@@ -702,22 +702,22 @@ UINT64 timediff64_us(struct timeval end, struct timeval start);
     char *utf8_index(char *utf8str, int idx);
 
     #if 0 /* ufko */
-    #ifdef USE_WIN_UTF16PATH
-        WCHAR *ansi_mbcs_to_utf16(const char *);
-        char *utf16_to_utf8(const WCHAR *utf16str);
-        WCHAR *utf8_to_utf16(const char *utf8str);
-        int utf16_to_utf8ptr(const WCHAR *utf16str, char *utf8str, int size) ;
-        INT64 fileSize_utf16(char *pathName8);
-        char *win_realpath(const char *filepath, char *realpath);
-        int rename_utf16(const char *oldname8, const char *newname8);
-        int stat_utf16(const char *filename8, struct stat *buf);
-        int chdir_utf16(const char *filename8);
-        int open_utf16(const char *filename8, int flags, int mode);
-        int mkdir_utf16(const char *filename8);
-        int rmdir_utf16(const char *filename8);
-        int unlink_utf16(const char *filename8);
-        _WDIR *opendir_utf16(const char *dirname8);
-    #endif
+        #ifdef USE_WIN_UTF16PATH
+            WCHAR *ansi_mbcs_to_utf16(const char *);
+            char *utf16_to_utf8(const WCHAR *utf16str);
+            WCHAR *utf8_to_utf16(const char *utf8str);
+            int utf16_to_utf8ptr(const WCHAR *utf16str, char *utf8str, int size) ;
+            INT64 fileSize_utf16(char *pathName8);
+            char *win_realpath(const char *filepath, char *realpath);
+            int rename_utf16(const char *oldname8, const char *newname8);
+            int stat_utf16(const char *filename8, struct stat *buf);
+            int chdir_utf16(const char *filename8);
+            int open_utf16(const char *filename8, int flags, int mode);
+            int mkdir_utf16(const char *filename8);
+            int rmdir_utf16(const char *filename8);
+            int unlink_utf16(const char *filename8);
+            _WDIR *opendir_utf16(const char *dirname8);
+        #endif
     #endif /* if 0 */
 #endif
 

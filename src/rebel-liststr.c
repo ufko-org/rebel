@@ -145,20 +145,20 @@ CELL *p_length(CELL *params)
 {
     size_t length;
     SYMBOL *symbol;
-#ifdef BIGINT
+    #ifdef BIGINT
     int *bigintPtr;
     int *result;
     int len;
-#else
+    #else
     INT64 number;
     double fnum;
-#endif
+    #endif
 
     params = evaluateExpression(params);
     length = 0;
     switch(params->type)
     {
-#ifdef BIGINT
+            #ifdef BIGINT
         case CELL_LONG:
         case CELL_FLOAT:
         case CELL_BIGINT:
@@ -169,7 +169,7 @@ CELL *p_length(CELL *params)
                 free(result);
             }
             break;
-#else /* not BIGINT */
+            #else /* not BIGINT */
         case CELL_LONG:
             getInteger64Ext(params, &number, FALSE);
             if(number == 0)
@@ -200,7 +200,7 @@ CELL *p_length(CELL *params)
                 length = log(fnum) / log(10) + 1.5;
             }
             break;
-#endif /* not BIGINT */
+            #endif /* not BIGINT */
         case CELL_STRING:
             length = params->aux - 1;
             break;
@@ -434,9 +434,9 @@ CELL *p_chop(CELL *params)
     size_t number = 1;
     size_t length = 0;
     CELL *next;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     char *ptr;
-#endif
+    #endif
 
     next = getEvalDefault(params, &params);
 
@@ -447,7 +447,7 @@ CELL *p_chop(CELL *params)
 
     if(params->type == CELL_STRING)
     {
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         length = params->aux - 1;
         if(number > length)
         {
@@ -455,7 +455,7 @@ CELL *p_chop(CELL *params)
         }
         length = length - number;
         return stuffStringN((char *)params->contents, length);
-#else
+        #else
         length = utf8_wlen((char *)params->contents, (char *)params->contents + params->aux);
         if(number > length)
         {
@@ -465,7 +465,7 @@ CELL *p_chop(CELL *params)
         ptr = (char *)params->contents;
         ptr = utf8_index(ptr, length);
         return stuffStringN((char *)params->contents, ptr - (char *)params->contents);
-#endif
+        #endif
     }
 
     if(!isList(params->type))
@@ -819,11 +819,11 @@ CELL *popString(CELL *str, CELL *params)
 
     ptr = (char *)str->contents;
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     size = utf8_wlen(ptr, (char *)str->contents + str->aux);
-#else
+    #else
     size = str->aux - 1;
-#endif
+    #endif
 
     if(str->aux < 2)
     {
@@ -849,7 +849,7 @@ CELL *popString(CELL *str, CELL *params)
         len = size - index;
     }
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     newPtr = utf8_index(ptr, index);
     index = newPtr - ptr;
 
@@ -861,7 +861,7 @@ CELL *popString(CELL *str, CELL *params)
         return(errorProc(ERR_INVALID_UTF8));
     }
     len -= index;
-#endif
+    #endif
 
     newPtr = callocMemory(str->aux - len);
 
@@ -881,9 +881,9 @@ CELL *pushOnString(CELL *newStr, CELL *str, CELL *idx)
     char *ptr;
     char *newPtr;
     int len;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     char *sptr;
-#endif
+    #endif
 
     if(idx != nilCell)
     {
@@ -902,11 +902,11 @@ CELL *pushOnString(CELL *newStr, CELL *str, CELL *idx)
         return(newStr);
     }
 
-#ifndef SUPPORT_UTF8
+    #ifndef SUPPORT_UTF8
     len = str->aux - 1;
-#else
+    #else
     len = utf8_wlen(ptr, ptr + str->aux);
-#endif
+    #endif
 
     /* convert index into characters to skip before the new one is inserted */
     if(index < 0)
@@ -923,16 +923,16 @@ CELL *pushOnString(CELL *newStr, CELL *str, CELL *idx)
     }
 
     newPtr = callocMemory(str->aux + newStr->aux - 1);
-#ifndef SUPPORT_UTF8
+    #ifndef SUPPORT_UTF8
     memcpy(newPtr, ptr, index);
     memcpy(newPtr + index, (char *)newStr->contents, newStr->aux - 1);
     memcpy(newPtr + index + newStr->aux - 1, ptr + index, str->aux - index);
-#else
+    #else
     sptr = utf8_index(ptr, index);
     memcpy(newPtr, ptr, sptr - ptr);
     memcpy(newPtr + (sptr - ptr), (char *)newStr->contents, newStr->aux - 1);
     memcpy(newPtr + (sptr - ptr) + newStr->aux - 1, sptr, str->aux - (sptr - ptr)  );
-#endif
+    #endif
 
     str->contents = (UINT)newPtr;
     str->aux = str->aux + newStr->aux - 1;
@@ -952,11 +952,11 @@ CELL *p_select(CELL *params)
     CELL *head;
     int evalFlag = TRUE;
     char *str, *newStr;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     int *wstr;
     int *wnewStr;
     size_t len;
-#endif
+    #endif
 
     params = getEvalDefault(params, &head);
     cell = evaluateExpression(params);
@@ -974,7 +974,7 @@ CELL *p_select(CELL *params)
         }
 
         str = (char *)head->contents;
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         newStr = (char *)allocMemory(n + 1);
         idx = 0;
         while(params->type != CELL_NIL)
@@ -992,7 +992,7 @@ CELL *p_select(CELL *params)
             *(newStr + idx++) = *(str + index);
         }
         *(newStr + n) = 0;
-#else
+        #else
         wstr = allocMemory(head->aux *sizeof(int));
         len = utf8_wstr(wstr, str, head->aux - 1);
         wnewStr = allocMemory((n + 1) * sizeof(int));
@@ -1017,7 +1017,7 @@ CELL *p_select(CELL *params)
         newStr = reallocMemory(newStr, n + 1);
         free(wstr);
         free(wnewStr);
-#endif
+        #endif
         result = getCell(CELL_STRING);
         result->aux = n + 1;
         result->contents = (UINT)newStr;

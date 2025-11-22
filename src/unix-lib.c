@@ -47,16 +47,16 @@ void initializeMain(void)
 
     opsys += 64;
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     opsys += 128;
-#endif
+    #endif
 
     opsys += 256;
 
-#ifdef FFI
+    #ifdef FFI
     opsys += 1024;
     initFFI();
-#endif
+    #endif
 
 
     bigEndian = (*((char *)&bigEndian) == 0);

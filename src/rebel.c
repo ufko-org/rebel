@@ -44,7 +44,7 @@
     int rebelLibConsoleFlag = 0;
 #endif
 
-#ifdef LINUX 
+#ifdef LINUX
     int opsys = 1;
 #endif
 
@@ -61,18 +61,18 @@
 
 int bigEndian = 1; /* gets set in main() */
 
-int version = 1010; /*v.1.0*/
+int version = 10100; /*v.1.1*/
 
 char copyright[]=
-    "\nRebel v.1.0\nCopyright (c) 2020 Lutz Mueller.\nCopyright (c) 2025 Ufko (ufko.org).\nAll rights reserved.\n\n%s\n\n";
+    "\nRebel v.1.1\nCopyright (c) 2020 Lutz Mueller.\nCopyright (c) 2025 Ufko (ufko.org).\nAll rights reserved.\n\n%s\n\n";
 
-    #ifdef SUPPORT_UTF8
-        char banner[]=
-        "Rebel v.1.0 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
-    #else
-        char banner[]=
-        "Rebel v.1.0 64-bit on %s IPv4/6%s%s\n\n";
-    #endif
+#ifdef SUPPORT_UTF8
+    char banner[]=
+    "Rebel v.1.1 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
+#else
+    char banner[]=
+    "Rebel v.1.1 64-bit on %s IPv4/6%s%s\n\n";
+#endif
 
 char banner2[]= ", options: rebel -h";
 
@@ -114,7 +114,7 @@ int MAX_CPU_STACK = 0x800;
 int MAX_ENV_STACK;
 int MAX_RESULT_STACK;
 #define MAX_OBJECT_STACK 64
-    INT MAX_CELL_COUNT = 0x800000000000000LL;
+INT MAX_CELL_COUNT = 0x800000000000000LL;
 INT blockCount = 0;
 
 CELL *firstFreeCell = NULL;
@@ -460,11 +460,11 @@ void initLocale(void)
     struct lconv *lc;
     char *locale;
 
-#ifndef SUPPORT_UTF8
+    #ifndef SUPPORT_UTF8
     locale = setlocale(LC_ALL, "C");
-#else
+    #else
     locale = setlocale(LC_ALL, "");
-#endif
+    #endif
 
     if (locale != NULL)
     {
@@ -538,16 +538,16 @@ int main(int argc, char *argv[])
     int idx;
 
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     opsys += 128;
-#endif
+    #endif
 
     opsys += 256;
 
-#ifdef FFI
+    #ifdef FFI
     opsys += 1024;
     initFFI();
-#endif
+    #endif
 
     pagesize = getpagesize();
     tzset();
@@ -775,14 +775,14 @@ AFTER_ERROR_ENTRY:
     }
 
 
-#ifdef READLINE
+    #ifdef READLINE
     rl_readline_name = "rebel";
     rl_attempted_completion_function = (char **(*) (const char *, int, int))rebel_completion;
-#if defined(LINUX) || defined(_BSD)
+    #if defined(LINUX) || defined(_BSD)
     /* in Bash .inputrc put 'set blink-matching-paren on' */
     rl_set_paren_blink_timeout(300000); /* 300 ms */
-#endif
-#endif
+    #endif
+    #endif
 
     while(TRUE)
     {
@@ -873,7 +873,7 @@ char *getCommandLine(int batchMode, int *length)
     char *cmd;
     int len;
 
-#ifndef READLINE
+    #ifndef READLINE
     if(!batchMode)
     {
         varPrintf(OUT_CONSOLE, "%s", prompt());
@@ -888,7 +888,7 @@ char *getCommandLine(int batchMode, int *length)
     /* cut off line terminators  left by fgets */
     *(cmd + len - LINE_FEED_LEN) = 0;
     len -= LINE_FEED_LEN; /* v.10.6.2 */
-#else /*  READLINE */
+    #else /*  READLINE */
     int errnoSave = errno;
     if((cmd = readline(batchMode ? "" : prompt())) == NULL)
     {
@@ -901,7 +901,7 @@ char *getCommandLine(int batchMode, int *length)
     {
         add_history(cmd);
     }
-#endif
+    #endif
 
     if(length != NULL)
     {
@@ -1029,9 +1029,9 @@ void reset()
     }
     printDevice = recursionCount  = traceFlag = prettyPrintFlags = 0;
     evalFunc = NULL;
-#ifdef XML_SUPPORT
+    #ifdef XML_SUPPORT
     xmlTags = NULL; /* force recreation */
-#endif
+    #endif
     pushResultFlag = TRUE;
     currentContext = mainContext;
     itSymbol->contents = (UINT)nilCell;
@@ -1077,12 +1077,12 @@ void executeCommandLine(char *command, UINT outDevice, STREAM *cmdStream)
         batchMode = 1;
     }
 
-#ifndef LIBRARY
+    #ifndef LIBRARY
     if(!batchMode && commandEvent != nilSymbol)
     {
         command = processCommandEvent(command);
     }
-#endif
+    #endif
 
     if(!isTTY && (*command == '\n' || *command == '\r' || *command == 0))
     {
@@ -1095,7 +1095,7 @@ void executeCommandLine(char *command, UINT outDevice, STREAM *cmdStream)
         {
             writeLog(command, TRUE);
         }
-#ifndef LIBRARY
+        #ifndef LIBRARY
         if(strncmp(command, "GET /", 5) == 0)
         {
             executeHTTPrequest(command + 5, HTTP_GET);
@@ -1116,7 +1116,7 @@ void executeCommandLine(char *command, UINT outDevice, STREAM *cmdStream)
         {
             executeHTTPrequest(command + 8, HTTP_DELETE);
         }
-#endif
+        #endif
         else if(!httpMode)
         {
             goto EXEC_COMMANDLINE;
@@ -1183,9 +1183,9 @@ RETURN_BATCHMODE:
         {
             fclose(IOchannel);
         }
-#ifndef LIBRARY
+        #ifndef LIBRARY
         setupServer(1);
-#endif
+        #endif
         return;
     }
 
@@ -1874,11 +1874,11 @@ CELL *evaluateLambda(CELL *localLst, CELL *arg, SYMBOL *newContext)
     /* get contents for (self), is nil if no ancestor caller is colon : */
     objSymbol.contents = (UINT)objCell;
 
-#ifdef FOOP_DEBUG
+    #ifdef FOOP_DEBUG
     printf("objCell in lambda:");
     printCell(objCell, TRUE, OUT_CONSOLE);
     printf(" context:%s\n", currentContext->name);
-#endif
+    #endif
 
     /* evaluate body expressions */
     resultIdxSave = resultStackIdx;
@@ -2277,13 +2277,13 @@ CELL *copyCell(CELL *cell)
         newCell->contents = (UINT)allocMemory(len + 1);
         memcpy((char *)newCell->contents, (char *)cell->contents, len + 1);
     }
-#ifdef BIGINT
+    #ifdef BIGINT
     else if(cell->type == CELL_BIGINT)
     {
         newCell->contents = (UINT)allocMemory((UINT)cell->aux *sizeof(int));
         memcpy((void *)newCell->contents, (void *)cell->contents, (UINT)cell->aux *sizeof(int));
     }
-#endif
+    #endif
 
     return(newCell);
 }
@@ -2334,9 +2334,9 @@ void deleteList(CELL *cell)
         }
 
         else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-#ifdef BIGINT
+            #ifdef BIGINT
                 || cell->type == CELL_BIGINT
-#endif
+            #endif
                )
         {
             freeMemory( (void *)cell->contents);
@@ -2553,7 +2553,7 @@ void varPrintf(UINT device, char *format, ...)
                 break;
             }
         case OUT_CONSOLE:
-#ifdef LIBRARY
+            #ifdef LIBRARY
             if(!rebelLibConsoleFlag)
             {
                 writeStreamStr(&libStrStream, buffer, 0);
@@ -2562,18 +2562,18 @@ void varPrintf(UINT device, char *format, ...)
                 return;
             }
             else
-#endif
+            #endif
                 if(IOchannel == stdin)
                 {
                     printf("%s", buffer);
-#if defined(MAC_OSX) || defined(_BSD) /* 10.7.3 */
+                    #if defined(MAC_OSX) || defined(_BSD) /* 10.7.3 */
                     fflush(NULL);
-#else
+                    #else
                     if(!isTTY)
                     {
                         fflush(NULL);
                     }
-#endif
+                    #endif
                 }
                 else if(IOchannel != NULL)
                 {
@@ -2598,9 +2598,9 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
 {
     SYMBOL *sPtr;
     SYMBOL *sp;
-#ifdef BIGINT
+    #ifdef BIGINT
     char *ptr;
-#endif
+    #endif
 
     if(cell == debugPrintCell)
     {
@@ -2620,13 +2620,13 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
         case CELL_LONG:
             varPrintf(device,"%"PRIdPTR, cell->contents);
             break;
-#ifdef BIGINT
+            #ifdef BIGINT
         case CELL_BIGINT:
             ptr = bigintToDigits((int *)cell->contents, cell->aux - 1, 48, NULL);
             varPrintf(device, "%sL", ptr);
             free(ptr);
             break;
-#endif
+            #endif
         case CELL_FLOAT:
             varPrintf(device, prettyPrintFloat,*(double *)&cell->contents);
             break;
@@ -2673,7 +2673,7 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
         case CELL_IMPORT_CDECL:
         case CELL_IMPORT_FFI:
 
-#ifdef FFI
+            #ifdef FFI
             if(cell->type == CELL_IMPORT_FFI)
                 varPrintf(device,"%s@%lX", (char *)((FFIMPORT *)cell->aux)->name,
                           cell->contents);
@@ -2681,9 +2681,9 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
             {
                 varPrintf(device,"%s@%lX", (char *)cell->aux, cell->contents);
             }
-#else
+            #else
             varPrintf(device,"%s@%lX", (char *)cell->aux, cell->contents);
-#endif
+            #endif
             break;
 
         case CELL_QUOTE:
@@ -3324,9 +3324,9 @@ CELL *errorProcArgs(int errorNumber, CELL *expr)
 void fatalError(int errorNumber, CELL *expr, int deleteFlag)
 {
     printErrorMessage(errorNumber, expr, deleteFlag);
-#ifndef LIBRARY
+    #ifndef LIBRARY
     closeTrace();
-#endif
+    #endif
     longjmp(errorJump, errorReg);
 }
 
@@ -3469,9 +3469,9 @@ CELL *loadFile(char *fileName, UINT offset, int linkFlag, SYMBOL *context)
     int errNo, sourceLen;
     jmp_buf errorJumpSave;
     SYMBOL *contextSave;
-#ifdef LOAD_DEBUG
+    #ifdef LOAD_DEBUG
     int i;
-#endif
+    #endif
 
     contextSave = currentContext;
     currentContext = context;
@@ -3511,24 +3511,24 @@ CELL *loadFile(char *fileName, UINT offset, int linkFlag, SYMBOL *context)
         longjmp(errorJump, errNo);
     }
 
-#ifdef LOAD_DEBUG
+    #ifdef LOAD_DEBUG
     for(i = 0; i<recursionCount; i++)
     {
         printf("  ");
     }
     printf("load: %s\n", fileName);
-#endif
+    #endif
 
     result = evaluateStream(&stream, 0, TRUE);
     currentContext = contextSave;
 
-#ifdef LOAD_DEBUG
+    #ifdef LOAD_DEBUG
     for(i = 0; i<recursionCount; i++)
     {
         printf("  ");
     }
     printf("finish load: %s\n", fileName);
-#endif
+    #endif
 
     memcpy(errorJump, errorJumpSave, sizeof(jmp_buf));
     closeStrStream(&stream);
@@ -3640,24 +3640,24 @@ GETNEXT:
         case TKN_DECIMAL:
             errnoSave = errno;
             errno = 0;
-#ifdef BIGINT
+            #ifdef BIGINT
             if(*(token + tklen - 1) == 'L')
             {
                 newCell = stuffBigint(token);
                 break;
             }
-#endif
+            #endif
 
             number = strtoll(token, NULL, 0);
 
-#ifdef BIGINT
+            #ifdef BIGINT
             if(errno == ERANGE)
             {
                 newCell = stuffBigint(token);
                 errno = errnoSave;
                 break;
             }
-#endif
+            #endif
 
             newCell = stuffInteger(number);
             errno = errnoSave;
@@ -3841,9 +3841,9 @@ int getToken(STREAM *stream, char *token, int *ptr_len)
     char *tkn;
     char chr;
     int tknLen;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     int len;
-#endif
+    #endif
     int floatFlag;
     int bracketBalance;
     char buff[8];
@@ -4084,7 +4084,7 @@ STRIP:
                                         isxdigit((unsigned char)*(stream->ptr + 3)) &&
                                         isxdigit((unsigned char)*(stream->ptr + 4)))
                                 {
-#ifdef SUPPORT_UTF8
+                                    #ifdef SUPPORT_UTF8
                                     buff[0] = '0';
                                     buff[1] = 'x';
                                     memcpy(buff + 2, stream->ptr + 1, 4);
@@ -4093,13 +4093,13 @@ STRIP:
                                     stream->ptr += 4;
                                     tkn += len;
                                     tknLen += len -1;
-#else
+                                    #else
                                     *(tkn++) = '\\';
                                     memcpy(tkn, stream->ptr, 5);
                                     tknLen = 5;
                                     tkn += 5;
                                     stream->ptr += 4;
-#endif
+                                    #endif
                                     break;
                                 }
                             default:
@@ -4243,9 +4243,9 @@ int getFlag(CELL *params)
 CELL *getInteger(CELL *params, UINT *number)
 {
     CELL *cell;
-#ifdef BIGINT
+    #ifdef BIGINT
     INT64 longNum;
-#endif
+    #endif
 
     cell = evaluateExpression(params);
 
@@ -4274,14 +4274,14 @@ CELL *getInteger(CELL *params, UINT *number)
     }
     else
     {
-#ifdef BIGINT
+        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             longNum = bigintToInt64(cell);
             *number = longNum;
         }
         else
-#endif
+        #endif
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4329,13 +4329,13 @@ CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
     }
     else
     {
-#ifdef BIGINT
+        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             *number = bigintToInt64(cell);
         }
         else
-#endif
+        #endif
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4348,9 +4348,9 @@ CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
 CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
 {
     CELL *cell;
-#ifdef BIGINT
+    #ifdef BIGINT
     INT64 longNum;
-#endif
+    #endif
 
     if(evalFlag)
     {
@@ -4386,7 +4386,7 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
     }
     else /* if BIGNUM type throw ERR_NUMBER_OUT_OF_RANGE */
     {
-#ifdef BIGINT
+        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             longNum = bigintToInt64(cell);
@@ -4394,7 +4394,7 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
         }
         else
 
-#endif /* BIGINT */
+        #endif /* BIGINT */
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4421,13 +4421,13 @@ CELL *getFloat(CELL *params, double *floatNumber)
     }
     else
     {
-#ifdef BIGINT
+        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             *floatNumber = bigintCellToFloat(cell);
         }
         else
-#endif
+        #endif
         {
             *floatNumber = 0.0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -5103,11 +5103,11 @@ CELL *expand(CELL *expr, SYMBOL *symbol)
             sPtr = (SYMBOL *)cell->contents;
             if(symbol == NULL)
             {
-#ifndef SUPPORT_UTF8
+                #ifndef SUPPORT_UTF8
                 wchar = *sPtr->name;
-#else
+                #else
                 utf8_wchar(sPtr->name, &wchar);
-#endif
+                #endif
                 enable = (wchar > 64 && wchar < 91);
                 cont = (CELL *)sPtr->contents;
                 enable = (enable && cont->contents != (UINT)nilCell
@@ -5414,9 +5414,9 @@ SETF_BEGIN:
         }
     }
     else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-#ifdef BIGINT
+        #ifdef BIGINT
             || cell->type == CELL_BIGINT
-#endif
+        #endif
            )
     {
         freeMemory( (void *)cell->contents);
@@ -5759,9 +5759,9 @@ CELL *p_first(CELL *params)
     char str[2];
     CELL *cell;
     CELL *result;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     size_t len;
-#endif
+    #endif
 
     getEvalDefault(params, &cell);
 
@@ -5773,17 +5773,17 @@ CELL *p_first(CELL *params)
             return(stuffString(""));
         }
 
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         str[1] = 0;
         result = stuffString(str);
-#else
+        #else
         len =  utf8_1st_len((char *)cell->contents);
         if(len > cell->aux -1)
         {
             return(errorProc(ERR_INVALID_UTF8));
         }
         result = stuffStringN((char *)cell->contents, len);
-#endif
+        #endif
 
         stringIndexPtr = (char *)cell->contents;
         if(symbolCheck)
@@ -5819,9 +5819,9 @@ CELL *p_rest(CELL *params)
 {
     CELL *cell;
     CELL *tail;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     size_t size;
-#endif
+    #endif
 
     /* cell = evaluateExpression(params); */
     getEvalDefault(params, &cell);
@@ -5842,16 +5842,16 @@ CELL *p_rest(CELL *params)
         {
             return(stuffString(""));
         }
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         return(stuffString((char *)(cell->contents + 1)));
-#else
+        #else
         size = utf8_1st_len((char *)cell->contents);
         if(size > cell->aux - 1)
         {
             return(errorProc(ERR_INVALID_UTF8));
         }
         return(stuffString((char *)(cell->contents + size)));
-#endif
+        #endif
     }
 
     return(errorProcExt(ERR_ARRAY_LIST_OR_STRING_EXPECTED, params));
@@ -6025,13 +6025,13 @@ CELL *p_last(CELL *params)
         {
             return(copyCell(cell));
         }
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         str += (cell->aux - 2);
         result = stuffString(str);
-#else
+        #else
         str = utf8_index(str, utf8_wlen(str, str + cell->aux) -1);
         result = stuffString(str);
-#endif
+        #endif
         stringIndexPtr = (char *)str;
         if(symbolCheck)
         {
@@ -6456,7 +6456,7 @@ CELL *loop(CELL *params, int forFlag)
         {
             symbol->contents =
                 (UINT)stuffInteger((fromInt64 > toInt64) ? fromInt64 - i:
-                                     fromInt64 + i);
+                                   fromInt64 + i);
         }
         else
         {
@@ -6539,9 +6539,9 @@ CELL *dolist(CELL *params, int doType)
     CELL *cell;
     CELL *list = nilCell;
     char *str;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     int chr;
-#endif
+    #endif
     CELL *cond = nilCell;
     SYMBOL *symbol = NULL;
     SYMBOL *sPtr;
@@ -6588,12 +6588,12 @@ CELL *dolist(CELL *params, int doType)
             {
                 cleanupResults(resultIdxSave);
                 deleteList((CELL *)symbol->contents);
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 str = utf8_wchar(str, &chr);
                 symbol->contents = (UINT)stuffInteger(chr);
-#else
+                #else
                 symbol->contents = (UINT)stuffInteger((int)*str++);
-#endif
+                #endif
                 if(cond != nilCell)
                 {
                     cell = evaluateExpression(cond);
@@ -7334,15 +7334,17 @@ CELL *isEmptyFunc(CELL *cell)
 
 CELL *isZero(CELL *cell)
 {
-#ifdef BIGINT
+    #ifdef BIGINT
     int *numPtr;
-#endif
+    #endif
 
     switch(cell->type)
     {
         case CELL_FLOAT:
             if(*(double *)&cell->contents == 0.0)
+            {
                 return(trueCell);
+            }
             break;
         case CELL_LONG:
             if(cell->contents == 0)
@@ -7350,7 +7352,7 @@ CELL *isZero(CELL *cell)
                 return(trueCell);
             }
             break;
-#ifdef BIGINT
+            #ifdef BIGINT
         case CELL_BIGINT:
             numPtr = (int *)(UINT)cell->contents;
             if(cell->aux == 2 && numPtr[1] == 0)
@@ -7358,7 +7360,7 @@ CELL *isZero(CELL *cell)
                 return(trueCell);
             }
             break;
-#endif
+            #endif
         default:
             break;
     }
@@ -7383,7 +7385,9 @@ CELL *p_isNull(CELL *params)
     }
 
     if(cell->type == CELL_FLOAT && (isnan(*(double *)&cell->contents)))
+    {
         return(trueCell);
+    }
 
     return(isZero(cell));
 }
@@ -7656,10 +7660,10 @@ CELL *p_exit(CELL *params)
         result = 0;
     }
 
-#ifdef HAVE_FORK
+    #ifdef HAVE_FORK
     /* release spawn resources */
     purgeSpawnList(TRUE);
-#endif
+    #endif
 
     exit(result);
     return(trueCell);
@@ -7687,12 +7691,12 @@ CELL *p_reset(CELL *params)
             freeCellBlocks();
             return(stuffIntegerList(2, blockCountBefore, blockCount)); /* 10.3.3 */
         }
-#ifndef LIBRARY
+        #ifndef LIBRARY
         else
         {
             execv(MainArgs[0], MainArgs);
         }
-#endif
+        #endif
     }
     else
     {
@@ -8079,11 +8083,11 @@ CELL *p_colon(CELL *params)
     objCellSave = objCell;
     objCell = obj;
 
-#ifdef FOOP_DEBUG
+    #ifdef FOOP_DEBUG
     printf("entering colon, saving in objSave:");
     printCell(objSave, TRUE, OUT_CONSOLE);
     puts("");
-#endif
+    #endif
 
     cell = (CELL *)obj->contents;
     if(obj->type != CELL_EXPRESSION)
@@ -8118,11 +8122,11 @@ CELL *p_colon(CELL *params)
 
     pushResult(proc);
 
-#ifdef FOOP_DEBUG
+    #ifdef FOOP_DEBUG
     printf("colon calling %s in %s with objCell:", methodSymbol->name, contextSymbol->name);
     printCell(objCell, TRUE, OUT_CONSOLE);
     puts("");
-#endif
+    #endif
 
     cell = copyCell(evaluateExpression(proc));
 
@@ -8132,11 +8136,11 @@ CELL *p_colon(CELL *params)
     objSymbol.contents = (UINT)objSave;
     objCell = objCellSave;
 
-#ifdef FOOP_DEBUG
+    #ifdef FOOP_DEBUG
     printf("leavin colon, objCell restored to:");
     printCell(obj, TRUE, OUT_CONSOLE);
     puts("");
-#endif
+    #endif
 
 
     return(cell);

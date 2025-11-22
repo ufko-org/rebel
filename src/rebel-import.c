@@ -100,7 +100,7 @@ CELL *p_importLib(CELL *params)
         return(errorProcExt2(ERR_IMPORT_FUNC_NOT_FOUND, stuffString(error)));
     }
 
-#ifdef FFI
+    #ifdef FFI
     symbol->flags |= SYMBOL_FFI | SYMBOL_PROTECTED;
     if(pCell->type == CELL_IMPORT_FFI)
     {
@@ -108,7 +108,7 @@ CELL *p_importLib(CELL *params)
         ((FFIMPORT *)pCell->aux)->name = symbol->name;
         return(copyCell(ffiPreparation(pCell, params, FFI_FUNCTION)));
     }
-#endif
+    #endif
 
     pCell->aux = (UINT)symbol->name;
     return(copyCell(pCell));
@@ -121,13 +121,13 @@ CELL *executeLibfunction(CELL *pCell, CELL *params)
     UINT args[14];
     int count;
 
-#ifdef FFI
+    #ifdef FFI
     if(pCell->type == CELL_IMPORT_FFI)
         if(((FFIMPORT *)pCell->aux)->type != 0)
         {
             return executeLibFFI(pCell, params);
         }
-#endif
+    #endif
 
     count = 0;
     while(params->type != CELL_NIL && count < 14)
@@ -292,7 +292,7 @@ INT template(INT n, INT p1, INT p2, INT p3, INT p4, INT p5, INT p6, INT p7, INT 
     args = stuffIntegerList(8, p1, p2, p3, p4, p5, p6, p7, p8);
     executeSymbol(callback[n].sym, (CELL *)args->contents, &cell);
 
-        result = (INT)cell->contents;
+    result = (INT)cell->contents;
 
     args->contents = (UINT)nilCell;
 
@@ -318,18 +318,18 @@ CELL *p_callback(CELL *params)
     UINT n;
 
 
-#ifdef FFI
+    #ifdef FFI
     SYMBOL *symbol;
     CELL *ffiCell;
     FFIMPORT *ffi;
     char *cb_name;
     int result, len;
 
-#ifdef MAC_OSX
+    #ifdef MAC_OSX
     ffi_closure *closure;
-#endif
+    #endif
 
-#endif /* FFI */
+    #endif /* FFI */
 
     cell = evaluateExpression(params);
     if(cell->type == CELL_SYMBOL)
@@ -341,7 +341,7 @@ CELL *p_callback(CELL *params)
         goto CALLBACK_SIMPLE;
     }
 
-#ifdef FFI
+    #ifdef FFI
     len = strlen(sPtr->name);
     cb_name = calloc(sizeof(char) * (len + 6), 1);
     /*
@@ -380,7 +380,7 @@ CELL *p_callback(CELL *params)
     {
         ffi = (FFIMPORT *) ffiCell->aux;
         ffi->data = calloc(sizeof(ffi_closure_data), 1);
-#ifndef MAC_OSX
+        #ifndef MAC_OSX
         ffi->clos = ffi_closure_alloc(sizeof(ffi_closure),&ffi->code);
         if(!ffi->clos)
         {
@@ -394,7 +394,7 @@ CELL *p_callback(CELL *params)
             free(ffi->data);
             return(errorProcExt(ERR_FFI_PREP_FAILED, stuffSymbol(sPtr)));
         }
-#else /* MAC_OSX */
+        #else /* MAC_OSX */
         if((closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE,
                            MAP_ANON | MAP_PRIVATE, -1, 0)) == (void *)-1)
         {
@@ -417,7 +417,7 @@ CELL *p_callback(CELL *params)
         }
         /* ffi->code = ffi_trampoline; */
         ffi->code = closure;
-#endif
+        #endif
         ffi->data->symbol = sPtr;
         ffi->data->code = ffi->code;
 
@@ -430,7 +430,7 @@ CELL *p_callback(CELL *params)
     {
         return(errorProcExt(ERR_FFI_PREP_FAILED, stuffString(sPtr->name)));
     }
-#endif /* FFI */
+    #endif /* FFI */
 
 CALLBACK_SIMPLE:
     getIntegerExt(cell, &n, FALSE);

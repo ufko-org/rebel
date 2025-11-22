@@ -183,9 +183,9 @@ void traceEntry(CELL *cell, CELL *pCell, CELL *args)
     }
     traceFlag |= TRACE_IN_ENTRY;
 
-#ifdef DEBUGGER
+    #ifdef DEBUGGER
     int defaultFuncFlag = FALSE;
-#endif
+    #endif
 
     if(traceFlag & TRACE_SIGNAL)
     {
@@ -219,7 +219,7 @@ void traceEntry(CELL *cell, CELL *pCell, CELL *args)
         return;
     }
 
-#ifdef DEBUGGER
+    #ifdef DEBUGGER
     if(debugStackIdx > 1)
     {
         if(debugPrintFunction(cell))
@@ -265,7 +265,7 @@ void traceEntry(CELL *cell, CELL *pCell, CELL *args)
         pushDebugStack(recursionCount);
         pushDebugStack(currentFunc);
     }
-#endif /* no_DEBUG */
+    #endif /* no_DEBUG */
 
     traceFlag &= ~TRACE_IN_ENTRY;
 }
@@ -286,7 +286,7 @@ void traceExit(CELL *result, CELL *cell, CELL *pCell, CELL *args)
 
     traceFlag |= TRACE_IN_EXIT;
 
-#ifdef DEBUGGER
+    #ifdef DEBUGGER
     if(traceFlag & TRACE_DEBUG_NEXT)
     {
         if(currentLevel >= recursionCount)
@@ -337,7 +337,7 @@ void traceExit(CELL *result, CELL *cell, CELL *pCell, CELL *args)
     {
         currentLevel = recursionCount;
     }
-#endif /* DEBUGGER */
+    #endif /* DEBUGGER */
 
     traceFlag &= ~TRACE_IN_EXIT;
 }

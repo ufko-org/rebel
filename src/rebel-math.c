@@ -89,12 +89,12 @@ CELL *p_abs(CELL *params)
     CELL *cell;
     INT64 intValue;
     double floatValue;
-#ifdef BIGINT
+    #ifdef BIGINT
     int *numPtr;
-#endif
+    #endif
 
     cell = evaluateExpression(params);
-#ifdef BIGINT
+    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         cell = copyCell(cell);
@@ -106,7 +106,7 @@ CELL *p_abs(CELL *params)
         return(cell);
     }
     else
-#endif
+    #endif
         if(cell->type == CELL_FLOAT)
         {
             floatValue = getDirectFloat(cell);
@@ -131,13 +131,13 @@ CELL *incDecI(CELL *params, int type)
     CELL *cell;
     INT64 adjust = 1;
     INT64 lValue = 0;
-#ifdef BIGINT
+    #ifdef BIGINT
     int *lvaluePtr;
     int *adjustPtr;
     int *resultPtr;
     int *freePtr = NULL;
     int lvlen, adjlen, reslen;
-#endif
+    #endif
 
     cell = evaluateExpression(params);
 
@@ -158,7 +158,7 @@ CELL *incDecI(CELL *params, int type)
 
 
     if(!isNil(cell))
-#ifdef BIGINT
+    #ifdef BIGINT
     {
         if(cell->type == CELL_BIGINT)
         {
@@ -196,9 +196,9 @@ CELL *incDecI(CELL *params, int type)
         }
         getInteger64Ext(cell, &lValue, FALSE);
     }
-#else
+    #else
         getInteger64Ext(cell, &lValue, FALSE);
-#endif
+    #endif
 
 
     if(cell == nilCell) /* v. 10.7.1 */
@@ -285,7 +285,7 @@ CELL *arithmetikOp(CELL *params, int op)
 {
     INT64 number;
     INT64 result;
-#ifdef BIGINT
+    #ifdef BIGINT
     int sizex = 0;
     int sizey = 0;
     int n;
@@ -294,7 +294,7 @@ CELL *arithmetikOp(CELL *params, int op)
     int *numy;
     int *freePtr = NULL;
     CELL *next;
-#endif
+    #endif
     CELL *cell;
 
     if(params == nilCell)
@@ -311,7 +311,7 @@ CELL *arithmetikOp(CELL *params, int op)
 
     cell = evaluateExpression(params);
     params = params->next;
-#ifdef BIGINT
+    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         if(params == nilCell)
@@ -396,7 +396,7 @@ NEXT_FIRST_BIGINT:
         }
         return(cell);
     }
-#endif
+    #endif
 
     getInteger64Ext(cell, &result, FALSE);
     if(params == nilCell)
@@ -681,7 +681,7 @@ int compareInts(CELL *left, CELL *right)
     INT64 leftnum;
     INT64 rightnum;
 
-#ifdef BIGINT
+    #ifdef BIGINT
     int *leftnumPtr;
     int leftlen;
     int *rightnumPtr;
@@ -698,16 +698,16 @@ int compareInts(CELL *left, CELL *right)
         freeMemory(rightnumPtr);
         return(cmp);
     }
-#endif
+    #endif
 
     leftnum = (UINT)left->contents;
-#ifdef CELL_BIGINT
+    #ifdef CELL_BIGINT
     if(right->type == CELL_BIGINT)
     {
         getInteger64Ext(right, &rightnum, FALSE);
     }
     else
-#endif
+    #endif
         rightnum = (UINT)right->contents;
 
     if(leftnum < rightnum)
@@ -736,12 +736,12 @@ double getDirectFloat(CELL *param)
         floatNum = (INT)param->contents;
     }
 
-#ifdef BIGINT
+    #ifdef BIGINT
     else if(param->type == CELL_BIGINT)
     {
         floatNum = bigintCellToFloat(param);
     }
-#endif
+    #endif
 
 
     return(floatNum);
@@ -1483,12 +1483,12 @@ int compareCells(CELL *left, CELL *right)
             return(compareArrays((CELL *)left, (CELL *)right));
         case CELL_FLOAT:
             return(compareFloats(left, right));
-#ifdef BIGINT
+            #ifdef BIGINT
         case CELL_BIGINT:
             comp = cmpBigint((int *)(UINT)left->contents,
                              left->aux - 1, (int *)(UINT)right->contents, right->aux - 1);
             return(comp);
-#endif
+            #endif
         case CELL_LONG:
         default:
             if((INT)left->contents > (INT)right->contents)
@@ -2396,11 +2396,11 @@ double gammap(double a, double x)
 {
     double gln;
     gln = gammaln(a);
-#ifdef DEBUG
+    #ifdef DEBUG
     /* horrible error on LLVM 32-bit Apple update Oct 7, 2010, fine on LLVM 64-bit
        result is fine in printf() but gets passed up as NaN to gammai() by return() */
     printf("in gammap() result %f\n", (x < (a + 1.0)) ? gser(a, x, gln) : (1.0 - gcf(a,x, gln)));
-#endif
+    #endif
     return( (x < (a + 1.0)) ? gser(a, x, gln) : (1.0 - gcf(a,x, gln)) );
 }
 
@@ -2631,16 +2631,16 @@ CELL *p_gcd(CELL *params)
 {
     INT64 m, n, r;
     CELL *cell;
-#ifdef BIGINT
+    #ifdef BIGINT
     CELL *x;
     CELL *y;
     UINT *resultIdxSave = resultStackIdx;
-#endif
+    #endif
 
     cell = evaluateExpression(params);
     params = params->next;
 
-#ifdef BIGINT
+    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         x = copyCell(cell);
@@ -2659,7 +2659,7 @@ NEXT_BIG_GCD:
         *(int *)cell->contents = 1; /* abs */
         return(cell);
     }
-#endif
+    #endif
 
     cell = getInteger64Ext(cell, &m, FALSE);
     while(params != nilCell)
@@ -3443,7 +3443,9 @@ CELL *p_bayesQuery(CELL *params)
     for(idx = 0; idx < maxIdx; idx++)
     {
         if(probFlag == TRUE)
+        {
             priorP[idx] = (double)total->contents;
+        }
         else
         {
             if(total->type == CELL_LONG)
@@ -3452,9 +3454,9 @@ CELL *p_bayesQuery(CELL *params)
             }
         }
 
-#ifdef BAYES_DEBUG
+        #ifdef BAYES_DEBUG
         printf("priorP[%d]=%f probability of category %d\n", idx, priorP[idx], idx);
-#endif
+        #endif
 
         total = total->next;
         /* initialize Fisher's Chi-2 probs and priors */
@@ -3512,7 +3514,9 @@ CELL *p_bayesQuery(CELL *params)
         for(idx = 0; idx < maxIdx; idx++)
         {
             if(probFlag)
+            {
                 p_tkn_and_cat[idx] = *(double *)&count->contents *priorP[idx];
+            }
             else /*   p(M) * p(tkn|M) */
             {
                 /* count of token in category idx */
@@ -3525,10 +3529,10 @@ CELL *p_bayesQuery(CELL *params)
             /* accumulate probability of token in all cataegories */
             p_tkn_and_all_cat += p_tkn_and_cat[idx];
 
-#ifdef BAYES_DEBUG
+            #ifdef BAYES_DEBUG
             printf("token[%d] p(M[%d]) * p(tkn|M[%d])=%lf * %ld / %ld = %lf\n", i, idx, idx,
                    priorP[idx], countNum, totalNum, (double)p_tkn_and_cat[idx]);
-#endif
+            #endif
             count = count->next;
             total = total->next;
         }
@@ -3563,10 +3567,10 @@ CELL *p_bayesQuery(CELL *params)
                 postP[idx] = p_tkn_and_cat[idx] / p_tkn_and_all_cat;
                 priorP[idx] = postP[idx];
             }
-#ifdef BAYES_DEBUG
+            #ifdef BAYES_DEBUG
             printf("postP[%d] = p_tkn_and_cat[%d] / p_tkn_and_all_cat = %lf / %lf = %lf\n",
                    idx, idx, p_tkn_and_cat[idx], p_tkn_and_all_cat, postP[idx]);
-#endif
+            #endif
         }
 
         tkn = tkn->next;
@@ -3576,9 +3580,9 @@ CELL *p_bayesQuery(CELL *params)
     {
         for(idx = 0; idx < maxIdx; idx++)
         {
-#ifdef BAYES_DEBUG
+            #ifdef BAYES_DEBUG
             printf("Qchi2[%d] = %f, Pchi2[%d] = %f, nTkn = %d\n", idx, Qchi2[idx], idx, Pchi2[idx], nTkn);
-#endif
+            #endif
             /* corrected swapped Pchi2[idx] and Qchi2[idx] in 10.5.5 */
             postP[idx] = (probChi2(Pchi2[idx],  2 * nTkn) - probChi2(Qchi2[idx],  2 * nTkn)  + 1.0) / 2.0;
         }
@@ -3688,13 +3692,13 @@ CELL *p_unify(CELL *params)
 
     bindFlag =  getFlag(params);
 
-#ifdef DEBUG
+    #ifdef DEBUG
     debugFlag =  getFlag(params->next);
     if(debugFlag)
     {
         printStack(ws);
     }
-#endif
+    #endif
 
     return(unify(left, right));
 }
@@ -3741,7 +3745,7 @@ CELL *unify(CELL *left, CELL *right)
     {
         popSet(&ws, &left, &right);
 
-#ifdef DEBUG
+        #ifdef DEBUG
         if(debugFlag)
         {
             printf("unify:");
@@ -3750,7 +3754,7 @@ CELL *unify(CELL *left, CELL *right)
             printCell(right, FALSE, OUT_CONSOLE);
             printf("\n");
         }
-#endif
+        #endif
 
         leftType = unifyGetType(left);
         rightType = unifyGetType(right);
@@ -3784,21 +3788,21 @@ CELL *unify(CELL *left, CELL *right)
             substitute(right, left, mgu); /* expand(right-expr, left-sym) in mgu set */
             substitute(right, left, ws);  /* expand(right-expr, left-sym) in ws set */
 
-#ifdef DEBUG
+            #ifdef DEBUG
             if(debugFlag)
             {
                 printf("ws stack\n");
                 printStack(ws);
             }
-#endif
+            #endif
             pushSet(&mgu, left, right);
-#ifdef DEBUG
+            #ifdef DEBUG
             if(debugFlag)
             {
                 printf("mgu stack\n");
                 printStack(mgu);
             }
-#endif
+            #endif
             continue;
         }
 
@@ -3806,27 +3810,27 @@ CELL *unify(CELL *left, CELL *right)
         {
             substitute(left, right, mgu); /* expand(left-expr, right-sym) in mgu set */
             substitute(left, right, ws); /* expand(left-expr, right-sym) in ws set */
-#ifdef DEBUG
+            #ifdef DEBUG
             if(debugFlag)
             {
                 printf("ws stack\n");
                 printStack(ws);
             }
-#endif
+            #endif
             pushSet(&mgu, right, left);
-#ifdef DEBUG
+            #ifdef DEBUG
             if(debugFlag)
             {
                 printf("mgu stack\n");
                 printStack(mgu);
             }
-#endif
+            #endif
             continue;
         }
 
         if(leftType == UNIFY_LIST && rightType == UNIFY_LIST)
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             if(debugFlag)
             {
                 printf("lists:");
@@ -3835,7 +3839,7 @@ CELL *unify(CELL *left, CELL *right)
                 printCell(right, FALSE, OUT_CONSOLE);
                 printf("\n");
             }
-#endif
+            #endif
             if(listlen((CELL *)left->contents) != listlen((CELL *)right->contents))
             {
                 deleteList(left);
@@ -3885,11 +3889,11 @@ int unifyGetType(CELL *cell)
             return(UNIFY_ANY);
         }
 
-#ifndef SUPPORT_UTF8
+        #ifndef SUPPORT_UTF8
         wchar = *sPtr->name;
-#else
+        #else
         utf8_wchar(sPtr->name, &wchar);
-#endif
+        #endif
         return((wchar > 64 && wchar < 91) ? UNIFY_VAR : UNIFY_ATOM);
     }
     else if(isList(cell->type))
@@ -3932,20 +3936,20 @@ void substitute(CELL *expr, CELL *sym, TERMSET *tset)
 {
     if(tset == NULL)
     {
-#ifdef DEBUG
+        #ifdef DEBUG
         if(debugFlag)
         {
             printf("empty set in substitute %s for ", ((SYMBOL *)sym->contents)->name);
             printCell(expr, FALSE, OUT_CONSOLE);
             printf("\n");
         }
-#endif
+        #endif
         return;
     }
 
     while(tset != NULL)
     {
-#ifdef DEBUG
+        #ifdef DEBUG
         if(debugFlag)
         {
             printf("substitute %s for ", ((SYMBOL *)sym->contents)->name);
@@ -3954,9 +3958,9 @@ void substitute(CELL *expr, CELL *sym, TERMSET *tset)
             printf("left:");
             printCell(tset->left, FALSE, OUT_CONSOLE);
         }
-#endif
+        #endif
         tset->left = subsym(expr, sym, tset->left);
-#ifdef DEBUG
+        #ifdef DEBUG
         if(debugFlag)
         {
             printf("->");
@@ -3964,16 +3968,16 @@ void substitute(CELL *expr, CELL *sym, TERMSET *tset)
             printf(" right:");
             printCell(tset->right, FALSE, OUT_CONSOLE);
         }
-#endif
+        #endif
         tset->right = subsym(expr, sym, tset->right);
-#ifdef DEBUG
+        #ifdef DEBUG
         if(debugFlag)
         {
             printf("->");
             printCell(tset->right, FALSE, OUT_CONSOLE);
             printf("\n");
         }
-#endif
+        #endif
         tset = tset->next;
     }
 }
@@ -4143,13 +4147,13 @@ CELL *isOddEven(CELL *params, int type)
 
     params = evaluateExpression(params);
 
-#ifdef BIGINT
+    #ifdef BIGINT
     if(params->type == CELL_BIGINT)
     {
         num = *((int *)params->contents + params->aux - 1);
     }
     else
-#endif
+    #endif
         getInteger64Ext(params, &num, FALSE);
 
     if(type == BOOL_EVEN)
@@ -4922,18 +4926,18 @@ int *divModBigint(int *x, int nx, int *y, int ny, int rmndr, int *nq)
     sq = 0;
     r[0] = q[0] = p[0] = 1;
     yFloat = bigintToAbsFloat(y, (ny > 2) ? 2 : ny);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("yFloat %f\n", yFloat);
-#endif
+    #endif
     for(i = 1; i <= nx; i++)
     {
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("i = %d\n", i);
-#endif
+        #endif
         r[++nr] = x[i];
-#ifdef DEBUG
+        #ifdef DEBUG
         debug(r, nr, "r after <- x[i]");
-#endif
+        #endif
         if(sq == 0 && cmpAbsBigint(r, nr, y, ny) < 0)
         {
             continue;
@@ -4941,33 +4945,33 @@ int *divModBigint(int *x, int nx, int *y, int ny, int rmndr, int *nq)
 
         n = (ny > 2) ? (nr + 2 - ny) : nr;
         rFloat = bigintToAbsFloat(r, n);
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("rFloat %f\n", rFloat);
-#endif
+        #endif
 
         if(yFloat > rFloat)
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("yFloat > rFloat\n");
-#endif
+            #endif
             q[++sq] = 0;
             goto TRIM_ZEROS;
         }
 
         if(yFloat == rFloat)
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("yFloat == rFloat\n");
-#endif
+            #endif
             q[++sq] = 1;
         }
         else
         {
             q[++sq] = rFloat / yFloat + 1.0;    /* like ceil() */
         }
-#ifdef DEBUG
+        #ifdef DEBUG
         debug(q, sq, "q after float div");
-#endif
+        #endif
 
 PRODUCT:
         carry = 0;
@@ -4992,15 +4996,15 @@ PRODUCT:
             }
             p[1] = carry, ++pn;
         }
-#ifdef DEBUG
+        #ifdef DEBUG
         debug(p, pn, "p product");
-#endif
+        #endif
         if(cmpAbsBigint(r, nr, p, pn) < 0)
         {
             q[sq] = q[sq] - 1; /* q[sq] too big */
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("decrementing q[sq]\n");
-#endif
+            #endif
             goto PRODUCT;
         }
 
@@ -5048,9 +5052,9 @@ TRIM_ZEROS:
                         (char *)r + (n + 1) * sizeof(int), nr *sizeof(int));
             }
         }
-#ifdef DEBUG
+        #ifdef DEBUG
         debug(r, nr, "r after subtraction and trimming");
-#endif
+        #endif
         /* ---------------------------------- */
         if(r[1] == 0 && i < nx)
         {

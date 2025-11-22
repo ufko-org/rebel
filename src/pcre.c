@@ -838,19 +838,19 @@ pcre_config(int what, void *where)
     switch (what)
     {
         case PCRE_CONFIG_UTF8:
-#ifdef SUPPORT_UTF8
+            #ifdef SUPPORT_UTF8
             *((int *)where) = 1;
-#else
+            #else
             *((int *)where) = 0;
-#endif
+            #endif
             break;
 
         case PCRE_CONFIG_UNICODE_PROPERTIES:
-#ifdef SUPPORT_UCP
+            #ifdef SUPPORT_UCP
             *((int *)where) = 1;
-#else
+            #else
             *((int *)where) = 0;
-#endif
+            #endif
             break;
 
         case PCRE_CONFIG_NEWLINE:
@@ -870,11 +870,11 @@ pcre_config(int what, void *where)
             break;
 
         case PCRE_CONFIG_STACKRECURSE:
-#ifdef NO_RECURSE
+            #ifdef NO_RECURSE
             *((int *)where) = 0;
-#else
+            #else
             *((int *)where) = 1;
-#endif
+            #endif
             break;
 
         default:
@@ -964,20 +964,20 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
     a table. A non-zero result is something that can be returned immediately.
     Otherwise further processing may be required. */
 
-#if !EBCDIC    /* ASCII coding */
+    #if !EBCDIC    /* ASCII coding */
     else if (c < '0' || c > 'z') {}                           /* Not alphameric */
     else if ((i = escapes[c - '0']) != 0)
     {
         c = i;
     }
 
-#else          /* EBCDIC coding */
+    #else          /* EBCDIC coding */
     else if (c < 'a' || (ebcdic_chartab[c] & 0x0E) == 0) {}   /* Not alphameric */
     else if ((i = escapes[c - 0x48]) != 0)
     {
         c = i;
     }
-#endif
+    #endif
 
     /* Escapes that need further processing, or are illegal. */
 
@@ -1062,7 +1062,7 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
             which can be greater than 0xff, but only if the ddd are hex digits. */
 
             case 'x':
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (ptr[1] == '{' && (options & PCRE_UTF8) != 0)
                 {
                     const uschar *pt = ptr + 2;
@@ -1072,19 +1072,19 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
                     {
                         int cc = *pt++;
                         count++;
-#if !EBCDIC    /* ASCII coding */
+                        #if !EBCDIC    /* ASCII coding */
                         if (cc >= 'a')
                         {
                             cc -= 32;    /* Convert to upper case */
                         }
                         c = c * 16 + cc - ((cc < 'A')? '0' : ('A' - 10));
-#else          /* EBCDIC coding */
+                        #else          /* EBCDIC coding */
                         if (cc >= 'a' && cc <= 'z')
                         {
                             cc += 64;    /* Convert to upper case */
                         }
                         c = c * 16 + cc - ((cc >= '0')? '0' : ('A' - 10));
-#endif
+                        #endif
                     }
                     if (*pt == '}')
                     {
@@ -1098,7 +1098,7 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
                     /* If the sequence of hex digits does not end with '}', then we don't
                     recognize this construct; fall through to the normal \x handling. */
                 }
-#endif
+                #endif
 
                 /* Read just a single hex char */
 
@@ -1107,19 +1107,19 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
                 {
                     int cc;                               /* Some compilers don't like ++ */
                     cc = *(++ptr);                        /* in initializers */
-#if !EBCDIC    /* ASCII coding */
+                    #if !EBCDIC    /* ASCII coding */
                     if (cc >= 'a')
                     {
                         cc -= 32;    /* Convert to upper case */
                     }
                     c = c * 16 + cc - ((cc < 'A')? '0' : ('A' - 10));
-#else          /* EBCDIC coding */
+                    #else          /* EBCDIC coding */
                     if (cc <= 'z')
                     {
                         cc += 64;    /* Convert to upper case */
                     }
                     c = c * 16 + cc - ((cc >= '0')? '0' : ('A' - 10));
-#endif
+                    #endif
                 }
                 break;
 
@@ -1137,19 +1137,19 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
                 is ASCII-specific, but then the whole concept of \cx is ASCII-specific.
                 (However, an EBCDIC equivalent has now been added.) */
 
-#if !EBCDIC    /* ASCII coding */
+                #if !EBCDIC    /* ASCII coding */
                 if (c >= 'a' && c <= 'z')
                 {
                     c -= 32;
                 }
                 c ^= 0x40;
-#else          /* EBCDIC coding */
+                #else          /* EBCDIC coding */
                 if (c >= 'a' && c <= 'z')
                 {
                     c += 64;
                 }
                 c ^= 0xC0;
-#endif
+                #endif
                 break;
 
             /* PCRE_EXTRA enables extensions to Perl in the matter of escapes. Any
@@ -1601,7 +1601,7 @@ find_fixedlength(uschar *code, int options)
             case OP_CHARNC:
                 branchlength++;
                 cc += 2;
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if ((options & PCRE_UTF8) != 0)
                 {
                     while ((*cc & 0xc0) == 0x80)
@@ -1609,7 +1609,7 @@ find_fixedlength(uschar *code, int options)
                         cc++;
                     }
                 }
-#endif
+                #endif
                 break;
 
             /* Handle exact repetitions. The count is already in characters, but we
@@ -1618,7 +1618,7 @@ find_fixedlength(uschar *code, int options)
             case OP_EXACT:
                 branchlength += GET2(cc,1);
                 cc += 4;
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if ((options & PCRE_UTF8) != 0)
                 {
                     while((*cc & 0x80) == 0x80)
@@ -1626,7 +1626,7 @@ find_fixedlength(uschar *code, int options)
                         cc++;
                     }
                 }
-#endif
+                #endif
                 break;
 
             case OP_TYPEEXACT:
@@ -1659,11 +1659,11 @@ find_fixedlength(uschar *code, int options)
 
                 /* Check a class for variable quantification */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
             case OP_XCLASS:
                 cc += GET(cc, 1) - 33;
                 /* Fall through */
-#endif
+                #endif
 
             case OP_CLASS:
             case OP_NCLASS:
@@ -1720,9 +1720,9 @@ Returns:      pointer to the opcode for the bracket, or NULL if not found
 static const uschar *
 find_bracket(const uschar *code, BOOL utf8, int number)
 {
-#ifndef SUPPORT_UTF8
+    #ifndef SUPPORT_UTF8
     /* utf8 = utf8; v10.7.6  */               /* Stop pedantic compilers complaining */
-#endif
+    #endif
 
     for (;;)
     {
@@ -1748,7 +1748,7 @@ find_bracket(const uschar *code, BOOL utf8, int number)
         {
             code += OP_lengths[c];
 
-#ifdef SUPPORT_UTF8
+            #ifdef SUPPORT_UTF8
 
             /* In UTF-8 mode, opcodes that are followed by a character may be followed
             by a multi-byte character. The length in the table is a minimum, so we have
@@ -1782,7 +1782,7 @@ find_bracket(const uschar *code, BOOL utf8, int number)
                         code += GET(code, 1) + 1;
                         break;
                 }
-#endif
+            #endif
         }
     }
 }
@@ -1805,9 +1805,9 @@ Returns:      pointer to the opcode for OP_RECURSE, or NULL if not found
 static const uschar *
 find_recurse(const uschar *code, BOOL utf8)
 {
-#ifndef SUPPORT_UTF8
+    #ifndef SUPPORT_UTF8
     /* utf8 = utf8; v10.7.6 */               /* Stop pedantic compilers complaining */
-#endif
+    #endif
 
     for (;;)
     {
@@ -1828,7 +1828,7 @@ find_recurse(const uschar *code, BOOL utf8)
         {
             code += OP_lengths[c];
 
-#ifdef SUPPORT_UTF8
+            #ifdef SUPPORT_UTF8
 
             /* In UTF-8 mode, opcodes that are followed by a character may be followed
             by a multi-byte character. The length in the table is a minimum, so we have
@@ -1862,7 +1862,7 @@ find_recurse(const uschar *code, BOOL utf8)
                         code += GET(code, 1) + 1;
                         break;
                 }
-#endif
+            #endif
         }
     }
 }
@@ -1930,19 +1930,19 @@ could_be_empty_branch(const uschar *code, const uschar *endcode, BOOL utf8)
             {
                     /* Check for quantifiers after a class */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                 case OP_XCLASS:
                     ccode = code + GET(code, 1);
                     goto CHECK_CLASS_REPEAT;
-#endif
+                    #endif
 
                 case OP_CLASS:
                 case OP_NCLASS:
                     ccode = code + 33;
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
 CHECK_CLASS_REPEAT:
-#endif
+                    #endif
 
                     switch (*ccode)
                     {
@@ -2005,7 +2005,7 @@ CHECK_CLASS_REPEAT:
                     /* In UTF-8 mode, STAR, MINSTAR, QUERY, MINQUERY, UPTO, and MINUPTO  may be
                     followed by a multibyte character */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                 case OP_STAR:
                 case OP_MINSTAR:
                 case OP_QUERY:
@@ -2017,7 +2017,7 @@ CHECK_CLASS_REPEAT:
                             code++;
                         }
                     break;
-#endif
+                    #endif
             }
     }
 
@@ -2324,14 +2324,14 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
     uschar *previous_callout = NULL;
     uschar classbits[32];
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     BOOL class_utf8;
     BOOL utf8 = (options &PCRE_UTF8) != 0;
     uschar *class_utf8data;
     uschar utf8_char[6];
-#else
+    #else
     BOOL utf8 = FALSE;
-#endif
+    #endif
 
     /* Set up the default and non-default settings for greediness */
 
@@ -2536,10 +2536,10 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                 class_charcount = 0;
                 class_lastchar = -1;
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 class_utf8 = FALSE;                       /* No chars >= 256 */
                 class_utf8data = code + LINK_SIZE + 34;   /* For UTF-8 items */
-#endif
+                #endif
 
                 /* Initialize the 32-char bit map to all zeros. We have to build the
                 map in a temporary bit of store, in case the class contains only 1
@@ -2556,13 +2556,13 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
 
                 do
                 {
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && c > 127)
                     {
                         /* Braces are required because the */
                         GETCHARLEN(c, ptr, ptr);    /* macro generates multiple statements */
                     }
-#endif
+                    #endif
 
                     /* Inside \Q...\E everything is literal except \E */
 
@@ -2755,7 +2755,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                                     classbits[1] |= 0x08;    /* Perl 5.004 onwards omits VT from \s */
                                     continue;
 
-#ifdef SUPPORT_UCP
+                                    #ifdef SUPPORT_UCP
                                 case ESC_p:
                                 case ESC_P:
                                     {
@@ -2772,7 +2772,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                                         class_charcount -= 2;   /* Not a < 256 character */
                                     }
                                     continue;
-#endif
+                                    #endif
 
                                 /* Unrecognized escapes are faulted if PCRE is running in its
                                 strict mode. By default, for compatibility with Perl, they are
@@ -2803,14 +2803,14 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                         int d;
                         ptr += 2;
 
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         if (utf8)
                         {
                             /* Braces are required because the */
                             GETCHARLEN(d, ptr, ptr);    /* macro generates multiple statements */
                         }
                         else
-#endif
+                        #endif
                             d = *ptr;  /* Not UTF-8 mode */
 
                         /* The second part of a range can be a single-character escape, but
@@ -2856,7 +2856,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                         matching for characters > 127 is available only if UCP support is
                         available. */
 
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         if (utf8 && (d > 255 || ((options & PCRE_CASELESS) != 0 && d > 127)))
                         {
                             class_utf8 = TRUE;
@@ -2865,7 +2865,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                             the relevant characters. There may be several ranges. Optimize how
                             they fit with the basic range. */
 
-#ifdef SUPPORT_UCP
+                            #ifdef SUPPORT_UCP
                             if ((options & PCRE_CASELESS) != 0)
                             {
                                 int occ, ocd;
@@ -2903,7 +2903,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                                     class_utf8data += ord2utf8(ocd, class_utf8data);
                                 }
                             }
-#endif  /* SUPPORT_UCP */
+                            #endif  /* SUPPORT_UCP */
 
                             /* Now record the original range, possibly modified for UCP caseless
                             overlapping ranges. */
@@ -2916,9 +2916,9 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
                             caseless matching for UTF-8 characters > 127; we can use the bit map
                             for the smaller ones. */
 
-#ifdef SUPPORT_UCP
+                            #ifdef SUPPORT_UCP
                             continue;    /* With next character in the class */
-#else
+                            #else
                             if ((options & PCRE_CASELESS) == 0 || c > 127)
                             {
                                 continue;
@@ -2928,9 +2928,9 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
 
                             d = 127;
 
-#endif  /* SUPPORT_UCP */
+                            #endif  /* SUPPORT_UCP */
                         }
-#endif  /* SUPPORT_UTF8 */
+                        #endif  /* SUPPORT_UTF8 */
 
                         /* We use the bit map for all cases when not in UTF-8 mode; else
                         ranges that lie entirely within 0-127 when there is UCP support; else
@@ -2959,14 +2959,14 @@ LONE_SINGLE_CHARACTER:
 
                     /* Handle a character that cannot go in the bit map */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && (c > 255 || ((options & PCRE_CASELESS) != 0 && c > 127)))
                     {
                         class_utf8 = TRUE;
                         *class_utf8data++ = XCL_SINGLE;
                         class_utf8data += ord2utf8(c, class_utf8data);
 
-#ifdef SUPPORT_UCP
+                        #ifdef SUPPORT_UCP
                         if ((options & PCRE_CASELESS) != 0)
                         {
                             int chartype;
@@ -2977,11 +2977,11 @@ LONE_SINGLE_CHARACTER:
                                 class_utf8data += ord2utf8(othercase, class_utf8data);
                             }
                         }
-#endif  /* SUPPORT_UCP */
+                        #endif  /* SUPPORT_UCP */
 
                     }
                     else
-#endif  /* SUPPORT_UTF8 */
+                    #endif  /* SUPPORT_UTF8 */
 
                         /* Handle a single-byte character */
                     {
@@ -3015,14 +3015,14 @@ LONE_SINGLE_CHARACTER:
                 this item is first, whatever repeat count may follow. In the case of
                 reqbyte, save the previous value for reinstating. */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (class_charcount == 1 &&
                         (!utf8 ||
                          (!class_utf8 && (!negate_class || class_lastchar < 128))))
 
-#else
+                #else
                 if (class_charcount == 1)
-#endif
+                #endif
                 {
                     zeroreqbyte = reqbyte;
 
@@ -3043,13 +3043,13 @@ LONE_SINGLE_CHARACTER:
                     /* For a single, positive character, get the value into mcbuffer, and
                     then we can handle this with the normal one-character code. */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && class_lastchar > 127)
                     {
                         mclength = ord2utf8(class_lastchar, mcbuffer);
                     }
                     else
-#endif
+                    #endif
                     {
                         mcbuffer[0] = class_lastchar;
                         mclength = 1;
@@ -3073,7 +3073,7 @@ LONE_SINGLE_CHARACTER:
                 extended class, with its own opcode. If there are no characters < 256,
                 we can omit the bitmap. */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (class_utf8)
                 {
                     *class_utf8data++ = XCL_END;    /* Marks the end of extra data */
@@ -3105,7 +3105,7 @@ LONE_SINGLE_CHARACTER:
                     PUT(previous, 1, code - previous);
                     break;   /* End of class handling */
                 }
-#endif
+                #endif
 
                 /* If there are no characters > 255, negate the 32-byte map if necessary,
                 and copy it into the code vector. If this is the first thing in the branch,
@@ -3231,7 +3231,7 @@ REPEAT:
                     hold the length of the character in bytes, plus 0x80 to flag that it's a
                     length rather than a small character. */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && (code[-1] & 0x80) != 0)
                     {
                         uschar *lastchar = code - 1;
@@ -3244,7 +3244,7 @@ REPEAT:
                         c |= 0x80;                      /* Flag c as a length */
                     }
                     else
-#endif
+                    #endif
 
                         /* Handle the case of a single byte - either with no UTF8 support, or
                         with UTF-8 disabled, or for a UTF-8 character < 128. */
@@ -3372,14 +3372,14 @@ OUTPUT_SINGLE_REPEAT:
 
                         if (repeat_max < 0)
                         {
-#ifdef SUPPORT_UTF8
+                            #ifdef SUPPORT_UTF8
                             if (utf8 && c >= 128)
                             {
                                 memcpy(code, utf8_char, c & 7);
                                 code += c & 7;
                             }
                             else
-#endif
+                            #endif
                             {
                                 *code++ = c;
                                 if (prop_type >= 0)
@@ -3395,14 +3395,14 @@ OUTPUT_SINGLE_REPEAT:
 
                         else if (repeat_max != repeat_min)
                         {
-#ifdef SUPPORT_UTF8
+                            #ifdef SUPPORT_UTF8
                             if (utf8 && c >= 128)
                             {
                                 memcpy(code, utf8_char, c & 7);
                                 code += c & 7;
                             }
                             else
-#endif
+                            #endif
                                 *code++ = c;
                             if (prop_type >= 0)
                             {
@@ -3416,25 +3416,25 @@ OUTPUT_SINGLE_REPEAT:
 
                     /* The character or character type itself comes last in all cases. */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && c >= 128)
                     {
                         memcpy(code, utf8_char, c & 7);
                         code += c & 7;
                     }
                     else
-#endif
+                    #endif
                         *code++ = c;
 
                     /* For a repeated Unicode property match, there is an extra byte that
                     defines the required property. */
 
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     if (prop_type >= 0)
                     {
                         *code++ = prop_type;
                     }
-#endif
+                    #endif
                 }
 
                 /* If previous was a character class or a back reference, we put the repeat
@@ -3442,9 +3442,9 @@ OUTPUT_SINGLE_REPEAT:
 
                 else if (*previous == OP_CLASS ||
                          *previous == OP_NCLASS ||
-#ifdef SUPPORT_UTF8
+                     #ifdef SUPPORT_UTF8
                          *previous == OP_XCLASS ||
-#endif
+                     #endif
                          *previous == OP_REF)
                 {
                     if (repeat_max == 0)
@@ -4269,7 +4269,7 @@ NUMBERED_GROUP:
                     /* So are Unicode property matches, if supported. We know that get_ucp
                     won't fail because it was tested in the pre-pass. */
 
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     else if (-c == ESC_P || -c == ESC_p)
                     {
                         BOOL negated;
@@ -4278,7 +4278,7 @@ NUMBERED_GROUP:
                         *code++ = ((-c == ESC_p) != negated)? OP_PROP : OP_NOTPROP;
                         *code++ = value;
                     }
-#endif
+                    #endif
 
                     /* For the rest, we can obtain the OP value by negating the escape
                     value */
@@ -4295,13 +4295,13 @@ NUMBERED_GROUP:
                 a value > 127. We set its representation in the length/buffer, and then
                 handle it as a data character. */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (utf8 && c > 127)
                 {
                     mclength = ord2utf8(c, mcbuffer);
                 }
                 else
-#endif
+                #endif
 
                 {
                     mcbuffer[0] = c;
@@ -4319,7 +4319,7 @@ NORMAL_CHAR:
                 mclength = 1;
                 mcbuffer[0] = c;
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (utf8 && (c & 0xc0) == 0xc0)
                 {
                     while ((ptr[1] & 0xc0) == 0x80)
@@ -4327,7 +4327,7 @@ NORMAL_CHAR:
                         mcbuffer[mclength++] = *(++ptr);
                     }
                 }
-#endif
+                #endif
 
                 /* At this point we have the character's bytes in mcbuffer, and the length
                 in mclength. When not in UTF-8 mode, the length is always 1. */
@@ -5030,10 +5030,10 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
     int name_count = 0;
     int max_name_size = 0;
     int lastitemlength = 0;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     BOOL utf8;
     BOOL class_utf8;
-#endif
+    #endif
     BOOL inescq = FALSE;
     unsigned int brastackptr = 0;
     size_t size;
@@ -5064,7 +5064,7 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
 
     /* Can't support UTF8 unless PCRE has been compiled to include the code. */
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     utf8 = (options &PCRE_UTF8) != 0;
     if (utf8 && (options & PCRE_NO_UTF8_CHECK) == 0 &&
             (*erroroffset = valid_utf8((uschar *)pattern, -1)) >= 0)
@@ -5072,13 +5072,13 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
         *errorptr = ERR44;
         return NULL;
     }
-#else
+    #else
     if ((options & PCRE_UTF8) != 0)
     {
         *errorptr = ERR32;
         return NULL;
     }
-#endif
+    #endif
 
     if ((options & ~PUBLIC_OPTIONS) != 0)
     {
@@ -5186,7 +5186,7 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
                 {
                     length += 2;          /* For a one-byte character */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (utf8 && c > 127)
                     {
                         int i;
@@ -5198,7 +5198,7 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
                         length += i;
                         lastitemlength += i;
                     }
-#endif
+                    #endif
 
                     continue;
                 }
@@ -5213,20 +5213,20 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
 
                 /* \X is supported only if Unicode property support is compiled */
 
-#ifndef SUPPORT_UCP
+                #ifndef SUPPORT_UCP
                 if (-c == ESC_X)
                 {
                     *errorptr = ERR45;
                     goto PCRE_ERROR_RETURN;
                 }
-#endif
+                #endif
 
                 /* \P and \p are for Unicode properties, but only when the support has
                 been compiled. Each item needs 2 bytes. */
 
                 else if (-c == ESC_P || -c == ESC_p)
                 {
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     BOOL negated;
                     length += 2;
                     lastitemlength = 2;
@@ -5235,10 +5235,10 @@ pcre_compile(const char *pattern, int options, const char **errorptr,
                         goto PCRE_ERROR_RETURN;
                     }
                     continue;
-#else
+                    #else
                     *errorptr = ERR45;
                     goto PCRE_ERROR_RETURN;
-#endif
+                    #endif
                 }
 
                 /* Other escapes need one byte */
@@ -5373,9 +5373,9 @@ POSESSIVE:                     /* Test for possessive quantifier */
                     class_optcount = 0;
                 }
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 class_utf8 = FALSE;
-#endif
+                #endif
 
                 /* Written as a "do" so that an initial ']' is taken as data */
 
@@ -5436,7 +5436,7 @@ POSESSIVE:                     /* Test for possessive quantifier */
                             else
                             {
                                 class_optcount = 10;         /* \d, \s etc; make sure > 1 */
-#ifdef SUPPORT_UTF8
+                                #ifdef SUPPORT_UTF8
                                 if (-c == ESC_p || -c == ESC_P)
                                 {
                                     if (!class_utf8)
@@ -5446,7 +5446,7 @@ POSESSIVE:                     /* Test for possessive quantifier */
                                     }
                                     length += 2;
                                 }
-#endif
+                                #endif
                             }
                         }
 
@@ -5471,7 +5471,7 @@ POSESSIVE:                     /* Test for possessive quantifier */
 
 GET_ONE_CHARACTER:
 
-#ifdef SUPPORT_UTF8
+                            #ifdef SUPPORT_UTF8
                             if (utf8)
                             {
                                 int extra = 0;
@@ -5482,9 +5482,9 @@ GET_ONE_CHARACTER:
                             {
                                 c = *ptr;
                             }
-#else
+                            #else
                             c = *ptr;
-#endif
+                            #endif
 
                             /* Come here from handling \ above when it escapes to a char value */
 
@@ -5515,7 +5515,7 @@ NON_SPECIAL_CHARACTER:
                                 else if (ptr[1] != 0 && ptr[1] != ']')
                                 {
                                     ptr++;
-#ifdef SUPPORT_UTF8
+                                    #ifdef SUPPORT_UTF8
                                     if (utf8)
                                     {
                                         int extra = 0;
@@ -5523,7 +5523,7 @@ NON_SPECIAL_CHARACTER:
                                         ptr += extra;
                                     }
                                     else
-#endif
+                                    #endif
                                         d = *ptr;
                                 }
                                 if (d < 0)
@@ -5544,7 +5544,7 @@ NON_SPECIAL_CHARACTER:
                                     goto PCRE_ERROR_RETURN;
                                 }
 
-#ifdef SUPPORT_UTF8
+                                #ifdef SUPPORT_UTF8
                                 if (utf8 && (d > 255 || ((options & PCRE_CASELESS) != 0 && d > 127)))
                                 {
                                     uschar buffer[6];
@@ -5554,7 +5554,7 @@ NON_SPECIAL_CHARACTER:
                                         length += LINK_SIZE + 2;
                                     }
 
-#ifdef SUPPORT_UCP
+                                    #ifdef SUPPORT_UCP
                                     /* If we have UCP support, find out how many extra ranges are
                                     needed to map the other case of characters within this range. We
                                     have to mimic the range optimization here, because extending the
@@ -5592,13 +5592,13 @@ NON_SPECIAL_CHARACTER:
                                                       ((occ == ocd)? 0 : ord2utf8(ocd, buffer));
                                         }
                                     }
-#endif  /* SUPPORT_UCP */
+                                    #endif  /* SUPPORT_UCP */
 
                                     /* The length of the (possibly extended) range */
 
                                     length += 1 + ord2utf8(c, buffer) + ord2utf8(d, buffer);
                                 }
-#endif  /* SUPPORT_UTF8 */
+                                #endif  /* SUPPORT_UTF8 */
 
                             }
 
@@ -5609,7 +5609,7 @@ NON_SPECIAL_CHARACTER:
 
                             else
                             {
-#ifdef SUPPORT_UTF8
+                                #ifdef SUPPORT_UTF8
                                 if (utf8 && (c > 255 || ((options & PCRE_CASELESS) != 0 && c > 127)))
                                 {
                                     uschar buffer[6];
@@ -5619,14 +5619,14 @@ NON_SPECIAL_CHARACTER:
                                         class_utf8 = TRUE;
                                         length += LINK_SIZE + 2;
                                     }
-#ifdef SUPPORT_UCP
+                                    #ifdef SUPPORT_UCP
                                     length += (((options &PCRE_CASELESS) != 0)? 2 : 1) *
                                               (1 + ord2utf8(c, buffer));
-#else   /* SUPPORT_UCP */
+                                    #else   /* SUPPORT_UCP */
                                     length += 1 + ord2utf8(c, buffer);
-#endif  /* SUPPORT_UCP */
+                                    #endif  /* SUPPORT_UCP */
                                 }
-#endif  /* SUPPORT_UTF8 */
+                                #endif  /* SUPPORT_UTF8 */
                             }
                         }
                     }
@@ -6142,7 +6142,7 @@ NORMAL_CHAR:
 
                 /* In UTF-8 mode, check for additional bytes. */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (utf8 && (c & 0xc0) == 0xc0)
                 {
                     while ((ptr[1] & 0xc0) == 0x80)         /* Can't flow over the end */
@@ -6153,7 +6153,7 @@ NORMAL_CHAR:
                         ptr++;
                     }
                 }
-#endif
+                #endif
 
                 continue;
         }
@@ -6241,12 +6241,12 @@ NORMAL_CHAR:
 
     *code++ = OP_END;
 
-#ifndef DEBUG
+    #ifndef DEBUG
     if (code - codestart > length)
     {
         *errorptr = ERR23;
     }
-#endif
+    #endif
 
     /* Give an error if there's back reference to a non-existent capturing
     subpattern. */
@@ -6318,7 +6318,7 @@ PCRE_ERROR_RETURN:
 
     /* Print out the compiled data for debugging */
 
-#ifdef DEBUG
+    #ifdef DEBUG
 
     printf("Length = %d top_bracket = %d top_backref = %d\n",
            length, re->top_bracket, re->top_backref);
@@ -6378,7 +6378,7 @@ PCRE_ERROR_RETURN:
         *erroroffset = ptr - (uschar *)pattern;
         return NULL;
     }
-#endif
+    #endif
 
     return (pcre *)re;
 }
@@ -6407,7 +6407,7 @@ match_ref(int offset, register const uschar *eptr, int length, match_data *md,
 {
     const uschar *p = md->start_subject + md->offset_vector[offset];
 
-#ifdef DEBUG
+    #ifdef DEBUG
     if (eptr >= md->end_subject)
     {
         printf("matching subject <null>");
@@ -6420,7 +6420,7 @@ match_ref(int offset, register const uschar *eptr, int length, match_data *md,
     printf(" against backref ");
     pchars(p, length, FALSE, md);
     printf("\n");
-#endif
+    #endif
 
     /* Always fail if not enough characters left */
 
@@ -6514,7 +6514,7 @@ match_xclass(int c, const uschar *data)
             }
         }
 
-#ifdef SUPPORT_UCP
+        #ifdef SUPPORT_UCP
         else  /* XCL_PROP & XCL_NOTPROP */
         {
             int chartype, othercase;
@@ -6535,7 +6535,7 @@ match_xclass(int c, const uschar *data)
                 }
             }
         }
-#endif  /* SUPPORT_UCP */
+        #endif  /* SUPPORT_UCP */
     }
 
     return negated;   /* char did not match */
@@ -6655,7 +6655,7 @@ typedef struct heapframe
 
     unsigned long int Xoriginal_ims;
 
-#ifdef SUPPORT_UCP
+    #ifdef SUPPORT_UCP
     int Xprop_type;
     int Xprop_fail_result;
     int Xprop_category;
@@ -6663,7 +6663,7 @@ typedef struct heapframe
     int Xprop_othercase;
     int Xprop_test_against;
     int *Xprop_test_variable;
-#endif
+    #endif
 
     int Xctype;
     int Xfc;
@@ -6746,7 +6746,7 @@ match(REGISTER const uschar *eptr, REGISTER const uschar *ecode,
     heap storage. Set up the top-level frame here; others are obtained from the
     heap whenever RMATCH() does a "recursion". See the macro definitions above. */
 
-#ifdef NO_RECURSE
+    #ifdef NO_RECURSE
     heapframe *frame = (pcre_stack_malloc)(sizeof(heapframe));
     frame->Xprevframe = NULL;            /* Marks the top level */
 
@@ -6774,9 +6774,9 @@ HEAP_RECURSE:
 
     /* Ditto for the local variables */
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
 #define charptr            frame->Xcharptr
-#endif
+    #endif
 #define callpat            frame->Xcallpat
 #define data               frame->Xdata
 #define next               frame->Xnext
@@ -6793,7 +6793,7 @@ HEAP_RECURSE:
 
 #define original_ims       frame->Xoriginal_ims
 
-#ifdef SUPPORT_UCP
+    #ifdef SUPPORT_UCP
 #define prop_type          frame->Xprop_type
 #define prop_fail_result   frame->Xprop_fail_result
 #define prop_category      frame->Xprop_category
@@ -6801,7 +6801,7 @@ HEAP_RECURSE:
 #define prop_othercase     frame->Xprop_othercase
 #define prop_test_against  frame->Xprop_test_against
 #define prop_test_variable frame->Xprop_test_variable
-#endif
+    #endif
 
 #define ctype              frame->Xctype
 #define fc                 frame->Xfc
@@ -6824,14 +6824,14 @@ HEAP_RECURSE:
     get preserved during recursion in the normal way. In this environment, fi and
     i, and fc and c, can be the same variables. */
 
-#else
+    #else
 #define fi i
 #define fc c
 
 
-#ifdef SUPPORT_UTF8                /* Many of these variables are used ony */
+    #ifdef SUPPORT_UTF8                /* Many of these variables are used ony */
     const uschar *charptr;             /* small blocks of the code. My normal  */
-#endif                             /* style of coding would have declared  */
+    #endif                             /* style of coding would have declared  */
     const uschar *callpat;             /* them within each of those blocks.    */
     const uschar *data;                /* However, in order to accommodate the */
     const uschar *next;                /* version of this code that uses an    */
@@ -6848,7 +6848,7 @@ HEAP_RECURSE:
 
     unsigned long int original_ims;
 
-#ifdef SUPPORT_UCP
+    #ifdef SUPPORT_UCP
     int prop_type;
     int prop_fail_result;
     int prop_category;
@@ -6856,7 +6856,7 @@ HEAP_RECURSE:
     int prop_othercase;
     int prop_test_against;
     int *prop_test_variable;
-#endif
+    #endif
 
     int ctype;
     int length;
@@ -6870,16 +6870,16 @@ HEAP_RECURSE:
     int stacksave[REC_STACK_SAVE_MAX];
 
     eptrblock newptrb;
-#endif
+    #endif
 
     /* These statements are here to stop the compiler complaining about unitialized
     variables. */
 
-#ifdef SUPPORT_UCP
+    #ifdef SUPPORT_UCP
     prop_fail_result = 0;
     prop_test_against = 0;
     prop_test_variable = NULL;
-#endif
+    #endif
 
     /* OK, now we can get on with the real code of the function. Recursion is
     specified by the macros RMATCH and RRETURN. When NO_RECURSE is *not* defined,
@@ -6951,11 +6951,11 @@ HEAP_RECURSE:
             }
             offset = number << 1;
 
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("start bracket %d subject=", number);
             pchars(eptr, 16, TRUE, md);
             printf("\n");
-#endif
+            #endif
 
             if (offset < md->offset_max)
             {
@@ -7189,7 +7189,7 @@ HEAP_RECURSE:
             back a number of characters, not bytes. */
 
             case OP_REVERSE:
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (md->utf8)
                 {
                     c = GET(ecode,1);
@@ -7204,7 +7204,7 @@ HEAP_RECURSE:
                     }
                 }
                 else
-#endif
+                #endif
 
                     /* No UTF-8 support, or not in UTF-8 mode: count is byte count */
 
@@ -7549,10 +7549,10 @@ HEAP_RECURSE:
                         }
                         offset = number << 1;
 
-#ifdef DEBUG
+                        #ifdef DEBUG
                         printf("end bracket %d", number);
                         printf("\n");
-#endif
+                        #endif
 
                         /* Test for a numbered group. This includes groups called as a result
                         of recursion. Note that whole-pattern recursion is coded as a recurse
@@ -7757,7 +7757,7 @@ HEAP_RECURSE:
                     It takes a bit more work in UTF-8 mode. Characters > 255 are assumed to
                     be "non-word" characters. */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (md->utf8)
                     {
                         if (eptr == md->start_subject)
@@ -7785,7 +7785,7 @@ HEAP_RECURSE:
                         }
                     }
                     else
-#endif
+                    #endif
 
                         /* More streamlined when not in UTF-8 mode */
 
@@ -7817,13 +7817,13 @@ HEAP_RECURSE:
                 {
                     RRETURN(MATCH_NOMATCH);
                 }
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (md->utf8)
                     while (eptr < md->end_subject && (*eptr & 0xc0) == 0x80)
                     {
                         eptr++;
                     }
-#endif
+                #endif
                 ecode++;
                 break;
 
@@ -7845,9 +7845,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c < 256 &&
-#endif
+                #endif
                     (md->ctypes[c] & ctype_digit) != 0
                 )
                 {
@@ -7863,9 +7863,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c >= 256 ||
-#endif
+                #endif
                     (md->ctypes[c] & ctype_digit) == 0
                 )
                 {
@@ -7881,9 +7881,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c < 256 &&
-#endif
+                #endif
                     (md->ctypes[c] & ctype_space) != 0
                 )
                 {
@@ -7899,9 +7899,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c >= 256 ||
-#endif
+                #endif
                     (md->ctypes[c] & ctype_space) == 0
                 )
                 {
@@ -7917,9 +7917,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c < 256 &&
-#endif
+                #endif
                     (md->ctypes[c] & ctype_word) != 0
                 )
                 {
@@ -7935,9 +7935,9 @@ HEAP_RECURSE:
                 }
                 GETCHARINCTEST(c, eptr);
                 if (
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                     c >= 256 ||
-#endif
+                #endif
                     (md->ctypes[c] & ctype_word) == 0
                 )
                 {
@@ -7946,7 +7946,7 @@ HEAP_RECURSE:
                 ecode++;
                 break;
 
-#ifdef SUPPORT_UCP
+                #ifdef SUPPORT_UCP
             /* Check the next character by Unicode property. We will get here only
             if the support is in the binary; otherwise a compile-time error occurs. */
 
@@ -8020,7 +8020,7 @@ HEAP_RECURSE:
                 }
                 ecode++;
                 break;
-#endif
+                #endif
 
 
             /* Match a back reference, possibly repeatedly. Look past the end of the
@@ -8217,7 +8217,7 @@ HEAP_RECURSE:
 
                     /* First, ensure the minimum number of matches are present. */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     /* UTF-8 mode */
                     if (md->utf8)
                     {
@@ -8245,7 +8245,7 @@ HEAP_RECURSE:
                         }
                     }
                     else
-#endif
+                    #endif
                         /* Not UTF-8 mode */
                     {
                         for (i = 1; i <= min; i++)
@@ -8275,7 +8275,7 @@ HEAP_RECURSE:
 
                     if (minimize)
                     {
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -8308,7 +8308,7 @@ HEAP_RECURSE:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (fi = min;; fi++)
@@ -8338,7 +8338,7 @@ HEAP_RECURSE:
                     {
                         pp = eptr;
 
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -8381,7 +8381,7 @@ HEAP_RECURSE:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (i = min; i < max; i++)
@@ -8417,7 +8417,7 @@ HEAP_RECURSE:
                 /* Match an extended character class. This opcode is encountered only
                 in UTF-8 mode, because that's the only time it is compiled. */
 
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
             case OP_XCLASS:
                 {
                     data = ecode + 1 + LINK_SIZE;                /* Save for matching */
@@ -8543,12 +8543,12 @@ HEAP_RECURSE:
 
                     /* Control never gets here */
                 }
-#endif    /* End of XCLASS */
+                #endif    /* End of XCLASS */
 
             /* Match a single character, casefully */
 
             case OP_CHAR:
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (md->utf8)
                 {
                     length = 1;
@@ -8564,7 +8564,7 @@ HEAP_RECURSE:
                         }
                 }
                 else
-#endif
+                #endif
 
                     /* Non-UTF-8 mode */
                 {
@@ -8583,7 +8583,7 @@ HEAP_RECURSE:
             /* Match a single character, caselessly */
 
             case OP_CHARNC:
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (md->utf8)
                 {
                     length = 1;
@@ -8621,17 +8621,17 @@ HEAP_RECURSE:
 
                         if (fc != dc)
                         {
-#ifdef SUPPORT_UCP
+                            #ifdef SUPPORT_UCP
                             int chartype;
                             int othercase;
                             if (ucp_findchar(fc, &chartype, &othercase) < 0 || dc != othercase)
-#endif
+                            #endif
                                 RRETURN(MATCH_NOMATCH);
                         }
                     }
                 }
                 else
-#endif   /* SUPPORT_UTF8 */
+                #endif   /* SUPPORT_UTF8 */
 
                     /* Non-UTF-8 mode */
                 {
@@ -8682,7 +8682,7 @@ HEAP_RECURSE:
                 the subject. */
 
 REPEATCHAR:
-#ifdef SUPPORT_UTF8
+                #ifdef SUPPORT_UTF8
                 if (md->utf8)
                 {
                     length = 1;
@@ -8702,7 +8702,7 @@ REPEATCHAR:
                         int oclength = 0;
                         uschar occhars[8];
 
-#ifdef SUPPORT_UCP
+                        #ifdef SUPPORT_UCP
                         int othercase;
                         int chartype;
                         if ((ims & PCRE_CASELESS) != 0 &&
@@ -8711,7 +8711,7 @@ REPEATCHAR:
                         {
                             oclength = ord2utf8(othercase, occhars);
                         }
-#endif  /* SUPPORT_UCP */
+                        #endif  /* SUPPORT_UCP */
 
                         for (i = 1; i <= min; i++)
                         {
@@ -8817,7 +8817,7 @@ REPEATCHAR:
                     value of fc will always be < 128. */
                 }
                 else
-#endif  /* SUPPORT_UTF8 */
+                #endif  /* SUPPORT_UTF8 */
 
                     /* When not in UTF-8 mode, load a single-byte character. */
                 {
@@ -8959,9 +8959,9 @@ REPEATCHAR:
                 GETCHARINCTEST(c, eptr);
                 if ((ims & PCRE_CASELESS) != 0)
                 {
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     if (c < 256)
-#endif
+                    #endif
                         c = md->lcc[c];
                     if (md->lcc[*ecode++] == c)
                     {
@@ -9038,7 +9038,7 @@ REPEATNOTCHAR:
                 {
                     fc = md->lcc[fc];
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     /* UTF-8 mode */
                     if (md->utf8)
                     {
@@ -9057,7 +9057,7 @@ REPEATNOTCHAR:
                         }
                     }
                     else
-#endif
+                    #endif
 
                         /* Not UTF-8 mode */
                     {
@@ -9075,7 +9075,7 @@ REPEATNOTCHAR:
 
                     if (minimize)
                     {
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -9099,7 +9099,7 @@ REPEATNOTCHAR:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (fi = min;; fi++)
@@ -9124,7 +9124,7 @@ REPEATNOTCHAR:
                     {
                         pp = eptr;
 
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -9162,7 +9162,7 @@ REPEATNOTCHAR:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (i = min; i < max; i++)
@@ -9193,7 +9193,7 @@ REPEATNOTCHAR:
 
                 else
                 {
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                     /* UTF-8 mode */
                     if (md->utf8)
                     {
@@ -9208,7 +9208,7 @@ REPEATNOTCHAR:
                         }
                     }
                     else
-#endif
+                    #endif
                         /* Not UTF-8 mode */
                     {
                         for (i = 1; i <= min; i++)
@@ -9225,7 +9225,7 @@ REPEATNOTCHAR:
 
                     if (minimize)
                     {
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -9245,7 +9245,7 @@ REPEATNOTCHAR:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (fi = min;; fi++)
@@ -9270,7 +9270,7 @@ REPEATNOTCHAR:
                     {
                         pp = eptr;
 
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -9304,7 +9304,7 @@ REPEATNOTCHAR:
                             }
                         }
                         else
-#endif
+                        #endif
                             /* Not UTF-8 mode */
                         {
                             for (i = min; i < max; i++)
@@ -9371,7 +9371,7 @@ REPEATNOTCHAR:
 REPEATTYPE:
                 ctype = *ecode++;      /* Code for the character type */
 
-#ifdef SUPPORT_UCP
+                #ifdef SUPPORT_UCP
                 if (ctype == OP_PROP || ctype == OP_NOTPROP)
                 {
                     prop_fail_result = ctype == OP_NOTPROP;
@@ -9391,7 +9391,7 @@ REPEATTYPE:
                 {
                     prop_type = -1;
                 }
-#endif
+                #endif
 
                 /* First, ensure the minimum number of matches are present. Use inline
                 code for maximizing the speed, and do the type test once at the start
@@ -9407,7 +9407,7 @@ REPEATTYPE:
                 }
                 if (min > 0)
                 {
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     if (prop_type > 0)
                     {
                         for (i = 1; i <= min; i++)
@@ -9456,11 +9456,11 @@ REPEATTYPE:
                     }
 
                     else
-#endif     /* SUPPORT_UCP */
+                    #endif     /* SUPPORT_UCP */
 
                         /* Handle all other cases when the coding is UTF-8 */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                         if (md->utf8) switch(ctype)
                             {
                                 case OP_ANY:
@@ -9568,7 +9568,7 @@ REPEATTYPE:
                             }  /* End switch(ctype) */
 
                         else
-#endif     /* SUPPORT_UTF8 */
+                    #endif     /* SUPPORT_UTF8 */
 
                             /* Code for the non-UTF-8 case for minimum matching of operators other
                             than OP_PROP and OP_NOTPROP. */
@@ -9660,7 +9660,7 @@ REPEATTYPE:
 
                 if (minimize)
                 {
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     if (prop_type > 0)
                     {
                         for (fi = min;; fi++)
@@ -9727,9 +9727,9 @@ REPEATTYPE:
                     }
 
                     else
-#endif     /* SUPPORT_UCP */
+                    #endif     /* SUPPORT_UCP */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
                         if (md->utf8)
                         {
@@ -9806,7 +9806,7 @@ REPEATTYPE:
                             }
                         }
                         else
-#endif
+                    #endif
                             /* Not UTF-8 mode */
                         {
                             for (fi = min;; fi++)
@@ -9891,7 +9891,7 @@ REPEATTYPE:
                 {
                     pp = eptr;  /* Remember where we started */
 
-#ifdef SUPPORT_UCP
+                    #ifdef SUPPORT_UCP
                     if (prop_type > 0)
                     {
                         for (i = min; i < max; i++)
@@ -10000,9 +10000,9 @@ REPEATTYPE:
                     }
 
                     else
-#endif   /* SUPPORT_UCP */
+                    #endif   /* SUPPORT_UCP */
 
-#ifdef SUPPORT_UTF8
+                    #ifdef SUPPORT_UTF8
                         /* UTF-8 mode */
 
                         if (md->utf8)
@@ -10207,7 +10207,7 @@ REPEATTYPE:
                             }
                         }
                         else
-#endif
+                    #endif
 
                             /* Not UTF-8 mode */
                         {
@@ -10570,7 +10570,7 @@ pcre_exec(const pcre *argument_re, const pcre_extra *extra_data,
     /* Check a UTF-8 string if required. Unfortunately there's no way of passing
     back the character offset. */
 
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     if (match_block.utf8 && (options & PCRE_NO_UTF8_CHECK) == 0)
     {
         if (valid_utf8((uschar *)subject, length) >= 0)
@@ -10590,7 +10590,7 @@ pcre_exec(const pcre *argument_re, const pcre_extra *extra_data,
             }
         }
     }
-#endif
+    #endif
 
     /* The ims options can vary during the matching as a result of the presence
     of (?ims) items in the pattern. They are kept in a local variable so that
@@ -10748,11 +10748,11 @@ pcre_exec(const pcre *argument_re, const pcre_extra *extra_data,
             }
         }
 
-#ifdef DEBUG  /* Sigh. Some compilers never learn. */
+        #ifdef DEBUG  /* Sigh. Some compilers never learn. */
         printf(">>>> Match against: ");
         pchars(start_match, end_subject - start_match, TRUE, &match_block);
         printf("\n");
-#endif
+        #endif
 
         /* If req_byte is set, we know that that character must appear in the subject
         for the match to succeed. If the first character is set, req_byte must be
@@ -10836,13 +10836,13 @@ pcre_exec(const pcre *argument_re, const pcre_extra *extra_data,
         if (rc == MATCH_NOMATCH)
         {
             start_match++;
-#ifdef SUPPORT_UTF8
+            #ifdef SUPPORT_UTF8
             if (match_block.utf8)
                 while(start_match < end_subject && (*start_match & 0xc0) == 0x80)
                 {
                     start_match++;
                 }
-#endif
+            #endif
             continue;
         }
 

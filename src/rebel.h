@@ -78,14 +78,14 @@
 This is for 64bit large file support (LFS),
 */
 #if 0
-/* ufko */
-#define LFS
-#ifdef LFS
-    #if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-        #define _LARGEFILE64_SOURCE 1
+    /* ufko */
+    #define LFS
+    #ifdef LFS
+        #if defined(SOLARIS) || defined(TRU64) || defined(AIX)
+            #define _LARGEFILE64_SOURCE 1
+        #endif
+        #define _FILE_OFFSET_BITS 64
     #endif
-    #define _FILE_OFFSET_BITS 64
-#endif
 #endif /* if 0 */
 
 #include <signal.h>
@@ -103,13 +103,13 @@ This is for 64bit large file support (LFS),
 */
 
 #if 0
-/* ufko - should work without it on linux */
-#ifdef SUPPORT_UTF8
-    #ifdef LINUX
-        #include <wchar.h>
-        #define WCSFTIME
+    /* ufko - should work without it on linux */
+    #ifdef SUPPORT_UTF8
+        #ifdef LINUX
+            #include <wchar.h>
+            #define WCSFTIME
+        #endif
     #endif
-#endif
 #endif /* if 0 */
 
 #include <termios.h>
@@ -127,11 +127,11 @@ This is for 64bit large file support (LFS),
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#ifdef LINUX 
+#ifdef LINUX
     #include <malloc.h>
 #endif
 
-#ifdef MAC_OSX 
+#ifdef MAC_OSX
     #include <alloca.h>
 #endif
 

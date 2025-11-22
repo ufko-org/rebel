@@ -2116,11 +2116,11 @@ CELL *ping(CELL *address, int maxwait, int listmode, int maxCount, int flag)
     CELL *link = NULL;
     char buff[64];
 
-#ifdef MAC_OSX /* no superuser rights necessary */
+    #ifdef MAC_OSX /* no superuser rights necessary */
     if ((s = socket(ADDR_FAMILY, SOCK_DGRAM, ICMP_TYPE)) < 0)
-#else
+    #else
     if ((s = socket(ADDR_FAMILY, SOCK_RAW, ICMP_TYPE)) < 0)
-#endif
+    #endif
         return(netError(ERR_INET_OPEN_SOCKET));
 
     sockaddr_len = (ADDR_FAMILY == AF_INET6) ?
@@ -2216,11 +2216,11 @@ CELL *ping(CELL *address, int maxwait, int listmode, int maxCount, int flag)
             /* printf("->%s\n", hostaddr); */
 
             memset((char *)whereto, 0, sockaddr_len);
-#ifdef  MAC_OSX
+            #ifdef  MAC_OSX
             if(getHostAddr(whereto, SOCK_DGRAM, hostaddr) != 0)
-#else
+            #else
             if(getHostAddr(whereto, SOCK_RAW, hostaddr) != 0)
-#endif
+            #endif
             {
                 shutdown(s, SHUT_RDWR);
                 return(netError(ERR_INET_HOST_UNKNOWN));
@@ -2490,13 +2490,13 @@ CELL *p_netPacket(CELL *params)
 
        Curently net-packet is IPv4 only.
     */
-#if defined(MAC_OSX)
+    #if defined(MAC_OSX)
     UINT configFlags = 3; /* ntohs() for both ip_len and ip_off */
-#elif defined(LINUX)
+    #elif defined(LINUX)
     UINT configFlags = 1; /* ntohs() for ip_len only */
-#else /* works for OpenBSD */
+    #else /* works for OpenBSD */
     UINT configFlags = 0; /* none */
-#endif
+    #endif
 
     params = getStringSize(params, &packet, &size, TRUE);
     /* undocumented user-supplied extra configFlags parameter
@@ -2597,12 +2597,12 @@ unsigned short pseudo_chks(
            packet + iph->ip_hl * 4 + data_offset, data_len);
 
     checksum = in_cksum((unsigned short *)pseudoh, sizeof(struct pseudohdr) + segment_len);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("segment_len:%d\n", segment_len);
     printf("data_offset:%d\n", data_offset);
     printf("data_len:%d\n", data_len);
     printf("checksum:%x\n", ntohs(checksum));
-#endif
+    #endif
     return(checksum);
 }
 #endif /* NO_NET_PACKET */

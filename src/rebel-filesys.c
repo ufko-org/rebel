@@ -351,7 +351,9 @@ ssize_t readFile(char *fileName, char * * buffer)
     fileName = getLocalPath(fileName);
 
     if(stat(fileName, &fileInfo) != 0)
+    {
         return(-1);
+    }
 
     size = fileInfo.st_size;
 
@@ -611,16 +613,16 @@ CELL *p_seek(CELL *params)
 
 char *readStreamLine(STREAM *stream, FILE *inStream)
 {
-#ifdef OLD_READ_STREAM /* pre 10.5.8 */
+    #ifdef OLD_READ_STREAM /* pre 10.5.8 */
     int chr;
-#else
+    #else
     char buff[MAX_STRING];
     size_t l;
-#endif
+    #endif
 
     openStrStream(stream, MAX_STRING, 1);
 
-#ifdef TRUE64 /* pre 10.5.8 also all other OS */
+    #ifdef TRUE64 /* pre 10.5.8 also all other OS */
     while((chr = fgetc(inStream)) != EOF)
     {
         if(chr == '\n')
@@ -637,7 +639,7 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
         }
         writeStreamChar(stream, chr);
     }
-#else
+    #else
     while(fgets(buff, MAX_STRING, inStream) != NULL)
     {
         l=strlen(buff);
@@ -653,7 +655,7 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
         }
         writeStreamStr(stream, buff, l);
     }
-#endif /* pre 10.5.8 also all other OS */
+    #endif /* pre 10.5.8 also all other OS */
 
     if(feof(inStream))
     {
@@ -687,12 +689,12 @@ CELL *p_readLine(CELL *params)
 
     /* check if stream input can be done */
     fstream = (handle == 0) ? IOchannel : getIOstream(handle);
-#ifdef LIBRARY
+    #ifdef LIBRARY
     if(!rebelLibConsoleFlag && fstream == stdin)
     {
         return(nilCell);
     }
-#endif
+    #endif
     if(fstream != NULL)
     {
         if((line = readStreamLine(&readLineStream, fstream)) == NULL)
@@ -770,7 +772,9 @@ int openFile(char *fileName, char *accessMode, char *option)
 
 
     if(*accessMode == 'r')
+    {
         return(open(fileName, O_RDONLY | O_BINARY | blocking, 0));
+    }
 
     else if(*accessMode == 'w')
         return(open(fileName,O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | blocking,
@@ -979,12 +983,12 @@ CELL *p_realpath(CELL *params)
         return(nilCell);
     }
 
-#ifdef _BSD /* behaves like Windows */
+    #ifdef _BSD /* behaves like Windows */
     if(isFile(path, 0))
     {
         return(nilCell);
     }
-#endif
+    #endif
 
     return(stuffString(path));
 }
@@ -1034,8 +1038,8 @@ CELL *p_fileInfo(CELL *params)
     return(list);
 }
 
-    /* ufko was: size_t because of LFS macro */
-    INT64 fileSize(char *pathName)
+/* ufko was: size_t because of LFS macro */
+INT64 fileSize(char *pathName)
 {
     struct stat fileInfo;
     int result;
@@ -1190,7 +1194,7 @@ CELL *p_process(CELL *params)
     cmd = callocMemory(size + 1);
     memcpy(cmd, command, size + 1);
 
-#ifdef DEBUG_INIT_ARGV
+    #ifdef DEBUG_INIT_ARGV
     int i;
     init_argv(cmd, argv);
     for(i = 0; i < 15; i++)
@@ -1202,7 +1206,7 @@ CELL *p_process(CELL *params)
         printf("->%s<-\n", argv[i]);
     }
     return(trueCell);
-#endif
+    #endif
 
     if(params != nilCell)
     {
@@ -1674,11 +1678,11 @@ CELL *getSelectReadyList(int mode)
     tv.tv_sec = 0;
     tv.tv_usec = 892 + (long int)arc4random() / 10000000;
 
-#ifdef LINUX
+    #ifdef LINUX
     memcpy(&thisFdSet, &myFdSet, sizeof(fd_set));
-#else
+    #else
     FD_COPY(&myFdSet, &thisFdSet);
-#endif
+    #endif
 
     if(mode == SELECT_READ_READY)
     {
@@ -2023,14 +2027,14 @@ SEMAPHORE_END:
 int semaphore(UINT sem_id, int value, int type)
 {
     struct sembuf sem_b;
-#ifdef SPARC
-#endif
+    #ifdef SPARC
+    #endif
 
-#if defined(MAC_OSX) || defined(LINUX)
+    #if defined(MAC_OSX) || defined(LINUX)
     union semun semu;
 
     semu.val = 0;
-#endif
+    #endif
 
     if(type != SEM_CREATE)
     {
@@ -2039,11 +2043,11 @@ int semaphore(UINT sem_id, int value, int type)
             if(value == 0)
             {
                 /* remove semaphore */
-#if defined(MAC_OSX) || defined(LINUX)
+                #if defined(MAC_OSX) || defined(LINUX)
                 if(semctl(sem_id, 0, IPC_RMID, semu) == -1) /* MAC_OSX, GNU/Linux, GNU/kFreeBSD */
-#else
+                #else
                 if(semctl(sem_id, 0, IPC_RMID, 0) == -1) /* BSD, TRU64 */
-#endif
+                #endif
                     return(-1);
                 return(0);
             }
@@ -2061,21 +2065,21 @@ int semaphore(UINT sem_id, int value, int type)
 
         else
             /* return semaphore value */
-#if defined(MAC_OSX) || defined(LINUX)
+        #if defined(MAC_OSX) || defined(LINUX)
             return(semctl(sem_id, 0, GETVAL, semu));
-#else
+        #else
             return(semctl(sem_id, 0, GETVAL, 0));
-#endif
+        #endif
     }
 
     /* create semaphore */
     sem_id = semget(IPC_PRIVATE, 1, 0666 );
 
-#if defined(MAC_OSX) || defined(LINUX)
+    #if defined(MAC_OSX) || defined(LINUX)
     if(semctl(sem_id, 0, SETVAL, semu) == -1) /* MAC_OSX, GNU/Linux, GNU/kFreeBSD */
-#else
+    #else
     if(semctl(sem_id, 0, SETVAL, 0) == -1) /* BSD, TRU64 */
-#endif
+    #endif
         return(-1);
 
     return(sem_id);
@@ -2393,15 +2397,15 @@ CELL *p_date(CELL *params)
     UINT tme;
     size_t size;
 
-#ifdef SUPPORT_UTF8
-#ifdef WCSFTIME
+    #ifdef SUPPORT_UTF8
+    #ifdef WCSFTIME
     int *ufmt;
     int *timeString;
-#endif
+    #endif
     char *utf8str;
-#else
+    #else
     char *timeString;
-#endif
+    #endif
 
     if(params == nilCell)
     {
@@ -2423,9 +2427,9 @@ CELL *p_date(CELL *params)
         {
             params = getStringSize(params, &fmt, &size, TRUE);
             ltm = localtime(&t);
-#ifdef SUPPORT_UTF8
+            #ifdef SUPPORT_UTF8
             /* some Linux do UTF-8 but don't have wcsftime() or it is buggy */
-#ifdef WCSFTIME
+            #ifdef WCSFTIME
             size = utf8_wlen(fmt, fmt + size + 1);
             ufmt = alloca(UTF8_MAX_BYTES * (size + 1));
             utf8_wstr(ufmt, fmt, size);
@@ -2435,17 +2439,17 @@ CELL *p_date(CELL *params)
             utf8str = alloca(size *UTF8_MAX_BYTES + 1);
             size =  wstr_utf8(utf8str, timeString, size *UTF8_MAX_BYTES);
             return(stuffString(utf8str));
-#else
+            #else
             utf8str = alloca(128);
             strftime(utf8str, 127, fmt, ltm);
             return(stuffString(utf8str));
-#endif /* WCSFTIME */
+            #endif /* WCSFTIME */
 
-#else
+            #else
             timeString = alloca(128);
             strftime(timeString, 127, fmt, ltm);
             return(stuffString(timeString));
-#endif
+            #endif
         }
     }
 
@@ -2758,18 +2762,18 @@ time_t calcDateValue(int year, int month, int day, int hour, int min, int sec)
 
 void mySleep(int ms)
 {
-#ifdef NANOSLEEP
+    #ifdef NANOSLEEP
     struct timespec tm;
 
     tm.tv_sec = ms / 1000;
     tm.tv_nsec = (ms - tm.tv_sec * 1000) * 1000000;
     nanosleep(&tm, 0);
 
-#else
+    #else
 
     sleep((ms + 500)/1000);
 
-#endif
+    #endif
 }
 
 #ifdef NANOSLEEP
@@ -2787,20 +2791,20 @@ void myNanoSleep(int nanosec)
 CELL *p_sleep(CELL *params)
 {
     double milliSecsFloat;
-#ifdef NANOSLEEP
+    #ifdef NANOSLEEP
     int nanoSecsInt;
-#endif
+    #endif
 
     getFloat(params, &milliSecsFloat);
 
     mySleep((UINT)milliSecsFloat);
-#ifdef NANOSLEEP
+    #ifdef NANOSLEEP
     nanoSecsInt = (milliSecsFloat - (int)milliSecsFloat) * 1000000;
     if(nanoSecsInt)
     {
         myNanoSleep(nanoSecsInt);
     }
-#endif
+    #endif
 
     return(stuffFloat(milliSecsFloat));
 }
@@ -2832,13 +2836,13 @@ CELL *p_env(CELL *params)
 
     /* two parameters sets environment for one variable */
     getString(params, &varValue);
-#ifndef MY_SETENV
+    #ifndef MY_SETENV
     if(*varValue == 0)
     {
         unsetenv(varName);
     }
     else
-#endif
+    #endif
         if(setenv(varName, varValue, 1) != 0)
         {
             return(nilCell);

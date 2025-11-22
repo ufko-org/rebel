@@ -926,10 +926,10 @@ CELL *getJSONstring(char *jsonStr, char * * restStr)
     char *xlated;
     size_t size;
     int i, j;
-#ifdef SUPPORT_UTF8
+    #ifdef SUPPORT_UTF8
     int len;
     char buff[8];
-#endif
+    #endif
 
     /* get key string */
     while((unsigned char)*jsonStr <= ' ' && *jsonStr != 0)
@@ -998,18 +998,18 @@ CELL *getJSONstring(char *jsonStr, char * * restStr)
                             isxdigit((unsigned char)*(token + i + 3)) &&
                             isxdigit((unsigned char)*(token + i + 4)))
                     {
-#ifdef SUPPORT_UTF8
+                        #ifdef SUPPORT_UTF8
                         buff[0] = '0';
                         buff[1] = 'x';
                         memcpy(buff + 2, token + i + 1, 4);
                         buff[6] = 0;
                         len = wchar_utf8(strtol(buff, NULL, 16), xlated + j);
                         j += len;
-#else
+                        #else
                         *(xlated + j) = '\\';
                         memcpy(xlated + j + 1, token + i, 5);
                         j += 6;
-#endif
+                        #endif
                         i += 4;
                     }
                     else

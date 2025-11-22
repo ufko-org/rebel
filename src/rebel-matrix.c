@@ -200,11 +200,11 @@ CELL *p_matInvert(CELL *params)
     int typeA;
     double * * A;
     double * * Y;
-#ifdef FP_NAN
+    #ifdef FP_NAN
     double tiny = FP_NAN;
-#else
+    #else
     double tiny = sqrt(-1);
-#endif
+    #endif
 
     if((A = getMatrix(params, &typeA, &n, &m, &err)) == NULL)
     {
@@ -247,11 +247,11 @@ CELL *p_determinant(CELL *params)
     double d;
     int typeM, n, m, i, err;
     int *indx;
-#ifdef FP_NAN
+    #ifdef FP_NAN
     double tiny = FP_NAN;
-#else
+    #else
     double tiny = sqrt(-1);
-#endif
+    #endif
 
     if( (M = getMatrix(params, &typeM, &n, &m, &err)) == NULL)
     {
@@ -567,11 +567,11 @@ int ludcmp(double * * a, int n, int *indx, double *d, double tiny)
 
         if (a[j][j] == 0.0)
         {
-#ifdef FP_NAN
+            #ifdef FP_NAN
             if(tiny != FP_NAN)
-#else
+            #else
             if(!isnan(tiny))
-#endif
+            #endif
                 a[j][j] = tiny;
             else
             {

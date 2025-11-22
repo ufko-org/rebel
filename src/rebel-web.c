@@ -1219,27 +1219,27 @@ void sendHTTPpage(char *content, size_t size, char *media)
 
     varPrintf(OUT_CONSOLE, "HTTP/1.0 %s\r\n", status);
     varPrintf(OUT_CONSOLE, "Server: Rebel v.%d (%s)\r\n", version, OSTYPE);
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     puts("# Header sent:");
     printf("HTTP/1.0 %s\r\n", status);
     printf("Server: Rebel v.%d (%s)\r\n", version, OSTYPE);
-#endif
+    #endif
 
     if(media != NULL)
     {
         varPrintf(OUT_CONSOLE, "Content-length: %d\r\nContent-type: %s\r\n\r\n", size, media);
-#ifdef DEBUGHTTP
+        #ifdef DEBUGHTTP
         printf("Content-length: %d\r\nContent-type: %s\r\n\r\n", (int)size, media);
-#endif
+        #endif
     }
     size = write(fileno(IOchannel), content, size);
     fflush(IOchannel);
     fclose(IOchannel);
     IOchannel = NULL;
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     printf("# content:%s:\r\n", content);
     fflush(stdout);
-#endif
+    #endif
 }
 
 #define MAX_BUFF 1024
@@ -1277,9 +1277,9 @@ int executeHTTPrequest(char *request, int type)
     setenv("SERVER_SOFTWARE", SERVER_SOFTWARE, 1);
     setenv("REQUEST_METHOD", requestMethod[type], 1);
 
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     printf("# HTTP request:%s:%s:\r\n", request, requestMethod[type]);
-#endif
+    #endif
 
     /* stuff after request */
     while(*sptr > ' ')
@@ -1554,18 +1554,18 @@ ssize_t readPayLoad(ssize_t size, char *buff, int outFile, char *request)
     ssize_t bytes, readsize;
     size_t offset = 0, transferred = 0;
 
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     printf("# Payload size:%ld\r\n", (long)size);
-#endif
+    #endif
 
     while(size > 0)
     {
         readsize = (size > MAX_BUFF) ? MAX_BUFF : size;
         bytes = read(fileno(IOchannel), buff + offset, readsize);
 
-#ifdef DEBUGHTTP
+        #ifdef DEBUGHTTP
         printf("Payload bytes:%ld:%s:\r\n", (long)bytes, buff + offset);
-#endif
+        #endif
 
         if(bytes <= 0)
         {
@@ -1604,9 +1604,9 @@ void handleHTTPcgi(char *request, char *query, ssize_t querySize)
 
     srandom(milliSecTime());
 
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     printf("# CGI request:%s:%s:\r\n", request, query);
-#endif
+    #endif
 
     if(isFile(request, 0) != 0)
     {
@@ -1651,11 +1651,11 @@ void handleHTTPcgi(char *request, char *query, ssize_t querySize)
         sendHTTPpage(content, size, NULL);
     }
 
-#ifdef DEBUGHTTP
+    #ifdef DEBUGHTTP
     printf("# Temporary file: %s\n", tempfile);
-#else
+    #else
     unlink(tempfile);
-#endif
+    #endif
 
     if(content)
     {
