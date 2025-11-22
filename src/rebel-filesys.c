@@ -36,17 +36,15 @@ int init_argv(char *ptr, char *argv[]);
 char *getUUID(char *str, char *node);
 
 
-#if defined(LINUX) || defined(KFREEBSD)
+#ifdef LINUX
 union semun
 {
     int val;    /* Value for SETVAL */
     struct semid_ds *buf;    /* Buffer for IPC_STAT, IPC_SET */
     unsigned short *array;  /* Array for GETALL, SETALL */
-#ifdef LINUX
     struct seminfo *__buf;  /* Buffer for IPC_INFO (Linux-specific) */
-#endif
 };
-#endif /* LINUX || KFREEBSD */
+#endif
 
 extern char **environ;
 
@@ -55,7 +53,7 @@ extern char **environ;
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
 
-#if defined(LINUX) || defined(KFREEBSD) || defined(CYGWIN)
+#ifdef LINUX
     char *strptime(const char *str, const char *fmt, struct tm *ttm);
 #endif
 
@@ -1738,7 +1736,7 @@ CELL *getSelectReadyList(int mode)
     tv.tv_sec = 0;
     tv.tv_usec = 892 + (long int)arc4random() / 10000000;
 
-#if defined(SUNOS) || defined(LINUX) || defined(CYGWIN) || defined(AIX) || defined(KFREEBSD)
+#ifdef LINUX
     memcpy(&thisFdSet, &myFdSet, sizeof(fd_set));
 #else
     FD_COPY(&myFdSet, &thisFdSet);
@@ -2093,7 +2091,7 @@ int semaphore(UINT sem_id, int value, int type)
 #endif
 #endif
 
-#if defined(MAC_OSX) || defined(LINUX) || defined(KFREEBSD)
+#if defined(MAC_OSX) || defined(LINUX)
     union semun semu;
 
     semu.val = 0;
@@ -2106,20 +2104,11 @@ int semaphore(UINT sem_id, int value, int type)
             if(value == 0)
             {
                 /* remove semaphore */
-#ifdef SPARC
-#ifndef REBEL64
-                if(semctl(sem_id, 0, IPC_RMID, &semun_val) == -1) /* SPARC 32 */
-#else
-                if(semctl(sem_id, 0, IPC_RMID, 0) == -1) /* SPARC 64 */
-#endif
-
-#else /* not SPARC */
-#if defined(MAC_OSX) || defined(LINUX) || defined(KFREEBSD)
+#if defined(MAC_OSX) || defined(LINUX)
                 if(semctl(sem_id, 0, IPC_RMID, semu) == -1) /* MAC_OSX, GNU/Linux, GNU/kFreeBSD */
 #else
                 if(semctl(sem_id, 0, IPC_RMID, 0) == -1) /* BSD, TRU64 */
-#endif /* not MAC_OSX */
-#endif /* not SPARC */
+#endif
                     return(-1);
                 return(0);
             }
@@ -2137,7 +2126,7 @@ int semaphore(UINT sem_id, int value, int type)
 
         else
             /* return semaphore value */
-#if defined(MAC_OSX) || defined(LINUX) || defined(KFREEBSD)
+#if defined(MAC_OSX) || defined(LINUX)
             return(semctl(sem_id, 0, GETVAL, semu));
 #else
             return(semctl(sem_id, 0, GETVAL, 0));
@@ -2147,19 +2136,11 @@ int semaphore(UINT sem_id, int value, int type)
     /* create semaphore */
     sem_id = semget(IPC_PRIVATE, 1, 0666 );
 
-#ifdef SPARC
-#ifndef REBEL64
-    if(semctl(sem_id, 0, SETVAL, &semun_val) == -1) /* SPARC 32 */
-#else
-    if(semctl(sem_id, 0, SETVAL, 0) == -1) /* SPARC 64 */
-#endif
-#else /* not SPARC */
-#if defined(MAC_OSX) || defined(LINUX) || defined(KFREEBSD)
+#if defined(MAC_OSX) || defined(LINUX)
     if(semctl(sem_id, 0, SETVAL, semu) == -1) /* MAC_OSX, GNU/Linux, GNU/kFreeBSD */
 #else
     if(semctl(sem_id, 0, SETVAL, 0) == -1) /* BSD, TRU64 */
-#endif /* not MAC_OSX */
-#endif /* not SPARC */
+#endif
         return(-1);
 
     return(sem_id);
@@ -2728,14 +2709,9 @@ CELL *p_now(CELL *params)
                (UINT)ttm->tm_yday + 1,
                ((UINT)ttm->tm_wday == 0 ? 7 : (UINT)ttm->tm_wday),
 
-#if defined(MAC_OSX) || defined(LINUX) || defined(_BSD) || defined(KFREEBSD) || defined(CYGWIN)
+#if defined(MAC_OSX) || defined(LINUX) || defined(_BSD) 
                gmtoff, isdst
 #endif
-
-#if defined(SUNOS)
-               timezone/60, daylight
-#endif
-
 
            );
 
