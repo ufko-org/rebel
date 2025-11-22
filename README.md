@@ -28,7 +28,7 @@ $: ls -l rebel
 
 ### [List of built-in functions](https://github.com/ufko-org/rebel/blob/main/built-in-functions.txt)
 
-## Rebel Fields of Operation
+### Rebel Fields of Operation
 
 - **Core Scripting & Flow Control**
   - loops, conditionals, list processing, lambda, functional programming
