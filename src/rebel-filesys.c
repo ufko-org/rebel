@@ -571,13 +571,8 @@ CELL *p_seek(CELL *params)
 {
     UINT handle;
     FILE *fstream;
-#ifdef LFS
-    INT64 paramPosition;
-    off_t newPosition;
-#else
     off_t paramPosition;
     off_t newPosition;
-#endif
 
     params = getInteger(params, &handle);
 
@@ -598,11 +593,7 @@ CELL *p_seek(CELL *params)
     }
     else
     {
-#ifdef LFS
-        getInteger64Ext(params, &paramPosition, TRUE);
-#else
         getInteger(params, (UINT *)&paramPosition);
-#endif
 
         newPosition = paramPosition;
 
@@ -623,11 +614,7 @@ CELL *p_seek(CELL *params)
     }
 
     paramPosition = newPosition;
-#ifdef LFS
     return(stuffInteger(paramPosition));
-#else
-    return(stuffInteger(paramPosition));
-#endif
 }
 
 char *readStreamLine(STREAM *stream, FILE *inStream)
@@ -1082,12 +1069,8 @@ CELL *p_fileInfo(CELL *params)
     return(list);
 }
 
-
-#ifdef LFS
+    /* ufko was: size_t because of LFS macro */
     INT64 fileSize(char *pathName)
-#else
-    size_t fileSize(char *pathName)
-#endif
 {
     struct stat fileInfo;
     int result;

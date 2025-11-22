@@ -105,14 +105,8 @@ CELL *p_search(CELL *params)
     int flag = 0;
     CELL *next;
 
-#ifdef LFS
-    off_t filePosition;
-    off_t foundPosition;
-    double result;
-#else
     ssize_t filePosition;
     ssize_t foundPosition;
-#endif
 
     char *searchString;
     char *buffer;
@@ -194,12 +188,7 @@ CELL *p_search(CELL *params)
     }
 
     lseek((int)fileHandle, foundPosition, SEEK_SET);
-#ifdef LFS
-    result = foundPosition;
-    return(stuffFloat(result));
-#else
     return(stuffInteger(foundPosition));
-#endif
 }
 
 /* returns a new string cell */
