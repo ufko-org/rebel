@@ -2263,11 +2263,9 @@ CELL *makeStringCell(char *contents, size_t size)
 
 CELL *copyCell(CELL *cell)
 {
-#ifdef ISO_C90
     CELL *newCell;
     CELL *list;
     UINT len;
-#endif
 
     /* avoids copy if cell on resultStack */
     if(cell == (CELL *)*(resultStackIdx))
@@ -2277,12 +2275,6 @@ CELL *copyCell(CELL *cell)
             return(popResult());
         }
     }
-
-#ifndef ISO_C90
-    CELL *newCell;
-    CELL *list;
-    UINT len;
-#endif
 
     if(firstFreeCell == NULL)
     {
@@ -2345,21 +2337,14 @@ CELL *copyCell(CELL *cell)
    if copying with envelope call copyCell() instead */
 CELL *copyList(CELL *cell)
 {
-#ifdef ISO_C90
     CELL *firstCell;
     CELL *newCell;
-#endif
 
     if(cell == nilCell)
     {
         lastCellCopied = nilCell;
         return(cell);
     }
-
-#ifndef ISO_C90
-    CELL *firstCell;
-    CELL *newCell;
-#endif
 
     firstCell = newCell = copyCell(cell);
 
