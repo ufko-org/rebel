@@ -2737,13 +2737,6 @@ CELL *p_now(CELL *params)
                timezone/60, daylight
 #endif
 
-#if defined(OS2) || defined(TRU64) || defined(AIX)
-#ifdef REBEL64
-               (UINT)0L, (UINT)0L
-#else
-               (UINT)0, (UINT)0
-#endif
-#endif
 
            );
 
@@ -3043,23 +3036,6 @@ CELL *environment(void)
 CELL *p_readKey(CELL *params)
 {
 
-#if defined(WINDOWS) || defined(OS2)
-    if(!isNil(evaluateExpression(params)) )
-    {
-        if(kbhit())
-        {
-            return(stuffInteger(getch()));
-        }
-        else
-        {
-            return(stuffInteger(0));
-        }
-    }
-    else
-    {
-        return(stuffInteger(getch()));
-    }
-#else
 
     struct termios term, oterm;
     char ch = 0;
@@ -3101,7 +3077,6 @@ CELL *p_readKey(CELL *params)
     }
 
     return(stuffInteger(0));
-#endif /* not Windows or OS2 */
 }
 
 /* --------------------- peek a file descriptor ------------------------------*/

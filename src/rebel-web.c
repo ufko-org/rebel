@@ -1513,11 +1513,7 @@ size_t readHeader(char *buff, int *pragmaFlag)
         if(my_strnicmp(buff, "content-length:", 15) == 0)
         {
             size = parseValue(buff + 15);
-#if defined(WINDOWS) || defined(TRU64)
-            snprintf(numStr, 16, "%lu", (long unsigned int)size);
-#else
             snprintf(numStr, 16, "%llu", (long long unsigned int)size);
-#endif
             setenv("CONTENT_LENGTH", numStr, 1);
         }
         if(my_strnicmp(buff, "pragma: append", 14) == 0)
@@ -1629,11 +1625,7 @@ void handleHTTPcgi(char *request, char *query, ssize_t querySize)
     snprintf(tempfile, PATH_MAX, "%s/nl%04x-%08x-%08x",
              tempDir, (unsigned int)size, (unsigned int)arc4random(), (unsigned int)arc4random());
 
-#if defined (WINDOWS) || (OS2)
-    snprintf(command, size - 1, "rebel \"%s\" > %s", request, tempfile);
-#else
     snprintf(command, size - 1, "./\"%s\" > %s", request, tempfile);
-#endif
 
     if((handle = popen(command, "w")) == NULL)
     {

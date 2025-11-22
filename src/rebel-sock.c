@@ -515,12 +515,8 @@ int netConnect(char *remoteHostName, int portNo, int type, int prot, int topt)
     struct addrinfo hints, *res, *res0;
     char portStr[10];
     int sock, opt;
-#if defined(WINDOWS) || defined(EMSCRIPTEN)
-    u_long arg = 1;
-#else
     int arg, value;
     socklen_t socklen = sizeof(sock);
-#endif
     int result = -1;
     int sinlen;
 
