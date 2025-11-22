@@ -11,7 +11,7 @@ css:rebel.css
 - Rebel has **lisp-like** syntax and some **lisp-like** features.
 - Rebel hopes you understand the expression **lisp-like**.
 - Rebel is not meant to be compared with or compete against other languages in terms of performance or features
-- Rebel is simply Rebel.
+- Rebel is simply a rebel.
 
 ### Rebel runs on: 
 
@@ -27,6 +27,27 @@ $: ls -l rebel
 ```
 
 ### [List of built-in functions](https://github.com/ufko-org/rebel/blob/main/built-in-functions.txt)
+
+## Rebel Fields of Operation
+
+- **Core Scripting & Flow Control**
+  - loops, conditionals, list processing, lambda, functional programming
+- **Strings & Data Manipulation**
+  - regex, parsing, conversion, unicode, text transformation
+- **Math & Statistics**
+  - integers, floats, linear algebra, special functions, probability, simulation
+- **File & I/O**
+  - file handling, directories, reading/writing, streams, HTTP file access
+- **Networking**
+  - TCP/IP, UDP, HTTP, JSON/XML, net-eval, sockets
+- **Processes & Multiprocessing**
+  - forks, Cilk-style API, IPC, semaphores, process management
+- **Reflection & Customization**
+  - macros, events, symbols, environment introspection
+- **Finance & Time**
+  - basic financial math, date and time functions
+- **Integration & Extensibility**
+  - import C libraries, extend interpreter, modular namespaces
 
 
 ### Installation steps:

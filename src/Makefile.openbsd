@@ -18,7 +18,7 @@ OBJS = rebel.o \
 
 CC = cc
 
-CFLAGS = -std=c90 -Wall -O0 -g -c \
+CFLAGS = -std=c90 -Wall -Os -g -c \
 	-I/usr/local/include \
 	-D_BSD -DSUPPORT_UTF8 -DREADLINE -DFFI
 
