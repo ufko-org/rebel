@@ -606,7 +606,7 @@ void cardioBeat(void);
 void cleanupResults(UINT *from);
 void closeStrStream(STREAM *stream);
 void closeTrace(void);
-void freeCellBlocks();
+void freeCellBlocks(void);
 void returnBlockMemory(void);
 void collectSymbols(SYMBOL *context, CELL *list);
 void deleteArray(CELL *cell);
@@ -701,6 +701,7 @@ UINT64 timediff64_us(struct timeval end, struct timeval start);
     int wchar_utf8(int cvalue, char *buffer);
     char *utf8_index(char *utf8str, int idx);
 
+    #if 0 /* ufko */
     #ifdef USE_WIN_UTF16PATH
         WCHAR *ansi_mbcs_to_utf16(const char *);
         char *utf16_to_utf8(const WCHAR *utf16str);
@@ -717,6 +718,7 @@ UINT64 timediff64_us(struct timeval end, struct timeval start);
         int unlink_utf16(const char *filename8);
         _WDIR *opendir_utf16(const char *dirname8);
     #endif
+    #endif /* if 0 */
 #endif
 
 /* eof */

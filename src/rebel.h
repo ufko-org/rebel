@@ -28,49 +28,41 @@
    Undefining DEBUGGER does not affected simple tracing with (trace <device-no>)
 */
 
-#define XML_SUPPORT
 #define BIGINT
 #define KMEANS
 #define DEBUGGER
+#define XML_SUPPORT
 
 
-/* config.h is only needed when doing auto configuration with ./configure-alt */
-#ifdef NEWCONFIG
-    #include "config.h"
-#else
-    #define REBELDIR "/usr/local/share/rebel"
-#endif
+#define REBELDIR "/usr/local/share/rebel"
 
 #ifdef LINUX
     #define OSTYPE "Linux"
 #endif
-
 
 #ifdef _BSD
     #define OSTYPE "BSD"
 #endif
 
 #ifdef MAC_OSX
-        #define OSTYPE "OSX"
+    #define OSTYPE "OSX"
 #endif
 
 /* include -DFFI in your makefile on the compile line
    and -lffi on the link line */
 #ifdef FFI
-
     #if defined(MAC_OSX)
         #include <ffi/ffi.h>
     #endif
 
-
-    #if defined(LINUX) || defined(_BSD) 
+    #if defined(LINUX) || defined(_BSD)
         #include <ffi.h>
     #endif
 
     #define LIBFFI " libffi"
+
 #else /* not FFI */
     #define LIBFFI ""
-
 #endif /* FFI */
 
 #define MY_RAND_MAX RAND_MAX
@@ -82,11 +74,11 @@
     #define NO_TIMER
 #endif
 
-
-
 /*
 This is for 64bit large file support (LFS),
 */
+#if 0
+/* ufko */
 #define LFS
 #ifdef LFS
     #if defined(SOLARIS) || defined(TRU64) || defined(AIX)
@@ -94,7 +86,7 @@ This is for 64bit large file support (LFS),
     #endif
     #define _FILE_OFFSET_BITS 64
 #endif
-
+#endif /* if 0 */
 
 #include <signal.h>
 #include <errno.h>
@@ -110,15 +102,18 @@ This is for 64bit large file support (LFS),
    buggy in some GCC, i.e. MinGW and Solaris
 */
 
+#if 0
+/* ufko - should work without it on linux */
 #ifdef SUPPORT_UTF8
     #ifdef LINUX
         #include <wchar.h>
         #define WCSFTIME
     #endif
 #endif
+#endif /* if 0 */
 
-    #include <termios.h>
-    #include <sys/wait.h>
+#include <termios.h>
+#include <sys/wait.h>
 
 #include <unistd.h>
 #include <sys/time.h>
@@ -132,25 +127,17 @@ This is for 64bit large file support (LFS),
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#if defined(LINUX) || defined(WINDOWS) || defined(OS2)
+#ifdef LINUX 
     #include <malloc.h>
 #endif
 
-#if defined(MAC_OSX) || defined(SOLARIS) || defined(TRU64) || defined(AIX)
+#ifdef MAC_OSX 
     #include <alloca.h>
 #endif
 
-
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    #define vasprintf my_vasprintf
-    #define MY_VASPRINTF
-#endif
-
-
-
-    #define LINE_FEED "\n"
-    #define LINE_FEED_LEN 1
-    #define NANOSLEEP
+#define LINE_FEED "\n"
+#define LINE_FEED_LEN 1
+#define NANOSLEEP
 
 #ifndef O_BINARY
     #define O_BINARY 0
@@ -431,7 +418,6 @@ This is for 64bit large file support (LFS),
 #define ERROR_CHUNKED_FORMAT 26
 
 #define MAX_NET_ERROR 26
-
 
 /* I/O routines */
 #define OUT_NULL 0
