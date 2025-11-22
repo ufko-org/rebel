@@ -38,9 +38,6 @@ pcre *pcreCachedCompile(char *pattern, int options);
 
 CELL *cellTokenString(char * *source, size_t *srclen, char *separator, pcre *re);
 
-#ifdef USE_WIN_UTF16PATH
-    int open_utf16(const char *a, int b, int c);
-#endif
 
 /* ---------------------------- string processing ----------------------- */
 

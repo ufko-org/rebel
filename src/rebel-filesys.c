@@ -125,11 +125,7 @@ int isDir(char *fileName)
     struct stat fileInfo;
 
 
-#ifdef USE_WIN_UTF16PATH
-    if(stat_utf16(fileName, &fileInfo) != 0)
-#else
     if(stat(fileName, &fileInfo) != 0)
-#endif
     {
         return(0);
     }
@@ -354,11 +350,7 @@ ssize_t readFile(char *fileName, char * * buffer)
 
     fileName = getLocalPath(fileName);
 
-#ifdef USE_WIN_UTF16PATH
-    if(stat_utf16(fileName, &fileInfo) != 0)
-#else
     if(stat(fileName, &fileInfo) != 0)
-#endif
         return(-1);
 
     size = fileInfo.st_size;
@@ -778,11 +770,7 @@ int openFile(char *fileName, char *accessMode, char *option)
 
 
     if(*accessMode == 'r')
-#ifdef USE_WIN_UTF16PATH
-        return(open_utf16(fileName, O_RDONLY | O_BINARY | blocking, 0));
-#else
         return(open(fileName, O_RDONLY | O_BINARY | blocking, 0));
-#endif
 
     else if(*accessMode == 'w')
         return(open(fileName,O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | blocking,
@@ -855,11 +843,7 @@ CELL *p_renameFile(CELL *params)
     params = getString(params, &oldName);
     getString(params, &newName);
 
-#ifdef USE_WIN_UTF16PATH
-    return(rename_utf16(oldName, newName) == 0 ? trueCell : nilCell);
-#else
     return(rename(oldName, newName) == 0 ? trueCell : nilCell);
-#endif
 }
 
 
@@ -876,11 +860,7 @@ CELL *p_deleteFile(CELL *params)
     }
 
     fileName = getLocalPath(fileName);
-#ifdef USE_WIN_UTF16PATH
-    return(unlink_utf16(fileName) == 0 ? trueCell : nilCell);
-#else
     return(unlink(fileName) == 0 ? trueCell : nilCell);
-#endif
 }
 
 
@@ -907,11 +887,7 @@ CELL *p_removeDir(CELL *params)
     char *dirString;
 
     getString(params, &dirString);
-#ifdef USE_WIN_UTF16PATH
-    return(rmdir_utf16(dirString) == 0 ? trueCell : nilCell);
-#else
     return(rmdir(dirString) == 0 ? trueCell : nilCell);
-#endif
 }
 
 
@@ -920,11 +896,7 @@ CELL *p_changeDir(CELL *params)
     char *newDir;
 
     getString(params, &newDir);
-#ifdef USE_WIN_UTF16PATH
-    return(chdir_utf16(newDir) == 0 ? trueCell : nilCell);
-#else
     return(chdir(newDir) == 0 ? trueCell : nilCell);
-#endif
 }
 
 CELL *p_directory(CELL *params)
@@ -965,18 +937,11 @@ CELL *p_directory(CELL *params)
 
     while((dEnt = readdir(dir)) != NULL)
     {
-#ifdef USE_WIN_UTF16PATH
-        fileName = utf16_to_utf8(dEnt->d_name);
-#else
         fileName = dEnt->d_name;
-#endif
         if(!pattern || searchBufferRegex(fileName, 0, pattern, strlen(fileName), options, NULL) != -1)
         {
             addList(dirList, stuffString(fileName));
         }
-#ifdef USE_WIN_UTF16PATH
-        free(fileName);
-#endif
     }
 
     closedir(dir);
