@@ -1196,21 +1196,17 @@ int init_argv(char *ptr, char *argv[])
 CELL *p_pipe(CELL *params)
 {
     int handles[2];
-#ifndef SUNOS
     IO_SESSION *session;
-#endif
 
     if(pipe(handles) != 0)
     {
         return(nilCell);
     }
 
-#ifndef SUNOS
     session = createIOsession(handles[0], AF_UNSPEC);
     session->stream = fdopen(handles[0], "r");
     session = createIOsession(handles[1], AF_UNSPEC);
     session->stream = fdopen(handles[0], "w");
-#endif
 
     return(stuffIntegerList(2, (UINT)handles[0], (UINT)handles[1]));
 }
@@ -2620,10 +2616,8 @@ CELL *p_now(CELL *params)
     struct timeval tv;
     struct tm *ttm;
     struct tm *ltm;
-#ifndef SUNOS
     INT gmtoff;
     UINT isdst;
-#endif
     ssize_t offset = 0;
     time_t sec;
     CELL *cell;
@@ -2638,12 +2632,9 @@ CELL *p_now(CELL *params)
     }
 
     ltm = localtime((time_t *)&tv.tv_sec);
-#ifndef SUNOS
     isdst = ltm->tm_isdst;
 
     gmtoff = ltm->tm_gmtoff/60;
-
-#endif
 
     sec = tv.tv_sec;
     ttm = gmtime(&sec);

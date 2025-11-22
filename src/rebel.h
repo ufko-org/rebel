@@ -41,12 +41,6 @@
     #define REBELDIR "/usr/local/share/rebel"
 #endif
 
-/* force ISO_C90 restrictions */
-#if defined(CYGWIN) || defined(OS2) || defined(SOLARIS) || defined(AIX) || defined(SUNOS)
-    /* not sure how this plays with introducing C99 based inttypes.h header file in 10.6.3 */
-    #define ISO_C90
-#endif
-
 #ifdef LINUX
     #define OSTYPE "Linux"
 #endif
@@ -56,29 +50,9 @@
     #define OSTYPE "BSD"
 #endif
 
-#ifdef KFREEBSD
-    #define OSTYPE "GNU/kFreeBSD"
-#endif
-
 #ifdef MAC_OSX
         #define OSTYPE "OSX"
 #endif
-
-
-#ifdef SUNOS
-    #define SOLARIS
-    #define SPARC
-    #define OSTYPE "SunOS"
-#endif
-
-#ifdef TRU64
-    #define OSTYPE "Tru64Unix"
-#endif
-
-
-
-
-
 
 /* include -DFFI in your makefile on the compile line
    and -lffi on the link line */
@@ -89,7 +63,7 @@
     #endif
 
 
-    #if defined(LINUX) || defined(_BSD) || defined(KFREEBSD) || defined(CYGWIN)
+    #if defined(LINUX) || defined(_BSD) 
         #include <ffi.h>
     #endif
 
@@ -99,16 +73,7 @@
 
 #endif /* FFI */
 
-#ifdef TRU64
-    #define strtoll strtol
-    #define strtoull strtoul
-#endif
-
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    #define MY_RAND_MAX 2147483647
-#else
-    #define MY_RAND_MAX RAND_MAX
-#endif
+#define MY_RAND_MAX RAND_MAX
 
 #ifdef LIBRARY
     #define NO_FORK
