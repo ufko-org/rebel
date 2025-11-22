@@ -1,0 +1,22 @@
+Rebel Project – Ownership & Licensing
+=====================================
+
+Authors and Licensing
+---------------------
+
+1. Files with explicit copyright/license:
+   - Any files that contain a copyright notice or GPL3 license
+     text belong to their respective authors (e.g., Lutz Mueller)
+     and are licensed under their stated terms.
+
+2. All other repository content:
+   - Copyright (c) 2025 Ufko (ufko.org)
+   - Licensed under the MIT License
+
+3. Distribution:
+   - No third-party binaries are distributed.
+   - See LICENSE file for full MIT License text.
+
+Notes:
+   - This file serves as the master ownership declaration.
+   - Absence of a license in a file defaults to MIT as above.

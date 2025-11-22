@@ -1,0 +1,18 @@
+(load "testing.rbl")
+(context 'test)
+
+(test "1: pop int from list"
+  (let (lst '(0 1 2 3))
+    (pop lst))
+  0)
+
+(test "2: pop string from list"
+  (let (lst '("c" "a" "b"))
+    (pop lst))
+  "c")
+
+(test "3: pop symbol from list"
+  (let (lst '(w z x y))
+    (pop lst))
+  'w)
+

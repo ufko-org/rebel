@@ -1,0 +1,23 @@
+(load "testing.rbl")
+(context 'test)
+
+(test "1: push int to list"
+  (let (lst '(1 2 3))
+    (push 0 lst)
+    lst)
+  '(0 1 2 3))
+
+(test "2: push string to list"
+  (let (lst '("a" "b"))
+    (push "c" lst)
+    lst)
+  '("c" "a" "b"))
+
+(test "3: push multiple elements to list"
+  (let (lst '(x y))
+    (push 'z lst)
+    (push 'w lst)
+    lst)
+  '(w z x y))
+
+

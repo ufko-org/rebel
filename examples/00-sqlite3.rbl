@@ -1,0 +1,14 @@
+; sqlite3 module examples:
+; ---------------------------------------------------------------------
+
+; opening and closing database
+(load "path/to/sqlite3.rbl")
+(sql3:open "path/to/file.db")
+(sql3:close)
+
+; creating a table
+(load "path/to/sqlite3.rbl")
+(sql3:open "path/to/file.db")
+(sql3:sql "CREATE TABLE x(a, b)")
+(sql3:close)
+

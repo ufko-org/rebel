@@ -1,0 +1,847 @@
+    List of Rebel built-in function in groups
+
+   Some functions appear in more than one group.
+
+  List processing, flow control, and integer arithmetic
+
+    +, -, *, /,  integer arithmetic                
+    %            
+    ++           increment integer numbers         
+    --           decrement integer numbers         
+    <, >, =      compares any data type: less,     
+                 greater, equal                    
+                 compares any data type:           
+    <=, >=, !=   less-equal, greater-equal,        
+                 not-equal                         
+    :            constructs a context symbol and   
+                 applies it to an object           
+    and          logical and                       
+                 appends lists ,arrays or strings  
+    append       to form a new list, array or      
+                 string                            
+    apply        applies a function or primitive   
+                 to a list of arguments            
+    args         retrieves the argument list of a  
+                 function or macro expression      
+    assoc        searches for keyword associations 
+                 in a list                         
+    begin        begins a block of functions       
+    bigint       convert a number to big integer   
+                 format                            
+    bind         binds variable associations in a  
+                 list                              
+    case         branches depending on contents of 
+                 control variable                  
+    catch        evaluates an expression, possibly 
+                 catching errors                   
+    chop         chops elements from the end of a  
+                 list                              
+    clean        cleans elements from a list       
+    collect      repeat evaluating an expression   
+                 and collect results in a list     
+    cond         branches conditionally to         
+                 expressions                       
+    cons         prepends an element to a list,    
+                 making a new list                 
+    constant     defines a constant symbol         
+    count        counts elements of one list that  
+                 occur in another list             
+    curry        transforms a function f(x, y)     
+                 into a function fx(y)             
+    define       defines a new function or lambda  
+                 expression                        
+    define-macro defines a macro or lambda-macro   
+                 expression                        
+    def-new      copies a symbol to a different    
+                 context (namespace)               
+    difference   returns the difference between    
+                 two lists                         
+    doargs       iterates through the arguments of 
+                 a function                        
+    dolist       evaluates once for each element   
+                 in a list                         
+    dostring     evaluates once for each character 
+                 in a string                       
+    dotimes      evaluates once for each number in 
+                 a range                           
+    dotree       iterates through the symbols of a 
+                 context                           
+                 repeats evaluation of an          
+    do-until     expression until the condition is 
+                 met                               
+                 repeats evaluation of an          
+    do-while     expression while the condition is 
+                 true                              
+    dup          duplicates a list or string a     
+                 specified number of times         
+                 checks the end of a string or     
+    ends-with    list against a key of the same    
+                 type                              
+    eval         evaluates an expression           
+    exists       checks for the existence of a     
+                 condition in a list               
+    expand       replaces a symbol in a nested     
+                 list                              
+    explode      explodes a list or string         
+    extend       extends a list or string          
+    first        gets the first element of a list  
+                 or string                         
+    filter       filters a list                    
+    find         searches for an element in a list 
+                 or string                         
+    flat         returns the flattened list        
+    fn           defines a new function or lambda  
+                 expression                        
+    for          evaluates once for each number in 
+                 a range                           
+    for-all      checks if all elements in a list  
+                 meet a condition                  
+    if           evaluates an expression           
+                 conditionally                     
+    index        filters elements from a list and  
+                 returns their indices             
+    intersect    returns the intersection of two   
+                 lists                             
+    lambda       defines a new function or lambda  
+                 expression                        
+    last         returns the last element of a     
+                 list or string                    
+    length       calculates the length of a list   
+                 or string                         
+    let          declares and initializes local    
+                 variables                         
+    letex        expands local variables into an   
+                 expression, then evaluates        
+    letn         initializes local variables       
+                 incrementally, like nested lets   
+    list         makes a list                      
+    local        declares local variables          
+    lookup       looks up members in an            
+                 association list                  
+    map          maps a function over members of a 
+                 list, collecting the results      
+                 matches patterns against lists;   
+    match        for matching against strings, see 
+                 find and regex                    
+    member       finds a member of a list or       
+                 string                            
+    not          logical not                       
+    nth          gets the nth element of a list or 
+                 string                            
+    or           logical or                        
+    pop          deletes and returns an element    
+                 from a list or string             
+    pop-assoc    removes an association from an    
+                 association list                  
+    push         inserts a new element into a list 
+                 or string                         
+    quote        quotes an expression              
+    ref          returns the position of an        
+                 element inside a nested list      
+    ref-all      returns a list of index vectors   
+                 of elements inside a nested list  
+    rest         returns all but the first element 
+                 of a list or string               
+    replace      replaces elements inside a list   
+                 or string                         
+    reverse      reverses a list or string         
+    rotate       rotates a list or string          
+    select       selects and permutes elements     
+                 from a list or string             
+    self         Accesses the target object inside 
+                 a FOOP method                     
+    set          sets the binding or contents of a 
+                 symbol                            
+    setf setq    sets contents of a symbol or      
+                 list, array or string reference   
+    set-ref      searches for an element in a      
+                 nested list and replaces it       
+                 searches for an element in a      
+    set-ref-all  nested list and replaces all      
+                 instances                         
+                 works like begin but suppresses   
+    silent       console output of the return      
+                 value                             
+    slice        extracts a sublist or substring   
+    sort         sorts the members of a list       
+                 checks the beginning of a string  
+    starts-with  or list against a key of the same 
+                 type                              
+    swap         swaps two elements inside a list  
+                 or string                         
+    unify        unifies two expressions           
+    unique       returns a list without duplicates 
+    union        returns a unique list of elements 
+                 found in two or more lists.       
+    unless       evaluates an expression           
+                 conditionally                     
+                 repeats evaluation of an          
+    until        expression until the condition is 
+                 met                               
+    when         evaluates a block of statements   
+                 conditionally                     
+                 repeats evaluation of an          
+    while        expression while the condition is 
+                 true                              
+
+  String and conversion functions
+
+    address     gets the memory address of a       
+                number or string                   
+    bigint      convert a number to big integer    
+                format                             
+    bits        translates a number into binary    
+                representation                     
+    char        translates between characters and  
+                ASCII codes                        
+    chop        chops off characters from the end  
+                of a string                        
+    dostring    evaluates once for each character  
+                in a string                        
+    dup         duplicates a list or string a      
+                specified number of times          
+    ends-with   checks the end of a string or list 
+                against a key of the same type     
+    encrypt     does a one-time-pad encryption and 
+                decryption of a string             
+    eval-string compiles, then evaluates a string  
+    explode     transforms a string into a list of 
+                characters                         
+    extend      extends a list or string           
+    find        searches for an element in a list  
+                or string                          
+    find-all    returns a list of all pattern      
+                matches found in string            
+    first       gets the first element in a list   
+                or string                          
+    float       translates a string or integer     
+                into a floating point number       
+    format      formats numbers and strings as in  
+                the C language                     
+    get-char    gets a character from a memory     
+                address                            
+    get-float   gets a double float from a memory  
+                address                            
+    get-int     gets a 32-bit integer from a       
+                memory address                     
+    get-long    gets a long 64-bit integer from a  
+                memory address                     
+    get-string  gets a string from a memory        
+                address                            
+    int         translates a string or float into  
+                an integer                         
+    join        joins a list of strings            
+    last        returns the last element of a list 
+                or string                          
+    lower-case  converts a string to lowercase     
+                characters                         
+    member      finds a list or string member      
+    name        returns the name of a symbol or    
+                its context as a string            
+    nth         gets the nth element in a list or  
+                string                             
+    pack        packs Rebel expressions into a   
+                binary structure                   
+    parse       breaks a string into tokens        
+    pop         pops from a string                 
+    push        pushes onto a string               
+    regex       performs a Perl-compatible regular 
+                expression search                  
+    regex-comp  pre-compiles a regular expression  
+                pattern                            
+    replace     replaces elements in a list or     
+                string                             
+    rest        gets all but the first element of  
+                a list or string                   
+    reverse     reverses a list or string          
+    rotate      rotates a list or string           
+    select      selects and permutes elements from 
+                a list or string                   
+    setf setq   sets contents of a string          
+                reference                          
+    slice       extracts a substring or sublist    
+    source      returns the source required to     
+                bind a symbol as a string          
+    starts-with checks the start of the string or  
+                list against a key string or list  
+    string      transforms anything into a string  
+    sym         translates a string into a symbol  
+    title-case  converts the first character of a  
+                string to uppercase                
+    trim        trims a string on one or both      
+                sides                              
+    unicode     converts ASCII or UTF-8 to UCS-4   
+                Unicode                            
+    utf8        converts UCS-4 Unicode to UTF-8    
+    utf8len     returns length of an UTF-8 string  
+                in UTF-8 characters                
+    unpack      unpacks a binary structure into    
+                Rebel expressions                
+    upper-case  converts a string to uppercase     
+                characters                         
+
+  Floating point math and special functions
+
+    abs        returns the absolute value of a     
+               number                              
+    acos       calculates the arc-cosine of a      
+               number                              
+    acosh      calculates the inverse hyperbolic   
+               cosine of a number                  
+               adds floating point or integer      
+    add        numbers and returns a floating      
+               point number                        
+    array      creates an array                    
+    array-list returns a list conversion from an   
+               array                               
+    asin       calculates the arcsine of a number  
+    asinh      calculates the inverse hyperbolic   
+               sine of a number                    
+    atan       calculates the arctangent of a      
+               number                              
+    atanh      calculates the inverse hyperbolic   
+               tangent of a number                 
+    atan2      computes the principal value of the 
+               arctangent of Y / X in radians      
+    beta       calculates the beta function        
+    betai      calculates the incomplete beta      
+               function                            
+    binomial   calculates the binomial function    
+    ceil       rounds up to the next integer       
+    cos        calculates the cosine of a number   
+    cosh       calculates the hyperbolic cosine of 
+               a number                            
+    crc32      calculates a 32-bit CRC for a data  
+               buffer                              
+    dec        decrements a number in a variable,  
+               list or array                       
+    div        divides floating point or integer   
+               numbers                             
+    erf        calculates the error function of a  
+               number                              
+    exp        calculates the exponential e of a   
+               number                              
+    factor     factors a number into primes        
+    fft        performs a fast Fourier transform   
+               (FFT)                               
+    floor      rounds down to the next integer     
+    flt        converts a number to a 32-bit       
+               integer representing a float        
+    gammai     calculates the incomplete Gamma     
+               function                            
+    gammaln    calculates the log Gamma function   
+    gcd        calculates the greatest common      
+               divisor of a group of integers      
+    ifft       performs an inverse fast Fourier    
+               transform (IFFT)                    
+    inc        increments a number in a variable,  
+               list or array                       
+    inf?       checks if a floating point value is 
+               infinite                            
+    log        calculates the natural or other     
+               logarithm of a number               
+    min        finds the smallest value in a       
+               series of values                    
+    max        finds the largest value in a series 
+               of values                           
+    mod        calculates the modulo of two        
+               numbers                             
+    mul        multiplies floating point or        
+               integer numbers                     
+    NaN?       checks if a float is NaN (not a     
+               number)                             
+    round      rounds a number                     
+    pow        calculates x to the power of y      
+    sequence   generates a list sequence of        
+               numbers                             
+    series     creates a geometric sequence of     
+               numbers                             
+    sgn        calculates the signum function of a 
+               number                              
+    sin        calculates the sine of a number     
+    sinh       calculates the hyperbolic sine of a 
+               number                              
+    sqrt       calculates the square root of a     
+               number                              
+    ssq        calculates the sum of squares of a  
+               vector                              
+    sub        subtracts floating point or integer 
+               numbers                             
+    tan        calculates the tangent of a number  
+    tanh       calculates the hyperbolic tangent   
+               of a number                         
+    uuid       returns a UUID (Universal Unique    
+               IDentifier)                         
+
+  Matrix functions
+
+    det        returns the determinant of a matrix 
+    invert     returns the inversion of a matrix   
+    mat        performs scalar operations on       
+               matrices                            
+    multiply   multiplies two matrices             
+    transpose  returns the transposition of a      
+               matrix                              
+
+  Array functions
+
+    append     appends arrays                      
+    array      creates and initializes an array    
+               with up to 16 dimensions            
+    array-list converts an array into a list       
+    array?     checks if expression is an array    
+    det        returns the determinant of a matrix 
+    first      returns the first row of an array   
+    invert     returns the inversion of a matrix   
+    last       returns the last row of an array    
+    mat        performs scalar operations on       
+               matrices                            
+    multiply   multiplies two matrices             
+    nth        returns an element of an array      
+    rest       returns all but the first row of an 
+               array                               
+    setf       sets contents of an array reference 
+    slice      returns a slice of an array         
+    transpose  transposes a matrix                 
+
+  Bit operators
+
+    <<, >>    bit shift left, bit shift right      
+    &         bitwise and                          
+    |         bitwise inclusive or                 
+    ^         bitwise exclusive or                 
+    ~         bitwise not                          
+
+  Predicates
+
+    atom?      checks if an expression is an atom  
+    array?     checks if an expression is an array 
+    bigint?    checks if a number is a big integer 
+    context?   checks if an expression is a        
+               context                             
+    directory? checks if a disk node is a          
+               directory                           
+    empty?     checks if a list or string is empty 
+    even?      checks the parity of an integer     
+               number                              
+    file?      checks if a file exists             
+    float?     checks if an expression is a float  
+    global?    checks if a symbol is global        
+    inf?       checks if a floating point value is 
+               infinite                            
+    integer?   checks if an expression is an       
+               integer                             
+    lambda?    checks if an expression is a lambda 
+               expression                          
+    legal?     checks if a string contains a legal 
+               symbol                              
+    list?      checks if an expression is a list   
+    macro?     checks if an expression is a        
+               lambda-macro expression             
+    NaN?       checks if a float is NaN (not a     
+               number)                             
+    nil?       checks if an expression is nil      
+    null?      checks if an expression is nil, "", 
+               (), 0 or 0.0                        
+    number?    checks if an expression is a float  
+               or an integer                       
+    odd?       checks the parity of an integer     
+               number                              
+    protected? checks if a symbol is protected     
+    primitive? checks if an expression is a        
+               primitive                           
+    quote?     checks if an expression is quoted   
+    string?    checks if an expression is a string 
+    symbol?    checks if an expression is a symbol 
+    true?      checks if an expression is not nil  
+    zero?      checks if an expression is 0 or 0.0 
+
+  Date and time functions
+
+    date        converts a date-time value to a    
+                string                             
+                returns a list of year, month,     
+    date-list   day, hours, minutes, seconds from  
+                a time value in seconds            
+                parses a date string and returns   
+    date-parse  the number of seconds passed since 
+                January 1, 1970, (formerly         
+                parse-date)                        
+                calculates the time in seconds     
+    date-value  since January 1, 1970 for a date   
+                and time                           
+    now         returns a list of current          
+                date-time information              
+                calculates the time it takes to    
+    time        evaluate an expression in          
+                milliseconds                       
+                calculates the number of           
+    time-of-day milliseconds elapsed since the day 
+                started                            
+
+  Statistics, simulation and modeling functions
+
+    amb          randomly selects an argument and  
+                 evaluates it                      
+    bayes-query  calculates Bayesian probabilities 
+                 for a data set                    
+    bayes-train  counts items in lists for         
+                 Bayesian or frequency analysis    
+    corr         calculates the product-moment     
+                 correlation coefficient           
+    crit-chi2    calculates the Chi^2 statistic    
+                 for a given probability           
+    crit-f       calculates the F statistic for a  
+                 given probability                 
+    crit-t       calculates the Student's t        
+                 statistic for a given probability 
+    crit-z       calculates the normal distributed 
+                 Z for a given probability         
+    kmeans-query calculates distances to cluster   
+                 centroids or other data points    
+    kmeans-train partitions a data set into        
+                 clusters                          
+                 makes a list of normal            
+    normal       distributed floating point        
+                 numbers                           
+    prob-chi2    calculates the tail probability   
+                 of a Chi^2 distribution value     
+    prob-f       calculates the tail probability   
+                 of a F distribution value         
+                 calculates the tail probability   
+    prob-t       of a Student's t distribution     
+                 value                             
+                 calculates the cumulated          
+    prob-z       probability of a Z distribution   
+                 value                             
+    rand         generates random numbers in a     
+                 range                             
+    random       generates a list of evenly        
+                 distributed floats                
+    randomize    shuffles all of the elements in a 
+                 list                              
+    seed         seeds the internal random number  
+                 generator                         
+    stats        calculates some basic statistics  
+                 for a data vector                 
+    t-test       compares means of data samples    
+                 using the Student's t statistic   
+
+  Pattern matching
+
+    ends-with   tests if a list or string ends     
+                with a pattern                     
+    find        searches for a pattern in a list   
+                or string                          
+    find-all    finds all occurrences of a pattern 
+                in a string                        
+    match       matches list patterns              
+    parse       breaks a string along around       
+                patterns                           
+    ref         returns the position of an element 
+                inside a nested list               
+    ref-all     returns a list of index vectors of 
+                elements inside a nested list      
+    regex       finds patterns in a string         
+    replace     replaces patterns in a string      
+    search      searches for a pattern in a file   
+    starts-with tests if a list or string starts   
+                with a pattern                     
+    unify       performs a logical unification of  
+                patterns                           
+
+  Financial math functions
+
+    fv   returns the future value of an investment 
+    irr  calculates the internal rate of return    
+    nper calculates the number of periods for an   
+         investment                                
+    npv  calculates the net present value of an    
+         investment                                
+    pv   calculates the present value of an        
+         investment                                
+    pmt  calculates the payment for a loan         
+
+  Input/output and file operations
+
+    append-file  appends data to a file            
+    close        closes a file                     
+    current-line retrieves contents of last        
+                 read-line buffer                  
+    device       sets or inquires about current    
+                 print device                      
+    exec         launches another program, then    
+                 reads from or writes to it        
+    load         loads and evaluates a file of     
+                 Rebel code                      
+    open         opens a file for reading or       
+                 writing                           
+    peek         checks file descriptor for number 
+                 of bytes ready for reading        
+    print        prints to the console or a device 
+    println      prints to the console or a device 
+                 with a line-feed                  
+    read         reads binary data from a file     
+    read-char    reads an 8-bit character from a   
+                 file                              
+    read-file    reads a whole file in one         
+                 operation                         
+    read-key     reads a keyboard key              
+    read-line    reads a line from the console or  
+                 file                              
+    read-utf8    reads UTF-8 character from a file 
+    save         saves a workspace, context, or    
+                 symbol to a file                  
+    search       searches a file for a string      
+    seek         sets or reads a file position     
+    write        writes binary data to a file or   
+                 string                            
+    write-char   writes a character to a file      
+    write-file   writes a file in one operation    
+    write-line   writes a line to the console or a 
+                 file                              
+
+  Processes and the Cilk API
+
+    !         shells out to the operating system   
+    abort     aborts a child process started with  
+              spawn                                
+    destroy   destroys a process created with fork 
+              or process                           
+    exec      runs a process, then reads from or   
+              writes to it                         
+    fork      launches a Rebel child process     
+    pipe      creates a pipe for interprocess      
+              communication                        
+    process   launches a child process, remapping  
+              standard I/O and standard error      
+    receive   receive a message from another       
+              process                              
+    semaphore creates and controls semaphores      
+    send      send a message to another process    
+    share     shares memory with other processes   
+    spawn     launches a child process for Cilk    
+              process management                   
+    sync      waits for child processes launched   
+              with spawn and collects results      
+    wait-pid  waits for a child process to end     
+
+  File and directory management
+
+    change-dir  changes to a different drive and   
+                directory                          
+    copy-file   copies a file                      
+    delete-file deletes a file                     
+    directory   returns a list of directory        
+                entries                            
+    file-info   gets file size, date, time, and    
+                attributes                         
+    make-dir    makes a new directory              
+    real-path   returns the full path of the       
+                relative file path                 
+    remove-dir  removes an empty directory         
+    rename-file renames a file or directory        
+
+  HTTP networking API
+
+    base64-enc     encodes a string into BASE64    
+                   format                          
+    base64-dec     decodes a string from BASE64    
+                   format                          
+    delete-url     deletes a file or page from the 
+                   web                             
+    get-url        reads a file or page from the   
+                   web                             
+    json-error     returns error information from  
+                   a failed JSON translation.      
+    json-parse     parses JSON formatted data      
+    post-url       posts info to a URL address     
+    put-url        uploads a page to a URL address 
+    xfer-event     registers an event handler for  
+                   HTTP byte transfers             
+    xml-error      returns last XML parse error    
+    xml-parse      parses an XML document          
+    xml-type-tags  shows or modifies XML type tags 
+
+  Socket TCP/IP, UDP and ICMP network API
+
+    net-accept        accepts a new incoming       
+                      connection                   
+    net-close         closes a socket connection   
+    net-connect       connects to a remote host    
+    net-error         returns the last error       
+                      evaluates expressions on     
+    net-eval          multiple remote Rebel      
+                      servers                      
+                      Sets the default interface   
+    net-interface     IP address on multihomed     
+                      computers.                   
+                      Switches between IPv4 and    
+    net-ipv           IPv6 internet protocol       
+                      versions.                    
+    net-listen        listens for connections to a 
+                      local socket                 
+    net-local         returns the local IP and     
+                      port number for a connection 
+    net-lookup        returns the name for an IP   
+                      number                       
+    net-packet        send a custom configured IP  
+                      packet over raw sockets      
+                      returns the number of        
+    net-peek          characters ready to be read  
+                      from a network socket        
+    net-peer          returns the remote IP and    
+                      port for a net connect       
+                      sends a ping packet (ICMP    
+    net-ping          echo request) to one or more 
+                      addresses                    
+    net-receive       reads data on a socket       
+                      connection                   
+    net-receive-from  reads a UDP on an open       
+                      connection                   
+    net-receive-udp   reads a UDP and closes the   
+                      connection                   
+    net-select        checks a socket or list of   
+                      sockets for status           
+    net-send          sends data on a socket       
+                      connection                   
+    net-send-to       sends a UDP on an open       
+                      connection                   
+    net-send-udp      sends a UDP and closes the   
+                      connection                   
+    net-service       translates a service name    
+                      into a port number           
+    net-sessions      returns a list of currently  
+                      open connections             
+
+  API for Rebel in a web browser
+
+    display-html   display an HTML page in a web   
+                   browser                         
+    eval-string-js evaluate JavaScript in the      
+                   current web browser page        
+
+  Reflection and customization
+
+    command-event pre-processes the command-line   
+                  and HTTP requests                
+    error-event   defines an error handler         
+    history       returns the call history of a    
+                  function                         
+    last-error    report the last error number and 
+                  text                             
+    macro         create a reader expansion macro  
+    ostype        contains a string describing the 
+                  OS platform                      
+    prefix        Returns the context prefix of a  
+                  symbol                           
+    prompt-event  customizes the interactive       
+                  Rebel shell prompt             
+    read-expr     reads and translates             
+                  s-expressions from source        
+    reader-event  preprocess expressions before    
+                  evaluation event-driven          
+    set-locale    switches to a different locale   
+    source        returns the source required to   
+                  bind a symbol to a string        
+    sys-error     reports OS system error numbers  
+    sys-info      gives information about system   
+                  resources                        
+                  returns the term part of a       
+    term          symbol or its context as a       
+                  string                           
+
+  System functions
+
+    $               accesses system variables $0   
+                    -> $15                         
+    callback        registers a callback function  
+                    for an imported library        
+                    evaluates an expression,       
+    catch           catching errors and early      
+                    returns                        
+    context         creates or switches to a       
+                    different namespace            
+    copy            copies the result of an        
+                    evaluation                     
+    debug           debugs a user-defined function 
+    delete          deletes symbols from the       
+                    symbol table                   
+    default         returns the contents of a      
+                    default functor from a context 
+    env             gets or sets the operating     
+                    system's environment           
+    exit            exits Rebel, setting the     
+                    exit value                     
+    global          makes a symbol accessible      
+                    outside MAIN                   
+    import          imports a function from a      
+                    shared library                 
+    main-args       gets command-line arguments    
+    new             creates a copy of a context    
+    pretty-print    changes the pretty-printing    
+                    characteristics                
+                    translates a string to an      
+    read-expr       s-expression without           
+                    evaluating it                  
+    reset           goes to the top level          
+    signal          sets a signal handler          
+    sleep           suspends processing for        
+                    specified milliseconds         
+    sym             creates a symbol from a string 
+    symbols         returns a list of all symbols  
+                    in the system                  
+    throw           causes a previous catch to     
+                    return                         
+    throw-error     throws a user-defined error    
+    timer           starts a one-shot timer,       
+                    firing an event                
+    trace           sets or inquires about trace   
+                    mode                           
+    trace-highlight sets highlighting strings in   
+                    trace mode                     
+
+  Importing libraries
+
+    address    returns the memory address of a     
+               number or string                    
+    callback   registers a callback function for   
+               an imported library                 
+    flt        converts a number to a 32-bit       
+               integer representing a float        
+    float      translates a string or integer into 
+               a floating point number             
+    get-char   gets a character from a memory      
+               address                             
+    get-float  gets a double float from a memory   
+               address                             
+    get-int    gets a 32-bit integer from a memory 
+               address                             
+    get-long   gets a long 64-bit integer from a   
+               memory address                      
+    get-string gets a string from a memory address 
+    import     imports a function from a shared    
+               library                             
+    int        translates a string or float into   
+               an integer                          
+    pack       packs Rebel expressions into a    
+               binary structure                    
+    struct     Defines a data structure with C     
+               types                               
+    unpack     unpacks a binary structure into     
+               Rebel expressions                 
+
+    Rebel internals API
+
+    command-event pre-processes the command-line   
+                  and HTTP requests                
+    cpymem        copies memory between addresses  
+    dump          shows memory address and         
+                  contents of Rebel cells        
+    prompt-event  customizes the interactive       
+                  Rebel shell prompt             
+    read-expr     reads and translates             
+                  s-expressions from source        
+    reader-event  preprocess expressions before    
+                  evaluation event-driven          
+

@@ -1,0 +1,20 @@
+; apply function tests
+(load "testing.rbl")
+(context 'test)
+
+(test "1: apply + to list"
+  (apply + '(1 2 3 4 5))
+  15
+)
+
+(test "2: apply * to list"
+  (apply * '(2 3 4))
+  24
+)
+
+(test "3: apply append on list of strings"
+  (apply append '("foo" "bar" "baz"))
+  "foobarbaz"
+)
+
+

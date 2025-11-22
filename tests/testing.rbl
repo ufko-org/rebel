@@ -1,0 +1,40 @@
+; Quick testing macro
+
+; (test "1: test 1" (+ 2 2) 4) ;-> pass
+; (test "2: test 2" (+ 2 2) 6) ;-> fail
+
+; = function goes deep. compares not only content but also types
+; (test "3 test 3" (array 2 '(1 2)) '(1 2)) ;-> fail
+
+; test against regexp using rx set to 1
+; (test "4: regexp" 123 {\d\d\d} 1)
+; (test "5: regexp" '(1 2 3) {\(\d \d \d\)} 1)
+
+(context 'test)
+(define-macro (test:test name expr want (rx 0))
+  (inc test:count)
+  (setf expr (eval expr))
+  (setf want (eval want))
+
+  (if (= rx 0)
+    (if (= expr want)
+      (begin
+        (inc test:pass)
+        (println (format "Test: %s\n\tpass: %s" 
+          name (string expr))))
+      (begin
+        (inc test:fail)
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+          name (string want) (string expr))))))
+
+  (if (= rx 1)
+    (begin
+      (setf expr (string expr))
+      (setf want (string want))
+      (if (regex want expr)
+        (println (format "Test: %s\n\tpass: %s" 
+          name expr))
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+          name want expr)))))
+)
+

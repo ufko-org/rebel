@@ -1,0 +1,57 @@
+; gcd: computes the greatest common divisor (GCD) of two or more
+; integers using Euclid's algorithm; supports arbitrary number of args
+; ---------------------------------------------------------------------
+(define (gcd-aux a b)
+  (let (r (% b a))
+       (if (= r 0) a (gcd-aux r a))
+  )
+)
+
+(define-macro (gcd)
+  (apply gcd-aux (args) 2))
+
+(gcd 15 5 21)
+;-> 1  
+
+
+; fact1: calculates the factorial of a non-negative integer n
+; simple recursive implementation
+; ---------------------------------------------------------------------
+(define (fact1 n)
+  (if (< n 2)
+      1
+      (* n (fact1 (- n 1)))
+  )
+)
+
+(fact1 5)
+;-> 120
+
+
+; fact2: calculates the factorial of n using an iterative approach
+; accumulates the product in a local variable
+; ---------------------------------------------------------------------
+(define (fact2 n)
+  (let (acc 1L)
+    (for (x 1L n)
+      (setq acc (* acc x))
+    )
+  )
+)
+
+(fact2 5)
+;-> 120L
+
+
+; fact3: Rebel's way to compute factorial using sequence, map, and apply
+; automatically handles big integers for large results
+; ---------------------------------------------------------------------
+(define (fact3 n)
+  (if (= n 0)
+    1
+    (apply * (map bigint (sequence 1 n)))
+  )
+)
+
+(fact3 5)
+;-> 120L

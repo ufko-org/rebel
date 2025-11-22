@@ -1,0 +1,22 @@
+; append function tests
+(load "testing.rbl")
+(context 'test)
+
+(test "1: appending to list"
+  (append '(1 2 3) '(4 5 6) '(a b))
+  '(1 2 3 4 5 6 a b)
+) 
+
+(test "2: appending to array"
+  (let ((a1 (array 3 2 (sequence 1 6)))
+        (a2 (array 2 2 (sequence 7 10))))
+        (append a1 a2))
+
+  (array 5 2 (sequence 1 10))
+) 
+
+(test "3: appending to string"
+  (let ((s1 "abc")
+        (s2 "xyz"))
+        (append s1 s2))
+  "abcxyz")

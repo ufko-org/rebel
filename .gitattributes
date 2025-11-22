@@ -1,0 +1,11 @@
+# Rebel source code
+*.rbl linguist-language=lisp eol=lf
+
+# Shell scripts
+*.sh linguist-language=shell eol=lf
+
+*.md linguist-language=markdown eol=lf
+*.txt linguist-language=text eol=lf
+
+# Git-specific settings
+.gitattributes export-ignore

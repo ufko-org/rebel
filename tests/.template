@@ -1,0 +1,24 @@
+; Tests for function ...
+; ------------------------------------------
+; Tests comments if any ...
+;
+;
+; This can be removed:
+; ------------------------------------------
+; Template:
+; (test "test-number:flag: test-description"
+;   tested-expression
+;   expected-value)
+;
+; Example:
+; (test "1: append two lists"
+;   (append '(1 2) '(3 4))
+;   '(1 2 3 4))
+; ------------------------------------------
+
+(load "testing.rbl")
+(context 'test)
+
+; ------------------------------------------
+
+

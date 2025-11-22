@@ -1,0 +1,35 @@
+; tests for bigint function
+; (test "test-number: test-descrition"
+;   tested-expression
+;   expected-value)
+
+(load "testing.rbl")
+(context 'test)
+;
+(test "1: bigint"
+  (bigint 12345)
+  12345L)
+
+; Result may differ slightly due to float-to-bigint conversion 
+; on your platform; nearest representable integer returned.
+(test "2: bigint"
+  (bigint 1.234567890e30)
+  1234567889999999995380000000000L)
+
+(test "3: bigint"
+  (let (n 567890)
+    (bigint n))
+  567890L)
+
+(test "4: bigint"
+  (bigint "-54321")
+  -54321L)
+
+(test "5: bigint"
+  (bigint "123.45")
+  123L)
+
+(test "6: bigint"
+  (bigint "123 hello")
+  123L)
+

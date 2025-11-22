@@ -1,0 +1,6 @@
+(println "\nRESULTS: " test:count " test(s)")
+(println (dup "-" 72))
+(println "PASSED:  "test:pass)
+(println "FAILED:  "test:fail)
+
+(exit)
