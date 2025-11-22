@@ -726,21 +726,9 @@ PARSE_FORMAT:
     }
 
     /* its an integer or character */
-#ifdef TRU64
-    if(*fmt == 'd' || *fmt == 'i' || *fmt == 'u' || *fmt == 'x' || *fmt == 'X' || *fmt == 'c' || *fmt == 'o')
-#else
     if(*fmt == 'd' || *fmt == 'u' || *fmt == 'x' || *fmt == 'X' || *fmt == 'c' || *fmt == 'o')
-#endif
     {
-#ifdef TRU64
-#ifndef REBEL64
-        *type = CELL_INT64;
-#else
         *type = CELL_LONG;
-#endif
-#else
-        *type = CELL_LONG;
-#endif
         return(++fmt);
     }
 
@@ -1372,11 +1360,7 @@ CELL *p_integer(CELL *params)
         base = 2;
     }
 
-#ifdef TRU64
-    result = strtoul(intString, NULL, base);
-#else
     result = strtoull(intString,(char **)0, base);
-#endif
 
     return(stuffInteger64(result));
 INT_DEFAULT:

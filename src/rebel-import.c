@@ -39,9 +39,6 @@ extern int evalCatchFlag;
 #endif
 
 
-#if defined(WINDOWS) || defined(CYGWIN)
-    UINT stdcallFunction(UINT fAddress, UINT *args, int count);
-#endif
 
 
 CELL *p_importLib(CELL *params)
@@ -72,11 +69,7 @@ CELL *p_importLib(CELL *params)
 
     hLibrary = 0;
 
-#ifdef TRU64
-    if((hLibrary = dlopen(libName, RTLD_LAZY)) == 0)
-#else
     if((hLibrary = dlopen(libName, RTLD_GLOBAL|RTLD_LAZY)) == 0)
-#endif
         return(errorProcExt2(ERR_IMPORT_LIB_NOT_FOUND, stuffString((char *)dlerror())));
 
     if(funcName == NULL)
@@ -166,13 +159,6 @@ CELL *executeLibfunction(CELL *pCell, CELL *params)
         params = (CELL *)params->next;
     }
 
-#if defined(WINDOWS) || defined(CYGWIN)
-    if(pCell->type == CELL_IMPORT_DLL)
-    {
-        return(stuffInteger(stdcallFunction(pCell->contents, args, count)));
-    }
-    else
-#endif
         return(stuffInteger(cdeclFunction(pCell->contents, args, count)));
 }
 
@@ -197,76 +183,6 @@ UINT cdeclFunction(UINT fAddress, UINT *args, int count)
              a[7], a[8], a[9], a[10], a[11], a[12], a[13]);
 }
 
-#if defined(WINDOWS) || defined(CYGWIN)
-UINT stdcallFunction(UINT fAddress, UINT *args, int count)
-{
-    UINT _stdcall (*function)();
-
-    function = (UINT _stdcall (*)())fAddress;
-
-    switch(count)
-    {
-        case 0:
-            return (*function)();
-
-        case 1:
-            return  (*function)(args[0]);
-
-        case 2:
-            return  (*function)(args[0], args[1]);
-
-        case 3:
-            return  (*function)(args[0], args[1], args[2]);
-
-        case 4:
-            return  (*function)(args[0], args[1], args[2], args[3]);
-
-        case 5:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4]);
-        case 6:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5]);
-        case 7:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6]);
-        case 8:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7]);
-
-        case 9:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7], args[8]);
-
-        case 10:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7], args[8], args[9]);
-        case 11:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7],
-                                args[8], args[9], args[10]);
-        case 12:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7],
-                                args[8], args[9], args[10], args[11]);
-
-        case 13:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7],
-                                args[8], args[9], args[10], args[11],
-                                args[12]);
-        case 14:
-            return  (*function)(args[0], args[1], args[2], args[3],
-                                args[4], args[5], args[6], args[7],
-                                args[8], args[9], args[10], args[11],
-                                args[12], args[13]);
-        default:
-            break;
-    }
-
-    return(0);
-}
-#endif
 
 
 /* 16 callback functions for up to 8 parameters */

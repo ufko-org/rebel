@@ -60,9 +60,6 @@
 
 
 
-#ifdef TRU64
-    int opsys = 9;
-#endif
 
 
 
@@ -273,79 +270,18 @@ void setupSignalHandler(int sig, void (* handler)(int))
     }
 }
 
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-void sigpipe_handler(int sig)
-{
-    setupSignalHandler(SIGPIPE, sigpipe_handler);
-}
-
-void sigchld_handler(int sig)
-{
-    waitpid(-1, (int *)0, WNOHANG);
-}
-
-void ctrlC_handler(int sig)
-{
-    char chr;
-
-    setupSignalHandler(SIGINT, ctrlC_handler);
-
-    traceFlag |= TRACE_SIGINT;
-
-    printErrorMessage(ERR_SIGINT, NULL, 0);
-    printf("%s", "(c)ontinue, e(x)it, (r)eset:");
-    fflush(NULL);
-    chr = getchar();
-    if(chr == 'x')
-    {
-        exit(1);
-    }
-    if(chr == 'c')
-    {
-        traceFlag &= ~TRACE_SIGINT;
-    }
-}
-
-
-void sigalrm_handler(int sig)
-{
-    setupSignalHandler(sig, sigalrm_handler);
-    /* check if not sitting idle */
-    if(recursionCount)
-    {
-        traceFlag |= TRACE_TIMER;
-    }
-    else /* if idle */
-    {
-        executeSymbol(timerEvent, NULL, NULL);
-    }
-}
-
-#endif /* SOLARIS, TRUE64, AIX */
 
 
 void setupAllSignals(void)
 {
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    setupSignalHandler(SIGINT, ctrlC_handler);
-#else
     setupSignalHandler(SIGINT, signal_handler);
-#endif
 
 
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    setupSignalHandler(SIGALRM, sigalrm_handler);
-    setupSignalHandler(SIGVTALRM, sigalrm_handler);
-    setupSignalHandler(SIGPROF, sigalrm_handler);
-    setupSignalHandler(SIGPIPE, sigpipe_handler);
-    setupSignalHandler(SIGCHLD, sigchld_handler);
-#else
     setupSignalHandler(SIGALRM, signal_handler);
     setupSignalHandler(SIGVTALRM, signal_handler);
     setupSignalHandler(SIGPROF, signal_handler);
     setupSignalHandler(SIGPIPE, signal_handler);
     setupSignalHandler(SIGCHLD, signal_handler);
-#endif
 
 }
 
@@ -358,24 +294,7 @@ void signal_handler(int sig)
         return;
     }
 
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    switch(sig)
-    {
-        case SIGALRM:
-        case SIGVTALRM:
-        case SIGPROF:
-            setupSignalHandler(sig, sigalrm_handler);
-            break;
-        case SIGPIPE:
-            setupSignalHandler(SIGPIPE, sigpipe_handler);
-            break;
-        case SIGCHLD:
-            setupSignalHandler(SIGCHLD, sigchld_handler);
-            break;
-    }
-#else
     setupSignalHandler(sig, signal_handler);
-#endif
 
     if(symHandler[sig - 1] != nilSymbol)
     {
@@ -2839,9 +2758,6 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
             break;
         case CELL_IMPORT_CDECL:
         case CELL_IMPORT_FFI:
-#if defined(WINDOWS) || defined(CYGWIN)
-        case CELL_IMPORT_DLL:
-#endif
 
 #ifdef FFI
             if(cell->type == CELL_IMPORT_FFI)
@@ -3089,9 +3005,6 @@ void printSymbol(SYMBOL *sPtr, UINT device)
         case CELL_PRIMITIVE:
         case CELL_IMPORT_CDECL:
         case CELL_IMPORT_FFI:
-#if defined(WINDOWS) || defined(CYGWIN)
-        case CELL_IMPORT_DLL:
-#endif
             break;
         case CELL_SYMBOL:
         case CELL_DYN_SYMBOL:
@@ -7289,9 +7202,6 @@ void saveSymbols(SYMBOL *sPtr, UINT device)
         /* don't save primitives, symbols containing nil and the trueSymbol */
         else if(type != CELL_PRIMITIVE && type != CELL_NIL
                 && sPtr != trueSymbol && type != CELL_IMPORT_CDECL && type != CELL_IMPORT_FFI
-#if defined(WINDOWS) || defined(CYGWIN)
-                && type != CELL_IMPORT_DLL
-#endif
                )
             if(*sPtr->name != '$')
             {
@@ -7932,9 +7842,6 @@ CELL *isType(CELL *params, int operand)
         case CELL_PRIMITIVE:
             if(params->type == CELL_IMPORT_CDECL
                     || params->type == CELL_IMPORT_FFI
-#if defined(WINDOWS) || defined(CYGWIN)
-                    || params->type == CELL_IMPORT_DLL
-#endif
               )
             {
                 return(trueCell);

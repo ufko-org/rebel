@@ -50,12 +50,6 @@
 
 
 
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    #include <stropts.h>
-    #include <sys/conf.h>
-    #include <netinet/in_systm.h>
-    #define gethostbyname2(A, B) gethostbyname(A)
-#endif
 
 
 
@@ -998,11 +992,7 @@ CELL *netReceiveFrom(int sock, size_t readSize, int closeFlag)
     char IPaddress[STRADDR_LEN];
     CELL *cell;
     CELL *result;
-#ifdef TRU64
-    unsigned long remote_sin_len;
-#else
     socklen_t remote_sin_len;
-#endif
 
     buffer = (char *)allocMemory(readSize + 1);
 
@@ -2123,11 +2113,7 @@ CELL *ping(CELL *address, int maxwait, int listmode, int maxCount, int flag)
     struct sockaddr *from;
     int s;
     int sockopt = 1;
-#ifdef TRU64
-    unsigned long sockaddr_len;
-#else
     socklen_t sockaddr_len;
-#endif
     int broadcast = 0;
     int size, ipNo, startIp = 0, endIp = 0;
     int timeout = 0, tdiff;

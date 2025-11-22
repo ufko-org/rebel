@@ -26,9 +26,6 @@
 #define AF_UNSPEC 0 /* from socket.h or winsock2.h */
 
 
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    #include <stropts.h>
-#endif
 
 
     #include <sys/types.h>
@@ -53,9 +50,7 @@ union semun
 };
 #endif /* LINUX || KFREEBSD */
 
-#ifndef TRU64
     extern char **environ;
-#endif
 
 
     #include <sys/socket.h>
@@ -650,11 +645,6 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
 
     openStrStream(stream, MAX_STRING, 1);
 
-#ifdef TRU64
-    do
-    {
-        errno = 0;
-#endif
 #ifdef TRUE64 /* pre 10.5.8 also all other OS */
         while((chr = fgetc(inStream)) != EOF)
         {
@@ -689,17 +679,7 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
             writeStreamStr(stream, buff, l);
         }
 #endif /* pre 10.5.8 also all other OS */
-#ifdef TRU64
-    }
-    while (errno == EINTR);
-#endif
 
-#ifdef TRU64 /* and pre 10.5.8 on all other OS */
-    if(chr == EOF && stream->position == 0)
-    {
-        return(NULL);
-    }
-#else
     if(feof(inStream))
     {
         clearerr(inStream);
@@ -708,7 +688,6 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
             return(NULL);
         }
     }
-#endif
     return(stream->buffer);
 }
 
@@ -1715,11 +1694,7 @@ CELL *p_sync(CELL *params)
     }
 
     /* put initial behaviour back */
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-    setupSignalHandler(SIGCHLD, sigchld_handler);
-#else
     setupSignalHandler(SIGCHLD, signal_handler);
-#endif
 
     return(trueCell);
 }
@@ -1746,11 +1721,7 @@ CELL *p_abort(CELL *params)
             processSpawnList(mySpawnList->pid, PROCESS_SPAWN_ABORT, 0);
         }
         /* put initial behaviour back */
-#if defined(SOLARIS) || defined(TRU64) || defined(AIX)
-        setupSignalHandler(SIGCHLD, sigchld_handler);
-#else
         setupSignalHandler(SIGCHLD, signal_handler);
-#endif
     }
 
     return(trueCell);
