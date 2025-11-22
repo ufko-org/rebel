@@ -36,7 +36,7 @@
 
 #define freeMemory free
 
-#define INIT_FILE "init.lsp"
+#define INIT_FILE "init.rbl"
 
 
 #ifdef LIBRARY
@@ -436,7 +436,7 @@ void loadStartup(char *name)
             }
         }
     }
-    /* load part at offset no init.lsp or .init.lsp is loaded */
+    /* load part at offset no init.rbl or .init.rbl is loaded */
     else
     {
         if(strchr(name, '/') == NULL)
@@ -583,8 +583,8 @@ int main(int argc, char *argv[])
 
     sysEvalString(preLoad, mainContext, nilCell, EVAL_STRING);
 
-    /* loading of init.lsp will be suppressed with -n, -x or -h as first option
-       but is never done when program is link.lsp'd */
+    /* loading of init.rbl will be suppressed with -n, -x or -h as first option
+       but is never done when program is link.rbl'd */
 
     if(argc < 2 || (strncmp(argv[1], "-n", 2) && strncmp(argv[1], "-h", 2)) )
     {
@@ -610,6 +610,7 @@ int main(int argc, char *argv[])
              * Its arguments are files to execute.
              * Executes files and exits immediately, even if the files
              * do not contain an explicit (exit) call.
+             * Loads ~/.init.rbl 
              */
             int j;
             for(j = 1; j < argc; j++)
@@ -922,9 +923,9 @@ void printHelpText(void)
               "    no explicit (exit) call is required",
               "    all other options are ignored",
               "    example: rebel -q file1 file2",
-              " -h this help (no init.lsp)",
-              " -n no init.lsp (must be first)",
-              " -x <source> <target> link (no init.lsp)",
+              " -h this help (no init.rbl)",
+              " -n no init.rbl (must be first)",
+              " -x <source> <target> link (no init.rbl)",
               " -v version",
               " -s <stacksize>",
               " -m <max-mem-MB> cell memory",
