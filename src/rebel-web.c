@@ -49,18 +49,6 @@ extern int httpSafe;
 
 char *requestMethod[] = {"GET", "HEAD", "PUT", "PUT", "POST", "DELETE"};
 
-/* with MinGW gcc 3.4.5 not needed
-#ifdef WINDOWS
-struct timezone {
-       int     tz_minuteswest;
-       int     tz_dsttime;
-};
-
-int gettimeofday( struct timeval *tp, struct timezone *tzp );
-#endif
-*/
-
-
 extern SYMBOL *transferEvent;
 
 ssize_t readFile(char *fileName, char * * buffer);
@@ -1617,11 +1605,6 @@ void handleHTTPcgi(char *request, char *query, ssize_t querySize)
     char *content = NULL;
     ssize_t size;
     char tempfile[PATH_MAX];
-#ifdef WINDOWS_BEFORE_SETTING_BINARYMODE
-    char *ptr;
-    char *pos;
-    int bytes = 0;
-#endif
 
     srandom(milliSecTime());
 
