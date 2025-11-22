@@ -1452,14 +1452,12 @@ void initStacks()
 
 CELL *evaluateExpression(CELL *cell)
 {
-#ifdef ISO_C90
     CELL *result;
     UINT *resultIdxSave = resultStackIdx;
     CELL *args = NULL;
     CELL *pCell = NULL;
     SYMBOL *newContext = NULL;
     SYMBOL *sPtr = NULL;
-#endif
 
     symbolCheck = NULL;
     stringCell = NULL;
@@ -1474,15 +1472,6 @@ CELL *evaluateExpression(CELL *cell)
         symbolCheck = (SYMBOL *)cell->contents;
         return((CELL *)symbolCheck->contents);
     }
-
-#ifndef ISO_C90
-    CELL *result;
-    UINT *resultIdxSave = resultStackIdx;
-    CELL *args = NULL;
-    CELL *pCell = NULL;
-    SYMBOL *newContext = NULL;
-    SYMBOL *sPtr = NULL;
-#endif
 
     switch(cell->type)
     {
