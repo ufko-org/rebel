@@ -5374,7 +5374,9 @@ int *floatToBigint(double fnum, int *len)
     int *numPtr;
 
     if(isinf(fnum))
+    {
         errorProcExt2(ERR_CANNOT_CONVERT, stuffFloat(fnum));
+    }
 
     sign = fnum < 0 ? -1 : 1;
     fnum = fnum *sign;

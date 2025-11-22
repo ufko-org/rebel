@@ -26,13 +26,11 @@
 #define AF_UNSPEC 0 /* from socket.h or winsock2.h */
 
 
-
-
-    #include <sys/types.h>
-            #include <sys/ipc.h>
-            #include <sys/sem.h>
-    #include <sys/mman.h>
-    #include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
 
 int init_argv(char *ptr, char *argv[]);
 char *getUUID(char *str, char *node);
@@ -50,12 +48,12 @@ union semun
 };
 #endif /* LINUX || KFREEBSD */
 
-    extern char **environ;
+extern char **environ;
 
 
-    #include <sys/socket.h>
-    #define SOCKET_ERROR -1
-    #define INVALID_SOCKET -1
+#include <sys/socket.h>
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
 
 #if defined(LINUX) || defined(KFREEBSD) || defined(CYGWIN)
     char *strptime(const char *str, const char *fmt, struct tm *ttm);
@@ -646,38 +644,38 @@ char *readStreamLine(STREAM *stream, FILE *inStream)
     openStrStream(stream, MAX_STRING, 1);
 
 #ifdef TRUE64 /* pre 10.5.8 also all other OS */
-        while((chr = fgetc(inStream)) != EOF)
+    while((chr = fgetc(inStream)) != EOF)
+    {
+        if(chr == '\n')
         {
-            if(chr == '\n')
+            break;
+        }
+        if(chr == '\r')
+        {
+            chr = fgetc(inStream);
+            if(chr == '\n' || chr == EOF)
             {
                 break;
             }
-            if(chr == '\r')
-            {
-                chr = fgetc(inStream);
-                if(chr == '\n' || chr == EOF)
-                {
-                    break;
-                }
-            }
-            writeStreamChar(stream, chr);
         }
+        writeStreamChar(stream, chr);
+    }
 #else
-        while(fgets(buff, MAX_STRING, inStream) != NULL)
+    while(fgets(buff, MAX_STRING, inStream) != NULL)
+    {
+        l=strlen(buff);
+        if(buff[l-1] == 0x0A)
         {
-            l=strlen(buff);
-            if(buff[l-1] == 0x0A)
+            buff[--l] = 0;
+            if(buff[l-1] == 0x0D)
             {
                 buff[--l] = 0;
-                if(buff[l-1] == 0x0D)
-                {
-                    buff[--l] = 0;
-                }
-                writeStreamStr(stream, buff, l);
-                break;
             }
             writeStreamStr(stream, buff, l);
+            break;
         }
+        writeStreamStr(stream, buff, l);
+    }
 #endif /* pre 10.5.8 also all other OS */
 
     if(feof(inStream))
@@ -1218,7 +1216,6 @@ int init_argv(char *ptr, char *argv[])
     argv[argc] = 0;
     return(argc);
 }
-
 
 
 CELL *p_pipe(CELL *params)
@@ -2427,7 +2424,9 @@ void checkDeleteShareFile(UINT *address)
     if(     (*address == (CELL_STRING | SHARED_MEM_EVAL_MASK)) &&
             (strncmp((char *)(address + 2), "/tmp/nls-", 9) == 0) &&
             (strlen((char *)(address + 2)) == 45) )
+    {
         unlink((char *)(address + 2));
+    }
 }
 
 extern int ADDR_FAMILY;

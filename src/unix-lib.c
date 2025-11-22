@@ -35,7 +35,7 @@ extern int rebelLibConsoleFlag;
 int libInitialized = 0;
 
 #ifdef MAC_OSX
-        #define LIBNAME "rebel.dylib"
+    #define LIBNAME "rebel.dylib"
 #else
     #define LIBNAME "rebel.so"
 #endif

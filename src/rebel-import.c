@@ -22,7 +22,7 @@
 #include "rebel.h"
 #include "protos.h"
 
-    #include <dlfcn.h>
+#include <dlfcn.h>
 
 #ifdef MAC_OSX
     #include <sys/mman.h>
@@ -37,8 +37,6 @@ extern int evalCatchFlag;
     CELL *unpackFFI(ffi_type *ffi, char *data);
     void ffi_trampoline(ffi_cif *cif, void *ret, void **args, void *symbol);
 #endif
-
-
 
 
 CELL *p_importLib(CELL *params)
@@ -70,7 +68,9 @@ CELL *p_importLib(CELL *params)
     hLibrary = 0;
 
     if((hLibrary = dlopen(libName, RTLD_GLOBAL|RTLD_LAZY)) == 0)
+    {
         return(errorProcExt2(ERR_IMPORT_LIB_NOT_FOUND, stuffString((char *)dlerror())));
+    }
 
     if(funcName == NULL)
     {
@@ -159,7 +159,7 @@ CELL *executeLibfunction(CELL *pCell, CELL *params)
         params = (CELL *)params->next;
     }
 
-        return(stuffInteger(cdeclFunction(pCell->contents, args, count)));
+    return(stuffInteger(cdeclFunction(pCell->contents, args, count)));
 }
 
 
@@ -182,7 +182,6 @@ UINT cdeclFunction(UINT fAddress, UINT *args, int count)
     return f(a[0], a[1], a[2], a[3], a[4], a[5], a[6],
              a[7], a[8], a[9], a[10], a[11], a[12], a[13]);
 }
-
 
 
 /* 16 callback functions for up to 8 parameters */

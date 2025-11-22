@@ -316,7 +316,7 @@ CELL *setInterDiff(CELL *params, int mode)
 
     while(i < lengthA)
     {
-        if(listB) 
+        if(listB)
         {
             switch(mode)
             {
@@ -1380,7 +1380,7 @@ CELL *p_sequence(CELL *params)
    optimization messes up setjmp/longjmp
 */
 
-    CELL *filterIndex(CELL *params, int mode);
+CELL *filterIndex(CELL *params, int mode);
 
 
 CELL *p_filter(CELL *params)
@@ -1408,7 +1408,7 @@ CELL *p_forAll(CELL *params)
     return filterIndex(params, FILTER_FOR_ALL);
 }
 
-    CELL *filterIndex(CELL *params, int mode)
+CELL *filterIndex(CELL *params, int mode)
 {
     CELL *expr;
     CELL *pCell;

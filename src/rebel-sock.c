@@ -22,35 +22,31 @@
 #include <string.h>
 
 
-    #include <sys/types.h>
-    #include <sys/time.h>
-    #include <sys/socket.h>
-    #include <sys/un.h>
-    #include <sys/ioctl.h>
-    #include <sys/wait.h>
-    #define __FAVOR_BSD
-    #include <netinet/in_systm.h>
-    #include <netinet/in.h>
-    #include <netinet/ip.h>
-    #include <netinet/tcp.h>
-    #include <netinet/udp.h>
-    #include <netinet/ip_icmp.h>
-        #include <netinet/icmp6.h>
-    #include <netdb.h>
-    #include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
+#define __FAVOR_BSD
+#include <netinet/in_systm.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <netinet/icmp6.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
-    #ifndef IPPROTO_DIVERT
-        #define IPPROTO_DIVERT 254
-    #endif
+#ifndef IPPROTO_DIVERT
+    #define IPPROTO_DIVERT 254
+#endif
 
-    /* Android needs it */
-    #ifndef ICMP6_FILTER
-        #define ICMP6_FILTER 1
-    #endif
-
-
-
-
+/* Android needs it */
+#ifndef ICMP6_FILTER
+    #define ICMP6_FILTER 1
+#endif
 
 
 #ifndef INADDR_NONE
@@ -71,8 +67,8 @@
 #define MAX_PENDING_CONNECTS 128
 #define NO_FLAGS_SET 0
 
-    #define SOCKET_ERROR -1
-    #define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
 
 #define isnum(A) ((A)>= '0' && (A) <= '9')
 

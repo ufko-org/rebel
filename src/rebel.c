@@ -22,7 +22,7 @@
 #include "protos.h"
 #include "primes.h"
 
-    #include <sys/socket.h>
+#include <sys/socket.h>
 
 #ifdef READLINE
     #include <readline/readline.h>
@@ -45,7 +45,7 @@
 #endif
 
 #if defined(LINUX) || defined(KFREEBSD)
-        int opsys = 1;
+    int opsys = 1;
 #endif
 
 #ifdef _BSD
@@ -53,14 +53,8 @@
 #endif
 
 #ifdef MAC_OSX
-        int opsys = 3;
+    int opsys = 3;
 #endif
-
-
-
-
-
-
 
 
 /* opsys = 11 taken for ANDROID; see LINUX */
@@ -269,7 +263,6 @@ void setupSignalHandler(int sig, void (* handler)(int))
         printf("Error setting signal:%d handler\n", sig);
     }
 }
-
 
 
 void setupAllSignals(void)
@@ -530,7 +523,7 @@ char *getArg(char * * arg, int argc, int *index)
     return(arg[*index]);
 }
 
-    char **MainArgs;
+char **MainArgs;
 
 CELL *getMainArgs(char *mainArgs[])
 {
@@ -780,7 +773,7 @@ AFTER_ERROR_ENTRY:
     }
     else
     {
-            setbuf(IOchannel,0);
+        setbuf(IOchannel,0);
         if(forcePromptMode)
         {
             varPrintf(OUT_CONSOLE, banner, OSTYPE, LIBFFI, banner2);
@@ -831,11 +824,11 @@ AFTER_ERROR_ENTRY:
         if(connectionTimeout && IOchannel && daemonMode)
         {
             if(wait_ready(fileno(IOchannel), connectionTimeout, 0) == 0)
-                {
-                    fclose(IOchannel);
-                    setupServer(1);
-                    continue;
-                }
+            {
+                fclose(IOchannel);
+                setupServer(1);
+                continue;
+            }
         }
 
         if(IOchannel == NULL || fgets(command, MAX_COMMAND_LINE - 1, IOchannel) == NULL)
@@ -978,7 +971,7 @@ void setupServer(int reconnect)
         exit(1);
     }
 
-        setbuf(IOchannel,0);
+    setbuf(IOchannel,0);
 
     if(!reconnect && !noPromptMode)
     {
@@ -5215,7 +5208,6 @@ CELL *sysEvalString(char *evalString, SYMBOL *context, CELL *proc, int mode)
 }
 
 
-
 CELL *p_curry(CELL *params)
 {
     CELL *lambda;
@@ -7239,7 +7231,9 @@ CELL *p_save(CELL *params)
         errorFlag = (strncmp((char *)result->contents, "ERR:", 4) == 0);
     }
     else
+    {
         errorFlag = writeFile(fileName, strStream.buffer, strStream.position, "w");
+    }
 
     closeStrStream(&strStream);
 
@@ -7937,8 +7931,6 @@ CELL *p_exit(CELL *params)
 }
 
 
-
-
 CELL *p_reset(CELL *params)
 {
     int blockCountBefore = blockCount;
@@ -7968,7 +7960,9 @@ CELL *p_reset(CELL *params)
 #endif
     }
     else
+    {
         longjmp(errorJump, ERR_USER_RESET);
+    }
 
     return(trueCell);
 }
@@ -8006,7 +8000,6 @@ CELL *p_readerEvent(CELL *params)
 {
     return(setEvent(params, &readerEvent, "$reader-event"));
 }
-
 
 
 CELL *p_timerEvent(CELL *params)
