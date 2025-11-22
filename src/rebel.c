@@ -44,7 +44,7 @@
     int rebelLibConsoleFlag = 0;
 #endif
 
-#if defined(LINUX) || defined(KFREEBSD)
+#ifdef LINUX 
     int opsys = 1;
 #endif
 
@@ -798,7 +798,7 @@ AFTER_ERROR_ENTRY:
 #ifdef READLINE
     rl_readline_name = "rebel";
     rl_attempted_completion_function = (char **(*) (const char *, int, int))rebel_completion;
-#if defined(LINUX) || defined(_BSD) || defined(KFREEBSD)
+#if defined(LINUX) || defined(_BSD)
     /* in Bash .inputrc put 'set blink-matching-paren on' */
     rl_set_paren_blink_timeout(300000); /* 300 ms */
 #endif

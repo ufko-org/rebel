@@ -2709,9 +2709,7 @@ CELL *p_now(CELL *params)
                (UINT)ttm->tm_yday + 1,
                ((UINT)ttm->tm_wday == 0 ? 7 : (UINT)ttm->tm_wday),
 
-#if defined(MAC_OSX) || defined(LINUX) || defined(_BSD) 
                gmtoff, isdst
-#endif
 
            );
 
