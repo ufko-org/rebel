@@ -1323,7 +1323,7 @@ CELL *p_sequence(CELL *params)
         params = getInteger64Ext(params, &fromInt64, TRUE);
         getInteger64Ext(params, &toInt64, TRUE);
         stepCnt = (fromInt64 > toInt64) ? fromInt64 - toInt64 : toInt64 - fromInt64;
-        cell = stuffInteger64(fromInt64);
+        cell = stuffInteger(fromInt64);
     }
     else
     {

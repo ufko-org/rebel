@@ -20,7 +20,7 @@ CC = cc
 
 CFLAGS = -fPIC -Wall -O0 -g -c \
 	-I/usr/local/include \
-	-DLINUX -DREBEL64 -DSUPPORT_UTF8 -DREADLINE -DFFI
+	-DLINUX -DSUPPORT_UTF8 -DREADLINE -DFFI
 
 default: rebel
 

@@ -357,19 +357,9 @@ CELL *p_char(CELL *params)
         case CELL_LONG:
             buff[0] = (int)datCell->contents;
             break;
-#ifndef REBEL64
-        case CELL_INT64:
-            num = *(INT64 *)&datCell->aux;
-            buff[0] = num;
-            break;
-        case CELL_FLOAT:
-            num = *(double *)&datCell->aux;
-            buff[0] = num;
-#else /* REBEL64 */
         case CELL_FLOAT:
             num = *(double *)&datCell->contents;
             buff[0] = num;
-#endif /* REBEL64 */
             break;
 
 
@@ -381,24 +371,6 @@ CELL *p_char(CELL *params)
             utf8_wchar(string, &num);
             return(stuffInteger(num));
 
-#ifndef REBEL64
-        case CELL_FLOAT:
-        case CELL_LONG:
-        case CELL_INT64:
-            string = allocMemory(UTF8_MAX_BYTES + 1);
-            if(datCell->type == CELL_FLOAT)
-            {
-                num = *(double *)&datCell->aux;
-            }
-            else if(datCell->type == CELL_INT64)
-            {
-                num = *(INT64 *)&datCell->aux;
-            }
-            else
-            {
-                num = datCell->contents;
-            }
-#else /* REBEL64 */
         case CELL_FLOAT:
         case CELL_LONG:
             string = allocMemory(UTF8_MAX_BYTES + 1);
@@ -410,7 +382,6 @@ CELL *p_char(CELL *params)
             {
                 num = (int)datCell->contents;
             }
-#endif /* REBEL64 */
             len = wchar_utf8(num, string);
             datCell = stuffStringN(string, len);
             free(string);
@@ -742,21 +713,13 @@ PARSE_FORMAT:
     /* supporting ld, li, lu, lx, lX formats */
     if(*fmt == 'l' &&  (*(fmt + 1) == 'd' || *(fmt + 1) == 'i' || *(fmt + 1) == 'u' || *(fmt + 1) =='x' || *(fmt + 1) == 'X'))
     {
-#ifndef REBEL64
-        *type = CELL_INT64;
-#else
         *type = CELL_LONG;
-#endif
         return(fmt+2);
     }
 
     if(*fmt == 'l' && *(fmt + 1) == 'l' && (*(fmt + 2) == 'd' || *(fmt + 2) == 'u' || *(fmt + 2) =='x' || *(fmt + 2) == 'X'))
     {
-#ifndef REBEL64
-        *type = CELL_INT64;
-#else
         *type = CELL_LONG;
-#endif
         return(fmt+3);
     }
 
@@ -789,9 +752,6 @@ CELL *p_format(CELL *params)
     int fType;
     double floatNum;
     UINT intNum;
-#ifndef REBEL64
-    INT64 bigNum;
-#endif
     int evalFlag = TRUE;
     char saveChar;
 
@@ -851,34 +811,10 @@ CELL *p_format(CELL *params)
             varPrintf((UINT)&fmtStream, fmt, intNum);
             goto NEXT_FORMAT;
         }
-#ifndef REBEL64
-        if(fType == CELL_INT64)
-        {
-            if(isNumber(cell->type))
-            {
-                cell = getInteger64Ext(cell, &bigNum, TRUE);
-            }
-            else
-            {
-                goto FORMAT_DATA_ERROR;
-            }
-
-            varPrintf((UINT)&fmtStream, fmt, bigNum);
-            goto NEXT_FORMAT;
-        }
-#endif
         if(fType == CELL_FLOAT)
         {
             if(cell->type == CELL_FLOAT)
-#ifndef REBEL64
-                floatNum = *(double *)&cell->aux;
-            else if(cell->type == CELL_INT64)
-            {
-                floatNum = *(INT64 *)&cell->aux;
-            }
-#else
                 floatNum = *(double *)&cell->contents;
-#endif
             else if(cell->type == CELL_LONG)
             {
                 floatNum = (INT)cell->contents;
@@ -1306,7 +1242,7 @@ CELL *p_integer(CELL *params)
         else
 #endif
             getInteger64Ext(cell, &num, FALSE);
-        return(stuffInteger64(num));
+        return(stuffInteger(num));
     }
     else
     {
@@ -1360,7 +1296,7 @@ CELL *p_integer(CELL *params)
 
     result = strtoull(intString,(char **)0, base);
 
-    return(stuffInteger64(result));
+    return(stuffInteger(result));
 INT_DEFAULT:
     return(copyCell(evaluateExpression(deflt)));
 }
@@ -1433,18 +1369,8 @@ CELL *p_symbol(CELL *params)
             snprintf(number, 30, "%"PRIdPTR, cell->contents);
             token = number;
             break;
-#ifndef REBEL64
-        case CELL_INT64:
-            token = number;
-            snprintf(number, 30, "%"PRId64, *(INT64 *)&cell->aux);
-            break;
-#endif /* REBEL64 */
         case CELL_FLOAT:
-#ifndef REBEL64
-            snprintf(number, 30, "%1.10g",*(double *)&cell->aux);
-#else
             snprintf(number, 30, "%1.10g",*(double *)&cell->contents);
-#endif
             token = number;
             break;
         case CELL_STRING:
@@ -1545,24 +1471,11 @@ UINT getAddress(CELL *params)
 
     getEvalDefault(params, &params);
 
-#ifndef REBEL64
-    if(params->type == CELL_INT64)
-    {
-        num = *(INT64 *)&params->aux;
-        return(num);
-    }
-    else if(params->type == CELL_FLOAT)
-    {
-        num = *(INT64 *)&params->aux;
-        return(num);
-    }
-#else
     if(params->type == CELL_FLOAT)
     {
         num = *(double *)&params->contents;
         return(num);
     }
-#endif
 
     return(params->contents);
 }
@@ -1628,7 +1541,7 @@ CELL *p_getInteger(CELL *params)
 
 CELL *p_getLong(CELL *params)
 {
-    return(stuffInteger64(*(INT64 *)getAddress(params)));
+    return(stuffInteger(*(INT64 *)getAddress(params)));
 }
 
 CELL *p_getFloat(CELL *params)
@@ -1649,14 +1562,8 @@ CELL *p_address(CELL *params)
     {
         case CELL_LONG:
             return(stuffInteger((UINT)&params->contents));
-#ifndef REBEL64
-        case CELL_INT64:
-        case CELL_FLOAT:
-            return(stuffInteger((UINT)&params->aux));
-#else
         case CELL_FLOAT:
             return(stuffInteger((UINT)&params->contents));
-#endif
         default:
             break;
     }
@@ -1962,18 +1869,7 @@ CELL *p_pack(CELL *params)
             params = cell;
             listFlag = 1;
         }
-#ifndef REBEL64
-        if(cell->type == CELL_FLOAT || cell->type == CELL_INT64)
-        {
-            uint64V = *(INT64 *)&cell->aux;
-        }
-        else /* CELL_LONG and CELL_STRING */
-        {
-            uint64V = cell->contents;
-        }
-#else
         uint64V = cell->contents;
-#endif
 
         if(type < PACK_FLOAT && cell->type == CELL_FLOAT)
         {
@@ -2312,13 +2208,8 @@ CELL *p_unpack(CELL *params)
                 {
                     swapEndian((char *)&int32V, 4);
                 }
-#ifndef REBEL64
-                cell = getCell(CELL_INT64);
-                *(INT64 *)&cell->aux = int32V;
-#else
                 cell = getCell(CELL_LONG);
                 *(INT *)&cell->contents = int32V;
-#endif
                 break;
 
             case PACK_UNSIGNED_LONG:
@@ -2327,12 +2218,7 @@ CELL *p_unpack(CELL *params)
                 {
                     swapEndian((char *)&uint32V, 4);
                 }
-#ifndef REBEL64
-                cell = getCell(CELL_INT64);
-                *(INT64 *)&cell->aux = uint32V;
-#else
                 cell = makeCell(CELL_LONG, uint32V);
-#endif
                 break;
 
             case PACK_LONG_LONG:
@@ -2342,12 +2228,7 @@ CELL *p_unpack(CELL *params)
                 {
                     swapEndian((char *)&uint64V, 8);
                 }
-#ifndef REBEL64
-                cell = getCell(CELL_INT64);
-                memcpy(&cell->aux, &uint64V, 8);
-#else
                 cell = makeCell(CELL_LONG, uint64V);
-#endif
                 break;
 
             case PACK_FLOAT:

@@ -333,11 +333,6 @@ This is for 64bit large file support (LFS),
 
 #define symbolType(A) ((CELL*)(A)->contents)->type
 
-/* redefine some functions */
-#ifdef REBEL64
-    #define stuffInteger64 stuffInteger
-#endif
-
 /* RED BLACK binary balanced tree: nl-symbol.c */
 #define BLACK 0
 #define RED 1

@@ -20,7 +20,7 @@ CC = cc
 
 CFLAGS = -fPIC -Wall -O0 -g -c \
 	-I/usr/local/include -I/usr/local/opt/libffi/include \
-	-DMAC_OSX -DREBEL64 -DSUPPORT_UTF8 -DREADLINE -DFFI
+	-DMAC_OSX -DSUPPORT_UTF8 -DREADLINE -DFFI
 
 LDFLAGS = -L/usr/local/lib -L/usr/local/opt/libffi/lib
 

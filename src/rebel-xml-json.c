@@ -1127,7 +1127,7 @@ CELL *getJSONvalue(char *jsonStr, char * * restStr)
     }
     else
     {
-        return(stuffInteger64(atoll(number)));
+        return(stuffInteger(atoll(number)));
     }
 
 

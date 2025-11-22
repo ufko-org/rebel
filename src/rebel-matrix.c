@@ -959,21 +959,10 @@ double * *makeMatrix(CELL *number, int n, int m)
     double * * matrix;
     int i, j;
 
-#ifndef REBEL64
-    if(number->type == CELL_FLOAT)
-    {
-        s = *(double *)&number->aux;
-    }
-    else if(number->type == CELL_INT64)
-    {
-        s = *(INT64 *)&number->aux;
-    }
-#else
     if(number->type == CELL_FLOAT)
     {
         s = *(double *)&number->contents;
     }
-#endif
     else
     {
         s = *(INT64 *)&number->contents;
@@ -1154,11 +1143,7 @@ CELL *matrix2data(double **matrix, int type, int n, int m)
             for(j = 1; j <= m; j++)
             {
                 fnum = matrix[i][j];
-#ifndef REBEL64
-                *(double *)&cell->aux = fnum;
-#else
                 *(double *)&cell->contents = fnum;
-#endif
                 if(j == m)
                 {
                     break;

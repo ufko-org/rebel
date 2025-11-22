@@ -160,9 +160,6 @@ CELL *p_length(CELL *params)
     {
 #ifdef BIGINT
         case CELL_LONG:
-#ifndef REBEL64
-        case CELL_INT64:
-#endif
         case CELL_FLOAT:
         case CELL_BIGINT:
             result = getBigintSizeDirect(params, &bigintPtr, &len);
@@ -174,9 +171,6 @@ CELL *p_length(CELL *params)
             break;
 #else /* not BIGINT */
         case CELL_LONG:
-#ifndef REBEL64
-        case CELL_INT64:
-#endif
             getInteger64Ext(params, &number, FALSE);
             if(number == 0)
             {

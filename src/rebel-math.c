@@ -123,7 +123,7 @@ CELL *p_abs(CELL *params)
         intValue = intValue * -1;
     }
 
-    return(stuffInteger64(intValue));
+    return(stuffInteger(intValue));
 }
 
 CELL *incDecI(CELL *params, int type)
@@ -212,13 +212,8 @@ CELL *incDecI(CELL *params, int type)
     }
 
 
-#ifndef REBEL64
-    cell->type = CELL_INT64;
-    *(INT64 *)&cell->aux = lValue + adjust *type;
-#else
     cell->type = CELL_LONG;
     cell->contents = lValue + adjust *type;
-#endif
 
     return(copyCell(cell));
 }
@@ -263,11 +258,7 @@ CELL *incDecF(CELL *params, int type)
     }
 
     cell->type = CELL_FLOAT;
-#ifndef REBEL64
-    *(double *)&cell->aux = lValue + adjust *type;
-#else
     *(double *)&cell->contents = lValue + adjust *type;
-#endif
 
     return(copyCell(cell));
 }
@@ -310,11 +301,11 @@ CELL *arithmetikOp(CELL *params, int op)
     {
         if(op == OP_ADD)
         {
-            return(stuffInteger64(0));
+            return(stuffInteger(0));
         }
         if(op == OP_MULTIPLY)
         {
-            return(stuffInteger64(1));
+            return(stuffInteger(1));
         }
     }
 
@@ -473,7 +464,7 @@ NEXT_FIRST_BIGINT:
             }
         }
 
-    return(stuffInteger64(result));
+    return(stuffInteger(result));
 }
 
 
@@ -524,7 +515,7 @@ CELL *p_bitNot(CELL *params)
 {
     INT64 number;
     getInteger64Ext(params, &number, TRUE);
-    return(stuffInteger64(~number));
+    return(stuffInteger(~number));
 }
 
 
@@ -652,11 +643,7 @@ CELL *floatOp(CELL *params, int op)
 
 END_FLOAT_ARITHMETIK:
     params = getCell(CELL_FLOAT);
-#ifndef REBEL64
-    memcpy((void *)&params->aux, (void *)&result, sizeof(double));
-#else
     *(double *)&params->contents = result;
-#endif
     return(params);
 }
 
@@ -713,31 +700,6 @@ int compareInts(CELL *left, CELL *right)
     }
 #endif
 
-#ifndef REBEL64
-    if(left->type == CELL_LONG)
-    {
-        leftnum = (int)left->contents;
-    }
-    else
-    {
-        leftnum = *(INT64 *)&left->aux;
-    }
-
-    if(right->type == CELL_LONG)
-    {
-        rightnum = (int)right->contents;
-    }
-#ifdef CELL_BIGINT
-    else if(right->type == CELL_BIGINT)
-    {
-        getInteger64Ext(right, &rightnum, FALSE);
-    }
-#endif
-    else
-    {
-        rightnum = *(INT64 *)&right->aux;
-    }
-#else /* REBEL64 */
     leftnum = (UINT)left->contents;
 #ifdef CELL_BIGINT
     if(right->type == CELL_BIGINT)
@@ -747,7 +709,6 @@ int compareInts(CELL *left, CELL *right)
     else
 #endif
         rightnum = (UINT)right->contents;
-#endif /* REBEL64 */
 
     if(leftnum < rightnum)
     {
@@ -766,27 +727,6 @@ double getDirectFloat(CELL *param)
 {
     double floatNum = 0.0;
 
-#ifndef REBEL64
-    if(param->type == CELL_FLOAT)
-    {
-        return(*(double *)&param->aux);
-    }
-    else if(param->type == CELL_LONG)
-    {
-        floatNum = (INT)param->contents;
-    }
-    else if(param->type == CELL_INT64)
-    {
-        floatNum = *(INT64 *)&param->aux;
-    }
-#ifdef BIGINT
-    else if(param->type == CELL_BIGINT)
-    {
-        floatNum = bigintCellToFloat(param);
-    }
-#endif
-
-#else /* REBEL64 */
     if(param->type == CELL_FLOAT)
     {
         return(*(double *)&param->contents);
@@ -803,7 +743,6 @@ double getDirectFloat(CELL *param)
     }
 #endif
 
-#endif
 
     return(floatNum);
 }
@@ -1022,11 +961,7 @@ CELL *functionFloat(CELL *params, int op)
     }
 
     cell = getCell(CELL_FLOAT);
-#ifndef REBEL64
-    *(double *)&cell->aux = floatN;
-#else
     *(double *)&cell->contents = floatN;
-#endif
     return(cell);
 }
 
@@ -1077,11 +1012,7 @@ CELL *p_atan2(CELL *params)
     getFloat(params, &floatY);
 
     cell = getCell(CELL_FLOAT);
-#ifndef REBEL64
-    *(double *)&cell->aux = atan2(floatX, floatY);
-#else
     *(double *)&cell->contents = atan2(floatX, floatY);
-#endif
     return(cell);
 }
 
@@ -1268,7 +1199,7 @@ CELL *compareOp(CELL *params, int op)
         {
             if(isNumber(left->type))
             {
-                right = stuffInteger64(0);
+                right = stuffInteger(0);
             }
             else if(left->type == CELL_STRING)
             {
@@ -1552,18 +1483,6 @@ int compareCells(CELL *left, CELL *right)
             return(compareArrays((CELL *)left, (CELL *)right));
         case CELL_FLOAT:
             return(compareFloats(left, right));
-#ifndef REBEL64
-        case CELL_INT64:
-            if(*(INT64 *)&left->aux > *(INT64 *)&right->aux)
-            {
-                return(1);
-            }
-            if(*(INT64 *)&left->aux < *(INT64 *)&right->aux)
-            {
-                return(-1);
-            }
-            break;
-#endif
 #ifdef BIGINT
         case CELL_BIGINT:
             comp = cmpBigint((int *)(UINT)left->contents,
@@ -2680,7 +2599,7 @@ CELL *p_factor (CELL *params)
     }
     for(i = 0; i < k; i++)
     {
-        addList(factList, stuffInteger64(d));
+        addList(factList, stuffInteger(d));
     }
 
     for (d = 3; d *d <= n; d += 2)
@@ -2691,13 +2610,13 @@ CELL *p_factor (CELL *params)
         }
         for(i = 0; i < k; i++)
         {
-            addList(factList, stuffInteger64(d));
+            addList(factList, stuffInteger(d));
         }
     }
 
     if (n > 1)
     {
-        addList(factList, stuffInteger64(n));
+        addList(factList, stuffInteger(n));
     }
 
     return(factList);
@@ -2758,7 +2677,7 @@ NEXT_BIG_GCD:
     {
         m = -m;
     }
-    return(stuffInteger64(m));
+    return(stuffInteger(m));
 }
 
 
@@ -3196,7 +3115,7 @@ CELL *p_crc32(CELL *params)
 
     getStringSize(params, &data, &len, TRUE);
     crc = update_crc(0xffffffffL, (unsigned char *)data, (int)len) ^ 0xffffffffL;
-    return(stuffInteger64(crc));
+    return(stuffInteger(crc));
 }
 
 /* Update a running CRC with the bytes buf[0..len-1]--the CRC
@@ -3362,12 +3281,6 @@ CELL *p_bayesTrain(CELL *params)
             {
                 count->contents++;
             }
-#ifndef REBEL64
-            else if(count->type == CELL_INT64)
-            {
-                *(INT64 *)&count->aux += 1;
-            }
-#endif
             else
             {
                 return(errorProcExt(ERR_NUMBER_EXPECTED, count));
@@ -3403,12 +3316,6 @@ CELL *p_bayesTrain(CELL *params)
         {
             count->contents += total[i];
         }
-#ifndef REBEL64
-        else if(count->type == CELL_INT64)
-        {
-            *(INT64 *)&count->aux += total[i];
-        }
-#endif
         count = count->next;
     }
 
@@ -3514,12 +3421,6 @@ CELL *p_bayesQuery(CELL *params)
             {
                 N += total->contents;
             }
-#ifndef REBEL64
-            else if(total->type == CELL_INT64)
-            {
-                N += *(INT64 *)&total->aux;
-            }
-#endif
         }
         total = total->next;
         maxIdx++;
@@ -3542,23 +3443,13 @@ CELL *p_bayesQuery(CELL *params)
     for(idx = 0; idx < maxIdx; idx++)
     {
         if(probFlag == TRUE)
-#ifndef REBEL64
-            priorP[idx] = *(double *)&total->aux;
-#else
             priorP[idx] = (double)total->contents;
-#endif
         else
         {
             if(total->type == CELL_LONG)
             {
                 priorP[idx] = (double)total->contents / N;
             }
-#ifndef REBEL64
-            else /* INT64 */
-            {
-                priorP[idx] = (double)*(INT64 *)&total->aux / N;
-            }
-#endif
         }
 
 #ifdef BAYES_DEBUG
@@ -3621,11 +3512,7 @@ CELL *p_bayesQuery(CELL *params)
         for(idx = 0; idx < maxIdx; idx++)
         {
             if(probFlag)
-#ifndef REBEL64
-                p_tkn_and_cat[idx] = *(double *)&count->aux *priorP[idx];
-#else
                 p_tkn_and_cat[idx] = *(double *)&count->contents *priorP[idx];
-#endif
             else /*   p(M) * p(tkn|M) */
             {
                 /* count of token in category idx */
@@ -4297,7 +4184,7 @@ CELL *p_flt(CELL *params)
     floatV = dfloatV;
     memcpy(&number, &floatV, 4);
 
-    return(stuffInteger64(number));
+    return(stuffInteger(number));
 }
 
 
@@ -4644,24 +4531,6 @@ int *getBigintSizeDirect(CELL *cell, int * * numPtr, int *len)
     int size = 0;
     int *num = NULL;
 
-#ifndef REBEL64
-    if(cell->type == CELL_INT64)
-    {
-        num = intToBigint(*(INT64 *)&cell->aux, &size);
-    }
-    else if(cell->type == CELL_LONG)
-    {
-        num = intToBigint((INT64)cell->contents, &size);
-    }
-    else if(cell->type == CELL_FLOAT)
-    {
-        if(isnan(*(double *)&cell->aux))
-        {
-            num = intToBigint(0, &size);
-        }
-        num = floatToBigint(*(double *)&cell->aux, &size);
-    }
-#else /* REBEL64 */
     if(cell->type == CELL_LONG)
     {
         num = intToBigint((INT64)cell->contents, &size);
@@ -4674,7 +4543,6 @@ int *getBigintSizeDirect(CELL *cell, int * * numPtr, int *len)
         }
         num = floatToBigint( *(double *)&cell->contents, &size);
     }
-#endif
     else if(cell->type == CELL_BIGINT)
     {
         *numPtr = (int *)cell->contents;

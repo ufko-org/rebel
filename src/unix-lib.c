@@ -51,9 +51,7 @@ void initializeMain(void)
     opsys += 128;
 #endif
 
-#ifdef REBEL64
     opsys += 256;
-#endif
 
 #ifdef FFI
     opsys += 1024;

@@ -66,15 +66,6 @@ int version = 1010; /*v.1.0*/
 char copyright[]=
     "\nRebel v.1.0\nCopyright (c) 2020 Lutz Mueller.\nCopyright (c) 2025 Ufko (ufko.org).\nAll rights reserved.\n\n%s\n\n";
 
-#ifndef REBEL64
-    #ifdef SUPPORT_UTF8
-        char banner[]=
-        "Rebel v.1.0 32-bit on %s IPv4/6 UTF-8%s%s\n\n";
-    #else
-        char banner[]=
-        "Rebel v.1.0 32-bit on %s IPv4/6%s%s\n\n";
-    #endif
-#else /* REBEL64 */
     #ifdef SUPPORT_UTF8
         char banner[]=
         "Rebel v.1.0 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
@@ -82,7 +73,6 @@ char copyright[]=
         char banner[]=
         "Rebel v.1.0 64-bit on %s IPv4/6%s%s\n\n";
     #endif
-#endif /* REBEL64 */
 
 char banner2[]= ", options: rebel -h";
 
@@ -124,11 +114,7 @@ int MAX_CPU_STACK = 0x800;
 int MAX_ENV_STACK;
 int MAX_RESULT_STACK;
 #define MAX_OBJECT_STACK 64
-#ifndef REBEL64
-    INT MAX_CELL_COUNT = 0x10000000;
-#else
     INT MAX_CELL_COUNT = 0x800000000000000LL;
-#endif
 INT blockCount = 0;
 
 CELL *firstFreeCell = NULL;
@@ -556,9 +542,7 @@ int main(int argc, char *argv[])
     opsys += 128;
 #endif
 
-#ifdef REBEL64
     opsys += 256;
-#endif
 
 #ifdef FFI
     opsys += 1024;
@@ -706,11 +690,7 @@ int main(int argc, char *argv[])
 
         if(strncmp(argv[idx], "-m", 2) == 0)
         {
-#ifndef REBEL64
-            MAX_CELL_COUNT =  abs(0x0010000 * atoi(getArg(argv, argc, &idx)));
-#else
             MAX_CELL_COUNT =  abs(0x0008000 * atoi(getArg(argv, argc, &idx)));
-#endif
             continue;
         }
 
@@ -2057,26 +2037,6 @@ CELL *stuffInteger(UINT contents)
     return(cell);
 }
 
-#ifndef REBEL64
-CELL *stuffInteger64(INT64 contents)
-{
-    CELL *cell;
-
-    if(firstFreeCell == NULL)
-    {
-        allocBlock();
-    }
-    cell = firstFreeCell;
-    firstFreeCell = cell->next;
-    ++cellCount;
-
-    cell->type = CELL_INT64;
-    cell->next = nilCell;
-
-    *(INT64 *)&cell->aux = contents;
-    return(cell);
-}
-#endif
 
 CELL *stuffIntegerList(int argc, ...)
 {
@@ -2144,11 +2104,7 @@ CELL *stuffFloat(double floatVal)
     CELL *cell;
 
     cell = getCell(CELL_FLOAT);
-#ifndef REBEL64
-    *(double *)&cell->aux = floatVal;
-#else
     *(double *)&cell->contents = floatVal;
-#endif
     return(cell);
 }
 
@@ -2664,11 +2620,6 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
         case CELL_LONG:
             varPrintf(device,"%"PRIdPTR, cell->contents);
             break;
-#ifndef REBEL64
-        case CELL_INT64:
-            varPrintf(device,"%"PRId64, *(INT64 *)&cell->aux);
-            break;
-#endif /* REBEL64 */
 #ifdef BIGINT
         case CELL_BIGINT:
             ptr = bigintToDigits((int *)cell->contents, cell->aux - 1, 48, NULL);
@@ -2677,11 +2628,7 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
             break;
 #endif
         case CELL_FLOAT:
-#ifndef REBEL64
-            varPrintf(device, prettyPrintFloat,*(double *)&cell->aux);
-#else
             varPrintf(device, prettyPrintFloat,*(double *)&cell->contents);
-#endif
             break;
 
         case CELL_STRING:
@@ -3679,15 +3626,15 @@ GETNEXT:
             break;
 
         case TKN_HEX:
-            newCell = stuffInteger64((INT64)strtoull(token,NULL,0));
+            newCell = stuffInteger((INT64)strtoull(token,NULL,0));
             break;
 
         case TKN_BINARY:
-            newCell = stuffInteger64((INT64)strtoull(&token[2],NULL,2));
+            newCell = stuffInteger((INT64)strtoull(&token[2],NULL,2));
             break;
 
         case TKN_OCTAL:
-            newCell = stuffInteger64(strtoll(token,NULL,0));
+            newCell = stuffInteger(strtoll(token,NULL,0));
             break;
 
         case TKN_DECIMAL:
@@ -3701,11 +3648,7 @@ GETNEXT:
             }
 #endif
 
-#ifndef REBEL64
-            number = (INT64)strtoll(token, NULL, 0);
-#else
             number = strtoll(token, NULL, 0);
-#endif
 
 #ifdef BIGINT
             if(errno == ERANGE)
@@ -3716,7 +3659,7 @@ GETNEXT:
             }
 #endif
 
-            newCell = stuffInteger64(number);
+            newCell = stuffInteger(number);
             errno = errnoSave;
             break;
 
@@ -4306,46 +4249,6 @@ CELL *getInteger(CELL *params, UINT *number)
 
     cell = evaluateExpression(params);
 
-#ifndef REBEL64
-    if(cell->type == CELL_INT64)
-    {
-        if(*(INT64 *)&cell->aux >  0xFFFFFFFF)
-        {
-            *number = 0xFFFFFFFF;
-        }
-        else if(*(INT64 *)&cell->aux < INT32_MIN_AS_INT64)
-        {
-            *number = 0x80000000;
-        }
-        else
-        {
-            *number = *(INT64 *)&cell->aux;
-        }
-    }
-    else if(cell->type == CELL_LONG)
-    {
-        *number = cell->contents;
-    }
-    else if(cell->type == CELL_FLOAT)
-    {
-        if(isnan(*(double *)&cell->aux))
-        {
-            *number = 0;
-        }
-        else if(*(double *)&cell->aux >  4294967295.0)
-        {
-            *number = 0xFFFFFFFF;
-        }
-        else if(*(double *)&cell->aux < -2147483648.0)
-        {
-            *number = 0x80000000;
-        }
-        else
-        {
-            *number = *(double *)&cell->aux;
-        }
-    }
-#else /* REBEL64 */
     if(cell->type == CELL_LONG)
     {
         *number = cell->contents;
@@ -4369,7 +4272,6 @@ CELL *getInteger(CELL *params, UINT *number)
             *number = *(double *)&cell->contents;
         }
     }
-#endif
     else
     {
 #ifdef BIGINT
@@ -4377,12 +4279,6 @@ CELL *getInteger(CELL *params, UINT *number)
         {
             longNum = bigintToInt64(cell);
             *number = longNum;
-#ifndef REBEL64
-            if(longNum > 2147483647LL || longNum < -2147483648LL)
-            {
-                return(errorProcExt(ERR_NUMBER_OUT_OF_RANGE, cell));
-            }
-#endif
         }
         else
 #endif
@@ -4395,66 +4291,6 @@ CELL *getInteger(CELL *params, UINT *number)
     return(params->next);
 }
 
-#ifndef REBEL64
-CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
-{
-    CELL *cell;
-
-    if(evalFlag)
-    {
-        cell = evaluateExpression(params);
-    }
-    else
-    {
-        cell = params;
-    }
-
-    if(cell->type == CELL_INT64)
-    {
-        *number = *(INT64 *)&cell->aux;
-    }
-    else if(cell->type == CELL_LONG)
-    {
-        *number = (int)cell->contents;
-    }
-    else if(cell->type == CELL_FLOAT)
-    {
-        if(isnan(*(double *)&cell->aux))
-        {
-            *number = 0;
-        }
-        else if(*(double *)&cell->aux >  9223372036854775807.0)
-        {
-            *number = 0x7FFFFFFFFFFFFFFFLL;
-        }
-        else if(*(double *)&cell->aux < -9223372036854775808.0)
-        {
-            *number = 0x8000000000000000LL;
-        }
-        else
-        {
-            *number = *(double *)&cell->aux;
-        }
-    }
-    else /* check for bigint if size * != NULL, then return bigint address in number */
-    {
-#ifdef BIGINT
-        if(cell->type == CELL_BIGINT)
-        {
-            *number = bigintToInt64(cell);
-        }
-        else
-#endif
-        {
-            *number = 0;
-            return(errorProcExt(ERR_NUMBER_EXPECTED, params));
-        }
-    }
-
-    return(params->next);
-}
-
-#else /* REBEL64 */
 CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
 {
     CELL *cell;
@@ -4508,7 +4344,6 @@ CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
 
     return(params->next);
 }
-#endif
 
 CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
 {
@@ -4526,46 +4361,6 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
         cell = params;
     }
 
-#ifndef REBEL64
-    if(cell->type == CELL_INT64)
-    {
-        if(*(INT64 *)&cell->aux >  0xFFFFFFFF)
-        {
-            *number = 0xFFFFFFFF;
-        }
-        else if(*(INT64 *)&cell->aux < INT32_MIN_AS_INT64)
-        {
-            *number = 0x80000000;
-        }
-        else
-        {
-            *number = *(INT64 *)&cell->aux;
-        }
-    }
-    else if(cell->type == CELL_LONG)
-    {
-        *number = cell->contents;
-    }
-    else if(cell->type == CELL_FLOAT)
-    {
-        if(isnan(*(double *)&cell->aux))
-        {
-            *number = 0;
-        }
-        else if(*(double *)&cell->aux >  4294967295.0)
-        {
-            *number = 0xFFFFFFFF;
-        }
-        else if(*(double *)&cell->aux < -2147483648.0)
-        {
-            *number = 0x80000000;
-        }
-        else
-        {
-            *number = *(double *)&cell->aux;
-        }
-    }
-#else /* REBEL64 */
     if(cell->type == CELL_LONG)
     {
         *number = cell->contents;
@@ -4589,7 +4384,6 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
             *number = *(double *)&cell->contents;
         }
     }
-#endif
     else /* if BIGNUM type throw ERR_NUMBER_OUT_OF_RANGE */
     {
 #ifdef BIGINT
@@ -4597,12 +4391,6 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
         {
             longNum = bigintToInt64(cell);
             *number = longNum;
-#ifndef REBEL64
-            if(longNum > 2147483647LL || longNum < -2147483648LL)
-            {
-                return(errorProcExt(ERR_NUMBER_OUT_OF_RANGE, cell));
-            }
-#endif
         }
         else
 
@@ -4623,21 +4411,10 @@ CELL *getFloat(CELL *params, double *floatNumber)
 
     cell = evaluateExpression(params);
 
-#ifndef REBEL64
-    if(cell->type == CELL_FLOAT)
-    {
-        *floatNumber = *(double *)&cell->aux;
-    }
-    else if(cell->type == CELL_INT64)
-    {
-        *floatNumber = *(INT64 *)&cell->aux;
-    }
-#else
     if(cell->type == CELL_FLOAT)
     {
         *floatNumber = *(double *)&cell->contents;
     }
-#endif
     else if(cell->type == CELL_LONG)
     {
         *floatNumber = (INT)cell->contents;
@@ -6678,7 +6455,7 @@ CELL *loop(CELL *params, int forFlag)
         if(intFlag)
         {
             symbol->contents =
-                (UINT)stuffInteger64((fromInt64 > toInt64) ? fromInt64 - i:
+                (UINT)stuffInteger((fromInt64 > toInt64) ? fromInt64 - i:
                                      fromInt64 + i);
         }
         else
@@ -7563,20 +7340,8 @@ CELL *isZero(CELL *cell)
 
     switch(cell->type)
     {
-#ifndef REBEL64
-        case CELL_INT64:
-            if(*(INT64 *)&cell->aux == 0)
-            {
-                return(trueCell);
-            }
-            break;
-#endif
         case CELL_FLOAT:
-#ifndef REBEL64
-            if(*(double *)&cell->aux == 0.0)
-#else
             if(*(double *)&cell->contents == 0.0)
-#endif
                 return(trueCell);
             break;
         case CELL_LONG:
@@ -7617,11 +7382,7 @@ CELL *p_isNull(CELL *params)
         return(isEmptyFunc(cell));
     }
 
-#ifndef REBEL64
-    if(cell->type == CELL_FLOAT && (isnan(*(double *)&cell->aux)) )
-#else
     if(cell->type == CELL_FLOAT && (isnan(*(double *)&cell->contents)))
-#endif
         return(trueCell);
 
     return(isZero(cell));

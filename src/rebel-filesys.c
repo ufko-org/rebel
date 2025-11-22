@@ -624,7 +624,7 @@ CELL *p_seek(CELL *params)
 
     paramPosition = newPosition;
 #ifdef LFS
-    return(stuffInteger64(paramPosition));
+    return(stuffInteger(paramPosition));
 #else
     return(stuffInteger(paramPosition));
 #endif
@@ -1072,12 +1072,6 @@ CELL *p_fileInfo(CELL *params)
                (UINT)fileInfo.st_ctime
            );
 
-#ifndef REBEL64
-#ifdef LFS
-    ((CELL *)list->contents)->type = CELL_INT64;
-    *(INT64 *)&((CELL *)list->contents)->aux = (INT64)fileInfo.st_size;
-#endif /* LFS */
-#endif /* REBEL64 */
 
     if(params != nilCell)
     {
@@ -2086,9 +2080,6 @@ int semaphore(UINT sem_id, int value, int type)
 {
     struct sembuf sem_b;
 #ifdef SPARC
-#ifndef REBEL64
-    int semun_val = 0;
-#endif
 #endif
 
 #if defined(MAC_OSX) || defined(LINUX)
@@ -2252,22 +2243,10 @@ CELL *readWriteShared(UINT *address, CELL *params, int flag)
                 *(address + 1) = sizeof(INT);
                 *(address + 2) = cell->contents;
                 break;
-#ifndef REBEL64
-            case CELL_INT64:
-                *(address + 1) = sizeof(INT64);
-                memcpy(address + 2, (void *)&cell->aux, sizeof(INT64));
-                break;
-            case CELL_FLOAT:
-                *(address + 1) = sizeof(double);
-                *(address + 2) = cell->aux;
-                *(address + 3) = cell->contents;
-                break;
-#else /* REBEL64 */
             case CELL_FLOAT:
                 *(address + 1) = sizeof(double);
                 *(address + 2) = cell->contents;
                 break;
-#endif /* REBEL64 */
             case CELL_STRING:
                 getStringSize(cell, &str, &size, FALSE);
                 if(size > (pagesize - 3 * sizeof(INT)))
@@ -2297,20 +2276,9 @@ CELL *readWriteShared(UINT *address, CELL *params, int flag)
         case CELL_LONG:
             cell = stuffInteger(*(address + 2));
             break;
-#ifndef REBEL64
-        case CELL_INT64:
-            cell = stuffInteger64(*(INT64 *)(address + 2));
-            break;
-#endif
         case CELL_FLOAT:
-#ifndef REBEL64
-            cell = getCell(CELL_FLOAT);
-            cell->aux = *(address + 2);
-            cell->contents = *(address + 3);
-#else
             cell = getCell(CELL_FLOAT);
             cell->contents = *(address + 2);
-#endif
             break;
         case CELL_STRING:
             if(*address & SHARED_MEM_EVAL_MASK)
@@ -2808,11 +2776,7 @@ CELL *p_dateValue(CELL *params)
 
     dateValue = calcDateValue(year, month, day, hour, min, sec);
 
-#ifndef REBEL64
-    return(stuffInteger64((INT64)dateValue));
-#else
     return(stuffInteger((UINT)dateValue));
-#endif
 }
 
 

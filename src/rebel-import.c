@@ -140,16 +140,7 @@ CELL *executeLibfunction(CELL *pCell, CELL *params)
             case CELL_PRIMITIVE:
                 args[count++] = arg->contents;
                 break;
-#ifndef REBEL64
-            /* change 64-bit to 32-bit */
-            case CELL_INT64:
-                args[count++] = *(INT64 *)&arg->aux;
-                break;
-#endif
             case CELL_FLOAT:
-#ifndef REBEL64
-                args[count++] = arg->aux;
-#endif
                 args[count++] = arg->contents;
                 break;
             default:
@@ -301,13 +292,6 @@ INT template(INT n, INT p1, INT p2, INT p3, INT p4, INT p5, INT p6, INT p7, INT 
     args = stuffIntegerList(8, p1, p2, p3, p4, p5, p6, p7, p8);
     executeSymbol(callback[n].sym, (CELL *)args->contents, &cell);
 
-#ifndef REBEL64
-    if(cell->type == CELL_INT64)
-    {
-        result = *(INT64 *)&cell->aux;
-    }
-    else
-#endif
         result = (INT)cell->contents;
 
     args->contents = (UINT)nilCell;
@@ -498,11 +482,7 @@ FFITYPE ffi_types[] =
     {"short int",   &ffi_type_sint16},
     {"unsigned int",&ffi_type_uint32},
     {"int",         &ffi_type_sint32},
-#ifdef REBEL64
     {"long",        &ffi_type_sint64},
-#else
-    {"long",        &ffi_type_sint32},
-#endif
     {"long long",   &ffi_type_sint64},
     {"float",       &ffi_type_float},
     {"double",      &ffi_type_double},
@@ -635,18 +615,7 @@ CELL *packFFIstruct(CELL *cell, CELL *params)
             offset += elem->alignment - pad;
         }
 
-#ifndef REBEL64
-        if(cell->type == CELL_FLOAT || cell->type == CELL_INT64)
-        {
-            uint64V = *(INT64 *)&cell->aux;
-        }
-        else /* CELL_LONG and CELL_STRING */
-        {
-            uint64V = cell->contents;
-        }
-#else
         uint64V = cell->contents;
-#endif
 
         if( elem == &ffi_type_sint8 )
         {
@@ -1046,11 +1015,11 @@ CELL *ffiTypeToCell(ffi_type *type, void *result)
     }
     else if(type == &ffi_type_uint32)
     {
-        return stuffInteger64(*((unsigned int *)result));
+        return stuffInteger(*((unsigned int *)result));
     }
     else if(type == &ffi_type_sint64 || type == &ffi_type_uint64)
     {
-        return stuffInteger64(*((INT64 *)result));
+        return stuffInteger(*((INT64 *)result));
     }
 
     return nilCell;
