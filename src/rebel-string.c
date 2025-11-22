@@ -750,7 +750,6 @@ PARSE_FORMAT:
         return(fmt+2);
     }
 
-#ifndef TRUE64 /* UNIX except TRUE64 and WINDOWS MINGW suporting lld, llu, llx, llX formats */
     if(*fmt == 'l' && *(fmt + 1) == 'l' && (*(fmt + 2) == 'd' || *(fmt + 2) == 'u' || *(fmt + 2) =='x' || *(fmt + 2) == 'X'))
     {
 #ifndef REBEL64
@@ -760,7 +759,6 @@ PARSE_FORMAT:
 #endif
         return(fmt+3);
     }
-#endif
 
 
     /* L and q seem not to be suported on most GCC although in the docs
