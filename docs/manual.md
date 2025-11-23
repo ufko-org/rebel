@@ -2,11 +2,9 @@ title:Rebel manual
 css:rebel.css
 author:Ufko (ufko.org)
 
-<center>
 Rebel Manual
 
 Copyright © 2025 Ufko (ufko.org).  All rights reserved.  
-</center>
 
 Rebel is a standalone scripting interpreter and
 documentation.
@@ -19,7 +17,35 @@ end).
 
 ---
 
-BODY
+## Table of contents 
+
+---
+
+- Introduction
+- Interactive Lisp mode
+- Command line options
+- Startup, directories & environment
+- Functions & Data
+  (code is data :)
+  - Evaluating expressions
+  - Lists, strings & numbers
+  - Lambda expressions (ordinary lists)
+  - nil, true, cons & ()
+  - Arrays & indexing
+  - Destructive vs non-destructive functions
+  - Early return from functions, loops, blocks
+  - Commas in parameter lists
+- Dynamic & lexical scoping
+- Contexts & modules
+- Functional object-oriented programming
+- Concurrent & distributed computing
+- JSON, XML & XML-RPC
+- Customization, localization & UTF-8
+- Extending Rebel with shared libraries
+
+---
+
+deepwiki note
 
 ---
 
