@@ -125,6 +125,6 @@ Hello rebels :)
 ### Links:
 
 - Homepage: https://rebel-lang.org
-- Github repo: https://github.com/ufko-org/rebel
-- Github organization: https://github.com/rebellang
+- Codeberg repo (primary): https://codeberg.org/ufko/rebel
+- Github repo (mirror): https://github.com/ufko-org/rebel
 - DeepWiki analysis: https://deepwiki.com/ufko-org/rebel/1.1-language-heritage-and-philosophy
