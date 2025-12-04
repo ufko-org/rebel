@@ -101,7 +101,7 @@ most recent regex match. Capture groups start at index 1.</p>
 </ul>
 <p>See: <a href="#f-regex">regex</a>, <a href="#f-find">find</a>, <a href="#f-find-all">find-all</a></p>
 <hr/>
-<p><a name="f-mod"></a></p>
+<p><a name="f-mod-op"></a></p>
 <h2 id="section-3">%</h2>
 <pre><code>syntax: (% int [int ...])
 </code></pre>
@@ -119,7 +119,7 @@ integer in sequence. All arguments must be integers.</p>
 </ul>
 <p>See: <a href="#f-div">div</a>, <a href="#f-mul">mul</a></p>
 <hr/>
-<p><a name="f-and"></a></p>
+<p><a name="f-amp"></a></p>
 <h2 id="section-4">&#38;</h2>
 <pre><code>syntax: (&#38; int int [int ...])
 </code></pre>
@@ -251,7 +251,7 @@ reciprocal as a floating-point number.</p>
 <li>Integer division for multiple arguments.</li>
 <li>Single-argument form returns 1&#47;arg as float.</li>
 </ul>
-<p>See: [%](#f-mod), <a href="#f-mul">*</a></p>
+<p>See: [%](#f-mod-op), <a href="#f-mul">*</a></p>
 <hr/>
 <p><a name="f-colon"></a></p>
 <h2 id="section-10">:</h2>
@@ -307,7 +307,7 @@ shifts left sequentially using each shift amount.</p>
 <li>Bitwise left shift.</li>
 <li>All arguments must be integers.</li>
 </ul>
-<p>See: <a href="#f-shr">&#62;&#62;</a>, <a href="#f-and">&#38;</a></p>
+<p>See: <a href="#f-shr">&#62;&#62;</a>, <a href="#f-amp">&#38;</a></p>
 <hr/>
 <p><a name="f-leq"></a></p>
 <h2 id="section-13">&#60;=</h2>
@@ -404,7 +404,7 @@ amounts, shifts sequentially from left to right.</p>
 <li>Bitwise right shift.</li>
 <li>All arguments must be integers.</li>
 </ul>
-<p>See: <a href="#f-shl">&#60;&#60;</a>, <a href="#f-and">&#38;</a></p>
+<p>See: <a href="#f-shl">&#60;&#60;</a>, <a href="#f-amp">&#38;</a></p>
 <hr/>
 <p><a name="f-nanp"></a></p>
 <h2 id="nan">NaN?</h2>
@@ -440,7 +440,7 @@ Evaluation proceeds from left to right.</p>
 <li>Bitwise XOR for integers.</li>
 <li>All arguments must be integers.</li>
 </ul>
-<p>See: <a href="#f-and">&#38;</a>, <a href="#f-orbit">|</a></p>
+<p>See: <a href="#f-amp">&#38;</a>, <a href="#f-orbit">|</a></p>
 <hr/>
 <p><a name="f-abort"></a></p>
 <h2 id="abort">abort</h2>
@@ -1076,7 +1076,7 @@ be included.</p>
 <ul>
 <li>Produces textual bit representation.</li>
 </ul>
-<p>See: <a href="#f-orbit">|</a>, <a href="#f-and">&#38;</a></p>
+<p>See: <a href="#f-orbit">|</a>, <a href="#f-amp">&#38;</a></p>
 <hr/>
 <p><a name="f-callback"></a></p>
 <h2 id="callback">callback</h2>
@@ -2011,7 +2011,7 @@ With a single argument, returns its reciprocal as a float.</p>
 <li>Similar to <code>&#47;</code>, but accepts floats explicitly.</li>
 <li>Left-associative.</li>
 </ul>
-<p>See: <a href="#f-div-op">&#47;</a>, [%](#f-mod)</p>
+<p>See: <a href="#f-div-op">&#47;</a>, [%](#f-mod-op)</p>
 <hr/>
 <p><a name="f-do-until"></a></p>
 <h2 id="do-until">do-until</h2>
