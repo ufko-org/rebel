@@ -120,4 +120,4 @@ Hello rebels :)
 - Homepage: https://rebel-lang.org
 - Codeberg repo (primary): https://codeberg.org/ufko/rebel
 - Github repo (mirror): https://github.com/ufko-org/rebel
-- DeepWiki analysis: https://deepwiki.com/ufko-org/rebel/1.1-language-heritage-and-philosophy
+- DeepWiki analysis: https://deepwiki.com/ufko-org/rebel
