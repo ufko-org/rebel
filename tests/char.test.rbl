@@ -1,0 +1,68 @@
+; Test for function "char"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Single character formatting
+; ------------------------------------------------------------
+(test "1: format char 'a'"
+  (= (format "%c" (char "a" 0)) "a")
+  true
+)
+
+; Basic char code conversions
+; ------------------------------------------------------------
+(test "2: char 'A' to code"
+  (= (char "A") 65)
+  true
+)
+
+(test "3: char code 65 to char"
+  (= (char 65) "A")
+  true
+)
+
+; Mapping char over sequence
+; ------------------------------------------------------------
+(test "4: map char over 65..67"
+  (= (map char (sequence 65 67)) '("A" "B" "C"))
+  true
+)
+
+; Null character
+; ------------------------------------------------------------
+(test "5: char 0 is null"
+  (= (char 0) "\000")
+  true
+)
+
+; String indexing
+; ------------------------------------------------------------
+(set 'D:D "ABCDEFG")
+
+(test "6: char D 0"
+  (= (char D 0) 65)
+  true
+)
+
+(test "7: char D -1"
+  (= (char D -1) 71)
+  true
+)
+
+; UTF-8 multi-byte character
+; ------------------------------------------------------------
+(test "8: UTF-8 char 937 bytes"
+  (if utf8
+      (let (s (char 937))
+        (and
+          (= (char s 0 true) 206)
+          (= (char s 1 true) 169)
+          (= (char s -1 true) 169)
+          (= (char s -2 true) 206)
+        )
+      )
+      true
+  )
+  true
+)

@@ -1,0 +1,26 @@
+; Test for function "+"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: large integer addition"
+  (+ 999999999999999999 1)
+  1000000000000000000
+)
+
+(test "2: addition wrapping around to -1"
+  (+ 9223372036854775807 -9223372036854775808)
+  -1
+)
+
+(test "3: addition wrapping around to max integer"
+  (+ -9223372036854775808 -1)
+  9223372036854775807
+)
+
+(test "4: addition with no arguments"
+  (+)
+  0
+)

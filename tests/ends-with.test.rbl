@@ -1,0 +1,16 @@
+; tests for ends-with function
+
+(load "testing.rbl")
+(context 'test)
+
+(test "1: ends-with string"
+  (ends-with "hello" "o")
+  true)
+
+(test "2: ends-with string"
+  (ends-with "hello" "lo")
+  true)
+
+(test "2: ends-with string"
+  (ends-with "hello" "xx")
+  nil)

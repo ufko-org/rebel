@@ -1,0 +1,7 @@
+# Rebel source code
+*.rbl linguist-language=lisp eol=lf
+*.t linguist-language=lisp eol=lf
+*.sh linguist-language=shell eol=lf
+*.md linguist-language=markdown eol=lf
+*.txt linguist-language=text eol=lf
+.gitattributes export-ignore

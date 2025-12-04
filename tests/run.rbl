@@ -1,0 +1,27 @@
+#!/usr/bin/env rebel
+
+# recreate clean tests-fs/
+./mk-tests-fs
+
+# load and run test files
+(setq test-files (sort (directory "." {\.test\.rbl})))
+(dolist (test-file test-files)
+  (println)
+  (println "File: " test-file)
+  (println (dup "-" 60))
+  (load test-file)
+  (++ files)
+)
+
+# print results
+(println)
+(println (dup "=" 60)) 
+(println "RESULT: " test:cases " test(s) in " files " file(s)")
+(if (and (> test:cases test:pass) (= test:fail 0)) (println 'FAKE))
+(println (dup "-" 60)) 
+(println "PASSED: " test:pass)
+(println "FAILED: " test:fail)
+(write-file ".stats" 
+  (format "Tests count: %d\nPass: %d\nFail: %d\n" 
+    test:cases test:pass test:fail))
+(exit)

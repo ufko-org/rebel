@@ -1,0 +1,31 @@
+; Test for special form "bind"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; basic bind assignment
+; ------------------------------------------------------------
+(test "1: bind multiple variables"
+  (bind '((a 1) (b "hello") (c (3 4))))
+  '(3 4)
+)
+
+(test "2: bind variable a"
+  (= a 1)
+  true
+)
+
+(test "3: bind variable b"
+  (= b "hello")
+  true
+)
+
+(test "4: bind variable c"
+  (= c '(3 4))
+  true
+)
+
+(test "5: bind with expression and return value"
+  (= 7 (bind '((a (+ 3 4))) true))
+  true
+)

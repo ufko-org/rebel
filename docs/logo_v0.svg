@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="42.06876mm"
+   height="43.127083mm"
+   viewBox="0 0 42.06876 43.127083"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="translate(-109.80207,-17.991677)">
+    <rect
+       width="42.068756"
+       height="43.127083"
+       fill="#d00"
+       id="rect1-2-5"
+       style="fill:#000000;fill-opacity:1;stroke-width:0.224895"
+       x="109.80206"
+       y="17.991676"
+       ry="2.9104166" />
+    <g
+       id="g3-4"
+       transform="translate(-5.0563986,-51.941183)">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:42.7467px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.801499"
+         x="104.09744"
+         y="122.38332"
+         id="text1-0"
+         transform="scale(1.1477695,0.87125508)"><tspan
+           id="tspan1-0"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI Bold';fill:#ffffff;stroke:none;stroke-width:0.801499"
+           x="104.09744"
+           y="122.38332">R</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.7779px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.333333"
+         x="109.22668"
+         y="-120.22592"
+         id="text2-6"
+         transform="matrix(0.52890504,1.162112,-0.68315713,0.38966334,0,0)"><tspan
+           id="tspan2-67"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';fill:#ffffff;stroke-width:0.333333"
+           x="109.22668"
+           y="-120.22592">)</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.1465px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.302747"
+         x="-24.549841"
+         y="208.15434"
+         id="text2-2-1"
+         transform="matrix(-0.6955432,1.1870305,0.53845432,0.51878634,0,0)"><tspan
+           id="tspan2-4-8"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';fill:#ffffff;stroke-width:0.302747"
+           x="-24.549841"
+           y="208.15434">)</tspan></text>
+    </g>
+  </g>
+</svg>

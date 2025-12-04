@@ -1,0 +1,46 @@
+; Test for function "cons"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Cons cases
+; ------------------------------------------------------------
+(test "1: cons atoms"
+  (cons 'a 'b)
+  '(a b)
+)
+
+(test "2: cons atom and list"
+  (cons 'a '(b c))
+  '(a b c)
+)
+
+(test "3: cons expressions"
+  (cons (+ 3 4) (* 5 5))
+  '(7 25)
+)
+
+(test "4: cons two lists"
+  (cons '(1 2) '(3 4))
+  '((1 2) 3 4)
+)
+
+(test "5: cons nil first"
+  (cons nil 1)
+  '(nil 1)
+)
+
+(test "6: cons nil second"
+  (cons 1 nil)
+  '(1 nil)
+)
+
+(test "7: cons single argument"
+  (cons 1)
+  '(1)
+)
+
+(test "8: cons no arguments"
+  (cons)
+  '()
+)

@@ -1,0 +1,11 @@
+; Test for function "beta"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; basic beta value
+; ------------------------------------------------------------
+(test "1: beta(1 2) approx"
+  (< (abs (sub (beta 1 2) 0.5)) 1e-05)
+  true
+)

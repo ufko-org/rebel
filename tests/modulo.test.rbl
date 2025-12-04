@@ -1,0 +1,16 @@
+; Test for function "%"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: modulo of two numbers"
+  (% 10 3)
+  1
+)
+
+(test "2: modulo with no arguments triggers catch"
+  (not (catch (%) 'result))
+  true
+)

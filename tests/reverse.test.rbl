@@ -1,0 +1,19 @@
+(load "testing.rbl")
+(context 'test)
+
+(test "1: reverse int list"
+  (let (lst '(1 2 3 4))
+    (reverse (copy lst)))
+  '(4 3 2 1))
+
+(test "2: reverse string list"
+  (let (lst '("a" "b" "c"))
+    (reverse (copy lst)))
+  '("c" "b" "a"))
+
+(test "3: reverse symbol list"
+  (let (lst '(x y z))
+    (reverse (copy lst)))
+  '(z y x))
+
+

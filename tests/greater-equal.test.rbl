@@ -1,0 +1,16 @@
+; Test for function ">="
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: integer >= smaller integer"
+  (>= 1 0)
+  true
+)
+
+(test "2: float >= smaller integer"
+  (>= 1.00000001 1)
+  true
+)

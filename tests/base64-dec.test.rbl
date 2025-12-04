@@ -1,0 +1,32 @@
+
+; Test for function "base64-enc"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Strings
+; ------------------------------------------------------------
+(test "1: empty string"
+  (= "" (base64-dec (base64-enc "")))
+  true
+)
+
+(test "2: single character"
+  (= "1" (base64-dec (base64-enc "1")))
+  true
+)
+
+(test "3: two characters"
+  (= "12" (base64-dec (base64-enc "12")))
+  true
+)
+
+(test "4: three characters"
+  (= "123" (base64-dec (base64-enc "123")))
+  true
+)
+
+(test "5: four characters"
+  (= "1234" (base64-dec (base64-enc "1234")))
+  true
+)

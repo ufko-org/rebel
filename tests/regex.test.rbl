@@ -1,0 +1,75 @@
+; Test for function "regex"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic match returns ("bbb" 4 3)
+; ------------------------------------------------------------
+(test "1: simple match"
+  (regex "b+" "aaaabbbaaaa")
+  '("bbb" 4 3)
+)
+
+; Case-insensitive option numeric
+; ------------------------------------------------------------
+(test "2: case-insensitive option numeric"
+  (regex "b+" "AAAABBBAAAA" 1)
+  '("BBB" 4 3)
+)
+
+; Case-insensitive option string
+; ------------------------------------------------------------
+(test "3: case-insensitive option string"
+  (regex "b+" "AAAABBBAAAA" "i")
+  '("BBB" 4 3)
+)
+
+; More complex match with capture groups
+; ------------------------------------------------------------
+(test "4: capture groups populate $0 $1 $2"
+  (begin
+    (regex "http://(.*):(.*)" "http://nuevatec.com:80")
+    (and
+      (= $0 "http://nuevatec.com:80")
+      (= $1 "nuevatec.com")
+      (= $2 "80")
+    )
+  )
+  true
+)
+
+; No match returns nil (but does not clear $0,$1,...)
+; ------------------------------------------------------------
+(test "5: no match returns nil"
+  (regex "ZZZ" "aaaabbbaaaa")
+  nil
+)
+
+; Starting offset skips early matches
+; "baaa", search "a", offset 2 → match at index 2, length 1
+; ------------------------------------------------------------
+(test "6: offset skips matches"
+  (regex "a" "baaa" "" 2)
+  '("a" 2 1)
+)
+
+; Escaped regex pattern inside quotes (\\d{1,3})
+; ------------------------------------------------------------
+(test "7: escaped pattern with {} braces"
+  (regex "\\d{1,3}" "qwerty567asdfg")
+  '("567" 6 3)
+)
+
+; Quotes escaped with one backslash
+; ------------------------------------------------------------
+(test "8: regex for literal quote"
+  (regex "\"" "abc\"def")
+  '("\"" 3 1)
+)
+
+; Using { } delimiters (raw, no doubling necessary)
+; ------------------------------------------------------------
+(test "9: curly-brace delimited pattern"
+  (regex {\(abc\)} "xyz(abc)xyz")
+  '("(abc)" 3 5)
+)

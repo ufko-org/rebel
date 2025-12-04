@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rebel Programming Language</title>
+  
+  <link rel="stylesheet" href="rebel.css">
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProgrammingLanguage","name":"Rebel","alternateName":"Rebel Language","description":"Rebel is a pragmatic general-purpose scripting language written in ANSI C with a lean lisp-like syntax.","url":"https://rebel-lang.org","creator":{"@type":"Person","name":"Ufko (ufko.org)"},"license":"https://opensource.org/license/gpl-3-0","programmingLanguage":"ANSI C","sameAs":["https://github.com/ufko-org/rebel","https://ufko.org"]}</script>
+  <link rel="icon" href="/logo_v0.svg" type="image/svg+xml">
+</head>
+<body>
+  <table>
+    <tr>
+      <td rowspan="2" class="logo">
+        <a href="/index.html">
+          <img src="logo_v0.svg" alt="Rebel">
+        </a>
+      </td>
+      <td><a href="/guide.html">Guide</a></td>
+      <td><a href="/patterns.html">Patterns</a></td>
+      <td><a href="/reference.html">Reference</a></td>
+      <td><a href="https://github.com/ufko-org/rebel">Code</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <hr>
+  <h1 id="rebel-programming-language">Rebel Programming Language</h1>
+<hr/>
+<ul>
+<li>Rebel is a pragmatic general-purpose scripting language written in ANSI C.</li>
+<li>Rebel has no build system, just plain make.</li>
+<li>Rebel builds cleanly with Clang, GCC, or TCC; with TCC under 0.5s.</li>
+<li>Rebel comes with a core of over 373 <a href="https://github.com/ufko-org/rebel/blob/main/docs/builtin.txt">built-in functions</a> plus FFI in a single binary under 350KB.</li>
+<li>Rebel has <strong>lisp-like</strong> syntax and some <strong>lisp-like</strong> features.</li>
+<li>Rebel hopes you understand the s-expression <strong>(lisp-like)</strong>.</li>
+<li>Rebel doesn’t compete with other languages.</li>
+<li>Rebel is simply Rebel.</li>
+</ul>
+<h3 id="rebel-fields-of-operation">Rebel Fields of Operation</h3>
+<ul>
+<li><strong>Core Scripting &#38; Flow Control</strong>
+<ul>
+<li>loops, conditionals, list processing, lambda, functional programming</li>
+</ul></li>
+<li><strong>Strings &#38; Data Manipulation</strong>
+<ul>
+<li>regex, parsing, conversion, unicode, text transformation</li>
+</ul></li>
+<li><strong>Math &#38; Statistics</strong>
+<ul>
+<li>integers, floats, linear algebra, special functions, probability, simulation</li>
+</ul></li>
+<li><strong>File &#38; I&#47;O</strong>
+<ul>
+<li>file handling, directories, reading&#47;writing, streams, HTTP file access</li>
+</ul></li>
+<li><strong>Networking</strong>
+<ul>
+<li>TCP&#47;IP, UDP, HTTP, JSON&#47;XML, net-eval, sockets</li>
+</ul></li>
+<li><strong>Processes &#38; Multiprocessing</strong>
+<ul>
+<li>forks, Cilk-style API, IPC, semaphores, process management</li>
+</ul></li>
+<li><strong>Reflection &#38; Customization</strong>
+<ul>
+<li>macros, events, symbols, environment introspection</li>
+</ul></li>
+<li><strong>Finance &#38; Time</strong>
+<ul>
+<li>basic financial math, date and time functions</li>
+</ul></li>
+<li><strong>Integration &#38; Extensibility</strong>
+<ul>
+<li>import C libraries, extend interpreter, modular namespaces</li>
+</ul></li>
+<li><strong><a href="https://github.com/ufko-org/rebel/blob/main/docs/builtin.txt">List of built-in functions</a></strong></li>
+</ul>
+<h3 id="rebel-runs-on">Rebel runs on:</h3>
+<ul>
+<li>BSD </li>
+<li>Linux<br/></li>
+<li>macOS<br/></li>
+</ul>
+<h2 id="installation-steps">Installation steps</h2>
+<p>To build Rebel on your system you need to have the following
+libraries installed:</p>
+<ul>
+<li>A readline library for line-editing and history support in
+the REPL</li>
+<li>A libffi installation for calling native C functions
+through the FFI interface</li>
+</ul>
+<p>If you don&#8217;t want these features, remove their references
+in the Makefile before building.</p>
+<pre><code>$: git clone https:&#47;&#47;github.com&#47;ufko-org&#47;rebel.git
+$: cd rebel&#47;src
+$: make -f Makefile.[bsd|linux|macos]
+$: .&#47;rebel
+</code></pre>
+<h3 id="rebel-size-openbsd-7.8">Rebel ~ size OpenBSD 7.8</h3>
+<pre><code>$: ls -l rebel
+-rwxr-xr-x  1 ufko  ufko  344560 Nov 19 23:32 rebel*
+</code></pre>
+<h3 id="rebel-repl-in-openbsd-7.8">Rebel REPL in OpenBSD 7.8:</h3>
+<p>Rebel can change his running shoes mid-sprint.</p>
+<pre><code>gringo ~ $: rebel
+Rebel v.1.0 64-bit on BSD IPv4&#47;6 UTF-8 libffi, options: rebel -h
+
+&#62; (define (sum x) (+ x x))
+(lambda (x) (+ x x))
+&#62; (sum 2)
+4
+&#62; (list? sum)
+true
+&#62; (setf (nth 1 sum) &#39;(- x x))
+(- x x)
+&#62; (sum 2) ; surprise :D
+0
+&#62;
+</code></pre>
+<p>Rebel remembers things</p>
+<pre><code>&#62; (define (gen:gen) (inc 0))
+(lambda () (inc 0))
+&#62; (gen)
+1
+&#62; (gen)
+2
+&#62; (gen)
+3
+&#62;
+</code></pre>
+<p>Rebel loves all C libraries </p>
+<pre><code>&#62; (import "&#47;usr&#47;lib&#47;libc.so.102.0" "printf")
+printf@F3D306ED040
+&#62; (printf "Hello rebels :)\n")
+Hello rebels :)
+16
+&#62;
+</code></pre>
+<h3 id="links">Links:</h3>
+<ul>
+<li>Homepage: <a href="https://rebel-lang.org">https:&#47;&#47;rebel-lang.org</a></li>
+<li>Github repo: <a href="https://github.com/ufko-org/rebel">https:&#47;&#47;github.com&#47;ufko-org&#47;rebel</a></li>
+<li>Github organization: <a href="https://github.com/rebellang">https:&#47;&#47;github.com&#47;rebellang</a></li>
+<li>DeepWiki analysis: <a href="https://deepwiki.com/ufko-org/rebel/1.1-language-heritage-and-philosophy">https:&#47;&#47;deepwiki.com&#47;ufko-org&#47;rebel&#47;1.1-language-heritage-and-philosophy</a></li>
+</ul>
+
+</body>
+</html>

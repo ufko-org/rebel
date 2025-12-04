@@ -1,0 +1,14 @@
+; Test for function "amb"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Control / Choice
+; ------------------------------------------------------------
+(test "1: amb returns one of the possible values"
+  (local (x)
+    (set 'x (amb 1 2))
+    (or (= x 1) (= x 2))
+  )
+  true
+)

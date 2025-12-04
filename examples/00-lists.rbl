@@ -1,0 +1,39 @@
+; apply-examples: demonstrates applying functions to lists using apply
+; shows standard operations (+, *, sqrt), lambdas, and repeated application
+; highlights the int-reduce parameter for left-fold style application
+; ---------------------------------------------------------------------
+
+; simple sum using apply
+(apply + '(1 2 3 4))
+;-> 10
+
+; multiply elements of a list
+(set 'lst '(3 4 5))
+;-> (3 4 5)
+
+(apply * lst)
+;-> 60
+
+; square root of a single-element list
+(apply sqrt '(25))
+;-> 5
+
+; using a lambda with apply
+(apply (lambda (x y) (* x y)) '(3 4))
+;-> 12
+
+; repeated application using int-reduce
+(apply max '(11 22 13 41 15) 2)
+; equivalent to: (max (max (max (max 11 22) 13) 41) 15)
+;-> 41
+
+; using gcd-aux (from math examples) with apply and int-reduce
+(apply gcd-aux '(15 5 21) 2)
+; equivalent to: (gcd-aux (gcd-aux 15 5) 21)
+;-> 1
+
+(apply gcd-aux '(10 25) 2)
+;-> 5
+
+(apply gcd-aux '(4 8 24) 2)
+;-> 4

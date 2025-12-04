@@ -1,0 +1,2388 @@
+Rebel Built-In Functions in Groups
+
+Some functions appear in more than one group.
+
+---
+
+List of groups:
+
+#1  List processing, flow control, and integer arithmetic
+#2  String and conversion functions
+#3  Floating point math and special functions
+#4  Matrix functions
+#5  Array functions
+#6  Bit operators
+#7  Predicates
+#8  Date and time functions
+#9  Statistics, simulation and modeling functions
+#10 Pattern matching
+#11 Financial math functions
+#12 Input/output and file operations
+#13 File and directory operations
+#14 Processes and the Cilk API
+#15 HTTP networking API
+#16 Socket TCP/IP, UDP and ICMP network API
+#17 Reflection and customization
+#18 System functions
+#19 Importing libraries
+#20 Rebel internals API
+
+---
+
+Parameter naming convention:
+
+seq       list / string / array  
+seq-1     first sequence  
+seq-2     second sequence  
+num       count / length / range  
+num-1     count value 1  
+num-2     count value 2  
+int       integer (mathematical)  
+float     floating-point (mathematical)  
+str       string  
+str-1     first string  
+str-2     second string  
+str-pat   pattern string  
+sym       symbol  
+ctx       context  
+func      function / lambda  
+pred      predicate  
+data      raw data  
+path      filesystem path  
+host      network host  
+port      network port  
+sock      socket descriptor  
+matrix    matrix value
+
+Each function block contanins the following fields:
+
+name      (syntax)
+ret       descripton
+
+---
+
+#1 List processing, flow control, and integer arithmetic
+
+---
+
++        (+ num-1 [num-2 ...])
+num      Integer arithmetic.
+
+---
+
+-        (- num-1 [num-2 ...])
+num      Integer arithmetic.
+
+---
+
+*        (* num-1 [num-2 ...])
+num      Integer arithmetic.
+
+---
+
+/        (/ num-1 [num-2 ...])
+num      Integer arithmetic.
+
+---
+
+%        (% int-1 int-2)
+int      Integer remainder.
+
+---
+
+++       (++ int)
+int      Increment integer number.
+
+---
+
+--       (-- int)
+int      Decrement integer number.
+
+---
+
+<        (< num-1 num-2)
+bool     True if num-1 < num-2.
+
+---
+
+>        (> num-1 num-2)
+bool     True if num-1 > num-2.
+
+---
+
+=        (= exp-1 exp-2)
+bool     True if equal.
+
+---
+
+<=       (<= num-1 num-2)
+bool     True if num-1 <= num-2.
+
+---
+
+>=       (>= num-1 num-2)
+bool     True if num-1 >= num-2.
+
+---
+
+!=       (!= exp-1 exp-2)
+bool     True if not equal.
+
+---
+
+:        (: ctx exp)
+any      Apply context symbol.
+
+---
+
+and      (and exp-1 [exp-2 ...])
+bool     Logical AND.
+
+---
+
+append   (append seq-1 [seq-2 ...])
+seq      Concatenate sequences.
+
+---
+
+apply    (apply func seq)
+any      Call func with items from seq.
+
+---
+
+args     (args)
+seq      Arguments of current function.
+
+---
+
+assoc    (assoc key seq)
+seq      Find association list entry.
+
+---
+
+begin    (begin exp-1 [exp-2 ...])
+any      Evaluate expressions in sequence.
+
+---
+
+bigint   (bigint num)
+num      Convert to big integer.
+
+---
+
+bind     (bind assoc-list body)
+any      Bind variables and eval body.
+
+---
+
+case     (case key [clause ...])
+any      Branch on key.
+
+---
+
+catch    (catch exp [handler])
+any      Evaluate exp, catch errors.
+
+---
+
+chop     (chop seq [num])
+seq      Remove elements from end.
+
+---
+
+clean    (clean seq)
+seq      Remove nil/empty elements.
+
+---
+
+collect  (collect exp [num])
+seq      Collect num evaluations.
+
+---
+
+cond     (cond (test exp...) ...)
+any      Multi-branch conditional.
+
+---
+
+cons     (cons exp seq)
+seq      Prepend element to seq.
+
+---
+
+constant (constant sym value)
+sym      Define constant symbol.
+
+---
+
+count    (count seq-1 seq-2)
+num      Count matches of seq-1 in seq-2.
+
+---
+
+curry    (curry func exp)
+func     Partial application of func.
+
+---
+
+define   (define (sym args...) body)
+func     Define function.
+
+---
+
+define-macro (define-macro (sym args...) body)
+func     Define macro.
+
+---
+
+def-new  (def-new sym ctx)
+sym      Copy symbol to another context.
+
+---
+
+difference (difference seq-1 seq-2)
+seq      List difference.
+
+---
+
+doargs   (doargs (var seq) body)
+any      Iterate function args.
+
+---
+
+dolist   (dolist (var seq) body)
+any      Loop over seq.
+
+---
+
+dostring (dostring (var str) body)
+any      Loop over characters.
+
+---
+
+dotimes  (dotimes (var num) body)
+any      Loop num times.
+
+---
+
+dotree   (dotree (var ctx) body)
+any      Iterate symbols of context.
+
+---
+
+do-until (do-until test exp)
+any      Repeat until test true.
+
+---
+
+do-while (do-while test exp)
+any      Repeat while test true.
+
+---
+
+dup      (dup seq num)
+seq      Duplicate seq num times.
+
+---
+
+ends-with (ends-with seq key)
+bool      True if seq ends with key.
+
+---
+
+eval     (eval exp)
+any      Evaluate expression.
+
+---
+
+exists   (exists pred seq)
+bool     True if any element matches.
+
+---
+
+expand   (expand sym seq)
+seq      Replace symbol in nested seq.
+
+---
+
+explode  (explode seq)
+seq      Explode to elements.
+
+---
+
+extend   (extend seq num)
+seq      Extend seq to length num.
+
+---
+
+first    (first seq)
+any      First element.
+
+---
+
+filter   (filter pred seq)
+seq      Filter elements by pred.
+
+---
+
+find     (find key seq)
+any      First matching element.
+
+---
+
+flat     (flat seq)
+seq      Flatten nested seq.
+
+---
+
+fn       (fn (args...) body)
+func     Define function (alt syntax).
+
+---
+
+for      (for (var num-1 num-2) body)
+any      Loop over range.
+
+---
+
+for-all  (for-all pred seq)
+bool     True if all match pred.
+
+---
+
+if       (if test exp-then [exp-else])
+any      Conditional evaluation.
+
+---
+
+index    (index pred seq)
+seq      Indices of elements matching pred.
+
+---
+
+intersect (intersect seq-1 seq-2)
+seq      Intersection of sequences.
+
+---
+
+lambda   (lambda (args...) body)
+func     Create lambda.
+
+---
+
+last     (last seq)
+any      Last element.
+
+---
+
+length   (length seq)
+num      Length of seq.
+
+---
+
+let      (let (bindings...) body)
+any      Local bindings then eval.
+
+---
+
+letex    (letex (bindings...) body)
+any      Expand locals then eval.
+
+---
+
+letn     (letn (bindings...) body)
+any      Nested incremental let.
+
+---
+
+list     (list exp-1 [exp-2 ...])
+seq      Construct list.
+
+---
+
+local    (local var-list)
+any      Declare local variables.
+
+---
+
+lookup   (lookup key seq)
+seq      Lookup association entry.
+
+---
+
+map      (map func seq)
+seq      Apply func to elements.
+
+---
+
+match    (match pat seq)
+any      List pattern matching.
+
+---
+
+member   (member key seq)
+any      First matching member.
+
+---
+
+not      (not exp)
+bool     Logical NOT.
+
+---
+
+nth      (nth num seq)
+any      Element at index num.
+
+---
+
+or       (or exp-1 [exp-2 ...])
+any      Logical OR.
+
+---
+
+pop      (pop seq)
+any      Remove last element.
+
+---
+
+pop-assoc (pop-assoc key seq)
+seq      Remove association entry.
+
+---
+
+push     (push exp seq)
+seq [!]  Insert element into seq.
+
+---
+
+quote    (quote exp)
+exp      Return expression unevaluated.
+
+---
+
+ref      (ref key seq)
+seq      Index vector of nested element.
+
+---
+
+ref-all  (ref-all key seq)
+seq      All index vectors.
+
+---
+
+rest     (rest seq)
+seq      All but first element.
+
+---
+
+replace  (replace old new seq)
+seq      Replace items in seq.
+
+---
+
+reverse  (reverse seq)
+seq      Reverse sequence.
+
+---
+
+rotate   (rotate seq num)
+seq      Rotate sequence.
+
+---
+
+select   (select seq idxs)
+seq      Select and permute elements.
+
+---
+
+self     (self)
+any      Target object in FOOP.
+
+---
+
+set      (set sym exp)
+any      Set symbol binding.
+
+---
+
+setf     (setf place exp)
+any      Set place value.
+
+---
+
+set-ref  (set-ref key new seq)
+seq      Replace nested occurrence.
+
+---
+
+set-ref-all (set-ref-all key new seq)
+seq         Replace all nested occurrences.
+
+---
+
+silent   (silent exp-1 [exp-2 ...])
+any      Like begin but silent.
+
+---
+
+slice    (slice seq num-1 [num-2])
+seq      Subsequence of seq.
+
+---
+
+sort     (sort seq [func])
+seq      Sorted copy.
+
+---
+
+starts-with (starts-with seq key)
+bool        True if seq begins with key.
+
+---
+
+swap     (swap seq num-1 num-2)
+seq      Swap two elements.
+
+---
+
+unify    (unify exp-1 exp-2)
+any      Logical unification.
+
+---
+
+unique   (unique seq)
+seq      Remove duplicates.
+
+---
+
+union    (union seq-1 seq-2 [seq-3 ...])
+seq      Unique union.
+
+---
+
+unless   (unless test exp [exp2])
+any      Evaluate when test false.
+
+---
+
+until    (until test exp)
+any      Repeat until test true.
+
+---
+
+when     (when test exp-1 [exp-2 ...])
+any      Evaluate when true.
+
+---
+
+while    (while test exp)
+any      Repeat while true.
+
+---
+
+#2 String and conversion functions
+
+---
+
+address      (address exp)
+num          Memory address of number or string.
+
+---
+
+bigint       (bigint num)
+num          Convert number to big integer format.
+
+---
+
+bits         (bits num)
+str          Binary representation of num.
+
+---
+
+char         (char exp)
+any          Char code → character or vice versa.
+
+---
+
+chop         (chop str [num])
+str          Remove characters from end.
+
+---
+
+dostring     (dostring (var str) body)
+any          Loop over characters of str.
+
+---
+
+dup          (dup str num)
+str          Duplicate string num times.
+
+---
+
+ends-with    (ends-with str key)
+bool         True if str ends with key.
+
+---
+
+encrypt      (encrypt str-1 str-2)
+str          One-time pad encryption/decryption.
+
+---
+
+eval-string  (eval-string str)
+any          Compile and evaluate string.
+
+---
+
+explode      (explode str)
+seq          Split string into list of characters.
+
+---
+
+extend       (extend str num)
+str          Extend string to length num.
+
+---
+
+find         (find key str)
+any          First matching element.
+
+---
+
+find-all     (find-all pat str)
+seq          All pattern matches in string.
+
+---
+
+first        (first str)
+any          First character.
+
+---
+
+float        (float exp)
+float        Convert to floating-point number.
+
+---
+
+format       (format str-format exp-data-1 [exp-data-2 ...])
+str          C-style formatted string.
+
+---
+
+get-char     (get-char addr)
+num          Read 8-bit char from address.
+
+---
+
+get-float    (get-float addr)
+float        Read double float from address.
+
+---
+
+get-int      (get-int addr)
+int          Read 32-bit integer from address.
+
+---
+
+get-long     (get-long addr)
+num          Read long 64-bit integer.
+
+---
+
+get-string   (get-string addr)
+str          Read zero-terminated string from address.
+
+---
+
+int          (int exp)
+int          Convert to integer.
+
+---
+
+join         (join seq [str-sep])
+str          Join sequence of strings.
+
+---
+
+last         (last str)
+any          Last character.
+
+---
+
+lower-case   (lower-case str)
+str          Convert to lowercase.
+
+---
+
+member       (member key str)
+any          First matching character.
+
+---
+
+name         (name sym)
+str          Symbol or context name as string.
+
+---
+
+nth          (nth num str)
+any          nth character of string.
+
+---
+
+pack         (pack exp ...)
+data         Pack values into binary buffer.
+
+---
+
+parse        (parse str [delim])
+seq          Split string into tokens.
+
+---
+
+pop          (pop str)
+any          Remove last character.
+
+---
+
+push         (push exp str)
+str [!]      Insert character into string.
+
+---
+
+regex        (regex pat str)
+any          Regex match result.
+
+---
+
+regex-comp   (regex-comp pat)
+any          Pre-compiled regex pattern.
+
+---
+
+replace      (replace old new str)
+str          Replace substrings.
+
+---
+
+rest         (rest str)
+str          All but first character.
+
+---
+
+reverse      (reverse str)
+str          Reverse string.
+
+---
+
+rotate       (rotate str num)
+str          Rotate characters.
+
+---
+
+select       (select str idxs)
+str          Select and permute characters.
+
+---
+
+setf         (setf place exp)
+any          Set substring or reference.
+
+---
+
+slice        (slice str num-1 [num-2])
+str          Substring by numeric range.
+
+---
+
+source       (source sym)
+str          Source to bind symbol.
+
+---
+
+starts-with  (starts-with str key)
+bool         True if str begins with key.
+
+---
+
+string       (string exp)
+str          Convert value to string.
+
+---
+
+sym          (sym str)
+sym          Convert string to symbol.
+
+---
+
+title-case   (title-case str)
+str          Capitalize first character.
+
+---
+
+trim         (trim str [mode])
+str          Trim whitespace.
+
+---
+
+unicode      (unicode str)
+seq          ASCII/UTF-8 → UCS-4 code points.
+
+---
+
+utf8         (utf8 seq)
+str          UCS-4 → UTF-8 string.
+
+---
+
+utf8len      (utf8len str)
+num          Count UTF-8 characters.
+
+---
+
+unpack       (unpack data)
+seq          Unpack binary structure.
+
+---
+
+upper-case   (upper-case str)
+str          Convert to uppercase.
+
+---
+
+
+#3 Floating point math and special functions
+
+---
+
+abs         (abs num)
+num         Absolute value of number.
+
+---
+
+acos        (acos float)
+float       Arc cosine (radians).
+
+---
+
+acosh       (acosh float)
+float       Inverse hyperbolic cosine.
+
+---
+
+add         (add num-1 [num-2 ...])
+float       Add numbers, return float.
+
+---
+
+array       (array dim-1 [dim-2 ...])
+array       Create array.
+
+---
+
+array-list  (array-list array)
+seq         Convert array to list.
+
+---
+
+asin        (asin float)
+float       Arc sine (radians).
+
+---
+
+asinh       (asinh float)
+float       Inverse hyperbolic sine.
+
+---
+
+atan        (atan float)
+float       Arc tangent (radians).
+
+---
+
+atanh       (atanh float)
+float       Inverse hyperbolic tangent.
+
+---
+
+atan2       (atan2 float-y float-x)
+float       atan(y/x) with correct quadrant.
+
+---
+
+beta        (beta float-1 float-2)
+float       Beta function.
+
+---
+
+betai       (betai float-a float-b float-x)
+float       Incomplete beta function.
+
+---
+
+binomial    (binomial int-1 int-2)
+int         Binomial coefficient.
+
+---
+
+ceil        (ceil float)
+int         Round up to next integer.
+
+---
+
+cos         (cos float)
+float       Cosine.
+
+---
+
+cosh        (cosh float)
+float       Hyperbolic cosine.
+
+---
+
+crc32       (crc32 data)
+num         32-bit CRC of buffer.
+
+---
+
+dec         (dec num)
+num         Decrement number.
+
+---
+
+div         (div num-1 num-2)
+float       Divide numbers.
+
+---
+
+erf         (erf float)
+float       Error function.
+
+---
+
+exp         (exp float)
+float       Exponential e^x.
+
+---
+
+factor      (factor int)
+seq         Prime factors of integer.
+
+---
+
+fft         (fft seq)
+seq         Fast Fourier transform.
+
+---
+
+floor       (floor float)
+int         Round down to integer.
+
+---
+
+flt         (flt float)
+int         32-bit integer bit-pattern of float.
+
+---
+
+gammai      (gammai float-a float-x)
+float       Incomplete gamma function.
+
+---
+
+gammaln     (gammaln float)
+float       Natural log of gamma.
+
+---
+
+gcd         (gcd int-1 [int-2 ...])
+int         Greatest common divisor.
+
+---
+
+ifft        (ifft seq)
+seq         Inverse fast Fourier transform.
+
+---
+
+inc         (inc num)
+num         Increment number.
+
+---
+
+inf?        (inf? float)
+bool        True if float is infinite.
+
+---
+
+log         (log float [float-base])
+float       Logarithm.
+
+---
+
+min         (min num-1 [num-2 ...])
+num         Minimum of values.
+
+---
+
+max         (max num-1 [num-2 ...])
+num         Maximum of values.
+
+---
+
+mod         (mod int-1 int-2)
+int         Integer modulo.
+
+---
+
+mul         (mul num-1 [num-2 ...])
+float       Multiply numbers.
+
+---
+
+NaN?        (NaN? float)
+bool        True if not-a-number.
+
+---
+
+round       (round float [num-digits])
+float       Rounded number.
+
+---
+
+pow         (pow float-x float-y)
+float       x to the power of y.
+
+---
+
+sequence    (sequence num-1 num-2 [num-3])
+seq         Numeric sequence from/to/step.
+
+---
+
+series      (series float-init float-mult num-count)
+seq         Geometric series.
+
+---
+
+sgn         (sgn num)
+int         Sign (-1, 0, 1).
+
+---
+
+sin         (sin float)
+float       Sine.
+
+---
+
+sinh        (sinh float)
+float       Hyperbolic sine.
+
+---
+
+sqrt        (sqrt float)
+float       Square root.
+
+---
+
+ssq         (ssq seq)
+float       Sum of squares.
+
+---
+
+sub         (sub num-1 [num-2 ...])
+float       Subtract numbers.
+
+---
+
+tan         (tan float)
+float       Tangent.
+
+---
+
+tanh        (tanh float)
+float       Hyperbolic tangent.
+
+---
+
+uuid        (uuid)
+str         Generate UUID.
+
+---
+
+#4 Matrix functions
+
+---
+
+det         (det matrix)
+float       Determinant of matrix.
+
+---
+
+invert      (invert matrix)
+matrix      Inverse of matrix.
+
+---
+
+mat         (mat matrix func)
+matrix      Apply scalar func to matrix elements.
+
+---
+
+multiply    (multiply matrix-1 matrix-2)
+matrix      Matrix multiplication.
+
+---
+
+transpose   (transpose matrix)
+matrix      Transpose rows and columns.
+
+---
+
+#5 Array functions
+
+---
+
+append       (append array-1 [array-2 ...])
+array        Concatenate arrays.
+
+---
+
+array        (array dim-1 [dim-2 ...])
+array        Create array with dimensions.
+
+---
+
+array-list   (array-list array)
+seq          Convert array to list.
+
+---
+
+array?       (array? exp)
+bool         True if exp is an array.
+
+---
+
+det          (det array)
+float        Determinant of matrix/array.
+
+---
+
+first        (first array)
+any          First row of array.
+
+---
+
+invert       (invert array)
+array        Invert matrix/array.
+
+---
+
+last         (last array)
+any          Last row of array.
+
+---
+
+mat          (mat array func)
+array        Apply func to elements.
+
+---
+
+multiply     (multiply array-1 array-2)
+array        Multiply two arrays/matrices.
+
+---
+
+nth          (nth num array)
+any          nth element (row/column).
+
+---
+
+rest         (rest array)
+array        All but first row.
+
+---
+
+setf         (setf place exp)
+any          Set element in array.
+
+---
+
+slice        (slice array num-1 [num-2])
+array        Slice array rows.
+
+---
+
+transpose    (transpose array)
+array        Transpose array.
+
+---
+
+#6 Bit operators
+
+---
+
+<<          (<< int-1 int-2)
+int         Bit shift left.
+
+---
+
+>>          (>> int-1 int-2)
+int         Bit shift right.
+
+---
+
+&           (& int-1 int-2)
+int         Bitwise AND.
+
+---
+
+|           (| int-1 int-2)
+int         Bitwise inclusive OR.
+
+---
+
+^           (^ int-1 int-2)
+int         Bitwise XOR.
+
+---
+
+~           (~ int)
+int         Bitwise NOT.
+
+---
+
+#7 Predicates
+
+---
+
+atom?         (atom? exp)
+bool          True if exp is an atom.
+
+---
+
+array?        (array? exp)
+bool          True if exp is an array.
+
+---
+
+bigint?       (bigint? exp)
+bool          True if exp is a big integer.
+
+---
+
+context?      (context? exp)
+bool          True if exp is a context.
+
+---
+
+directory?    (directory? path)
+bool          True if path is a directory.
+
+---
+
+empty?        (empty? seq)
+bool          True if seq is empty.
+
+---
+
+even?         (even? int)
+bool          True if int is even.
+
+---
+
+file?         (file? path)
+bool          True if file exists.
+
+---
+
+float?        (float? exp)
+bool          True if exp is a float.
+
+---
+
+global?       (global? sym)
+bool          True if sym is global.
+
+---
+
+inf?          (inf? float)
+bool          True if float is infinite.
+
+---
+
+integer?      (integer? exp)
+bool          True if exp is an integer.
+
+---
+
+lambda?       (lambda? exp)
+bool          True if exp is a lambda.
+
+---
+
+legal?        (legal? str)
+bool          True if str is a legal symbol.
+
+---
+
+list?         (list? exp)
+bool          True if exp is a list.
+
+---
+
+macro?        (macro? exp)
+bool          True if exp is a lambda-macro.
+
+---
+
+NaN?          (NaN? float)
+bool          True if float is NaN.
+
+---
+
+nil?          (nil? exp)
+bool          True if exp is nil.
+
+---
+
+null?         (null? exp)
+bool          True if exp is nil, empty, or zero.
+
+---
+
+number?       (number? exp)
+bool          True if exp is int or float.
+
+---
+
+odd?          (odd? int)
+bool          True if int is odd.
+
+---
+
+protected?    (protected? sym)
+bool          True if sym is protected.
+
+---
+
+primitive?    (primitive? exp)
+bool          True if exp is a primitive.
+
+---
+
+quote?        (quote? exp)
+bool          True if exp is quoted.
+
+---
+
+string?       (string? exp)
+bool          True if exp is a string.
+
+---
+
+symbol?       (symbol? exp)
+bool          True if exp is a symbol.
+
+---
+
+true?         (true? exp)
+bool          True if exp is not nil.
+
+---
+
+zero?         (zero? exp)
+bool          True if exp is 0 or 0.0.
+
+---
+
+#8 Date and time functions
+
+---
+
+date          (date num [str-format])
+str           Format date-time value.
+
+---
+
+date-list     (date-list num)
+seq           Split time into Y M D h m s.
+
+---
+
+date-parse    (date-parse str)
+num           Seconds since 1970-01-01.
+
+---
+
+date-value    (date-value seq)
+num           Seconds since 1970-01-01 from fields.
+
+---
+
+now           (now)
+seq           Current date-time components.
+
+---
+
+time          (time exp)
+num           Milliseconds to evaluate exp.
+
+---
+
+time-of-day   (time-of-day)
+num           Milliseconds since start of day.
+
+---
+
+#9 Statistics, simulation and modeling functions
+
+---
+
+amb            (amb exp-1 [exp-2 ...])
+any            Randomly select and evaluate one argument.
+
+---
+
+bayes-query    (bayes-query model data)
+any            Bayesian probability query.
+
+---
+
+bayes-train    (bayes-train data)
+any            Train Bayesian/frequency model.
+
+---
+
+corr           (corr seq-x seq-y)
+float          Correlation coefficient.
+
+---
+
+crit-chi2      (crit-chi2 float-prob float-df)
+float          Chi² critical value.
+
+---
+
+crit-f         (crit-f float-prob float-df1 float-df2)
+float          F-distribution critical value.
+
+---
+
+crit-t         (crit-t float-prob float-df)
+float          Student t critical value.
+
+---
+
+crit-z         (crit-z float-prob)
+float          Z critical value.
+
+---
+
+kmeans-query   (kmeans-query model seq)
+seq            Distances to cluster centroids.
+
+---
+
+kmeans-train   (kmeans-train data num-k)
+seq            Partition data into k clusters.
+
+---
+
+normal         (normal float-mean float-sd num-count)
+seq            List of normally distributed floats.
+
+---
+
+prob-chi2      (prob-chi2 float-x float-df)
+float          Chi² tail probability.
+
+---
+
+prob-f         (prob-f float-x float-df1 float-df2)
+float          F tail probability.
+
+---
+
+prob-t         (prob-t float-x float-df)
+float          Student t tail probability.
+
+---
+
+prob-z         (prob-z float-x)
+float          Cumulative Z probability.
+
+---
+
+rand           (rand num)
+int            Random integer in range.
+
+---
+
+random         (random num)
+seq            List of random floats (0–1).
+
+---
+
+randomize      (randomize seq)
+seq [!]        Shuffle elements of seq.
+
+---
+
+seed           (seed int)
+bool           Seed random generator.
+
+---
+
+stats          (stats seq)
+seq            Basic statistical summary.
+
+---
+
+t-test         (t-test seq-a seq-b)
+float          Student t statistic.
+
+---
+
+#10 Pattern matching
+
+---
+
+ends-with    (ends-with seq key)
+bool         True if seq ends with key.
+
+---
+
+find         (find key seq)
+any          First match of key in seq.
+
+---
+
+find-all     (find-all pat str)
+seq          All occurrences of pat in str.
+
+---
+
+match        (match pat seq)
+any          Match list pattern.
+
+---
+
+parse        (parse str [delim])
+seq          Split string around patterns.
+
+---
+
+ref          (ref key seq)
+seq          Index vector of nested element.
+
+---
+
+ref-all      (ref-all key seq)
+seq          All index vectors of nested matches.
+
+---
+
+regex        (regex pat str)
+any          Regex match result.
+
+---
+
+replace      (replace old new seq)
+seq          Replace patterns in seq.
+
+---
+
+search       (search path str)
+seq          File search for pattern.
+
+---
+
+starts-with  (starts-with seq key)
+bool         True if seq starts with key.
+
+---
+
+unify        (unify exp-1 exp-2)
+any          Logical unification.
+
+---
+
+#11 Financial math functions
+
+---
+
+fv          (fv float-rate num-nper float-pmt [float-pv])
+float       Future value of investment.
+
+---
+
+irr         (irr seq-cashflow)
+float       Internal rate of return.
+
+---
+
+nper        (nper float-rate float-pmt float-pv [float-fv])
+float       Number of periods.
+
+---
+
+npv         (npv float-rate seq-cashflow)
+float       Net present value.
+
+---
+
+pv          (pv float-rate num-nper float-pmt [float-fv])
+float       Present value of investment.
+
+---
+
+pmt         (pmt float-rate num-nper float-pv [float-fv])
+float       Payment per period.
+
+---
+
+#12 Input/output and file operations
+
+---
+
+append-file   (append-file path data)
+bool          Append data to file.
+
+---
+
+close         (close handle)
+bool          Close file or stream handle.
+
+---
+
+current-line  (current-line)
+str           Contents of last read-line buffer.
+
+---
+
+device        (device sym [exp])
+any           Set or query current print device.
+
+---
+
+exec          (exec cmd [args...])
+any           Run external program with I/O mapping.
+
+---
+
+load          (load path)
+bool          Load and evaluate Rebel file.
+
+---
+
+open          (open path mode)
+any           Open file for reading or writing.
+
+---
+
+peek          (peek handle)
+num           Bytes available for reading.
+
+---
+
+print         (print exp-1 [exp-2 ...])
+any           Print without newline.
+
+---
+
+println       (println exp-1 [exp-2 ...])
+any           Print with newline.
+
+---
+
+read          (read handle num)
+data          Read binary data.
+
+---
+
+read-char     (read-char handle)
+num           Read 8-bit character.
+
+---
+
+read-file     (read-file path)
+str           Read entire file.
+
+---
+
+read-key      (read-key)
+num           Read keyboard key.
+
+---
+
+read-line     (read-line [handle])
+str           Read one line.
+
+---
+
+read-utf8     (read-utf8 handle)
+str           Read UTF-8 character.
+
+---
+
+save          (save exp path)
+bool          Save workspace, context, or symbol.
+
+---
+
+search        (search path str)
+seq           Find pattern in file.
+
+---
+
+seek          (seek handle num)
+num           Set or get file position.
+
+---
+
+write         (write handle data)
+num           Write binary data.
+
+---
+
+write-char    (write-char handle num)
+bool          Write character.
+
+---
+
+write-file    (write-file path data)
+bool          Write entire file in one step.
+
+---
+
+write-line    (write-line handle str)
+bool          Write line to handle.
+
+---
+
+#13 File and directory operations
+
+---
+
+change-dir     (change-dir path)
+bool           Change current directory.
+
+---
+
+copy-file      (copy-file path-src path-dst)
+bool           Copy file.
+
+---
+
+delete-file    (delete-file path)
+bool           Delete file.
+
+---
+
+directory      (directory [path])
+seq            List directory entries.
+
+---
+
+file-info      (file-info path)
+seq            File size, date, time, attributes.
+
+---
+
+make-dir       (make-dir path)
+bool           Create new directory.
+
+---
+
+real-path      (real-path path)
+str            Resolve full canonical path.
+
+---
+
+remove-dir     (remove-dir path)
+bool           Remove empty directory.
+
+---
+
+rename-file    (rename-file path-old path-new)
+bool           Rename file or directory.
+
+---
+
+#14 Processes and the Cilk API
+
+---
+
+!             (! str-cmd)
+num           Shell out to OS.
+
+---
+
+abort         (abort pid)
+bool          Abort child process (spawn).
+
+---
+
+destroy       (destroy pid)
+bool          Destroy process created by fork/process.
+
+---
+
+exec          (exec cmd [args...])
+any           Run process with I/O mapping.
+
+---
+
+fork          (fork exp)
+num           Launch new Rebel child process.
+
+---
+
+pipe          (pipe)
+seq           Create pipe for IPC.
+
+---
+
+process       (process cmd [args...])
+any           Start process with stdio remapping.
+
+---
+
+receive       (receive)
+any           Receive message from process.
+
+---
+
+semaphore     (semaphore sym num)
+any           Create or control semaphore.
+
+---
+
+send          (send pid msg)
+bool          Send message to process.
+
+---
+
+share         (share addr num-size)
+any           Shared memory segment.
+
+---
+
+spawn         (spawn exp)
+any           Launch Cilk-style child task.
+
+---
+
+sync          (sync)
+seq           Wait for spawned tasks and collect results.
+
+---
+
+wait-pid      (wait-pid pid)
+num           Wait for child process to exit.
+
+---
+
+#15 HTTP networking API
+
+---
+
+base64-enc     (base64-enc str)
+str            Encode string to BASE64.
+
+---
+
+base64-dec     (base64-dec str)
+str            Decode BASE64 string.
+
+---
+
+delete-url     (delete-url url)
+any            HTTP DELETE request.
+
+---
+
+get-url        (get-url url)
+str            Read text or file from URL.
+
+---
+
+json-error     (json-error)
+str            Last JSON parse error.
+
+---
+
+json-parse     (json-parse str)
+any            Parse JSON formatted data.
+
+---
+
+post-url       (post-url url data)
+any            HTTP POST request.
+
+---
+
+put-url        (put-url url data)
+any            HTTP PUT request.
+
+---
+
+xfer-event     (xfer-event func)
+any            Register handler for HTTP transfer events.
+
+---
+
+xml-error      (xml-error)
+str            Last XML parse error.
+
+---
+
+xml-parse      (xml-parse str)
+any            Parse XML document.
+
+---
+
+xml-type-tags  (xml-type-tags [seq-tags])
+seq            Get or set XML type tags.
+
+---
+
+#16 Socket TCP/IP, UDP and ICMP network API
+
+---
+
+net-accept       (net-accept sock)
+any              Accept incoming connection.
+
+---
+
+net-close        (net-close sock)
+bool             Close socket connection.
+
+---
+
+net-connect      (net-connect host port)
+any              Connect to remote host.
+
+---
+
+net-error        (net-error)
+str              Last network error message.
+
+---
+
+net-eval         (net-eval seq-servers exp)
+any              Eval expressions on multiple Rebel servers.
+
+---
+
+net-interface    (net-interface host)
+any              Set default interface address.
+
+---
+
+net-ipv          (net-ipv num)
+bool             Switch between IPv4 and IPv6.
+
+---
+
+net-listen       (net-listen host port)
+sock             Listen on local socket.
+
+---
+
+net-local        (net-local sock)
+seq              Local IP and port.
+
+---
+
+net-lookup       (net-lookup host)
+str              Lookup host name for IP.
+
+---
+
+net-packet       (net-packet sock data)
+bool             Send custom raw IP packet.
+
+---
+
+net-peek         (net-peek sock)
+num              Bytes ready to read.
+
+---
+
+net-peer         (net-peer sock)
+seq              Remote IP and port.
+
+---
+
+net-ping         (net-ping host)
+seq              Send ICMP ping request(s).
+
+---
+
+net-receive      (net-receive sock)
+data             Read data from socket.
+
+---
+
+net-receive-from (net-receive-from sock)
+data             Read UDP from connection.
+
+---
+
+net-receive-udp  (net-receive-udp host port)
+data             Read UDP and close connection.
+
+---
+
+net-select       (net-select seq-socks num-timeout)
+seq              Check sockets for status.
+
+---
+
+net-send         (net-send sock data)
+num              Send data.
+
+---
+
+net-send-to      (net-send-to host port data)
+num              Send UDP packet to host.
+
+---
+
+net-send-udp     (net-send-udp host port data)
+num              Send UDP then close connection.
+
+---
+
+net-service      (net-service str-service)
+num              Translate service name to port.
+
+---
+
+net-sessions     (net-sessions)
+seq              List open connections.
+
+---
+
+#17 Reflection and customization
+
+---
+
+command-event   (command-event func)
+any             Preprocess command-line or HTTP requests.
+
+---
+
+error-event     (error-event func)
+any             Custom error handler.
+
+---
+
+history         (history sym)
+seq             Call history of function.
+
+---
+
+last-error      (last-error)
+seq             Last error number and message.
+
+---
+
+macro           (macro (sym args...) body)
+func            Create reader-expansion macro.
+
+---
+
+ostype          (ostype)
+str             OS platform string.
+
+---
+
+prefix          (prefix sym)
+str             Context prefix of symbol.
+
+---
+
+prompt-event    (prompt-event func)
+any             Customize REPL prompt behavior.
+
+---
+
+read-expr       (read-expr str)
+any             Read s-expression without evaluation.
+
+---
+
+reader-event    (reader-event func)
+any             Preprocess expression before evaluation.
+
+---
+
+set-locale      (set-locale str)
+bool            Change locale.
+
+---
+
+source          (source sym)
+str             Source needed to bind symbol.
+
+---
+
+sys-error       (sys-error)
+seq             Report OS error number and text.
+
+---
+
+sys-info        (sys-info)
+seq             System resource information.
+
+---
+
+term            (term sym)
+str             Term part of symbol or context.
+
+---
+
+#18 System functions
+
+---
+
+$             ($ num)
+any           Access system variables $0–$15.
+
+---
+
+callback      (callback sym-func sig)
+sym           Register callback for imported library.
+
+---
+
+catch         (catch exp [handler])
+any           Evaluate exp, catching errors or early returns.
+
+---
+
+context       (context sym-context)
+ctx           Create or switch namespace.
+
+---
+
+copy          (copy exp)
+any           Shallow copy of value.
+
+---
+
+debug         (debug sym)
+any           Debug a user-defined function.
+
+---
+
+delete        (delete sym)
+bool          Delete symbol from symbol table.
+
+---
+
+default       (default ctx)
+any           Get contents of default functor.
+
+---
+
+env           (env [str-key [str-value]])
+any           Get or set environment variable.
+
+---
+
+exit          (exit [num])
+nil           Exit Rebel with code.
+
+---
+
+global        (global sym-1 [sym-2 ...])
+bool          Make symbol global.
+
+---
+
+import        (import lib name sig)
+sym           Import function from shared library.
+
+---
+
+main-args     (main-args)
+seq           Command-line arguments.
+
+---
+
+new           (new ctx)
+ctx           Copy context.
+
+---
+
+pretty-print  (pretty-print num)
+num           Set pretty-print width.
+
+---
+
+read-expr     (read-expr str)
+any           Parse expression without evaluating.
+
+---
+
+reset         (reset)
+nil           Return to top level.
+
+---
+
+signal        (signal num func)
+any           Set signal handler.
+
+---
+
+sleep         (sleep num)
+nil           Sleep num milliseconds.
+
+---
+
+sym           (sym str)
+sym           Create symbol from string.
+
+---
+
+symbols       (symbols [ctx])
+seq           List of all symbols.
+
+---
+
+throw         (throw exp)
+any           Force return to last catch.
+
+---
+
+throw-error   (throw-error exp)
+any           Throw user-defined error.
+
+---
+
+timer         (timer num func)
+any           One-shot timer event.
+
+---
+
+trace         (trace [sym] )
+any           Enable/disable trace mode.
+
+---
+
+trace-highlight (trace-highlight str-begin str-end)
+any             Set trace highlight delimiters.
+
+---
+
+#19 Importing libraries
+
+---
+
+address      (address exp)
+num          Memory address of number or string.
+
+---
+
+callback     (callback sym-func sig)
+sym          Register callback for imported library.
+
+---
+
+flt          (flt float)
+int          32-bit integer bit-pattern of float.
+
+---
+
+float        (float exp)
+float        Convert to floating-point number.
+
+---
+
+get-char     (get-char addr)
+num          Read 8-bit char from memory.
+
+---
+
+get-float    (get-float addr)
+float        Read double float from memory.
+
+---
+
+get-int      (get-int addr)
+int          Read 32-bit integer from memory.
+
+---
+
+get-long     (get-long addr)
+num          Read 64-bit integer from memory.
+
+---
+
+get-string   (get-string addr)
+str          Read zero-terminated string.
+
+---
+
+import       (import lib name sig)
+sym          Import function from shared library.
+
+---
+
+int          (int exp)
+int          Convert value to integer.
+
+---
+
+pack         (pack exp-1 [exp-2 ...])
+data         Pack values into binary structure.
+
+---
+
+struct       (struct spec)
+any          Define C-type data structure.
+
+---
+
+unpack       (unpack data)
+seq          Unpack binary structure.
+
+---
+
+#20 Rebel internals API
+
+---
+
+command-event   (command-event func)
+any             Preprocess command-line or HTTP requests.
+
+---
+
+cpymem          (cpymem addr-src addr-dst num)
+nil             Copy raw memory bytes.
+
+---
+
+dump            (dump exp)
+any             Show memory address and cell contents.
+
+---
+
+prompt-event    (prompt-event func)
+any             Customize REPL prompt behavior.
+
+---
+
+read-expr       (read-expr str)
+any             Read s-expression without evaluating.
+
+---
+
+reader-event    (reader-event func)
+any             Preprocess expression before evaluation.
+
+---

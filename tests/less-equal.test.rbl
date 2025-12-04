@@ -1,0 +1,17 @@
+
+; Test for function "<="
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: minimum integer <= itself"
+  (<= -9223372036854775808 -9223372036854775808)
+  true
+)
+
+(test "2: integer <= slightly larger float"
+  (<= 1 1.00000001)
+  true
+)

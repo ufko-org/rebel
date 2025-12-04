@@ -1,0 +1,56 @@
+; Test for function "assoc"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Setup list
+; ------------------------------------------------------------
+(set 'L '((a 1) (b (c (d 2) (e 3) (e 4))) ("a" 5) ((a) 6)))
+
+; Basic assoc by symbol / string / list
+; ------------------------------------------------------------
+(test "1: assoc 'a"
+  (= (assoc 'a L) '(a 1))
+  true
+)
+
+(test "2: assoc 'b"
+  (= (assoc 'b L) '(b (c (d 2) (e 3) (e 4))))
+  true
+)
+
+(test "3: assoc \"a\""
+  (= (assoc "a" L) '("a" 5))
+  true
+)
+
+(test "4: assoc '((a))"
+  (= (assoc '((a)) L) '((a) 6))
+  true
+)
+
+; Nested keys
+; ------------------------------------------------------------
+(test "5: assoc '(b c)"
+  (= (assoc '(b c) L) '(c (d 2) (e 3) (e 4)))
+  true
+)
+
+(test "6: assoc '(b c d)"
+  (= (assoc '(b c d) L) '(d 2))
+  true
+)
+
+(test "7: assoc '(b c e)"
+  (= (assoc '(b c e) L) '(e 3))
+  true
+)
+
+; Default functor
+; ------------------------------------------------------------
+(set 'C:C '((a 1) (b (c (d 2) (e 3) (e 4))) ("a" 5) ((a) 6)))
+
+(test "8: assoc 'a with C default functor"
+  (= (assoc 'a C) '(a 1))
+  true
+)

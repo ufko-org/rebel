@@ -1,0 +1,44 @@
+; Test for function "add" (float)
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: sum of no numbers is 0"
+  (add)
+  0.0
+)
+
+(test "2: sum of positive floats"
+  (add 1.1 2.2 3.3)
+  6.6
+)
+
+(test "3: sum with negative floats"
+  (add -1.5 2.5 -3.0)
+  -2.0
+)
+
+(test "4: sum of first 5 float increments"
+  (local (l)
+    (set 'l '(0.1 0.2 0.3 0.4 0.5))
+    (apply add l)
+  )
+  1.5
+)
+
+(test "5: sum with large float numbers"
+  (add 1.0e10 2.0e10 3.0e10)
+  6.0e10
+)
+
+(test "6: sum of first 100 floats"
+  (local (l)
+    (set 'l '())
+    (dotimes (x 100)
+      (push (float x) l))  ; convert integers to float
+    (apply add l)
+  )
+  4950.0
+)

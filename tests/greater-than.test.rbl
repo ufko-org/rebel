@@ -1,0 +1,80 @@
+; Test for function ">"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: max integer > min integer"
+  (> 9223372036854775807 -9223372036854775808)
+  true
+)
+
+(test "2: float > integer"
+  (> 1.000000001 1)
+  true
+)
+
+(test "3: single positive integer"
+  (> 1)
+  true
+)
+
+(test "4: single positive float"
+  (> 1.23)
+  true
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "5: longer string > shorter string"
+  (> "abcdefgh" "abcdefg")
+  true
+)
+
+(test "6: string > number"
+  (> "a" 1)
+  true
+)
+
+(test "7: string > string"
+  (> "z" "aaaaa")
+  true
+)
+
+(test "8: string > string"
+  (> "aaa" "a")
+  true
+)
+
+(test "9: single string not true"
+  (> "abc")
+  true
+)
+
+(test "10: empty string not true"
+  (not (> ""))
+  true
+)
+
+; Symbols / Lists
+; ------------------------------------------------------------
+(test "11: symbol > string"
+  (> 'a "a")
+  true
+)
+
+(test "12: list > symbol"
+  (> '(a) 'a)
+  true
+)
+
+(test "13: non-empty list not true"
+  (> '(1 2 3))
+  true
+)
+
+(test "14: empty list not true"
+  (not (> '()))
+  true
+)

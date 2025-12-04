@@ -1,0 +1,11 @@
+; Test for function "acos"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Trigonometry
+; ------------------------------------------------------------
+(test "1: acos(cos(acos(cos 0))) equals 0"
+  (acos (cos (acos (cos 0))))
+  0
+)

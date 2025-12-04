@@ -1,0 +1,75 @@
+
+; Test for function "array"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Arrays
+; ------------------------------------------------------------
+(test "1: convert array to list"
+  (array-list (array 3 2 (sequence 1 6)))
+  '((1 2) (3 4) (5 6))
+)
+
+(test "2: nth element access and bounds checking"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (and
+      (= (array-list (nth 0 A)) '(1 2))
+      (= (nth '(0 0) A) 1)
+      (= (nth '(2 1) A) 6)
+      (= (nth '(-1 -1) A) 6)
+      (not (catch (nth '(10 10) A) 'result))
+      (not (catch (nth '(-10 -10) A) 'result))
+    )
+  )
+  true
+)
+
+(test "3: nth of row returns sub-array"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (= (nth 0 A) (array 2 '(1 2)))
+  )
+  true
+)
+
+(test "4: comparison of array rows"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (and
+      (< (nth 0 A) (nth 1 A))
+      (> (nth 2 A) (nth 1 A))
+    )
+  )
+  true
+)
+
+(test "5: setf elements in array"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (setf (A 1 0) 1)
+    (= (nth '(1 0) A) 1)
+  )
+  true
+)
+
+(test "6: setf multiple elements and check array-list"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (setf (A 1 0) 1)
+    (setf (A 1 1) 1)
+    (= (array-list A) '((1 2) (1 1) (5 6)))
+  )
+  true
+)
+
+(test "7: comparison after setf"
+  (local (A)
+    (set 'A (array 3 2 (sequence 1 6)))
+    (setf (A 1 0) 1)
+    (setf (A 1 1) 1)
+    (< (nth 1 A) (nth 0 A))
+  )
+  true
+)

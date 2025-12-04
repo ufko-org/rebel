@@ -1,0 +1,26 @@
+
+; Test for function "date-parse"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic Y.m.d pattern
+; ------------------------------------------------------------
+(test "1: parse YYYY.M.D"
+  (date-parse "2007.1.3" "%Y.%m.%d")
+  1167782400
+)
+
+; Compact Ymd pattern
+; ------------------------------------------------------------
+(test "2: parse YYYYMMDD"
+  (date-parse "20091014" "%Y%m%d")
+  1255478400
+)
+
+; Month name + day + year (locale-dependent, but stable for English C locale)
+; ------------------------------------------------------------
+(test "3: parse 'January 10, 07'"
+  (date-parse "January 10, 07" "%B %d, %y")
+  1168387200
+)

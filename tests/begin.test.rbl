@@ -1,0 +1,15 @@
+; Test for function/special form "begin"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; basic begin sequencing
+; ------------------------------------------------------------
+(test "1: begin sets and increments"
+  (begin
+    (set 'x 0)
+    (inc x)
+    (inc x)
+    (= x 2))
+  true
+)

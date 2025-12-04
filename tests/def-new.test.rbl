@@ -1,0 +1,64 @@
+; Test for function "def-new"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic symbol copy
+; ------------------------------------------------------------
+(test "1: set C:var with C:x C:y"
+  (set 'C:var '(C:x C:y))
+  '(C:x C:y)
+)
+
+(test "2: def-new C:var into C2:myvar returns symbol"
+  (def-new 'C:var 'C2:myvar)
+  'C2:myvar
+)
+
+(test "3: C2:myvar has remapped refs"
+  C2:myvar
+  '(C2:x C2:y)
+)
+
+; Implicit def-new into current test context
+; ------------------------------------------------------------
+; NOTE:
+; All tests run inside the 'test' context. The runner
+; resets the current context to 'test' before each test.
+;
+; Because implicit (def-new 'C:var) copies into the current
+; context, the effective target here is always 'test'.
+; Therefore expected symbols are 'test:var and never C:var
+; or MAIN:var. This makes results stable and reproducible.
+;
+; These tests verify:
+; - correct symbol returned by def-new
+; - correct remapping of inner symbols
+; - correct behavior when copying into the 'test' context
+; ------------------------------------------------------------
+(test "4: def-new C:var into current test context"
+  (def-new 'C:var)
+  'test:var
+)
+
+(test "5: test:var has remapped refs"
+  test:var
+  '(x y)
+)
+
+; Lambda moved into a new context
+; ------------------------------------------------------------
+(test "6: set tmp lambda"
+  (set 'tmp (lambda (x) (+ x x)))
+  '(lambda (x) (+ x x))
+)
+
+(test "7: def-new tmp into C4:C4 returns symbol"
+  (def-new 'tmp 'C4:C4)
+  'C4:C4
+)
+
+(test "8: C4:C4 has remapped parameter"
+  C4:C4
+  '(lambda (C4:x) (+ C4:x C4:x))
+)

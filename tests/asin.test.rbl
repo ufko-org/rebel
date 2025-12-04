@@ -1,0 +1,12 @@
+; Test for function "asin"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic asin / sin identity
+; ------------------------------------------------------------
+(test "1: asin(sin(asin(sin 1))) rounded"
+  (= (round (asin (sin (asin (sin 1)))) -9) 1)
+  true
+)
+

@@ -1,0 +1,198 @@
+;; Rebel sqlite3 module
+;; Tested with sqlite3 3.50 and above
+;; Usage: see examples/ folder
+;; $Revision: 1.3 $
+;; $Author: Ufko $
+;; ---------------------------------------------------------------------
+
+(context 'sql3)
+
+;; Set path to the SQLite3 shared library 
+;; ---------------------------------------------------------------------
+(setq library (append (env "HOME") "/me/app/sqlite3/lib/libsqlite3.so.3.50.4"))
+
+;; Module constants and global vars
+;; ---------------------------------------------------------------------
+
+(define db nil)
+(define dbp "\000\000\000\000\000\000\000\000")
+(define error-message nil)
+(define col-names '())
+(define col-types '())
+(define pstm "\000\000\000\000\000\000\000\000\000")
+
+(constant 'SQLITE_OK 0)
+(constant 'SQLITE_ROW 100)
+(constant 'SQLITE_DONE 101)
+
+(constant 'SQLITE_TYPES '(
+	0 
+	SQLITE_INTEGER 
+	SQLITE_FLOAT 
+	SQLITE_TEXT 
+	SQLITE_BLOB 
+	SQLITE_NULL))
+
+;; Import SQLite3 functions
+;; ---------------------------------------------------------------------
+
+(import library "sqlite3_open" "cdecl")
+(import library "sqlite3_close" "cdecl")
+(import library "sqlite3_prepare_v2" "cdecl")
+(import library "sqlite3_bind_blob" "cdecl")
+(import library "sqlite3_bind_double" "cdecl")
+(import library "sqlite3_bind_null" "cdecl")
+(import library "sqlite3_bind_parameter_count" "cdecl")
+(import library "sqlite3_bind_parameter_index" "cdecl")
+(import library "sqlite3_bind_parameter_name" "cdecl")
+(import library "sqlite3_bind_text" "cdecl")
+(import library "sqlite3_bind_text16" "cdecl")
+(import library "sqlite3_step" "cdecl")
+(import library "sqlite3_column_count" "cdecl")
+(import library "sqlite3_column_name" "cdecl")
+(import library "sqlite3_column_type" "cdecl")
+(import library "sqlite3_column_int64" "cdecl")
+(import library "sqlite3_column_double" "cdecl")
+(import library "sqlite3_column_text" "cdecl")
+(import library "sqlite3_column_blob" "cdecl")
+(import library "sqlite3_column_bytes" "cdecl")
+(import library "sqlite3_finalize" "cdecl")
+(import library "sqlite3_get_table" "cdecl")
+(import library "sqlite3_last_insert_rowid" "cdecl")
+(import library "sqlite3_changes" "cdecl")
+(import library "sqlite3_busy_timeout" "cdecl")
+(import library "sqlite3_errmsg" "cdecl")
+
+;; Explicitly prefixed functions to avoid conflicts with built-ins
+;; ---------------------------------------------------------------------
+
+(define (sql3:open db-name)
+  ;; prefixed to avoid clash with built-in open
+  (if (not db)
+    (begin
+      (set 'result (sqlite3_open db-name dbp))
+      (if (!= result SQLITE_OK)
+        (set 'db nil)
+        (set 'db (get-long dbp))))
+    (begin
+      (set 'error-message "A database is already open")
+      nil)))
+
+(define (sql3:close)
+  ;; prefixed to avoid clash with built-in close
+	(if db (begin
+		(sqlite3_close db)
+		(set 'db nil)
+		true)))
+
+;; Internal module helpers
+;; ---------------------------------------------------------------------
+
+(define (bind-parameter pstm param value)
+	(let (idx param)
+		(unless (integer? param)
+			(set 'idx (sqlite3_bind_parameter_index pstm
+				(if (symbol? param) (term param) (string param)))))
+		(cond
+			((float? value) (sqlite3_bind_double pstm idx (float value)))
+			((string? value) (sqlite3_bind_text pstm idx value (length value) -1))
+			((nil? value) (sqlite3_bind_null pstm idx))
+			(true (sqlite3_bind_text pstm idx (string value) (length (string value)) -1)))))
+
+(define (get-values pstm cols) 
+	(set 'row '())
+	(dotimes (idx cols)
+		(set 'i (int idx))
+		(case (nth idx col-types idx)
+			(SQLITE_INTEGER 
+				(set 'pstr (sqlite3_column_text pstm i)) 
+				(if (= pstr 0) (push nil row -1) (push (int (get-string pstr)) row -1))) 
+			(SQLITE_FLOAT 
+				(set 'pstr (sqlite3_column_text pstm i))
+				(if (= pstr 0) (push nil row -1) (push (float (get-string pstr)) row -1)))
+			(SQLITE_TEXT 
+				(set 'pstr (sqlite3_column_text pstm i))
+				(if (= pstr 0) (push "" row -1) (push (get-string pstr) row -1)))
+			(SQLITE_BLOB 
+				(set 'pstr (sqlite3_column_blob pstm i))
+				(set 'len (sqlite3_column_bytes pstm i))
+				(set 'buff (dup "\000" len))
+				(if (= pstr 0) (push "" row -1) (begin (cpymem pstr buff len) (push buff row -1))))
+			(SQLITE_NULL 
+				(push nil row -1))))
+	row)
+
+(define (get-names pstm cols) 
+	(set 'row '())
+	(dotimes (idx cols)
+		(set 'i (int idx))
+		(set 'ps (sqlite3_column_name pstm i))
+		(if (= ps 0) (push "" row -1) (push (get-string ps) row -1)))
+	row)
+
+(define (get-types pstm cols)
+	(set 'row '())
+	(dotimes (idx cols)
+		(set 'i (int idx))
+		(push (nth (sqlite3_column_type pstm i) SQLITE_TYPES) row -1))
+	row)
+
+(define (set-error)
+	(set 'result (sqlite3_errmsg db))
+	(if (= result 0) (set 'error-message nil) (set 'error-message (get-string result)) nil))
+
+;; SQL query function
+;; ---------------------------------------------------------------------
+
+(define (sql sql-str sql-args)
+	(set 'result nil 'done nil 'error-message nil)
+	(set 'sqarray '())
+	(set 'col-names '())
+	(set 'col-types '())
+
+	(set 'ppstm "\000\000\000\000\000\000\000\000") ; pointer to statement ptr
+	(set 'pptail "\000\000\000\000\000\000\000\000") ; pointer to statement tail
+
+	(if db (set 'result (sqlite3_prepare_v2 db sql-str -1 ppstm pptail)))
+	(set 'pstm (get-long ppstm))
+
+	(if (and (= result SQLITE_OK) sql-args)
+  		(let (argi 0)
+    			(dolist (entry sql-args (!= result SQLITE_OK))
+      				(if (list? entry)
+        				(set 'result (bind-parameter pstm (first entry) (last entry)))
+        				(set 'result (bind-parameter pstm (++ argi) entry))
+				))))
+
+	(if (= result SQLITE_OK)
+		(while (not done)
+			(set 'result (sqlite3_step pstm))
+			(set 'num-cols (sqlite3_column_count pstm))
+			(if (empty? col-names) (set 'col-names (get-names pstm num-cols)))
+			(set 'col-types (get-types pstm num-cols))
+			(if (= result SQLITE_ROW)
+				(push (get-values pstm num-cols) sqarray -1)
+				(set 'done true))
+		))
+
+	(if (= result SQLITE_DONE)
+		(begin
+			(set 'result (sqlite3_finalize pstm))
+			(if (> num-cols 0) sqarray true))
+		(if (= result 0) true (set-error))))
+
+;; Module functions
+;; ---------------------------------------------------------------------
+
+(define (colnames) col-names)
+(define (rowid) (if db (sqlite3_last_insert_rowid db)))
+(define (tables) (if db (set 'lst (sql "select tbl_name from sqlite_master")) (if lst (set 'lst (first (transpose lst))))))
+(define (columns aTable) (if (list? (sql (append "select * from " aTable " where 0;"))) col-names))
+(define (changes) (if db (sqlite3_changes db)))
+(define (timeout ms) (if db (zero? (sqlite3_busy_timeout db (int ms)))))
+(define (error) error-message)
+
+;; ---------------------------------------------------------------------
+(println "Loaded: sqlite3 module")
+(context MAIN)
+;; eof

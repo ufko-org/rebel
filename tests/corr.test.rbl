@@ -1,0 +1,18 @@
+; Test for function "corr"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Correlation calculation
+; ------------------------------------------------------------
+(test "1: apply add over mapped sub of corr"
+  (< (apply add
+         (map sub
+           (corr '(1 3 5 8 9 9) '(2 2 3 4 6 8))
+           '(0.868724789 0.5571847507 0.6187683284 3.507907832 4 0.0247186268)
+         )
+       )
+     0.000000001
+  )
+  true
+)

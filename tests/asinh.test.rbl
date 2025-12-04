@@ -1,0 +1,26 @@
+; Test for function "asinh"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic asinh / sinh identity
+; ------------------------------------------------------------
+(test "1: sinh(asinh 1) rounded"
+  (= (round (sinh (asinh 1)) -12) 1)
+  true
+)
+
+(test "2: sinh(asinh 0)"
+  (= (sinh (asinh 0)) 0)
+  true
+)
+
+(test "3: sinh(asinh -1) rounded"
+  (= (round (sinh (asinh -1)) -12) -1)
+  true
+)
+
+(test "4: asinh / sinh small value"
+  (= (round (sinh (asinh 0.5)) -12) 0.5)
+  true
+)

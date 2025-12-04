@@ -1,0 +1,26 @@
+; Test for function "atan"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic atan / tan identity
+; ------------------------------------------------------------
+(test "1: 1 - atan(tan(atan(tan 1))) small"
+  (< (sub 1 (atan (tan (atan (tan 1))))) 1e-15)
+  true
+)
+
+(test "2: atan 0"
+  (= (atan 0) 0)
+  true
+)
+
+(test "3: atan tan small value"
+  (< (abs (sub (atan (tan 0.5)) 0.5)) 1e-15)
+  true
+)
+
+(test "4: atan tan negative value"
+  (< (abs (sub (atan (tan -0.8)) -0.8)) 1e-15)
+  true
+)

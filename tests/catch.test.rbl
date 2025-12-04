@@ -1,0 +1,23 @@
+; Test for function/special form "catch"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; basic catch usage
+; ------------------------------------------------------------
+(test "1: catch with result variable"
+  (begin
+    (catch (+ 3 4) 'result)
+    (= result 7))
+  true
+)
+
+(test "2: catch returns value directly"
+  (= (catch (+ 3 4)) 7)
+  true
+)
+
+(test "3: catch with throw inside loop"
+  (= (catch (dotimes (x 100) (if (= x 7) (throw x)))) 7)
+  true
+)

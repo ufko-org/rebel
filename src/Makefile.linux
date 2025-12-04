@@ -1,0 +1,47 @@
+# makefile for Rebel Linux
+
+OBJS = rebel.o \
+			 rebel-symbol.o \
+			 rebel-math.o \
+			 rebel-list.o \
+			 rebel-liststr.o \
+			 rebel-string.o \
+			 rebel-filesys.o \
+			 rebel-sock.o \
+			 rebel-import.o \
+			 rebel-xml-json.o \
+			 rebel-web.o \
+			 rebel-matrix.o \
+			 rebel-debug.o \
+			 rebel-utf8.o \
+			 pcre.o
+
+CC = cc
+
+# -fPIC -m64 -Wall -Wno-uninitialized -Wno-strict-aliasing -Wno-long-long -c -O2 -g
+CFLAGS = -fPIC -Wall -Oz -c \
+	-Wno-strict-aliasing \
+	-Wno-unused-result \
+	-Wno-format-overflow \
+	-Wno-format-truncation \
+	-Wno-restrict \
+	-I/usr/local/include \
+	-DLINUX -DSUPPORT_UTF8 -DREADLINE -DFFI
+
+default: rebel
+
+rebel: $(OBJS)
+	$(CC) $(OBJS) -lm -ldl -lreadline -lffi -o $@
+	strip rebel
+	ls -l rebel
+
+.c.o:
+	$(CC) $(CFLAGS) $<
+
+$(OBJS): primes.h protos.h Makefile.linux
+
+clean:
+	rm -f $(OBJS) rebel
+
+test: rebel
+	./rebel qa-dot

@@ -1,0 +1,19 @@
+; Test for function "constant"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Constant / protected
+; ------------------------------------------------------------
+(test "1: define constant cs"
+  (begin
+    (constant 'cs 123)
+    cs
+  )
+  123
+)
+
+(test "2: check if constant cs is protected"
+  (protected? 'cs)
+  true
+)

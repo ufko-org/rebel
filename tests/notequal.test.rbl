@@ -1,0 +1,33 @@
+; Test for function "!="
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: negative integer bitwise check"
+  (not (!= -9223372036854775808 (& -9223372036854775808 -1)))
+  true
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "2: different strings"
+  (!= "abc" "ABC")
+  true
+)
+
+(test "3: different unicode characters"
+  (!= "a" "ה")
+  true
+)
+
+(test "4: floating point comparison"
+  (!= 1.000000001 1)
+  true
+)
+
+(test "5: different unicode character comparison"
+  (!= "ב" "a")
+  true
+)

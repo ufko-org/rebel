@@ -1,0 +1,76 @@
+
+; Test for function "<"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: negative < positive integer"
+  (< -9223372036854775808 9223372036854775807)
+  true
+)
+
+(test "2: float > integer"
+  (< 1 1.000000001)
+  true
+)
+
+(test "3: single negative integer"
+  (< -1)
+  true
+)
+
+(test "4: single negative float"
+  (< -1.23)
+  true
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "5: shorter string < longer string"
+  (< "abcdefg" "abcdefgh")
+  true
+)
+
+(test "6: integer < string"
+  (< 1 "a")
+  true
+)
+
+(test "7: string < symbol"
+  (< "a" 'a)
+  true
+)
+
+(test "8: single string not true"
+  (not (< "1"))
+  true
+)
+
+; Lists
+; ------------------------------------------------------------
+(test "9: list comparisons"
+  (< '(a b) '(b c) '(c d))
+  true
+)
+
+(test "10: list comparison not true"
+  (not (< '(a b) '(b d) '(b c)))
+  true
+)
+
+(test "11: nested lists"
+  (< '(((a b))) '(((b c))))
+  true
+)
+
+(test "12: more nested lists"
+  (< '(a (b c)) '(a (b d)) '(a (b (d))))
+  true
+)
+
+(test "13: empty list not true"
+  (not (< '()))
+  true
+)

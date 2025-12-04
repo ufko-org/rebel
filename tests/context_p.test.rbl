@@ -1,0 +1,20 @@
+; Test for function "context?"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Context existence check
+; ------------------------------------------------------------
+
+(test "1: check if MAIN context exists"
+  (context? MAIN)
+  true
+)
+
+(context MAIN) 
+; we have to switch to another context to
+; check the existence of test context
+(test "2: check if 'test' context exists"
+  (context? test)
+  true
+)

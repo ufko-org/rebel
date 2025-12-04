@@ -1,0 +1,16 @@
+; Test for function "make-dir"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Directory operations
+; ------------------------------------------------------------
+(test "1: create, change, revert and remove directory"
+  (begin
+    (make-dir "adir")
+    (change-dir "adir")
+    (change-dir "..")
+    (remove-dir "adir")
+  )
+  true
+)

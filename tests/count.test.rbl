@@ -1,0 +1,33 @@
+; Test for function "count"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Multiple items in target list
+; ------------------------------------------------------------
+(test "1: count two numbers in list"
+  (count '(1 2) '(2 1 2 1))
+  '(2 2)
+)
+
+(test "2: count two symbols in list"
+  (count '(a b) '(a a b c a b b))
+  '(3 3)
+)
+
+; Empty target
+; ------------------------------------------------------------
+(test "3: count three symbols in empty list"
+  (count '(a b c) '())
+  '(0 0 0)
+)
+
+; Each element appears exactly once
+; ------------------------------------------------------------
+(test "4: count L in L"
+  (begin
+    (set 'L '(a b c d e f))
+    (count L L)
+  )
+  '(1 1 1 1 1 1)
+)

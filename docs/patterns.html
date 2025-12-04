@@ -1,0 +1,2295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rebel Patterns </title>
+  
+  <link rel="stylesheet" href="docs.css">
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProgrammingLanguage","name":"Rebel","alternateName":"Rebel Language","description":"Rebel is a pragmatic general-purpose scripting language written in ANSI C with a lean lisp-like syntax.","url":"https://rebel-lang.org","creator":{"@type":"Person","name":"Ufko (ufko.org)"},"license":"https://opensource.org/license/gpl-3-0","programmingLanguage":"ANSI C","sameAs":["https://github.com/ufko-org/rebel","https://ufko.org"]}</script>
+  <link rel="icon" href="/logo_v0.svg" type="image/svg+xml">
+</head>
+<body>
+  <table>
+    <tr>
+      <td rowspan="2" class="logo">
+        <a href="/index.html">
+          <img src="logo_v0.svg" alt="Rebel">
+        </a>
+      </td>
+      <td><a href="/guide.html">Guide</a></td>
+      <td><a href="/patterns.html">Patterns</a></td>
+      <td><a href="/reference.html">Reference</a></td>
+      <td><a href="https://github.com/ufko-org/rebel">Code</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <hr>
+  <h1 id="rebel-patterns-field-manual-wip">Rebel Patterns (Field Manual WIP)</h1>
+<hr/>
+<p>Copyright &#169; 2025 Ufko (ufko.org)</p>
+<p>This manual is released under the MIT license.
+You may use, copy, modify and distribute it freely,
+provided that this notice is preserved.</p>
+<hr/>
+<h2 id="table-of-contents-summary-of-chapters">Table of Contents (Summary of Chapters)</h2>
+<p>TOC</p>
+<h2 id="writing-software-in-modules">Writing Software in Modules</h2>
+<p>Modules are implemented with contexts. A context is a namespace
+that isolates its own symbols, preventing name clashes across
+different parts of a program. A common pattern is one context per
+file, each file dedicated to a specific task.</p>
+<h3 id="one-context-per-file">One context per file</h3>
+<pre><code>; file: db.rbl
+(context &#39;db)
+;
+(define (db:update x y z)
+  ...)
+;
+(define (db:erase x y z)
+  ...)
+</code></pre>
+<pre><code>; file: util.rbl
+(context &#39;util)
+;
+(define (util:get a b)
+  ...)
+</code></pre>
+<p>Main module loads the others and coordinates them.</p>
+<pre><code>; file: app.rbl
+(load "util.rbl")
+(load "db.rbl")
+;
+(define (run)
+  (db:update a b c)
+  (util:get k v)
+  ...)
+;
+(run)
+</code></pre>
+<h3 id="more-than-one-context-per-file">More than one context per file</h3>
+<p>Multiple contexts may live in one file. Close each context
+section by switching back to MAIN.</p>
+<pre><code>; file: myapp.rbl
+(context &#39;a)
+;
+(define (a:foo x)
+  ...)
+;
+(context MAIN)
+;
+(context &#39;b)
+;
+(define (b:bar x)
+  ...)
+;
+(context MAIN)
+;
+(define (main)
+  (a:foo 1)
+  (b:bar 2))
+</code></pre>
+<p>Alternative closing and opening in one step:</p>
+<pre><code>(context &#39;a)
+;
+(define (a:foo x)
+  ...)
+;
+(context &#39;MAIN:b)
+;
+(define (b:bar x)
+  ...)
+;
+(context &#39;MAIN)
+;
+(define (main)
+  (a:foo 1)
+  (b:bar 2))
+</code></pre>
+<h3 id="default-function">Default function</h3>
+<p>If a context defines a function with the same name as the
+context, calling the context behaves like calling that function.
+This allows compact stateful generators.</p>
+<pre><code>(context &#39;gen)
+;
+(define (gen:gen)
+  (inc acc))
+;
+(context MAIN)
+;
+(gen) ;-&#62; 1
+(gen) ;-&#62; 2
+(gen) ;-&#62; 3
+</code></pre>
+<p>Fibonacci generator:</p>
+<pre><code>(define (fib:fib)
+  (if (not fib:mem)
+      (set &#39;fib:mem &#39;(0 1)))
+  (last (push (+ (fib:mem -1) (fib:mem -2))
+              fib:mem -1)))
+;
+(fib) ;-&#62; 1
+(fib) ;-&#62; 2
+(fib) ;-&#62; 3
+(fib) ;-&#62; 5
+(fib) ;-&#62; 8
+</code></pre>
+<p>Explicit version:</p>
+<pre><code>(context &#39;fib)
+;
+(define (fib:fib)
+  (if (not mem)
+      (set &#39;mem &#39;(0 1)))
+  (last (push (+ (mem -1) (mem -2)) mem -1)))
+;
+(context MAIN)
+;
+(fib) ;-&#62; 1
+(fib) ;-&#62; 2
+(fib) ;-&#62; 3
+(fib) ;-&#62; 5
+(fib) ;-&#62; 8
+</code></pre>
+<h3 id="packaging-data-with-contexts">Packaging data with contexts</h3>
+<p>A context can hold plain data. The default functor gives direct
+access.</p>
+<pre><code>(set &#39;db:db &#39;(a "b" (c d) 1 2 3 x y z))
+;
+(db 0) ;-&#62; a
+(db 1) ;-&#62; "b"
+(db 2 1) ;-&#62; d
+(db -1) ;-&#62; z
+(3 db) ;-&#62; (1 2 3 x y z)
+</code></pre>
+<h3 id="passing-objects-by-reference">Passing objects by reference</h3>
+<p>Passing a context symbol passes the underlying object by
+reference, allowing efficient updates.</p>
+<pre><code>(define (upd data idx expr)
+  (if (not (or (lambda? expr) (primitive? expr)))
+      (setf (data idx) expr)
+      (setf (data idx) (expr $it))))
+;
+(set &#39;db:db &#39;(a "b" (c d) 1 2 3 x y z))
+;
+(upd db 0 99) ;-&#62; a
+db:db ;-&#62; (99 "b" (c d) 1 2 3 x y z)
+;
+(upd db 1 upper-case) ;-&#62; "b"
+db:db ;-&#62; (99 "B" (c d) 1 2 3 x y z)
+;
+(upd db 4 (fn (x) (mul 1.1 x))) ;-&#62; 2.2
+db:db ;-&#62; (99 "B" (c d) 1 2.2 3 x y z)
+</code></pre>
+<p>Simple wrapper:</p>
+<pre><code>(define (pop-last data)
+  (pop data -1))
+;
+(pop-last db) ;-&#62; z
+db:db ;-&#62; (99 "B" (c d) 1 2.2 3 x y)
+</code></pre>
+<hr/>
+<h2 id="local-variables">Local Variables</h2>
+<p>Rebel provides several ways to work with local variables. Looping
+forms such as <code>dolist</code>, <code>dotimes</code>, <code>dostring</code>, <code>doargs</code>, <code>dotree</code>,
+and <code>for</code> automatically create a local loop variable that restores
+its old value after the loop ends.</p>
+<p>Functions like <code>let</code>, <code>letn</code>, <code>local</code>, and <code>letex</code> offer explicit
+control over temporary bindings inside a block. All locals revert
+to their previous values after the block exits.</p>
+<h3 id="locals-in-looping-forms">Locals in looping forms</h3>
+<p>Loop variables are always local to the loop body.</p>
+<pre><code>(dolist (x &#39;(a b c))
+  (println x))
+;
+x ;-&#62; original value restored (or nil if unused)
+</code></pre>
+<h3 id="locals-in-let-and-letn">Locals in let and letn</h3>
+<p><code>let</code> binds variables to values for the duration of its body.</p>
+<pre><code>(define (sum-sq a b)
+  (let ((x (* a a)) (y (* b b)))
+    (+ x y)))
+;
+(sum-sq 3 4) ;-&#62; 25
+</code></pre>
+<p>Alternative syntax (values without inner parentheses):</p>
+<pre><code>(define (sum-sq a b)
+  (let (x (* a a) y (* b b))
+    (+ x y)))
+</code></pre>
+<p><code>letn</code> allows later initializers to use earlier ones.</p>
+<pre><code>(letn ((x 1) (y (+ x 1)))
+  (list x y)) ;-&#62; (1 2)
+</code></pre>
+<h3 id="local">local</h3>
+<p><code>local</code> creates variables initialized to <code>nil</code>.</p>
+<pre><code>(local (a b c)
+  (set &#39;a 10)
+  (set &#39;b 20)
+  (list a b c))
+;-&#62; (10 20 nil)
+</code></pre>
+<h3 id="letex">letex</h3>
+<p><code>letex</code> works like <code>let</code>, but the bound values are expanded into
+the body at macro-expansion time.</p>
+<pre><code>(letex ((x 1) (y &#39;(a b)) (z "hi")) &#39;(x y z))
+;-&#62; (1 (a b) "hi")
+;
+(letex (x 1 y 2 z 3) &#39;(x y z))
+;-&#62; (1 2 3)
+</code></pre>
+<h3 id="unused-parameters-as-locals">Unused parameters as locals</h3>
+<p>Function parameters are optional. Extra ones become local symbols,
+initialized to <code>nil</code>. This creates convenient scratch variables.</p>
+<pre><code>(define (sum-sq a b , x y)
+  (set &#39;x (* a a))
+  (set &#39;y (* b b))
+  (+ x y))
+;
+(sum-sq 3 4) ;-&#62; 25
+</code></pre>
+<p>Note: the comma is only a visual separator; it behaves like a
+normal symbol.</p>
+<h3 id="default-parameter-values">Default parameter values</h3>
+<p>Default values can be assigned in parameter lists.</p>
+<pre><code>(define (foo (a 1) (b 2))
+  (list a b))
+;
+(foo) ;-&#62; (1 2)
+(foo 3) ;-&#62; (3 2)
+(foo 3 4) ;-&#62; (3 4)
+</code></pre>
+<h3 id="args-as-a-local-substitute">args as a local substitute</h3>
+<p><code>args</code> returns the list of arguments not bound by declared
+parameters.</p>
+<pre><code>(define (foo)
+  (args))
+;
+(foo 1 2 3) ;-&#62; (1 2 3)
+</code></pre>
+<pre><code>(define (foo a b)
+  (args))
+;
+(foo 1 2 3 4 5) ;-&#62; (3 4 5)
+</code></pre>
+<p>You can index into <code>(args)</code>:</p>
+<pre><code>(define (foo)
+  (+ (args 0) (args 1)))
+;
+(foo 3 4) ;-&#62; 7
+</code></pre>
+<h3 id="args-and-local-together">args and local together</h3>
+<p>A common idiom: use <code>local</code> to declare names, then bind them using
+<code>args</code> and <code>bind</code>.</p>
+<pre><code>(define-macro (foo)
+  (local (len width height)
+    (bind (args) true)
+    (println "len:" len " width:" width " height:" height)))
+;
+(foo (width 20) (height 30) (len 10))
+;-&#62; len:10 width:20 height:30
+</code></pre>
+<hr/>
+<h2 id="walking-through-lists-and-data">Walking Through Lists and Data</h2>
+<p>Rebel supports both recursive and iterative patterns for walking
+through data. Recursion is expressive but may use more resources.
+Iteration is often faster and lighter. Many built-ins such as
+<code>flat</code> already use recursion internally, so you only need to call
+them instead of writing your own.</p>
+<h3 id="recursion-vs-iteration">Recursion vs iteration</h3>
+<p>Classic recursive functions are clear, but can be slow because
+each call adds overhead and may repeat work.</p>
+<pre><code>; classic recursion
+(define (fib n)
+  (if (&#60; n 2) 1
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+;
+(fib 5) ;-&#62; 8
+</code></pre>
+<p>Iterative patterns use minimal memory and run much faster.</p>
+<pre><code>; iterative version
+(define (fibo n , f)
+  (set &#39;f &#39;(1 0))
+  (dotimes (i n)
+    (push (+ (f 0) (f 1)) f)))
+;
+(fibo 5) ;-&#62; (3 2 1 1 0)
+</code></pre>
+<h3 id="speed-up-with-memoization">Speed-up with memoization</h3>
+<p>Memoization caches results for functions so repeated calls with
+the same arguments become instant. The macro below wraps any
+function and stores its results inside a private context.</p>
+<pre><code>(define-macro (memoize mem func)
+  (set (sym mem mem)
+    (letex (f func c mem)
+      (lambda ()
+        (or (context c (string (args)))
+            (context c (string (args))
+              (apply f (args))))))))
+;
+(define (fib1 n)
+  (if (&#60; n 2) 1
+      (+ (fib1 (- n 1))
+         (fib1 (- n 2)))))
+;
+(memoize fib1-m fib1)
+;
+(time (fib1-m 25)) ;-&#62; 148
+(time (fib1-m 25)) ;-&#62; 0
+</code></pre>
+<p>Recursive functions must be memoized using the raw lambda form.</p>
+<pre><code>(memoize fib2
+  (lambda (n)
+    (if (&#60; n 2) 1
+        (+ (fib2 (- n 1))
+           (fib2 (- n 2))))))
+;
+(time (fib2 100)) ;-&#62; 1
+(fib2 80) ;-&#62; 37889062373143906
+</code></pre>
+<h3 id="walking-a-tree-nested-lists">Walking a tree (nested lists)</h3>
+<p>Rebel can walk nested lists using classic recursion or using
+iteration. The recursive form is direct but slower.</p>
+<pre><code>(set &#39;l &#39;(a b c (d e (f g) h i) j k))
+;
+(define (walk l)
+  (cond ((= l &#39;()) true)
+        ((atom? (first l))
+          (println (first l))
+          (walk (rest l)))
+        (true
+          (walk (first l))
+          (walk (rest l)))))
+;
+(walk l)
+</code></pre>
+<p>A simpler recursive walk:</p>
+<pre><code>(define (walk l)
+  (dolist (x l)
+    (if (list? x)
+        (walk x)
+        (println x))))
+;
+(walk l)
+</code></pre>
+<p>Fast, built-in way:</p>
+<pre><code>(map println (flat l))
+; same as:
+(dolist (x (flat l)) (println x))
+</code></pre>
+<h3 id="walking-a-directory-tree">Walking a directory tree</h3>
+<p>Some structures must be walked recursively because they do not
+exist ahead of time — they are discovered as you go. Directory
+trees are a typical example.</p>
+<pre><code>(define (walk-dir d)
+  (when (directory? d)
+    (dolist (n (directory d))
+      (if (and (directory? (append d "&#47;" n))
+               (!= n ".") (!= n ".."))
+          (walk-dir (append d "&#47;" n))
+          (println (append d "&#47;" n))))))
+;
+(walk-dir "&#47;tmp")
+</code></pre>
+<hr/>
+<h2 id="modifying-and-searching-lists">Modifying and Searching Lists</h2>
+<p>Rebel supports multidimensional indexing on nested lists. Elements
+can be changed destructively using <code>push</code>, <code>pop</code>, <code>setf</code>,
+<code>set-ref</code>, <code>set-ref-all</code>, <code>sort</code>, <code>reverse</code> and others. Non-
+destructive operations include <code>nth</code>, <code>ref</code>, <code>ref-all</code>, <code>first</code>,
+<code>last</code>, <code>rest</code>, etc.</p>
+<p>Indexes may be negative. <code>-1</code> refers to the last element,
+<code>-2</code> to the second from the end, and so on.</p>
+<h3 id="negative-indexing">Negative indexing</h3>
+<pre><code>(set &#39;l &#39;(a b c d))
+;
+(l -1) ;-&#62; d
+(l -2) ;-&#62; c
+(-3 2 l) ;-&#62; (b c)
+;
+(set &#39;s "abcd")
+;
+(s -1) ;-&#62; "d"
+(s -2) ;-&#62; "c"
+(-3 2 s) ;-&#62; "bc"
+</code></pre>
+<h3 id="push-and-pop">push and pop</h3>
+<p><code>push</code> inserts, <code>pop</code> removes. Both modify the list in place.</p>
+<pre><code>(set &#39;l &#39;(b c d e f))
+;
+(push &#39;a l) ;-&#62; (a b c d e f)
+(push &#39;g l -1) ;-&#62; (a b c d e f g)
+(pop l) ;-&#62; a
+(pop l -1) ;-&#62; g
+(pop l -2) ;-&#62; e
+(pop l 1) ;-&#62; c
+;
+l ;-&#62; (b d f)
+</code></pre>
+<p>Nested push&#47;pop via index vector:</p>
+<pre><code>(set &#39;l &#39;(a b (c d (e f) g) h i))
+;
+(push &#39;x l 2 1) ;-&#62; (a b (c x d (e f) g) h i)
+;
+l ;-&#62; (a b (c x d (e f) g) h i)
+(pop l 2 1) ;-&#62; x
+</code></pre>
+<p>Pushing into a sublist accessed by assoc:</p>
+<pre><code>(set &#39;lst &#39;((a 1) (b 2) (c 3) (d)))
+;
+(push 4 (assoc &#39;d lst) -1) ;-&#62; (d 4)
+;
+lst ;-&#62; ((a 1) (b 2) (c 3) (d 4))
+</code></pre>
+<p>Push&#47;pull symmetry via index vector:</p>
+<pre><code>(set &#39;l &#39;(a b (c d (e f) g) h i))
+(set &#39;v &#39;(2 1))
+;
+(push &#39;x l v)
+;
+(ref &#39;x l) ;-&#62; (2 1)
+(pop l v) ;-&#62; x
+</code></pre>
+<h3 id="extend-destructive-append">extend (destructive append)</h3>
+<p><code>extend</code> inserts multiple lists into the target list.</p>
+<pre><code>(set &#39;l &#39;(a b c))
+;
+(extend l &#39;(d e) &#39;(f g))
+;
+l ;-&#62; (a b c d e f g)
+</code></pre>
+<p>Extend at nested place:</p>
+<pre><code>(set &#39;l &#39;(a b "CD" (e f)))
+;
+(extend (l 3) &#39;(g))
+;
+l ;-&#62; (a b "CD" (e f g))
+</code></pre>
+<h3 id="accessing-lists-multidimensional-indexing">Accessing lists (multidimensional indexing)</h3>
+<pre><code>(set &#39;l &#39;(a b (c d (e f) g) h i))
+;
+(nth 2 l) ;-&#62; (c d (e f) g)
+(nth &#39;(2 2 1) l) ;-&#62; f
+(nth &#39;(2 2) l) ;-&#62; (e f)
+;
+(set &#39;v &#39;(2 2 1))
+(nth v l) ;-&#62; f
+;
+(l 2 2 1) ;-&#62; f
+(l 2 2) ;-&#62; (e f)
+;
+(l v) ;-&#62; f
+</code></pre>
+<h3 id="rest-and-slice-via-implicit-indexing">rest and slice via implicit indexing</h3>
+<pre><code>(rest &#39;(a b c d e)) ;-&#62; (b c d e)
+(rest (rest &#39;(a b c d e))) ;-&#62; (c d e)
+;
+(1 &#39;(a b c d e)) ;-&#62; (b c d e)
+(2 &#39;(a b c d e)) ;-&#62; (c d e)
+;
+(-2 &#39;(a b c d e)) ;-&#62; (d e)
+;
+(2 2 &#39;(a b c d e f g)) ;-&#62; (c d)
+(-5 3 &#39;(a b c d e f g)) ;-&#62; (c d e)
+</code></pre>
+<h3 id="selecting-more-elements">Selecting more elements</h3>
+<p><code>select</code> extracts multiple elements in one pass.</p>
+<pre><code>(set &#39;l &#39;(a b c d e f g))
+;
+(select l 1 2 4 -1) ;-&#62; (b c e g)
+;
+(set &#39;v &#39;(1 2 4 -1))
+(select l v) ;-&#62; (b c e g)
+;
+(select l 2 2 1 1) ;-&#62; (c c b b)
+</code></pre>
+<h3 id="filtering-and-differencing">Filtering and differencing</h3>
+<pre><code>(filter (fn (x) (&#60; 5 x)) &#39;(1 6 3 7 8)) ;-&#62; (6 7 8)
+(filter symbol? &#39;(a b 3 c 4 "hi" g)) ;-&#62; (a b c g)
+(difference &#39;(1 3 2 5 5 7) &#39;(3 7)) ;-&#62; (1 2 5)
+;
+(filter (curry &#60; 5) &#39;(1 6 3 7 8)) ;-&#62; (6 7 8)
+</code></pre>
+<h3 id="changing-list-elements">Changing list elements</h3>
+<pre><code>(set &#39;l &#39;(a b (c d (e f) g) h i))
+;
+(setf (l 2 2 1) &#39;x) ;-&#62; x
+l ;-&#62; (a b (c d (e x) g) h i)
+;
+(setf (l 2 2) &#39;z) ;-&#62; z
+l ;-&#62; (a b (c d z g) h i)
+</code></pre>
+<p>Assoc example:</p>
+<pre><code>(set &#39;a &#39;((a 1) (b 2) (c 3)))
+;
+(setf (assoc &#39;b a) &#39;(b 22)) ;-&#62; (b 22)
+a ;-&#62; ((a 1) (b 22) (c 3))
+;
+(setf (lookup &#39;c a) 33) ;-&#62; 33
+a ;-&#62; ((a 1) (b 22) (c 33))
+</code></pre>
+<h3 id="anaphoric-variable-it">Anaphoric variable $it</h3>
+<p><code>$it</code> holds the old element when using <code>setf</code>, <code>replace</code>,
+<code>set-ref</code>, and related operations.</p>
+<pre><code>(set &#39;l &#39;(0 0 0))
+;
+(setf (l 1) (+ $it 1)) ;-&#62; 1
+(setf (l 1) (+ $it 1)) ;-&#62; 2
+(setf (l 1) (+ $it 1)) ;-&#62; 4
+;
+l ;-&#62; (0 3 0)
+</code></pre>
+<h3 id="replace-in-simple-lists">replace in simple lists</h3>
+<pre><code>(set &#39;l &#39;(a b c d e a b c d))
+;
+(replace &#39;b l &#39;B) ;-&#62; (a B c d e a B c d)
+</code></pre>
+<p>Replace with predicate:</p>
+<pre><code>(set &#39;l &#39;(1 4 22 5 6 89 2 3 24))
+;
+(replace 10 l 10 &#60;) ;-&#62; (1 4 10 5 6 10 2 3 10)
+</code></pre>
+<p>Pattern-based replace:</p>
+<pre><code>(set &#39;al &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+;
+(replace &#39;(mary *) al (list &#39;mary (apply + (rest $it))) match)
+;-&#62; ((john 5 6 4) (mary 14) (bob 4 2 7 9) (jane 3))
+</code></pre>
+<p>Sum-up all records:</p>
+<pre><code>(set &#39;al &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+;
+(replace &#39;(*) al (list ($it 0) (apply + (rest $it))) match)
+;-&#62; ((john 15) (mary 14) (bob 22) (jane 3))
+;
+$0 ;-&#62; 4
+</code></pre>
+<p>Replace where elements match pattern <code>(X X)</code>:</p>
+<pre><code>(replace &#39;(X X)
+         &#39;((3 10) (2 5) (4 4) (6 7) (8 8))
+         (list ($it 0) &#39;double ($it 1))
+         unify)
+;-&#62; ((3 10) (2 5) (4 double 4) (6 7) (8 double 8))
+;
+$0 ;-&#62; 2
+</code></pre>
+<h3 id="replace-in-nested-lists-set-ref-set-ref-all">replace in nested lists (set-ref &#47; set-ref-all)</h3>
+<pre><code>(set &#39;d &#39;((mon (ap 20 30) (or 2 4 9)))
+         (tue (ap 5) (or 32 1))))
+;
+(set-ref &#39;mon d &#39;tue)
+;-&#62; ((tue (ap 20 30) (or 2 4 9)) (tue (ap 5) (or 32 1)))
+</code></pre>
+<p>Replace all matches:</p>
+<pre><code>(set &#39;d &#39;((mon (ap 20 30) (or 2 4 9)))
+         (tue (ap 5) (or 32 1))))
+;
+(set-ref-all &#39;ap d "Ap")
+;-&#62; ((mon ("Ap" 20 30) (or 2 4 9))
+;    (tue ("Ap" 5) (or 32 1)))
+</code></pre>
+<p>Complex match example:</p>
+<pre><code>(set &#39;d &#39;((mon (ap 20 30) (or 2 4 9)))
+         (tue (ap 5) (or 32 1))))
+;
+(set-ref-all &#39;(or *) d
+  (list (first $0) (apply + (rest $it)))
+  match)
+;-&#62; ((mon (ap 20 30) (or 15))
+;    (tue (ap 5) (or 33)))
+</code></pre>
+<h3 id="passing-lists-by-reference">Passing lists by reference</h3>
+<p>Using a context lets you pass a list by reference.</p>
+<pre><code>(set &#39;data:data &#39;(a b c d e f g h))
+;
+(define (chg db i val)
+  (setf (db i) val))
+;
+(chg data 3 999) ;-&#62; d
+;
+data:data ;-&#62; (a b c 999 e f g h)
+</code></pre>
+<p>Nested calls preserve references:</p>
+<pre><code>(set &#39;l &#39;(r w j s r b))
+;
+(pop (sort l)) ;-&#62; b
+;
+l ;-&#62; (j r r s w)
+</code></pre>
+<h3 id="variable-expansion-expand-letex">Variable expansion (expand &#47; letex)</h3>
+<p>Symbol expansion replaces names with their values.</p>
+<pre><code>(set &#39;x 2 &#39;a &#39;(d e))
+;
+(expand &#39;(a x (b c x)) &#39;x &#39;a)
+;-&#62; ((d e) 2 (b c 2))
+</code></pre>
+<p>Expansion inside function factories:</p>
+<pre><code>(define (raise-to p)
+  (expand (fn (b) (pow b p)) &#39;p))
+;
+(define sq (raise-to 2))
+(define cb (raise-to 3))
+;
+(sq 5) ;-&#62; 25
+(cb 5) ;-&#62; 125
+</code></pre>
+<p>Association list expansion:</p>
+<pre><code>(expand &#39;(a b c) &#39;((a 1) (b 2))) ;-&#62; (1 2 c)
+(expand &#39;(a b c) &#39;((a 1) (b 2) (c (x y z))))
+;-&#62; (1 2 (x y z))
+</code></pre>
+<p>Evaluate association list before expansion:</p>
+<pre><code>(expand &#39;(a b) &#39;((a (+ 1 2)) (b (+ 3 4)))) ;-&#62; ((+ 1 2) (+ 3 4))
+(expand &#39;(a b) &#39;((a (+ 1 2)) (b (+ 3 4))) true) ;-&#62; (3 7)
+</code></pre>
+<p>Uppercase variable expansion:</p>
+<pre><code>(set &#39;A 1 &#39;Bv 2 &#39;C nil &#39;d 5 &#39;e 6)
+;
+(expand &#39;(A (Bv) C d e f))
+;-&#62; (1 (2) C d e f)
+</code></pre>
+<p>Function factory:</p>
+<pre><code>(define (raise-to P)
+  (expand (fn (b) (pow b P))))
+;
+(define cb (raise-to 3)) ;-&#62; (lambda (b) (pow b 3))
+(cb 4) ;-&#62; 64
+</code></pre>
+<h3 id="letex-for-expansion">letex for expansion</h3>
+<pre><code>(letex ((x 1) (y &#39;(a b c)) (z "hi")) &#39;(x y z))
+;-&#62; (1 (a b c) "hi")
+</code></pre>
+<h3 id="destructuring-nested-lists">Destructuring nested lists</h3>
+<p><code>unify</code> + <code>bind</code> can unpack nested lists into variables.</p>
+<pre><code>(set &#39;s &#39;((one "two") 3 (four (x y z))))
+(set &#39;p &#39;((A B) C (D E)))
+;
+(bind (unify p s))
+;
+A ;-&#62; one
+B ;-&#62; "two"
+C ;-&#62; 3
+D ;-&#62; four
+E ;-&#62; (x y z)
+</code></pre>
+<hr/>
+<h2 id="program-flow">Program Flow</h2>
+<p>Rebel supports functional style as well as looping and branching
+constructs. All loops behave like expressions: the last evaluated
+value becomes the result of the whole loop.</p>
+<h3 id="loops">Loops</h3>
+<p>Loop variables are always local to the loop and follow dynamic
+scoping rules.</p>
+<pre><code>; dotimes: repeat N times, i goes 0..N-1
+(dotimes (i n)
+  ...)
+</code></pre>
+<p>Locality of loop variable:</p>
+<pre><code>(dotimes (i 3)
+  (print i ":")
+  (dotimes (i 3) (print i))
+  (println))
+;-&#62; 0:012
+;-&#62; 1:012
+;-&#62; 2:012
+</code></pre>
+<p>Looping over lists:</p>
+<pre><code>(dolist (x lst)
+  ...)
+</code></pre>
+<p>Looping over strings (character codes):</p>
+<pre><code>(dostring (c s)
+  ...)
+</code></pre>
+<p>Looping over symbols in a context, sorted by name:</p>
+<pre><code>(dotree (sym ctx)
+  ...)
+</code></pre>
+<p>Numeric loop with step:</p>
+<pre><code>(for (i start end step)
+  ...)
+</code></pre>
+<p>Conditional loops:</p>
+<pre><code>(while cond
+  ...)
+;
+(until cond
+  ...)
+;
+(do-while cond
+  ...)
+;
+(do-until cond
+  ...)
+</code></pre>
+<p>Loops with break condition (third argument):</p>
+<pre><code>(dolist (x &#39;(a b c d e f g) (= x &#39;e))
+  (print x))
+;-&#62; abcd
+</code></pre>
+<h3 id="blocks">Blocks</h3>
+<p>Blocks are sequences of expressions evaluated in order. Loops
+implicitly treat their bodies as blocks. For grouping expressions
+inside <code>if</code> or <code>cond</code>, use <code>begin</code>.</p>
+<pre><code>(begin
+  e1
+  e2
+  e3)
+</code></pre>
+<p><code>and</code>, <code>or</code>, <code>let</code>, <code>letn</code> and <code>local</code> also form blocks implicitly,
+so no <code>begin</code> is required.</p>
+<h3 id="branching">Branching</h3>
+<p>Basic conditional:</p>
+<pre><code>(if cond expr-true expr-false)
+</code></pre>
+<p>No false clause:</p>
+<pre><code>(if cond expr)
+</code></pre>
+<p>Unary form:</p>
+<pre><code>(if cond)
+</code></pre>
+<p>Multiple statements must be wrapped:</p>
+<pre><code>(if (= x y)
+  (begin
+    (f1 x)
+    (f2 y))
+  (begin
+    (g1 x y)
+    (g2 x y)))
+</code></pre>
+<p><code>when</code> evaluates several expressions without <code>begin</code>:</p>
+<pre><code>(when cond
+  e1
+  e2)
+</code></pre>
+<p><code>unless</code> is the negated <code>when</code>:</p>
+<pre><code>(unless cond
+  e1
+  e2)
+</code></pre>
+<p>Multi-condition <code>if</code>:</p>
+<pre><code>(if c1 e1
+    c2 e2
+    c3 e3
+    e-default)
+</code></pre>
+<p><code>cond</code> version:</p>
+<pre><code>(cond
+  (c1 e1)
+  (c2 e2)
+  (true e-last))
+</code></pre>
+<h3 id="fuzzy-flow-amb">Fuzzy flow (amb)</h3>
+<p><code>amb</code> chooses one of several expressions at random.</p>
+<pre><code>(amb
+  e1
+  e2
+  e3)
+</code></pre>
+<h3 id="flow-with-catch-and-throw">Flow with catch and throw</h3>
+<p><code>catch</code> wraps a sequence; <code>throw</code> aborts immediately and returns a
+value from the whole block.</p>
+<pre><code>(catch
+  (dotimes (i 10)
+    (if (= i 5) (throw "done"))
+    (print i " ")))
+;
+; output: 0 1 2 3 4
+; return: "done"
+</code></pre>
+<h3 id="leave-loops-with-a-break-condition">Leave loops with a break condition</h3>
+<p><code>dotimes</code>, <code>dolist</code> and <code>for</code> accept a break condition.</p>
+<pre><code>(dotimes (x 10 (&#62; (* x x) 9))
+  (println x))
+;-&#62; 0
+;-&#62; 1
+;-&#62; 2
+;-&#62; 3
+</code></pre>
+<pre><code>(dolist (i &#39;(a b c nil d e) (not i))
+  (println i))
+;-&#62; a
+;-&#62; b
+;-&#62; c
+</code></pre>
+<h3 id="change-flow-with-and-or">Change flow with and &#47; or</h3>
+<p><code>and</code> evaluates each expression until one is nil or empty, then
+returns it.</p>
+<pre><code>(and
+  e1
+  e2
+  e3)
+</code></pre>
+<p><code>or</code> evaluates each expression until one is non-nil and returns
+that value.</p>
+<pre><code>(or
+  e1
+  e2
+  e3)
+</code></pre>
+<hr/>
+<h2 id="error-handling">Error Handling</h2>
+<p>Several conditions during evaluation can trigger error exceptions.
+These include wrong argument types, wrong number of parameters,
+invalid syntax, or calling a non-existent function.</p>
+<h3 id="built-in-errors">Built-in errors</h3>
+<pre><code>; examples of built-in errors
+(foo foo) ;-&#62; invalid function : (foo foo)
+(+ "hi") ;-&#62; value expected in function + : "hi"
+</code></pre>
+<h3 id="user-defined-errors">User-defined errors</h3>
+<p>Users can raise errors explicitly with <code>throw-error</code>.</p>
+<pre><code>(define (double x)
+  (if (= x 99) (throw-error "illegal number"))
+  (+ x x))
+;
+(double 8) ;-&#62; 16
+(double 10) ;-&#62; 20
+(double 99)
+;-&#62; user error : illegal number
+;-&#62; called from user defined function double
+</code></pre>
+<h3 id="error-event-handlers">Error event handlers</h3>
+<p>An error handler can be installed globally with <code>error-event</code>.</p>
+<pre><code>(define (err-handler)
+  (println (last (last-error)) " has occurred"))
+;
+(error-event &#39;err-handler)
+;
+(foo) ;-&#62; ERR: invalid function : (foo) has occurred
+</code></pre>
+<h3 id="catching-errors">Catching errors</h3>
+<p><code>catch</code> with a second parameter captures both built-in and user
+errors without aborting the program.</p>
+<pre><code>(define (double x)
+  (if (= x 99) (throw-error "illegal number"))
+  (+ x x))
+;
+(catch (double 8) &#39;r) ;-&#62; true
+r ;-&#62; 16
+;
+(catch (double 99) &#39;r) ;-&#62; nil
+(print r)
+;-&#62; user error : illegal number
+;-&#62; called from user defined function double
+;
+(catch (double "hi") &#39;r) ;-&#62; nil
+(print r)
+;-&#62; value expected in function + : x
+;-&#62; called from user defined function double
+</code></pre>
+<p>When the call succeeds:</p>
+<ul>
+<li><code>catch</code> → <code>true</code></li>
+<li>result stored in symbol given as 2nd argument</li>
+</ul>
+<p>When it fails:</p>
+<ul>
+<li><code>catch</code> → <code>nil</code></li>
+<li>symbol contains the error message</li>
+</ul>
+<h3 id="operating-system-errors">Operating system errors</h3>
+<p>Some OS-level failures are not captured as Rebel exceptions. They
+can be inspected with <code>sys-error</code>.</p>
+<pre><code>(open "no-file" "r") ;-&#62; nil
+(sys-error) ;-&#62; (2 "No such file or directory")
+;
+; reset errno
+(sys-error 0) ;-&#62; (0 "Unknown error: 0")
+</code></pre>
+<hr/>
+<h2 id="functions-as-data">Functions as Data</h2>
+<p>Functions in Rebel are first-class objects. They can be inspected,
+modified, stored, passed around, and constructed at runtime. A
+function is simply a lambda expression attached to a symbol.</p>
+<h3 id="manipulate-after-definition">Manipulate after definition</h3>
+<pre><code>(define (double x) (+ x x))
+;-&#62; (lambda (x) (+ x x))
+;
+(first double) ;-&#62; (x)
+(last double) ;-&#62; (+ x x)
+;
+; fuzzy double
+(setf (nth 1 double) &#39;(mul (normal x (div x 10)) 2))
+;
+(double 10) ;-&#62; 20.31445313
+(double 10) ;-&#62; 19.60351563
+</code></pre>
+<p><code>lambda</code> is not a symbol but an attribute attached to a list.</p>
+<p>Right-associative append:</p>
+<pre><code>(append (lambda) &#39;((x) (+ x x)))
+;-&#62; (lambda (x) (+ x x))
+;
+(append (fn) &#39;((x) (+ x x)))
+;-&#62; (lambda (x) (+ x x))
+;
+(set &#39;double (append (lambda) &#39;((x) (+ x x))))
+;
+(double 10) ;-&#62; 20
+</code></pre>
+<p>Left-associative cons:</p>
+<pre><code>(cons &#39;(x) (lambda))
+;-&#62; (lambda (x))
+</code></pre>
+<p>Lambda expressions never lose first-class properties. <code>fn</code> is
+a short alias.</p>
+<h3 id="mapping-and-applying">Mapping and applying</h3>
+<pre><code>(define (double x) (+ x x))
+;
+(map double &#39;(1 2 3 4 5)) ;-&#62; (2 4 6 8 10)
+</code></pre>
+<p>Apply a function to list elements:</p>
+<pre><code>(apply + (sequence 1 10)) ;-&#62; 55
+</code></pre>
+<h3 id="functions-making-functions">Functions making functions</h3>
+<p>Using <code>expand</code>:</p>
+<pre><code>(define (raise-to p)
+  (expand (fn (b) (pow b p)) &#39;p))
+;
+(define sq (raise-to 2))
+(define cb (raise-to 3))
+;
+(sq 5) ;-&#62; 25
+(cb 5) ;-&#62; 125
+</code></pre>
+<p>Using <code>letex</code>:</p>
+<pre><code>(define (raise-to p)
+  (letex (x p) (fn (b) (pow b x))))
+</code></pre>
+<p>Currying:</p>
+<pre><code>(define add-one (curry add 1))
+(define by-ten (curry mul 10))
+;
+(add-one 5) ;-&#62; 6
+(by-ten 1.23) ;-&#62; 12.3
+</code></pre>
+<h3 id="functions-with-memory-namespace-state">Functions with memory (namespace state)</h3>
+<pre><code>(define (gen:gen)
+  (inc gen:sum))
+;
+(gen) ;-&#62; 1
+(gen) ;-&#62; 2
+(gen) ;-&#62; 3
+</code></pre>
+<p>Initializer:</p>
+<pre><code>(define (gen:init x)
+  (setq gen:sum x))
+;
+(gen:init 20) ;-&#62; 20
+(gen) ;-&#62; 21
+(gen) ;-&#62; 22
+</code></pre>
+<h3 id="functions-using-self-modifying-code">Functions using self-modifying code</h3>
+<p>Accumulator:</p>
+<pre><code>(define (sum (x 0))
+  (inc 0 x))
+;
+(sum 1) ;-&#62; 1
+(sum 2) ;-&#62; 3
+(sum 100) ;-&#62; 103
+(sum) ;-&#62; 103
+;
+sum ;-&#62; (lambda ((x 0)) (inc 103 x))
+</code></pre>
+<p>Stream factory:</p>
+<pre><code>(define (make-stream lst)
+  (letex (stream lst)
+    (lambda () (pop &#39;stream))))
+;
+(set &#39;l &#39;(a b c d e f g h))
+(define s (make-stream l))
+;
+(s) ;-&#62; a
+(s) ;-&#62; b
+(s) ;-&#62; c
+</code></pre>
+<p>Works for strings too:</p>
+<pre><code>(set &#39;str "abcddefgh")
+(define s (make-stream str))
+;
+(s) ;-&#62; "a"
+(s) ;-&#62; "c"
+</code></pre>
+<hr/>
+<h2 id="text-processing">Text Processing</h2>
+<p>Rebel provides several tools for scanning, tokenizing, modifying
+and constructing strings. Many operations use regular expressions,
+and pattern matches populate the system variables <code>$0</code> to <code>$15</code>.</p>
+<h3 id="regular-expressions-functions-that-use-them">Regular expressions — functions that use them</h3>
+<p>directory       → filter directory entries<br/>
+ends-with       → test string suffix<br/>
+find            → position of a match<br/>
+find-all        → list of all matches<br/>
+parse           → split text at regex separators<br/>
+regex           → full match details, offsets, lengths<br/>
+replace         → replace matches using expressions<br/>
+search          → search patterns in files<br/>
+starts-with     → test string prefix  </p>
+<h3 id="scanning-text-with-replace">Scanning text with replace</h3>
+<p><code>replace</code> is often used as a scanner: the regex describes the
+token, and the replacement expression collects results.</p>
+<pre><code>; tokenize file names from HTML
+(set &#39;page (get-url "http:&#47;&#47;example.org&#47;files&#47;"))
+;
+(replace {&#62;(.*rbl)&#60;} page (first (push $1 links)) 0)
+;
+(dolist (f links)
+  (write-file f (get-url (append "http:&#47;&#47;example.org&#47;files&#47;" f)))
+  (println "-&#62;" f))
+;
+(exit)
+</code></pre>
+<p>Curly braces <code>{…}</code> avoid escape hell inside regex patterns.</p>
+<h3 id="scanning-text-with-find-all">Scanning text with find-all</h3>
+<p>Shorter and clearer: <code>find-all</code> returns all matches directly.</p>
+<pre><code>(set &#39;links (find-all {&#62;(.*rbl)&#60;} page $1))
+</code></pre>
+<p>A transformation can be applied to each match:</p>
+<pre><code>(find-all {(new)(rebel)} "newREBELisNEWREBEL" (append $2 $1) 1)
+;-&#62; ("REBELnew" "REBELNEW")
+</code></pre>
+<h3 id="tokenizing-with-parse">Tokenizing with parse</h3>
+<p>With <code>parse</code>, the regex describes the separators instead of the
+tokens.</p>
+<pre><code>(set &#39;s "1 2,3,4 5, 6 7  8")
+;
+(parse s {,\ *|\ +,*} 0)
+;-&#62; ("1" "2" "3" "4" "5" "6" "7" "8")
+</code></pre>
+<p>Without <code>{}</code>, backslashes would need doubling.</p>
+<h3 id="appending-strings-efficiently">Appending strings efficiently</h3>
+<p><code>append</code> and <code>join</code> are efficient ways to build large strings.</p>
+<pre><code>(set &#39;lst (map string (rand 1000 100)))
+;-&#62; ("976" "329" ... "425")
+;
+; slow method
+(set &#39;big "")
+(dolist (x lst)
+  (set &#39;big (append big x)))
+;
+; faster — 50×
+(apply append lst)
+</code></pre>
+<p>Fastest approach: build a list, then join.</p>
+<pre><code>(join lst) ;-&#62; "976329368692425..."
+(join lst "-") ;-&#62; "976-329-368..."
+</code></pre>
+<h3 id="growing-strings-in-place">Growing strings in place</h3>
+<p>Use <code>extend</code> to append, or <code>push</code> to insert at arbitrary positions.</p>
+<pre><code>; grow in place using extend
+(set &#39;s "")
+(extend s "AB" "CD")
+;
+s ;-&#62; "ABCD"
+</code></pre>
+<p>Extend inside nested structure:</p>
+<pre><code>(set &#39;l &#39;(a b "CD" (e f)))
+;
+(extend (l 2) "E")
+;
+l ;-&#62; (a b "CDE" (e f))
+</code></pre>
+<p>Push into string:</p>
+<pre><code>(set &#39;s "")
+(push "AB" s -1)
+(push "CD" s -1)
+;
+s ;-&#62; "ABCD"
+</code></pre>
+<h3 id="rearranging-characters">Rearranging characters</h3>
+<p><code>select</code> works on strings just like on lists.</p>
+<pre><code>(set &#39;s "eilnpsw")
+(select s &#39;(3 0 -1 2 1 -2 -3))
+;-&#62; "newrebl"
+;
+(select s 3 0 -1 2 1 -2 -3)
+;-&#62; "newrebl"
+</code></pre>
+<h3 id="modifying-strings">Modifying strings</h3>
+<p>Operations that modify strings destructively:</p>
+<p>extend  → append string<br/>
+push&#47;pop → insert&#47;remove chars<br/>
+replace → pattern replacement<br/>
+setf → change one or more characters  </p>
+<p><code>replace</code> with <code>""</code> removes matches.</p>
+<p>UTF-8 is handled at character boundaries (not bytes) when indexing.</p>
+<h3 id="example-destructive-operations">Example destructive operations</h3>
+<pre><code>(set &#39;s "abcdef")
+;
+(setf (s 2) "XY") ; replace char at index 2
+;
+s ;-&#62; "abXYdef"
+</code></pre>
+<hr/>
+<h2 id="dictionaries-and-hashes">Dictionaries and Hashes</h2>
+<p>Rebel allows hash-like key&#47;value access by using the default
+functor of a namespace. A context whose default functor contains
+no value behaves like a hash table. Keys are strings (or numbers
+converted to strings internally). Values may be any expression.</p>
+<h3 id="hash-like-access-using-a-namespace">Hash-like access using a namespace</h3>
+<pre><code>; create namespace and default functor
+(define myhash:myhash)
+;
+; or using a predefined context template
+(new Tree &#39;myhash)
+</code></pre>
+<p>Setting values:</p>
+<pre><code>(myhash "var" 123)
+(myhash "foo" "hello")
+(myhash "bar" &#39;(q w e r t y))
+(myhash "!*@$" &#39;(a b c))
+(myhash 555 42)     ; numeric key converted to string
+</code></pre>
+<p>Retrieving:</p>
+<pre><code>(myhash "var") ;-&#62; 123
+(myhash 555)   ;-&#62; 42
+</code></pre>
+<p>Deleting (set value to nil):</p>
+<pre><code>(myhash "bar" nil)
+</code></pre>
+<h3 id="keys-and-internal-representation">Keys and internal representation</h3>
+<p>Rebel prepends an underscore to keys internally to avoid symbol
+collisions. The user never sees this during normal use.</p>
+<h3 id="convert-hash-to-association-list">Convert hash to association list</h3>
+<pre><code>(myhash)
+;-&#62; (("!*@$" (a b c)) ("foo" "hello") ("var" 123))
+</code></pre>
+<p>Inspect raw symbols:</p>
+<pre><code>(symbols myhash)
+;-&#62; (myhash:myhash myhash:_!*@$ myhash:_foo myhash:_var)
+</code></pre>
+<h3 id="build-a-dictionary-from-an-association-list">Build a dictionary from an association list</h3>
+<pre><code>(set &#39;alist &#39;(("one" 1) ("two" 2) ("three")))
+;
+(myhash alist)
+;
+(myhash)
+;-&#62; (("!*@$" (a b c))
+;    ("foo" "hello")
+;    ("one" 1)
+;    ("three" nil)
+;    ("two" 2)
+;    ("var" 123))
+</code></pre>
+<h3 id="saving-and-loading-dictionaries">Saving and loading dictionaries</h3>
+<p>Use <code>save</code> to serialize a namespace to a file.</p>
+<pre><code>(save "myhash.rbl" &#39;myhash)
+</code></pre>
+<p>Reload later:</p>
+<pre><code>(load "myhash")
+</code></pre>
+<p>Hash namespaces behave similarly to those created by statistical
+training functions: string keys become internal symbols
+(prepended with <code>_</code>). Such namespaces can be accessed using the
+same default-functor mechanism.</p>
+<hr/>
+<h2 id="tcpip-client-server">TCP&#47;IP Client Server</h2>
+<p>Rebel provides simple TCP&#47;IPv4 and IPv6 socket functions. Server
+and client can communicate using blocking send&#47;receive calls.</p>
+<h3 id="open-connection-persistent-session">Open connection (persistent session)</h3>
+<p>The server keeps the connection open until the client closes it,
+then accepts a new one.</p>
+<pre><code>(constant &#39;max-bytes 1024)
+;
+; server listens
+(if (not (set &#39;listen (net-listen 123)))
+    (print (net-error)))
+;
+(while (not (net-error))
+  (set &#39;conn (net-accept listen)) ; blocking accept
+  (while (not (net-error))
+    (net-receive conn msg max-bytes)
+    ; process msg from client
+    ; build reply
+    (net-send conn reply)))
+</code></pre>
+<p>Client:</p>
+<pre><code>; client connects
+(if (not (set &#39;conn (net-connect "host.com" 123)))
+    (println (net-error)))
+;
+(constant &#39;max-bytes 1024)
+;
+(while (not (net-error))
+  ; prepare message
+  (net-send conn out)
+  (net-receive conn inp max-bytes)
+  ; process inp
+  )
+</code></pre>
+<h3 id="closed-transaction-one-request-per-connection">Closed transaction (one request per connection)</h3>
+<p>The server closes the socket after each request&#47;response pair.</p>
+<pre><code>; server
+(constant &#39;max-bytes 1024)
+;
+(while (not (net-error))
+  (set &#39;conn (net-accept listen)) ; blocking
+  (net-receive conn msg max-bytes)
+  ; process msg
+  ; build reply
+  (net-send conn reply)
+  (close conn))
+</code></pre>
+<p>Client reconnects for every request:</p>
+<pre><code>; client
+(unless (set &#39;conn (net-connect "host.com" 123))
+  (println (net-error))
+  (exit))
+;
+(constant &#39;max-bytes 1024)
+;
+; prepare message
+(net-send conn out)
+(net-receive conn inp max-bytes)
+; process inp
+</code></pre>
+<p>These patterns cover the two common modes: persistent sessions and
+single-transaction connections.</p>
+<hr/>
+<h2 id="udp-communications">UDP Communications</h2>
+<p>UDP is fast, lightweight and supports multicast. It offers no
+guarantees about delivery order or completeness, which is fine for
+local networks, telemetry, device control, or custom lightweight
+protocols. Messages are connectionless.</p>
+<h3 id="open-connection-continuous-server">Open connection (continuous server)</h3>
+<p>Both server and client bind sockets with <code>net-listen</code> using the
+&#8220;udp&#8221; option. The server may receive packets from many clients.
+<code>net-send-to</code> extracts the target from the received message.</p>
+<pre><code>; server
+(set &#39;sock (net-listen 10001 "localhost" "udp"))
+(if sock (println "server on port " 10001)
+        (println (net-error)))
+;
+(while (not (net-error))
+  (set &#39;msg (net-receive-from sock 255))
+  (println "-&#62; " msg)
+  (net-send-to
+      (first (parse (nth 1 msg) ":"))
+      (nth 2 msg)
+      (upper-case (first msg))
+      sock))
+;
+(exit)
+</code></pre>
+<p>Client:</p>
+<pre><code>(set &#39;sock (net-listen 10002 "" "udp"))
+(if (not sock) (println (net-error)))
+;
+(while (not (net-error))
+  (print "enter -&#62; ")
+  (net-send-to "127.0.0.1" 10001 (read-line) sock)
+  (net-receive sock buff 255)
+  (println "=&#62; " buff))
+;
+(exit)
+</code></pre>
+<h3 id="closed-transaction">Closed transaction</h3>
+<p>Used for controlling hardware or equipment. No setup, no loop:
+just send&#47;receive datagrams.</p>
+<pre><code>; receive up to 20 bytes
+(net-receive-udp 1001 20)
+;
+; receive with timeout (5 seconds)
+(net-receive-udp 1001 20 5000000)
+;
+; sender
+(net-send-udp "host.com" 1001 "Hello")
+</code></pre>
+<p>Note: Win32 and Unix differ when sender&#47;receiver lengths mismatch.</p>
+<h3 id="multi-cast-communications">Multi-cast communications</h3>
+<p>Server subscribes to a multicast address. Clients send to the same
+multicast group.</p>
+<pre><code>; server
+(net-listen 4096 "226.0.0.1" "multi")
+(net-receive-from 5 20)
+</code></pre>
+<p>Client I:</p>
+<pre><code>(net-connect "226.0.0.1" 4096 "multi")
+(net-send 3 "hello")
+</code></pre>
+<p>Client II:</p>
+<pre><code>(net-connect "" 4096 "multi")
+(net-send-to "226.0.0.1" 4096 "hello" 3)
+</code></pre>
+<p><code>net-receive-from</code> blocks. To avoid blocking, use <code>net-select</code> or
+<code>net-peek</code>.</p>
+<hr/>
+<h2 id="non-blocking-communications">Non-blocking Communications</h2>
+<p>By default, receive operations block until data arrives. Rebel
+provides <code>net-select</code> and <code>net-peek</code> to avoid blocking and allow
+polling loops or background work while waiting.</p>
+<h3 id="using-net-select">Using net-select</h3>
+<p><code>net-select</code> checks if data is available on a socket (or multiple
+sockets). It can wait with a timeout in microseconds.</p>
+<pre><code>; poll for data with 100ms timeout
+(while (not (net-select conn "r" 100000))
+  (do-something-while-waiting ...))
+;
+(net-receive conn msg 255)
+</code></pre>
+<p><code>conn</code> may be a socket number or a list of sockets to watch.</p>
+<h3 id="using-net-peek">Using net-peek</h3>
+<p><code>net-peek</code> returns the number of bytes waiting to be read. Zero
+means no data yet.</p>
+<pre><code>(while (= (net-peek sock) 0)
+  (do-something-while-waiting ...))
+;
+(net-receive sock msg 255)
+</code></pre>
+<hr/>
+<h2 id="controlling-other-applications">Controlling Other Applications</h2>
+<p>Rebel can launch external programs and communicate with them
+through STDIO pipes, TCP&#47;IP, UDP, or named FIFOs. For simple
+one-shot commands, <code>exec</code> is enough. For longer sessions, use
+<code>process</code> together with pipes or sockets.</p>
+<h3 id="using-exec-simple-one-command-exchange">Using exec (simple, one-command exchange)</h3>
+<pre><code>(exec "ls *.c")
+;-&#62; ("foo.c" "bar.c" "net.c" "unix.c" ...)
+</code></pre>
+<p><code>exec</code> starts a process, reads its STDOUT into a list of strings
+and returns it. This is good for short interactions.</p>
+<h3 id="std-io-pipes-long-running-bidirectional">STD I&#47;O pipes (long-running, bidirectional)</h3>
+<p><code>process</code> allows you to provide separate pipes for STDIN and
+STDOUT of the child process.</p>
+<pre><code>; setup communication
+(map set &#39;(myin tcout) (pipe))
+(map set &#39;(tcin myout) (pipe))
+(process "&#47;usr&#47;bin&#47;wish" tcin tcout)
+;
+; send GUI script
+(write myout
+[text]
+wm geometry . 250x90
+wm title . "Tcl&#47;Tk + Rebel"
+bind . &#60;Destroy&#62; {puts {(exit)}}
+[&#47;text])
+;
+; event loop
+(while (read-line myin)
+  (eval-string (current-line)))
+</code></pre>
+<p>This technique works for any interpreter or CLI program that uses
+STDIN&#47;STDOUT.</p>
+<h3 id="communicate-via-tcpip">Communicate via TCP&#47;IP</h3>
+<p>Example pattern for driving a GTK-server over TCP.</p>
+<pre><code>(define (gtk s , tmp)
+  (net-send conn s)
+  (net-receive conn tmp 64)
+  tmp)
+;
+(process "gtk-server tcp localhost:50000")
+(sleep 1000)
+;
+(set &#39;conn (net-connect "localhost" 50000))
+;
+(set &#39;r (gtk "gtk_init NULL NULL"))
+(set &#39;r (gtk "gtk_window_new 0"))
+; ...
+</code></pre>
+<h3 id="communicate-via-named-fifo">Communicate via named FIFO</h3>
+<p>A FIFO behaves like a file. The client writes into it, then reads a
+response.</p>
+<pre><code>(exec "mkfifo myfifo")
+; or using libc directly:
+(import "&#47;lib&#47;libc.so.6" "mkfifo")
+(mkfifo "&#47;tmp&#47;myfifo" 0777)
+;
+(define (gtk s)
+  (set &#39;h (open "myfifo" "write"))
+  (write h s)
+  (close h)
+  ;
+  (set &#39;h (open "myfifo" "read"))
+  (read h tmp 20)
+  (close h)
+  tmp)
+</code></pre>
+<h3 id="communicate-via-udp">Communicate via UDP</h3>
+<p>UDP does not create a connection; it only binds a port and sends
+datagrams.</p>
+<pre><code>(define (gtk s , tmp)
+  (net-send-to "localhost" 50000 s sock)
+  (net-receive sock &#39;tmp net-buffer)
+  tmp)
+;
+(define (start)
+  (process "gtk-server udp localhost:50000")
+  (sleep 500)
+  (set &#39;sock (net-listen 50001 "localhost" "udp")))
+;
+(set &#39;r (gtk "gtk_init NULL NULL"))
+(set &#39;r (gtk "gtk_window_new 0"))
+; ...
+</code></pre>
+<hr/>
+<h2 id="launching-apps-blocking">Launching Apps (Blocking)</h2>
+<p>Rebel can run external commands in blocking mode. This is useful
+for quick shell escapes or running tools that do not require
+interactive communication.</p>
+<h3 id="shell-execution">Shell execution</h3>
+<p>The <code>!</code> form executes a command through the system shell and
+blocks until it finishes.</p>
+<pre><code>(! "ls -ltr")
+</code></pre>
+<p>A variant works only on the Rebel command line: the <code>!</code> must be
+the first character.</p>
+<pre><code>!ls -ltr
+</code></pre>
+<p>This acts like a shell escape (similar to editors like vi). It is
+useful for invoking tools without leaving the REPL entirely.</p>
+<h3 id="capturing-stdout">Capturing STDOUT</h3>
+<p>Use <code>exec</code> to run a command and capture its output into a list of
+strings.</p>
+<pre><code>(exec "ls &#47;")
+;-&#62; ("bin" "etc" "home" "lib")
+</code></pre>
+<h3 id="feeding-stdin">Feeding STDIN</h3>
+<p><code>exec</code> can also send input to a command’s STDIN:</p>
+<pre><code>(exec "script.cgi" cgi-in)
+</code></pre>
+<p><code>cgi-in</code> is a string that becomes the STDIN for the executed
+program.</p>
+<p>Note: in this form, the output is printed directly to the screen
+and cannot be captured. For bidirectional STDIN&#47;STDOUT, use
+<code>process</code> with <code>pipe</code>.</p>
+<hr/>
+<h2 id="semaphores-and-shared-memory">Semaphores and Shared Memory</h2>
+<p>Semaphores and shared memory allow separate processes to
+synchronize and exchange data without sockets or files. One
+process can act as a producer writing data into shared memory,
+while another acts as a consumer waiting for it.</p>
+<p>This technique is very fast but also error-prone when more than
+two processes interact. For larger systems, see the Cilk and
+messaging patterns in later chapters.</p>
+<h3 id="producerconsumer-example">Producer–consumer example</h3>
+<p>Two child processes are created: one produces values, the other
+consumes them. A shared memory cell holds the current value.
+Two semaphores coordinate access.</p>
+<pre><code>(constant &#39;wait -1 &#39;sig 1 &#39;release 0)
+;
+(define (consumer n)
+  (set &#39;i 0)
+  (while (&#60; i n)
+    (semaphore cons-sem wait)
+    (println (set &#39;i (share data)) " &#60;-")
+    (semaphore prod-sem sig))
+  (exit))
+;
+(define (producer n)
+  (for (i 1 n)
+    (semaphore prod-sem wait)
+    (println "-&#62; " (share data i))
+    (semaphore cons-sem sig))
+  (exit))
+;
+(define (run n)
+  (set &#39;data (share))
+  (share data 0)
+  ;
+  (set &#39;prod-sem (semaphore))
+  (set &#39;cons-sem (semaphore))
+  ;
+  (set &#39;prod-pid (fork (producer n)))
+  (set &#39;cons-pid (fork (consumer n)))
+  ;
+  (semaphore prod-sem sig)
+  (wait-pid prod-pid)
+  (wait-pid cons-pid)
+  ;
+  (semaphore cons-sem release)
+  (semaphore prod-sem release))
+;
+(run 10)
+(exit)
+</code></pre>
+<hr/>
+<h2 id="message-exchange">Message Exchange</h2>
+<p>Processes launched with <code>spawn</code> can exchange messages: parent → child,
+child → parent, or child → child routed cez parent. Each spawned
+process has two internal queues (in&#47;out). When a receive queue is
+empty, <code>receive</code> returns nil. When a send queue is full, <code>send</code>
+returns nil. Using <code>until</code> makes these operations blocking.</p>
+<h3 id="blocking-send-receive">Blocking send &#47; receive</h3>
+<pre><code>; blocking sender
+(until (send pid msg))
+;
+; blocking receiver
+(until (receive pid msg))
+</code></pre>
+<h3 id="blocking-message-exchange">Blocking message exchange</h3>
+<p>Parent starts child processes, then waits for input from each child.
+<code>sync</code> returns list of child PIDs with pending messages.</p>
+<pre><code>; child sends random numbers
+(define (child-proc)
+  (set &#39;pp (sys-info -4))
+  (while true
+    (until (send pp (rand 100)))))
+;
+; parent starts 5 children
+(dotimes (i 5)
+  (spawn &#39;r (child-proc) true))
+;
+(for (i 1 3)
+  (dolist (cpid (sync))
+    (until (receive cpid msg))
+    (print "pid:" cpid "-&#62;&#62;" (format "%-2d  " msg)))
+  (println))
+;
+(abort)
+(exit)
+</code></pre>
+<h3 id="non-blocking-message-exchange">Non-blocking message exchange</h3>
+<p>Messages are sent and received as fast as possible. Not all messages
+are guaranteed to arrive (queues may overflow).</p>
+<pre><code>(set &#39;start (time-of-day))
+;
+(define (child-proc)
+  (set &#39;pp (sys-info -4))
+  (while true
+    (send pp (rand 100))))
+;
+(dotimes (i 5)
+  (spawn &#39;r (child-proc) true))
+;
+(set &#39;n 1000)
+;
+(until fin
+  (if (= (inc cnt) n) (set &#39;fin true))
+  (dolist (cpid (receive))
+    (receive cpid msg)
+    (if msg (print "pid:" cpid "-&#62;" (format "%-2d  \r" msg)))))
+;
+(abort)
+(sleep 300)
+(exit)
+</code></pre>
+<h3 id="message-timeouts">Message timeouts</h3>
+<p>Blocking receive can be given a timeout limit.</p>
+<pre><code>(define (recv-timeout pid msec)
+  (let ((start (time-of-day)) (msg nil))
+    (until (receive pid msg)
+      (if (&#62; (- (time-of-day) start) msec)
+          (throw-error "timeout")))
+    msg))
+;
+(recv-timeout pid 1000)
+</code></pre>
+<h3 id="evaluating-messages">Evaluating messages</h3>
+<p>Messages can contain expressions evaluated by the receiver. This
+allows routing messages or modifying state in another process.</p>
+<p>Router example: child A sends expressions to parent; parent evaluates
+them and relays messages to child B.</p>
+<pre><code>; sender child A
+(set &#39;A
+  (spawn &#39;r
+    (begin
+      (dotimes (i 3)
+        (set &#39;pp (sys-info -4))
+        (set &#39;msg
+             &#39;(until (send B (string "greetings from " A))))
+        (until (send pp msg)))
+      (until (send pp
+        &#39;(begin
+           (sleep 200)
+           (println "parent exiting ...\n")
+           (set &#39;fin true)))))
+    true))
+;
+; receiver child B
+(set &#39;B
+  (spawn &#39;r
+    (begin
+      (set &#39;pp (sys-info -4))
+      (while true
+        (until (receive pp msg))
+        (println msg)
+        (unless (= msg (string "greetings from " A))
+          (println "ERROR: " msg))))
+    true))
+;
+; proxy loop in parent
+(until fin
+  (if (receive A msg)
+      (eval msg)))
+;
+(abort)
+(exit)
+</code></pre>
+<h3 id="acting-as-a-proxy">Acting as a proxy</h3>
+<p>Child A sends:</p>
+<pre><code>(until (send B (string "greetings from " A)))
+</code></pre>
+<p>The parent evaluates this expression and forwards the message to B.</p>
+<p>Child A can also signal the parent to stop:</p>
+<pre><code>(until (send pp &#39;(set &#39;fin true)))
+</code></pre>
+<p>The parent evaluates <code>set</code> and terminates its message loop.</p>
+<p>The short sleep in A ensures output appears in correct order.</p>
+<h2 id="section"></h2>
+<h2 id="databases-and-lookup-tables">Databases and Lookup Tables</h2>
+<p>For tables up to a few hundred records, association lists are
+simple and fast. For larger datasets, use dictionaries and hashes
+(see chapter 11).</p>
+<h3 id="association-lists">Association lists</h3>
+<p>Association lists map a key to a record. Pushing at index <code>-1</code>
+is optimized.</p>
+<pre><code>(push &#39;("John Doe" "123-5555" 1200.00) persons -1)
+(push &#39;("Jane Doe" "456-7777" 2000.00) persons -1)
+;
+persons
+;-&#62; (("John Doe" "123-5555" 1200.00)
+;    ("Jane Doe" "456-7777" 2000.00))
+</code></pre>
+<p>Lookup with <code>assoc</code>:</p>
+<pre><code>(assoc "John Doe" persons)
+;-&#62; ("John Doe" "123-5555" 1200.00 male)
+;
+(assoc "Jane Doe" persons)
+;-&#62; ("Jane Doe" "456-7777" 2000.00 female)
+</code></pre>
+<p><code>lookup</code> combines <code>assoc</code> + positional extraction:</p>
+<pre><code>(lookup "John Doe" persons 0)   ;-&#62; "123-5555"
+(lookup "John Doe" persons -1)  ;-&#62; male
+(lookup "Jane Doe" persons 1)   ;-&#62; 2000.00
+(lookup "Jane Doe" persons -2)  ;-&#62; 2000.00
+</code></pre>
+<p>Updating a record:</p>
+<pre><code>(setf (assoc "John Doe" persons)
+      &#39;("John Doe" "123-5555" 900.00 male))
+;
+(setf (assoc "John Doe" persons) (update-person $it))
+</code></pre>
+<p>Deleting:</p>
+<pre><code>(replace (assoc "John Doe" persons) persons)
+</code></pre>
+<h3 id="nested-associations">Nested associations</h3>
+<p>Values inside associations can themselves be association lists.</p>
+<pre><code>(set &#39;persons
+  &#39;(
+    ("Anne" (address (country "USA")   (city "New York")))
+    ("Jean" (address (country "France") (city "Paris")))
+  ))
+</code></pre>
+<p><code>assoc</code> can take a vector of keys:</p>
+<pre><code>; one key
+(assoc "Anne" persons)
+;-&#62; ("Anne" (address (country "USA") (city "New York")))
+;
+; two keys
+(assoc &#39;("Anne" address) persons)
+;-&#62; (address (country "USA") (city "New York")))
+;
+; three keys
+(assoc &#39;("Anne" address city) persons)
+;-&#62; (city "New York")
+;
+(set &#39;anne-city &#39;("Anne" address city))
+(assoc anne-city persons)
+;-&#62; (city "New York")
+</code></pre>
+<h3 id="updating-nested-associations">Updating nested associations</h3>
+<p>Use <code>setf</code> + <code>assoc</code> with multiple keys:</p>
+<pre><code>(setf (assoc &#39;("Anne" address city) persons)
+      &#39;(city "Boston"))
+;-&#62; (city "New York")
+</code></pre>
+<p><code>setf</code> always returns the previous value.</p>
+<h3 id="combining-associations-and-hashes">Combining associations and hashes</h3>
+<p>Hashes and FOOP objects can form an in-memory structured database.</p>
+<pre><code>(new Tree &#39;person)
+(new Class &#39;address)
+(new Class &#39;city)
+(new Class &#39;telephone)
+;
+(person "John Doe"
+  (address
+    (city "Small Town")
+    (telephone 5551234)))
+;
+(lookup &#39;telephone (person "John Doe"))
+;-&#62; 5551234
+;
+(setf (lookup &#39;telephone (person "John Doe")) 1234567)
+(setf (lookup &#39;city (person "John Doe")) (lower-case $it))
+;
+(person "John Doe")
+;-&#62; (address (city "small town") (telephone 1234567))
+</code></pre>
+<hr/>
+<h2 id="distributed-computing">Distributed Computing</h2>
+<p>Rebel can distribute work across multiple machines or processes.
+Remote expressions are evaluated using <code>net-eval</code>, which sends
+code to remote nodes and collects results in blocking or callback
+mode. Remote files can be accessed through HTTP-style URLs.</p>
+<h3 id="running-a-server-node">Running a server node</h3>
+<p>A Rebel server is simply a Rebel process listening on a TCP port
+and acting like a REPL plus minimal HTTP handler.</p>
+<p>Start a stateful server:</p>
+<pre><code>rebel -c -d 4711 &#38;
+;
+rebel myprog.rbl -c -d 4711 &#38;
+;
+rebel myprog.rbl -c -w &#47;home&#47;node25 -d 4711 &#38;
+</code></pre>
+<p><code>-c</code> removes prompts, <code>-d</code> sets the port, <code>-w</code> sets the working
+directory. After every closed connection Rebel resets its stack and
+returns to MAIN, but keeps program and variable data.</p>
+<h3 id="stateless-servers-via-inetd-or-xinetd">Stateless servers via inetd or xinetd</h3>
+<p>On Unix, inetd&#47;xinetd can launch a fresh Rebel process for each
+connection.</p>
+<p>Add to <code>&#47;etc&#47;services</code>:</p>
+<pre><code>net-eval 4711&#47;tcp
+</code></pre>
+<p>Add to <code>&#47;etc&#47;inetd.conf</code>:</p>
+<pre><code>net-eval stream tcp nowait rebel &#47;usr&#47;bin&#47;rebel -c
+;
+net-eval stream tcp nowait rebel &#47;usr&#47;bin&#47;rebel myprog.rbl -c
+;
+net-eval stream tcp nowait rebel &#47;usr&#47;bin&#47;rebel -c -w &#47;home&#47;node
+</code></pre>
+<p>xinetd example (<code>&#47;etc&#47;xinet.d&#47;net-eval</code>):</p>
+<pre><code>service net-eval
+{
+ socket_type = stream
+ wait = no
+ user = rebel
+ server = &#47;usr&#47;bin&#47;rebel
+ port = 4711
+ server_args = -c -w &#47;home&#47;node
+}
+</code></pre>
+<h3 id="testing-the-server-using-telnet">Testing the server using telnet</h3>
+<pre><code>telnet localhost 4711
+;
+telnet 192.168.1.100 4711
+</code></pre>
+<p>Multiline expressions must be enclosed in <code>[cmd]</code> and <code>[&#47;cmd]</code>.</p>
+<pre><code>[cmd]
+(+ 3 4)
+[&#47;cmd]
+</code></pre>
+<h3 id="testing-with-netcat">Testing with netcat</h3>
+<pre><code>echo &#39;(symbols) (exit)&#39; | nc localhost 4711
+;
+echo &#39;(symbols) (exit)&#39; | nc 192.168.1.100 4711
+</code></pre>
+<h3 id="testing-from-rebel-with-net-eval">Testing from Rebel with net-eval</h3>
+<pre><code>(net-eval "localhost" 4711 "(+ 3 4)" 1000)
+;-&#62; 7
+;
+(net-eval "192.168.1.100" 4711 {(upper-case "hello")} 1000)
+;-&#62; "HELLO"
+</code></pre>
+<p>Multiline content is automatically wrapped.</p>
+<h3 id="http-testing-with-a-browser">HTTP testing with a browser</h3>
+<pre><code>http:&#47;&#47;localhost:4711&#47;&#47;usr&#47;share&#47;rebel&#47;manual.html
+</code></pre>
+<p>The double slash means a file path relative to root on the server.</p>
+<h3 id="remote-evaluation">Remote evaluation</h3>
+<pre><code>(set &#39;res
+  (net-eval &#39;(
+    ("192.168.1.100" 4711 {(+ 3 4)})
+    ("192.168.1.101" 4711 {(+ 5 6)})
+    ("192.168.1.102" 4711 {(+ 7 8)})
+    ("192.168.1.103" 4711 {(+ 9 10)})
+    ("192.168.1.104" 4711 {(+ 11 12)})
+  ) 1000))
+;
+(println "result: " res)
+(exit)
+</code></pre>
+<p>Typical output:</p>
+<pre><code>result: (7 11 15 19 23)
+</code></pre>
+<h3 id="remote-evaluation-with-callbacks">Remote evaluation with callbacks</h3>
+<pre><code>(define (idle-loop p)
+  (if p (println p)))
+;
+(net-eval &#39;(
+  ("192.168.1.100" 4711 {(+ 3 4)})
+  ("192.168.1.101" 4711 {(+ 5 6)})
+  ("192.168.1.102" 4711 {(+ 7 8)})
+  ("192.168.1.103" 4711 {(+ 9 10)})
+  ("192.168.1.104" 4711 {(+ 11 12)})
+) 1000 idle-loop)
+(exit)
+</code></pre>
+<p>Callback output:</p>
+<pre><code>("192.168.1.100" 4711 7)
+("192.168.1.101" 4711 11)
+("192.168.1.102" 4711 15)
+("192.168.1.103" 4711 19)
+("192.168.1.104" 4711 23)
+</code></pre>
+<h3 id="dynamic-net-eval-parameter-setup">Dynamic net-eval parameter setup</h3>
+<p>Define node list:</p>
+<pre><code>(set &#39;nodes &#39;(
+  ("192.168.1.100" 4711)
+  ("192.168.1.101" 4711)
+  ("192.168.1.102" 4711)
+  ("192.168.1.103" 4711)
+  ("192.168.1.104" 4711)
+))
+</code></pre>
+<p>Program template:</p>
+<pre><code>(set &#39;program [text]
+(begin
+  (map set &#39;(from to node) &#39;(%d %d %d))
+  (for (x from to)
+    (if (= 1 (length (factor x)))
+        (push x primes -1)))
+primes)
+[&#47;text])
+</code></pre>
+<p>Callback:</p>
+<pre><code>(define (idle-loop p)
+  (when p
+    (println (p 0) ":" (p 1))
+    (push (p 2) primes)))
+</code></pre>
+<p>Sending tasks:</p>
+<pre><code>(set &#39;result
+  (net-eval (list
+    (list (nodes 0 0) (nodes 0 1) (format program 0     99999  1))
+    (list (nodes 1 0) (nodes 1 1) (format program 100000 199999 2))
+    (list (nodes 2 0) (nodes 2 1) (format program 200000 299999 3))
+    (list (nodes 3 0) (nodes 3 1) (format program 300000 399999 4))
+    (list (nodes 4 0) (nodes 4 1) (format program 400000 499999 5))
+  ) 20000 idle-loop))
+;
+(set &#39;primes (sort (flat primes)))
+(save "primes" &#39;primes)
+(exit)
+</code></pre>
+<h3 id="file-transfer-using-http-urls">File transfer using HTTP URLs</h3>
+<pre><code>(write-file  "http:&#47;&#47;127.0.0.1:4711&#47;&#47;home&#47;node&#47;file.txt" "msg-")
+;-&#62; "14 bytes transferred ..."
+;
+(append-file "http:&#47;&#47;127.0.0.1:4711&#47;&#47;home&#47;node&#47;file.txt" "more")
+;-&#62; "9 bytes transferred ..."
+;
+(read-file   "http:&#47;&#47;127.0.0.1:4711&#47;&#47;home&#47;node&#47;file.txt")
+;-&#62; "msg-more"
+</code></pre>
+<p>Errors:</p>
+<pre><code>(read-file "http:&#47;&#47;127.0.0.1:4711&#47;&#47;home&#47;node&#47;no.txt")
+;-&#62; "ERR:404 File not found ..."
+</code></pre>
+<h3 id="remote-loadsave">Remote load&#47;save</h3>
+<pre><code>(load "http:&#47;&#47;192.168.1.2:4711&#47;&#47;usr&#47;share&#47;rebel&#47;mysql5.rbl")
+(save "http:&#47;&#47;192.168.1.2:4711&#47;&#47;home&#47;rebel&#47;db.rbl" &#39;db)
+</code></pre>
+<h3 id="local-domain-sockets">Local domain sockets</h3>
+<p>Rebel supports local Unix domain sockets for fast IPC on the same
+machine using:</p>
+<ul>
+<li>net-eval<br/></li>
+<li>net-listen<br/></li>
+<li>net-connect<br/></li>
+<li>net-accept<br/></li>
+<li>net-receive<br/></li>
+<li>net-select<br/></li>
+<li>net-send<br/></li>
+</ul>
+<hr/>
+<h2 id="httpd-web-server-only-mode">HTTPD Web Server Only Mode</h2>
+<p>Rebel normally uses <code>-c</code> mode for combined net-eval and HTTP
+serving. In contrast, <code>-http</code> mode accepts only HTTP requests and
+ignores command-line and net-eval traffic. This mode is suitable
+for exposing Rebel as a minimal web server, but it must be secured
+carefully by restricting accessible paths.</p>
+<h3 id="environment-variables">Environment variables</h3>
+<p>In both <code>-c</code> and <code>-http</code> modes, the following variables are set:</p>
+<p>DOCUMENT_ROOT<br/>
+REQUEST_METHOD<br/>
+SERVER_SOFTWARE<br/>
+QUERY_STRING  </p>
+<p>If supplied by the client, the server also sets:</p>
+<p>CONTENT_TYPE<br/>
+CONTENT_LENGTH<br/>
+HTTP_HOST<br/>
+HTTP_USER_AGENT<br/>
+HTTP_COOKIE  </p>
+<h3 id="pre-processing-incoming-requests">Pre-processing incoming requests</h3>
+<p><code>command-event</code> allows rewriting or filtering incoming requests
+before Rebel evaluates them. A startup file can be used to install
+the handler.</p>
+<p>Example xinetd entry:</p>
+<pre><code>server_args = httpd-conf.rbl -http -w &#47;home&#47;node
+</code></pre>
+<p>Shell start:</p>
+<pre><code>rebel httpd-conf.rbl -http -d 80 -w &#47;home&#47;www &#38;
+</code></pre>
+<p>Example request filter (<code>httpd-conf.rbl</code>):</p>
+<pre><code>; filter and translate HTTP requests
+(command-event
+  (fn (s)
+    (let (req nil)
+      (if (find "?" s)
+        (begin
+          (set &#39;req (first (parse s "?")))
+          (if (ends-with req ".exe")
+              (set &#39;req "GET &#47;errorpage.html")
+              (set &#39;req s)))
+        (set &#39;req s))
+      req)))
+;
+</code></pre>
+<p>Any CGI request ending in <code>.exe</code> is rejected and redirected.</p>
+<h3 id="cgi-processing-in-http-mode">CGI processing in HTTP mode</h3>
+<p>CGI programs must end with <code>.cgi</code> and be executable.</p>
+<p>Minimal CGI:</p>
+<pre><code>#!&#47;usr&#47;bin&#47;rebel
+(print "Content-type: text&#47;html\r\n\r\n")
+(println "&#60;h2&#62;Hello World&#60;&#47;h2&#62;")
+(exit)
+;
+</code></pre>
+<p>If a CGI script starts its output with <code>"Status:"</code>, the default
+HTTP header is suppressed and the script must supply all headers.</p>
+<p>Redirect example:</p>
+<pre><code>#!&#47;usr&#47;bin&#47;rebel
+(print "Status: 301 Moved Permanently\r\n")
+(print "Location: http:&#47;&#47;example.org&#47;index.cgi\r\n\r\n")
+(exit)
+;
+</code></pre>
+<p>A CGI helper module (cgi.rbl) typically provides routines for GET
+and POST parsing, cookie access, etc.</p>
+<h3 id="media-types-in-http-modes">Media types in HTTP modes</h3>
+<p>In both <code>-c</code> and <code>-http</code>, Rebel chooses media types based on file
+extension:</p>
+<p>.avi       video&#47;x-msvideo<br/>
+.css       text&#47;css<br/>
+.gif       image&#47;gif<br/>
+.htm       text&#47;htm<br/>
+.html      text&#47;html<br/>
+.jpg       image&#47;jpg<br/>
+.js        application&#47;javascript<br/>
+.mov       video&#47;quicktime<br/>
+.mp3       audio&#47;mpeg<br/>
+.mpg       video&#47;mpeg<br/>
+.pdf       application&#47;pdf<br/>
+.png       image&#47;png<br/>
+.wav       audio&#47;x-wav<br/>
+.zip       application&#47;zip<br/>
+default    text&#47;plain  </p>
+<hr/>
+<h2 id="23.-extending-rebel">23. Extending Rebel</h2>
+<h3 id="ffi-quickstart">FFI Quickstart</h3>
+<p>This is the fastest way to understand Rebel’s FFI.<br/>
+Write a small C function, build a <code>.so</code>, import it, call it.</p>
+<p>C code:</p>
+<pre><code>int add2(int x) {
+  return x + 2;
+}
+</code></pre>
+<p>Compile:</p>
+<pre><code>cc -fPIC -shared -o add2.so add2.c
+</code></pre>
+<p>Rebel:</p>
+<pre><code>(import ".&#47;add2.so" "add2")
+(add2 40) ;-&#62; 42
+</code></pre>
+<p>That’s it.<br/>
+No wrappers, no config files, no type descriptions, no build system.<br/>
+You pass raw values, C receives them exactly, and returns exactly what it wants.</p>
+<hr/>
+<h2 id="full-ffi-reference">Full FFI Reference</h2>
+<p>Rebel’s FFI is intentionally low-level and predictable.<br/>
+Nothing is wrapped, nothing is abstracted, and nothing is hidden.<br/>
+You pass raw pointers, buffers, integers, and strings.<br/>
+C sees exactly what you send, and you get exactly what C returns.</p>
+<p>There is no marshalling layer.<br/>
+No automatic memory management.<br/>
+No type negotiation.<br/>
+No runtime safety net.</p>
+<p>If you pass a bad pointer, the process dies.<br/>
+If you follow the ABI, the call is as fast as calling C from C.</p>
+<p>The benefit: Rebel can be extended with C libraries in minutes, without
+tooling, without glue code, and without foreign type systems.<br/>
+You control everything.</p>
+<hr/>
+<h3 id="building-a-shared-library">Building a shared library</h3>
+<p>Example C file:</p>
+<pre><code>#include &#60;stdio.h&#62;
+#include &#60;ctype.h&#62;
+
+int foo1(char *ptr, int n) {
+  printf("str:%s n:%d\n", ptr, n);
+  return n * 10;
+}
+
+char *foo2(char *ptr, int n) {
+  char *p = ptr;
+  while (*p) { *p = toupper(*p); p++; }
+  return ptr;
+}
+</code></pre>
+<p>Build:</p>
+<pre><code>cc -fPIC -shared -o testlib.so testlib.c
+</code></pre>
+<hr/>
+<h3 id="importing-symbols">Importing symbols</h3>
+<pre><code>(import ".&#47;testlib.so" "foo1")
+(import ".&#47;testlib.so" "foo2")
+(foo1 "abc" 3) ;-&#62; prints + returns 30
+(set &#39;p (foo2 "hello" 1))
+(get-string p) ;-&#62; "HELLO"
+</code></pre>
+<hr/>
+<h3 id="passing-arguments">Passing arguments</h3>
+<p>Rebel can pass integers, floats (wrapped in <code>flt</code>), strings, and binary
+buffers using <code>pack</code>.</p>
+<ul>
+<li>integer<br/>
+<ul>
+<li><code>(foo 123)</code><br/></li>
+<li><code>foo(int x)</code></li>
+</ul></li>
+<li>double<br/>
+<ul>
+<li><code>(foo 1.23)</code><br/></li>
+<li><code>foo(double x)</code></li>
+</ul></li>
+<li>float<br/>
+<ul>
+<li><code>(foo (flt 1.23))</code><br/></li>
+<li><code>foo(float x)</code></li>
+</ul></li>
+<li>string<br/>
+<ul>
+<li><code>(foo "hello")</code><br/></li>
+<li><code>foo(char *s)</code></li>
+</ul></li>
+<li>int array<br/>
+<ul>
+<li><code>(foo (pack "d d d" 1 2 3))</code><br/></li>
+<li><code>foo(int a[])</code></li>
+</ul></li>
+<li>float array<br/>
+<ul>
+<li><code>(foo (pack "f f f" (flt 1.2) (flt 3.4) (flt 5.6)))</code><br/></li>
+<li><code>foo(float a[])</code></li>
+</ul></li>
+<li>double array<br/>
+<ul>
+<li><code>(foo (pack "lf lf lf" 1.2 3.4 5.6))</code><br/></li>
+<li><code>foo(double a[])</code></li>
+</ul></li>
+<li>string array<br/>
+<ul>
+<li><code>(foo (pack "lu lu lu" "a" "b" "c"))</code><br/></li>
+<li><code>foo(char *a[])</code></li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="reading-return-values">Reading return values</h3>
+<ul>
+<li>integer<br/>
+<ul>
+<li><code>(set &#39;n (foo x y))</code></li>
+</ul></li>
+<li>pointer to double<br/>
+<ul>
+<li><code>(get-float (foo x))</code></li>
+</ul></li>
+<li>pointer to string<br/>
+<ul>
+<li><code>(get-string (foo x))</code></li>
+</ul></li>
+<li>integer array<br/>
+<ul>
+<li><code>(unpack "ld ld ld" (foo x))</code></li>
+</ul></li>
+<li>float array<br/>
+<ul>
+<li><code>(unpack "f f f" (foo x))</code></li>
+</ul></li>
+<li>double array<br/>
+<ul>
+<li><code>(unpack "lf lf lf" (foo x))</code></li>
+</ul></li>
+<li>string array<br/>
+<ul>
+<li><code>(map get-string (unpack "ld ld ld" (foo x)))</code></li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="working-with-c-structures">Working with C structures</h3>
+<p>C struct:</p>
+<pre><code>#include &#60;stdlib.h&#62;
+#include &#60;string.h&#62;
+
+struct item {
+  int n;
+  char *s;
+};
+
+struct item *make_item(char *txt, int v) {
+  struct item *p = malloc(sizeof(struct item));
+  p-&#62;s = malloc(strlen(txt) + 1);
+  strcpy(p-&#62;s, txt);
+  p-&#62;n = v;
+  return p;
+}
+</code></pre>
+<p>Compile:</p>
+<pre><code>cc -fPIC -shared -o item.so item.c
+</code></pre>
+<p>Rebel example:</p>
+<pre><code>(import ".&#47;item.so" "make_item")
+(set &#39;p (make_item "yo" 7))
+(get-int p) ; n
+(get-string (get-int (+ p 8))) ; s on LP64
+</code></pre>
+<p>To discover offsets reliably, compile:</p>
+<pre><code>#include &#60;stdio.h&#62;
+#include &#60;stddef.h&#62;
+#include "item.h"
+int main(){
+  printf("n=%zu s=%zu\n",
+    offsetof(struct item,n),
+    offsetof(struct item,s));
+}
+</code></pre>
+<hr/>
+<h3 id="memory-management">Memory management</h3>
+<p>Rebel never frees foreign memory automatically.</p>
+<pre><code>(import "libc.so" "free")
+(set &#39;p (make_item "hi" 9))
+(free p)
+</code></pre>
+<p>If the C API provides its own destructor, use that instead.</p>
+<hr/>
+<h3 id="buffers-mutated-by-c">Buffers mutated by C</h3>
+<pre><code>(set &#39;buf (pack "c c c" 97 98 99))
+(callC buf)
+(unpack "c c c" buf)
+</code></pre>
+<hr/>
+<h3 id="alignment-and-padding">Alignment and padding</h3>
+<p>C compilers insert padding.<br/>
+Rebel treats memory as a flat byte array.</p>
+<p>Example:</p>
+<pre><code>struct X {
+  short a;
+  int   b;
+  short c;
+};
+</code></pre>
+<p>Likely LP64 layout: a(2), pad(2), b(4), c(2), pad(2).<br/>
+Total 12 bytes.</p>
+<p>Rebel:</p>
+<pre><code>(unpack "lu lu lu" (foo))
+</code></pre>
+<p>Another layout:</p>
+<pre><code>struct Y {
+  short a;
+  short b;
+  int   c;
+};
+</code></pre>
+<p>Total 8 bytes.</p>
+<p>Rebel:</p>
+<pre><code>(unpack "u u lu" (foo))
+</code></pre>
+<hr/>
+<h3 id="wrapper-libraries">Wrapper libraries</h3>
+<p>If a C library is inconvenient to call, write a thin wrapper.</p>
+<pre><code>#include &#60;stdarg.h&#62;
+
+double realfn(double x, int y, double z) {
+  return (x + z) * y;
+}
+
+double *wrap(int argc, ...) {
+  static double r;
+  va_list ap;
+  va_start(ap, argc);
+  double x = va_arg(ap, double);
+  int    y = va_arg(ap, int);
+  double z = va_arg(ap, double);
+  va_end(ap);
+  r = realfn(x, y, z);
+  return &#38;r;
+}
+</code></pre>
+<p>Compile:</p>
+<pre><code>cc -fPIC -shared -o wrap.so wrap.c
+</code></pre>
+<p>Rebel:</p>
+<pre><code>(import ".&#47;wrap.so" "wrap")
+(get-float (wrap 3 1.2 3 1.4))
+</code></pre>
+<hr/>
+<h3 id="callbacks-from-c-into-rebel">Callbacks from C into Rebel</h3>
+<p>C library:</p>
+<pre><code>typedef void (*cb_t)(int);
+void run(cb_t fn) {
+  fn(123);
+}
+</code></pre>
+<p>Compile:</p>
+<pre><code>cc -fPIC -shared -o cb.so cb.c
+</code></pre>
+<p>Rebel:</p>
+<pre><code>(import ".&#47;cb.so" "run")
+(define (cb x) (println x))
+(run (callback 1 &#39;cb))
+</code></pre>
+<hr/>
+<h3 id="pack-formats">Pack formats</h3>
+<ul>
+<li><code>d</code><br/>
+<ul>
+<li>32-bit signed int<br/></li>
+<li>C: <code>int</code></li>
+</ul></li>
+<li><code>f</code><br/>
+<ul>
+<li>32-bit float<br/></li>
+<li>C: <code>float</code></li>
+</ul></li>
+<li><code>lf</code><br/>
+<ul>
+<li>64-bit float<br/></li>
+<li>C: <code>double</code></li>
+</ul></li>
+<li><code>u</code><br/>
+<ul>
+<li>16-bit unsigned<br/></li>
+<li>C: <code>unsigned short</code></li>
+</ul></li>
+<li><code>c</code><br/>
+<ul>
+<li>byte<br/></li>
+<li>C: <code>char</code></li>
+</ul></li>
+<li><code>lu</code><br/>
+<ul>
+<li>pointer-sized unsigned<br/></li>
+<li>C: <code>uintptr_t</code></li>
+</ul></li>
+<li><code>ld</code><br/>
+<ul>
+<li>pointer-sized signed<br/></li>
+<li>C: <code>intptr_t</code></li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="summary">Summary</h3>
+<p>Rebel’s FFI is direct, transparent, and extremely easy to use.
+No foreign runtimes, no layers, no indirection.</p>
+<p>You write C, build a <code>.so</code>, import it, and call it.</p>
+<p>If you can write a C function, you can extend Rebel infinitely.
+If you know pointers and offsets, you can call any Unix library.
+If you want raw speed and control, FFI is the sharpest tool in the box.</p>
+
+</body>
+</html>

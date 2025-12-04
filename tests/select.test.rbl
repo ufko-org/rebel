@@ -1,0 +1,38 @@
+; Test for function "select"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Preset
+; ---------------------------------------------------------------------
+(set 'l '(0 1 2 3 4 5 6 7 8 9))
+
+; Select / collect operations
+; ------------------------------------------------------------
+(test "1: select from empty indices"
+  (= (select l '()) '())
+  true
+)
+
+(test "2: select with repeated indices"
+  (= (select l 0 9 9 0 1 8 8 1) '(0 9 9 0 1 8 8 1))
+  true
+)
+
+(test "3: select from string by indices"
+  (= (select "2001-09-20" 5 6 8 9 0 1 2 3) "09202001")
+  true
+)
+
+(test "4: select using variables as indices"
+  (begin 
+    (set 'a 0 'b 1 'c 2)
+    (= (select '(w x y z) a b c) '(w x y))
+  )
+  true
+)
+
+(test "5: select with incremented variables"
+  (= (select '(w x y z) (inc a) (inc b) (inc c)) '(x y z))
+  true
+)

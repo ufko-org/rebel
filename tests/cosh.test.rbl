@@ -1,0 +1,25 @@
+; Test for function "cosh"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Definition check
+; ------------------------------------------------------------
+(test "1: cosh(x) matches (exp(x)+exp(-x))/2"
+  (cosh 1)
+  (div (add (exp 1) (exp -1)) 2)
+)
+
+; Even function
+; ------------------------------------------------------------
+(test "2: cosh is even"
+  (cosh -1)
+  (cosh 1)
+)
+
+; Zero input
+; ------------------------------------------------------------
+(test "3: cosh(0) is 1"
+  (cosh 0)
+  1
+)

@@ -1,0 +1,44 @@
+; Demonstrates pointer-like behavior in Rebel using symbols as references
+; Shows how a well-designed scripting language can closely mirror C semantics
+; Conceptually: eval function acts like C's dereference operator, enabling
+; direct memory-style manipulation
+; Highlights the close analogy between Rebel and low-level C operations
+
+; We can alias (sugar-coat) eval or any other function using (constant)
+; or (constant) and (global), no speed penalty
+
+; deref as an alias to eval function
+
+/* C version */                          ; Rebel version
+#include <stdio.h>                       ; (constant 'deref eval)  ; aliasing eval as deref
+
+int main() {
+    int a = 2, b = 7;                    (setq a 2 b 7)
+    int *pa = &a, *pb = &b;              (setq pa 'a pb 'b)
+    int tmp;                             (setq tmp 0)
+
+    tmp = *pa;                           (setq tmp (deref pa))
+    *pa = *pb;                           (setq (deref pa) (deref pb))
+    *pb = tmp;                           (setq (deref pb) tmp)
+
+    printf("a=%d b=%d\n", a, b);         (println "a=" a " b=" b) ; -> a=7 b=2
+    return 0;                            (exit)
+}                                        ;
+
+; "*" as an alias to eval function
+
+/* C version */                          ; Rebel version
+#include <stdio.h>                       ; (constant '* eval)  ; aliasing eval as "*"
+
+int main() {
+    int a = 2, b = 7;                    (setq a 2 b 7)
+    int *pa = &a, *pb = &b;              (setq pa 'a pb 'b)
+    int tmp;                             (setq tmp 0)
+
+    tmp = *pa;                           (setq tmp (* pa))
+    *pa = *pb;                           (setq (* pa) (* pb))
+    *pb = tmp;                           (setq (* pb) tmp)
+
+    printf("a=%d b=%d\n", a, b);         (println "a=" a " b=" b) ; -> a=7 b=2
+    return 0;                            (exit)
+}                                        ;

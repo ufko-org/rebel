@@ -1,0 +1,16 @@
+; Test for function "context"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Context switching
+; ------------------------------------------------------------
+(test "1: switch to TEST context"
+  (context 'TEST)
+  'TEST
+)
+
+(test "2: switch to QA context"
+  (context 'QA)
+  'QA
+)

@@ -1,0 +1,18 @@
+; Test for function "crit-z" (with prob-z)
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; crit-z(prob-z(z)) ≈ z for z in range -6..6 step 0.3
+; ------------------------------------------------------------
+(test "1: inversion sweep from -6 to 6"
+  (begin
+    (set 'flag true)
+    (for (z -6 6 0.3)
+      (if (> (abs (sub (crit-z (prob-z z)) z)) 0.0001)
+          (set 'flag nil))
+    )
+    flag
+  )
+  true
+)

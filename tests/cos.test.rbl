@@ -1,0 +1,32 @@
+; Test for function "cos"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic identity through acos/cos
+; ------------------------------------------------------------
+(test "1: cos(acos(1)) returns 1"
+  (cos (acos 1))
+  1
+)
+
+; Double nested
+; ------------------------------------------------------------
+(test "2: cos(acos(cos(acos 1))) returns 1"
+  (cos (acos (cos (acos 1))))
+  1
+)
+
+; Symmetry
+; ------------------------------------------------------------
+(test "3: cos of negative angle matches cos of positive"
+  (= (cos 0.5) (cos -0.5))
+  true
+)
+
+; Range check
+; ------------------------------------------------------------
+(test "4: cos(0) is 1"
+  (cos 0)
+  1
+)

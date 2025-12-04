@@ -1,0 +1,11 @@
+; Test for function "binomial"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; basic binomial probability
+; ------------------------------------------------------------
+(test "1: binomial(2 1 0.5) approx"
+  (< (sub (binomial 2 1 0.5) 0.5) 1e-09)
+  true
+)

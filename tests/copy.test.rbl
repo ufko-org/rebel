@@ -1,0 +1,31 @@
+
+; Test for function "copy"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Preset
+; ------------------------------------------------------------
+(setq lst '(a b c))
+
+; Copy / replace / rotate operations
+; ------------------------------------------------------------
+(test "1: copy and replace element in list"
+  (replace 'b (copy lst))
+  '(a c)
+)
+
+(test "2: original list remains unchanged"
+  lst
+  '(a b c)
+)
+
+(test "3: copy and replace character in string with find-all"
+  (find-all "12" "12345" (replace "1" (copy $0) "N"))
+  '("N2")
+)
+
+(test "4: copy and rotate string"
+  (rotate (copy "abcdefg"))
+  "gabcdef"
+)

@@ -1,0 +1,36 @@
+; Test for function "atom?" 
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic atoms
+; ------------------------------------------------------------
+(test "1: integer atom"
+  (atom? 1)
+  true
+)
+
+(test "2: float atom"
+  (atom? 1.23)
+  true
+)
+
+(test "3: string atom"
+  (atom? "hello")
+  true
+)
+
+(test "4: symbol atom"
+  (atom? 'x)
+  true
+)
+
+(test "5: nil atom"
+  (atom? nil)
+  true
+)
+
+(test "6: boolean atom"
+  (atom? true)
+  true
+)

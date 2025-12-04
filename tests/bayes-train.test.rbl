@@ -1,0 +1,47 @@
+; Test for function "bayes-train"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+(context 'Lex)
+; bayes-train basic
+; ------------------------------------------------------------
+(test "1: bayes-train initial counts"
+  (bayes-train '(F F F B B) '(F B B B B) 'Lex)
+  '(5 5)
+)
+
+; bayes-query: single F
+; ------------------------------------------------------------
+(test "2: bayes-query '(F) approx"
+  (< (abs (apply add (map sub (bayes-query '(F) Lex) '(0.75 0.25)))) 0.001)
+  true
+)
+
+(test "3: bayes-query '(F) approx with smoothing"
+  (< (abs (apply add (map sub (bayes-query '(F) Lex true) '(0.75 0.25)))) 0.001)
+  true
+)
+
+; bayes-query: (F F)
+; ------------------------------------------------------------
+(test "4: bayes-query '(F F) approx"
+  (< (abs (apply add (map sub (bayes-query '(F F) Lex) '(0.8251777681 0.1748222319)))) 0.001)
+  true
+)
+
+(test "5: bayes-query '(F F) approx with smoothing"
+  (< (abs (apply add (map sub (bayes-query '(F F) Lex true) '(0.9 0.1)))) 0.001)
+  true
+)
+
+; bayes-query environment reset
+; ------------------------------------------------------------
+(test "6: bayes-query reset Lex:* vars"
+  (begin
+    (set 'Lex:F '(0 0))
+    (set 'Lex:B '(0 0))
+    (set 'Lex:total '(0 0))
+    true)
+  true
+)

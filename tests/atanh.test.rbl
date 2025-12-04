@@ -1,0 +1,27 @@
+; Test for function "atanh" -
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic atanh / tanh identity -
+; ------------------------------------------------------------
+(test "1: atanh(tanh 0.1) ~ original"
+  (< (abs (sub (atanh (tanh 0.1)) 0.1)) 1e-15)
+  true
+)
+
+(test "2: atanh(tanh 1) ~ original"
+  (< (abs (sub (atanh (tanh 1)) 1)) 1e-15)
+  true
+)
+
+(test "3: atanh 0"
+  (= (atanh 0) 0)
+  true
+)
+
+(test "4: atanh negative value"
+  (< (abs (sub (atanh (tanh -0.5)) -0.5)) 1e-15)
+  true
+)
+

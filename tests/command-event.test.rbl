@@ -1,0 +1,11 @@
+; Test for function "command-event"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Test interactively in REPL
+; ------------------------------------------------------------
+(test "1: command-event reply"
+  (begin (command-event) true)
+  true
+)

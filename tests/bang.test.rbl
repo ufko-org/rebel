@@ -1,0 +1,11 @@
+; Test for function "!"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Type checks
+; ------------------------------------------------------------
+(test "1: bang applied to empty string returns integer"
+  (integer? (! ""))
+  true
+)

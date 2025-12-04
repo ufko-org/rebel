@@ -1,0 +1,36 @@
+; Test for function "cond"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Cond / branching
+; ------------------------------------------------------------
+(test "1: simple addition in cond"
+  (= (cond ((+ 3 4))) 7)
+  true
+)
+
+(test "2: cond with nil and empty list"
+  (= (cond (nil 1) ('())) '())
+  true
+)
+
+(test "3: cond with only nil"
+  (= (cond (nil 1) (nil)) nil)
+  true
+)
+
+(test "4: cond with true leading to nil"
+  (= (cond (nil 1) (true nil)) nil)
+  true
+)
+
+(test "5: cond with single empty list"
+  (= (cond ('())) '())
+  true
+)
+
+(test "6: cond with nil and empty list returning 2"
+  (= (cond (nil 1) ('() 2)) '())
+  true
+)

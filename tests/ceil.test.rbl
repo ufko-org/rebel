@@ -1,0 +1,11 @@
+; Test for function "ceil"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic ceil tests
+; ------------------------------------------------------------
+(test "1: ceil of 1.5"
+  (= 2 (ceil 1.5))
+  true
+)

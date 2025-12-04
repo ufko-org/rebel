@@ -1,0 +1,9 @@
+; Test for function "debug"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+(test "1: debug evaluates expression"
+  (debug (+ 3 4))
+  7
+)

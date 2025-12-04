@@ -1,0 +1,75 @@
+; Test for function "="
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: float equality"
+  (= 1.23456789 1.23456789)
+  true
+)
+
+(test "2: integer equality"
+  (= 123456789 123456789)
+  true
+)
+
+(test "3: hexadecimal equals -1"
+  (= 0xFFFFFFFFFFFFFFFF -1)
+  true
+)
+
+(test "4: binary equals -1"
+  (= 0b1111111111111111111111111111111111111111111111111111111111111111 -1)
+  true
+)
+
+; Lists
+; ------------------------------------------------------------
+(test "5: nested list equality"
+  (= '(1 2 3 (4 5) (a b ("CDEFG" "HIJK") 'u 'v 'w))
+     '(1 2 3 (4 5) (a b ("CDEFG" "HIJK") 'u 'v 'w)))
+  true
+)
+
+(test "6: empty list equality"
+  (= '())
+  true
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "7: unicode string equality"
+  (= "יגהבםףתס\u05c1צע" "יגהבםףתס\u05c1צע")
+  true
+)
+
+(test "8: empty string equality"
+  (= "")
+  true
+)
+
+; Zero
+; ------------------------------------------------------------
+(test "9: zero equality"
+  (= 0)
+  true
+)
+
+; Negative tests
+; ------------------------------------------------------------
+(test "10: number inequality"
+  (not (= 1))
+  true
+)
+
+(test "11: string inequality"
+  (not (= "abc"))
+  true
+)
+
+(test "12: list inequality"
+  (not (= '(1 2 3)))
+  true
+)

@@ -1,0 +1,11 @@
+; Test for function "collect"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Collect numbers from loop
+; ------------------------------------------------------------
+(test "1: collect 1 to 5 using let and inc"
+  (= (let (x 0) (collect (if (<= (inc x) 5) x))) '(1 2 3 4 5))
+  true
+)

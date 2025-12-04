@@ -1,0 +1,46 @@
+; sqlite3 module examples:
+; ---------------------------------------------------------------------
+
+(load "../modules/sqlite3.rbl")
+
+;; open a database
+(sql3:open "people.db")
+
+;; create a table
+(sql3:sql "drop table if exists persons;")
+(sql3:sql "create table persons (id integer primary key, name text, age integer);")
+
+;; insert some data
+(sql3:sql "insert into persons (name, age) values (?, ?);" '("Alice" 30))
+(sql3:sql "insert into persons (name, age) values (?, ?);" '("Bob" 25))
+(sql3:sql "insert into persons (name, age) values (?, ?);" '("Charlie" 40))
+
+;; query all rows
+(set 'result (sql3:sql "select * from persons;"))
+(println "All persons:" result)
+
+;; query with condition
+(set 'result (sql3:sql "select name, age from persons where age > ?;" '(30)))
+(println "Persons older than 30:" result)
+
+;; get column names
+(println "Column names:" (sql3:colnames))
+
+;; check last insert row id
+(println "Last inserted row id:" (sql3:rowid))
+
+;; number of changes
+(println "Number of changes:" (sql3:changes))
+
+;; drop table
+(sql3:sql "drop table persons;")
+(println "Table 'persons' dropped.")
+
+;; close database
+(sql3:close)
+
+;; delete db file
+(if (delete-file "people.db")
+  (println "Deleting: people.db")
+  (println "Can't delete: people.db"))
+(println "Done.")

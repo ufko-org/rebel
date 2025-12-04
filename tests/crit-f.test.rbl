@@ -1,0 +1,26 @@
+; Test for function "crit-f" (with prob-f)
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Inversion property: crit-f(prob-f(x,df1,df2),df1,df2) ≈ x
+; ------------------------------------------------------------
+(test "1: inversion check df1=3 df2=4, x=6.59"
+  (< (abs (sub (crit-f (prob-f 6.59 3 4) 3 4) 6.59)) 0.001)
+  true
+)
+
+(test "2: inversion check df1=12 df2=11, x=2.79"
+  (< (abs (sub (crit-f (prob-f 2.79 12 11) 12 11) 2.79)) 0.001)
+  true
+)
+
+(test "3: inversion check df1=3 df2=4, x=16.59"
+  (< (abs (sub (crit-f (prob-f 16.59 3 4) 3 4) 16.59)) 0.001)
+  true
+)
+
+(test "4: inversion check df1=12 df2=11, x=4.40"
+  (< (abs (sub (crit-f (prob-f 4.40 12 11) 12 11) 4.40)) 0.001)
+  true
+)

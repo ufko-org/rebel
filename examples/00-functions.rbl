@@ -1,0 +1,38 @@
+; Call by reference:
+; ---------------------------------------------------------------------
+
+; 1. using default functor
+; default functor is always passed by reference (automatically)
+(setq x:x 10)
+(define (f p) 
+  (setq p 5))
+(f x:x)
+(println x:x) ;-> 5
+
+; 2. using eval
+(setq y 10)
+; use _p suffix for param name to avoid conflict 
+; with global symbol
+(define (f y_p) 
+  (setq (eval y_p) 5))  
+(f 'y)
+(println (y)) ;-> 5
+
+; 3. using macro
+; nice, clean way
+(setq z 10)
+(define-macro (f z) 
+  (setq (eval z) 5))
+(f z)
+(println z) ;-> 5
+
+; 4. using symbol as pointer
+; here you will finally understand the C pointers
+; we intentionally reuse a parameter name that 
+; conflicts with a global symbol to demonstrate 
+; call-by-reference using eval
+(setq p 'x)
+(define (f p) 
+  (setq (eval p) 5)) ; p points to x
+(f p)
+(println x) ;-> 5

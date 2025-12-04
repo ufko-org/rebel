@@ -1,0 +1,29 @@
+; Test for function "case"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; case checks helper
+; ------------------------------------------------------------
+(define (check-case x)
+  (case x
+   (1 "one")
+   (2 "two")
+   (3 "three")))
+
+; basic case checks
+; ------------------------------------------------------------
+(test "1: check-case 1 returns 'one'"
+  (= (check-case 1) "one")
+  true
+)
+
+(test "2: check-case 2 returns 'two'"
+  (= (check-case 2) "two")
+  true
+)
+
+(test "3: check-case 9 returns nil"
+  (= (check-case 9) nil)
+  true
+)

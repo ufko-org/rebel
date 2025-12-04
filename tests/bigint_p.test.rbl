@@ -1,0 +1,54 @@
+
+; Test for predicate "bigint?"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; bigint? on literal integers
+; ------------------------------------------------------------
+(test "1: bigint? large integer literal"
+  (bigint? 123456789012345678901234567890)
+  true
+)
+
+(test "2: bigint? large integer with L suffix"
+  (bigint? 123456789012345678901234567890L)
+  true
+)
+
+(test "3: bigint? zero with L suffix"
+  (bigint? 0L)
+  true
+)
+
+(test "4: bigint? small integer with L suffix"
+  (bigint? 123L)
+  true
+)
+
+; bigint? using bigint constructor
+; ------------------------------------------------------------
+(test "5: bigint? from integer"
+  (bigint? (bigint 12345))
+  true
+)
+
+(test "6: bigint? from float"
+  (bigint? (bigint 12345.678))
+  true
+)
+
+(test "7: bigint? from numeric string"
+  (bigint? (bigint "12345"))
+  true
+)
+
+(test "8: bigint? from numeric string with letters"
+  (bigint? (bigint "123hello"))
+  true
+)
+
+(test "9: bigint? from non-numeric string returns nil"
+  (nil? (bigint "hello"))
+  true
+)

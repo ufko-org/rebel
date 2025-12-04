@@ -1,0 +1,16 @@
+; Test for function "sub"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: sub identical floats -> 0"
+  (= 0 (sub 0.99999999 0.99999999))
+  true
+)
+
+(test "2: sub single argument -> negation"
+  (= -123 (sub 123))
+  true
+)

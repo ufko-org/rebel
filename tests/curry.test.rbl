@@ -1,0 +1,37 @@
+; Test for function "curry"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Curry arithmetic
+; ------------------------------------------------------------
+(test "1: curry with + and constant"
+  (begin
+    (set 'f (curry + 10))
+    (f 5)
+  )
+  15
+)
+
+; Curry inside filter
+; ------------------------------------------------------------
+(test "2: curry with match inside filter"
+  (filter (curry match '(a *))
+          '((a 10) (b 5) (a 3) (c 8) (a 9)))
+  '((a 10) (a 3) (a 9))
+)
+
+; Curry inside clean
+; ------------------------------------------------------------
+(test "3: curry with match inside clean"
+  (clean (curry match '(a *))
+         '((a 10) (b 5) (a 3) (c 8) (a 9)))
+  '((b 5) (c 8))
+)
+
+; Curry inside map
+; ------------------------------------------------------------
+(test "4: curry list constructor"
+  (map (curry list 'x) (sequence 1 5))
+  '((x 1) (x 2) (x 3) (x 4) (x 5))
+)

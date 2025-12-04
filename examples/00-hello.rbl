@@ -1,0 +1,3 @@
+#!/usr/bin/env rebel
+(println "Hello rebels :)")
+(exit)

@@ -1,0 +1,34 @@
+; Test for function "doargs"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Iteration / Control
+; ------------------------------------------------------------
+(test "1: doargs iterates over all arguments"
+  (local (res)
+    (set 'res '())
+    (define (foo)
+      (doargs (i)
+        (push i res -1)
+      )
+    )
+    (foo 1 2 3 4)
+    res
+  )
+  '(1 2 3 4)
+)
+
+(test "2: doargs stops at break expression"
+  (local (res)
+    (set 'res '())
+    (define (foo)
+      (doargs (i (> i 2))   ; break when i > 2 is true
+        (push i res -1)
+      )
+    )
+    (foo 1 2 3 4)
+    res
+  )
+  '(1 2)
+)

@@ -1,0 +1,27 @@
+; Test for function "current-line"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Reading first line preserves current-line
+; ------------------------------------------------------------
+(test "1: current-line returns last read-line"
+  (begin
+    (set 'handle (open "tests-fs/execs/script.rbl" "r"))
+    (read-line handle)
+    (= (current-line) "#!/usr/bin/env rebel")
+  )
+  true
+)
+
+; After closing handle, current-line stays last value
+; ------------------------------------------------------------
+(test "2: current-line after close still holds last line"
+  (begin
+    (set 'handle (open "tests-fs/execs/script.rbl" "r"))
+    (read-line handle)
+    (close handle)
+    (= (current-line) "#!/usr/bin/env rebel")
+  )
+  true
+)

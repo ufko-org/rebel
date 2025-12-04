@@ -1,0 +1,40 @@
+; Test for function "bigint"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: bigint of integer literal"
+  (bigint 12345)
+  12345L
+)
+
+(test "2: bigint of large float"
+  ; Result may differ slightly due to float-to-bigint conversion on your platform
+  (bigint 1.234567890e30)
+  1234567889999999995380000000000L
+)
+
+(test "3: bigint of local integer"
+  (local (n)
+    (set 'n 567890)
+    (bigint n)
+  )
+  567890L
+)
+
+(test "4: bigint of negative string"
+  (bigint "-54321")
+  -54321L
+)
+
+(test "5: bigint of string with decimal"
+  (bigint "123.45")
+  123L
+)
+
+(test "6: bigint of string with extra text"
+  (bigint "123 hello")
+  123L
+)

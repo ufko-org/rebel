@@ -1,0 +1,24 @@
+; Test for function "append-file"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; ------------------------------------------------------------
+(test "1: append string to file"
+  (append-file "junk" "ABC")
+  3
+)
+
+(test "2: append string to file using file:// URL"
+  (append-file "file://junk" "DEF")
+  3
+)
+
+(test "3: read file and check content"
+  (= (read-file "junk") "ABCDEF")
+  true
+)
+
+; Post cleanup
+; ------------------------------------------------------------
+(if (file? "junk") (delete-file "junk"))

@@ -1,0 +1,16 @@
+; Test for function "*"
+; ------------------------------------------------------------
+(load "testing.rbl")
+<context 'test>
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: multiply large numbers"
+  (* (* 123456789 123456789))
+  15241578750190521
+)
+
+(test "2: multiply with no arguments"
+  (*)
+  1
+)

@@ -1,0 +1,11 @@
+; Test for function "acosh"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Trigonometry
+; ------------------------------------------------------------
+(test "1: cosh(acosh 1) equals 1"
+  (cosh (acosh 1))
+  1
+)

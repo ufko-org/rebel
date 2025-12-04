@@ -1,0 +1,40 @@
+; Test for function "bits"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; bits to integer slices
+; ------------------------------------------------------------
+(test "1: bits 0x7fffffffffffffff to int"
+  (= (int (bits 0x7fffffffffffffff) 0 2) 0x7fffffffffffffff)
+  true
+)
+
+(test "2: bits 0x8000000000000000 to int"
+  (= (int (bits 0x8000000000000000) 0 2) 0x8000000000000000)
+  true
+)
+
+; bits length and string conversion
+; ------------------------------------------------------------
+(test "3: length of bits 0x8000000000000000"
+  (= 64 (length (bits 0x8000000000000000)))
+  true
+)
+
+(test "4: bits of 0"
+  (= (bits 0) "0")
+  true
+)
+
+(test "5: bits of 1234 as string"
+  (= (bits 1234) "10011010010")
+  true
+)
+
+; bits as boolean list
+; ------------------------------------------------------------
+(test "6: bits of 1234 as boolean list"
+  (= (bits 1234 true) '(nil true nil nil true nil true true nil nil true))
+  true
+)

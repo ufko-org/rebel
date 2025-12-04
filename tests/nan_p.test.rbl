@@ -1,0 +1,42 @@
+; Test for function "NaN?"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: sqrt of negative number is NaN"
+  (NaN? (sqrt -1))
+  true
+)
+
+(test "2: sqrt of negative float number is NaN" 
+  (begin (set 'NaN (sqrt -1.0)) 
+         (NaN? NaN))             
+  true
+)
+
+(test "3: NaN not equal to itself"
+  (not (= NaN NaN))
+  true
+)
+
+(test "4: adding NaN to 1 yields 1"
+  (= 1 (+ 1 NaN))
+  true
+)
+
+(test "5: multiplying NaN by 2 yields 0"
+  (= 0 (* 2 NaN))
+  true
+)
+
+(test "6: NaN? on addition with NaN"
+  (NaN? (add 1 (sqrt -1)))
+  true
+)
+
+(test "7: NaN? on absolute value of NaN"
+  (NaN? (abs (sqrt -1)))
+  true
+)

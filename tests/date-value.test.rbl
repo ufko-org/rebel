@@ -1,0 +1,14 @@
+; Test for function "date-value"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; All ways to express 1970-1-1 00:00:00 must return 0
+; ------------------------------------------------------------
+(test "1: date-value epoch variants"
+  (= 0
+     (date-value 1970 1 1 0 0 0)
+     (date-value (+ 1970) (+ 1) (+ 1) (+ 0) (+ 0) (+ 0))
+     (date-value '(1970 1 1 0 0 0)))
+  true
+)

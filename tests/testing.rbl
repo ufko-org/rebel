@@ -1,0 +1,54 @@
+; Simple testing suite
+; Early naive version :)
+; See also: .readme and .template files in this folder
+;
+; $Revision: 1.1 $ 
+; $Author: Ufko $
+;
+; ---------------------------------------------------------------------
+; (test "1: test 1" (+ 2 2) 4) ;-> pass
+; (test "2: test 2" (+ 2 2) 6) ;-> fail
+; = function that goes deep, comparing not only content but also types
+; (test "3 test 3" (array 2 '(1 2)) '(1 2)) ;-> fail
+; ---------------------------------------------------------------------
+; test against regexp using rx set to 1
+; (test "4: regexp" 123 {\d\d\d} 1)
+; (test "5: regexp" '(1 2 3) {\(\d \d \d\)} 1)
+; ---------------------------------------------------------------------
+
+; Global aliases and constants if needed
+; ---------------------------------------------------------------------
+
+; Macro functor
+; ---------------------------------------------------------------------
+(context 'test)
+(define-macro (test:test name expr want (re 0))
+  (setf expr (eval expr))
+  (setf want (eval want))
+  (if (= test:pass nil) (setq test:pass 0))
+  (if (= test:fail nil) (setq test:fail 0))
+  (++ test:cases)
+
+  (if (= re 0)
+    (if (= expr want)
+      (begin
+        (++ test:pass)
+        (println (format "Test: %s\n\tpass: %s" 
+          name (string expr))))
+      (begin
+        (++ test:fail)
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+          name (string want) (string expr))))))
+
+  (if (= re 1)
+    (if (regex (string want) (string expr))
+      (begin
+        (++ test:pass)
+        (println (format "Test: %s\n\tpass: %s" 
+          name (string expr))))
+      (begin
+        (++ test:fail)
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+          name (string want) (string expr))))))
+
+)

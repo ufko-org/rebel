@@ -1,0 +1,28 @@
+; Test for function "chop"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Strings
+; ------------------------------------------------------------
+(test "1: chop last character from string"
+  (chop "abcdef")
+  "abcde"
+)
+
+(test "2: chop last 3 characters from string"
+  (chop "abcdef" 3)
+  "abc"
+)
+
+; Lists
+; ------------------------------------------------------------
+(test "3: chop last element from list"
+  (chop '(1 2 3 4 5))
+  '(1 2 3 4)
+)
+
+(test "4: chop last 2 elements from list"
+  (chop '(a b c d e) 2)
+  '(a b c)
+)

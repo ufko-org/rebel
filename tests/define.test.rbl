@@ -1,0 +1,49 @@
+; Test for function "define"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Initial define with defaults
+; ------------------------------------------------------------
+(test "1: define lambda? check"
+  (lambda? (define (foo (x 1) (y 2)) (list x y)))
+  true
+)
+
+(test "2: foo with no args -> defaults 1 2"
+  (foo)
+  '(1 2)
+)
+
+(test "3: foo with one arg -> y stays 2"
+  (foo 3)
+  '(3 2)
+)
+
+(test "4: foo with two args"
+  (foo 3 4)
+  '(3 4)
+)
+
+; Redefine foo
+; ------------------------------------------------------------
+(test "5: redefine foo with x default 10, y = x/2"
+  (begin (define (foo (x 10) (y (div x 2))) (list x y))
+  (lambda? foo))
+  true
+)
+
+(test "6: new foo no args"
+  (foo)
+  '(10 5)
+)
+
+(test "7: new foo one arg"
+  (foo 20)
+  '(20 10)
+)
+
+(test "8: new foo two args"
+  (foo 3 4)
+  '(3 4)
+)

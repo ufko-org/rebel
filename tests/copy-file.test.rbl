@@ -1,0 +1,14 @@
+; Test for function "copy-file"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Copy / delete file
+; ------------------------------------------------------------
+(test "1: copy and delete file"
+  (begin
+    (copy-file "run.rbl" "junk")
+    (delete-file "junk")
+  )
+  true
+)

@@ -1,0 +1,16 @@
+; Test for function "crc32"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; CRC32 values
+; ------------------------------------------------------------
+(test "1: crc32 lowercase alphabet"
+  (= (crc32 "abcdefghijklmnopqrstuvwxyz") 1277644989)
+  true
+)
+
+(test "2: crc32 uppercase HELLO"
+  (= (crc32 "HELLO") 3242484790)
+  true
+)

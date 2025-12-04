@@ -1,0 +1,17 @@
+; Test for function "atan2"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: acos 0 / atan 1 1 = 2"
+  (= (div (acos 0) (atan 1 1)) 2)
+  true
+)
+
+(test "2: atan2 0,1 = 0"
+  (= (atan 0 1) 0)
+  true
+)
+

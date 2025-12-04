@@ -1,0 +1,53 @@
+; Test for function "apply"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: apply + to list of two numbers"
+  (apply + '(1 2))
+  3
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "2: apply append to list of strings"
+  (apply append '("a" "b" "c"))
+  "abc"
+)
+
+; Functions
+; ------------------------------------------------------------
+(test "3: apply anonymous function to two numbers"
+  (apply (fn (x y) (+ x y)) '(3 4))
+  7
+)
+
+; Lists
+; ------------------------------------------------------------
+(test "4: apply list with nesting"
+  (apply list '(a b c d e f) 2)
+  '(((((a b) c) d) e) f)
+)
+
+; Variables
+; ------------------------------------------------------------
+(test "5: apply set and increment"
+  (let ((x 0))
+    (= (inc (apply set '(x 123))) 124 x))
+  true
+)
+
+; Large sums
+; ------------------------------------------------------------
+(test "6: apply + over array and sequences"
+  (apply + (array 100 (sequence 1 100)))
+  (apply + (sequence 1 100))
+)
+
+(test "7: apply + over 0..100 array"
+  (apply + (0 100 (array 100 (sequence 1 100))))
+  (apply + (sequence 1 100))
+)
+

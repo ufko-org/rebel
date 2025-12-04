@@ -1,0 +1,70 @@
+; Test for function "append"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Lists
+; ------------------------------------------------------------
+(test "1: append two simple lists"
+  (append '(1 2) '(3 4))
+  '(1 2 3 4)
+)
+
+(test "2: append three lists"
+  (append '(1 2) '(3) '(4 5))
+  '(1 2 3 4 5)
+)
+
+(test "3: append with empty list"
+  (append '(1 2) '(3 4) '())
+  '(1 2 3 4)
+)
+
+(test "4: append multiple lists including empty"
+  (append '(1 2) '(3 4) '() '(5))
+  '(1 2 3 4 5)
+)
+
+(test "5: append with empty at start"
+  (append '() '(1 2) '(3 4) '() '(5))
+  '(1 2 3 4 5)
+)
+
+(test "6: append all empty lists"
+  (append '() (append '() '()) (append))
+  '()
+)
+
+; Strings
+; ------------------------------------------------------------
+(test "7: append multiple strings"
+  (append "" "a" "bcd" "" "ef" "g" "")
+  "abcdefg"
+)
+
+(test "8: append empty string"
+  (append "")
+  ""
+)
+
+; Arrays
+; ------------------------------------------------------------
+(test "9: append two arrays"
+  (let ((A (array 3 2 (sequence 1 6)))
+        (B (array 2 2 (sequence 7 10))))
+    (append A B))
+  (array 5 2 (sequence 1 10))
+)
+
+; Lambda / default functor
+; ------------------------------------------------------------
+(test "10: append lambda list"
+  (lambda? (append '(lambda)))
+  true
+)
+
+(test "11: append default functor repeated"
+    (begin (set 'C:C '(a b c))
+    (append C C C))
+  '(a b c a b c a b c)
+)

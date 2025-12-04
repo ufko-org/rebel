@@ -1,0 +1,26 @@
+; Test for function "crit-t" (with prob-t)
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Inversion property: crit-t(prob-t(x,df),df) ≈ x
+; ------------------------------------------------------------
+(test "1: inversion check df=2,  x=1.886"
+  (< (abs (sub (crit-t (prob-t 1.886 2) 2) 1.886)) 0.001)
+  true
+)
+
+(test "2: inversion check df=40, x=1.303"
+  (< (abs (sub (crit-t (prob-t 1.303 40) 40) 1.303)) 0.001)
+  true
+)
+
+(test "3: inversion check df=2,  x=6.965"
+  (< (abs (sub (crit-t (prob-t 6.965 2) 2) 6.965)) 0.001)
+  true
+)
+
+(test "4: inversion check df=40, x=2.423"
+  (< (abs (sub (crit-t (prob-t 2.423 40) 40) 2.423)) 0.001)
+  true
+)

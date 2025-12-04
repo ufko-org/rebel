@@ -1,0 +1,15 @@
+; test for function "odd?"
+; (test "test-number: test-descrition"
+;   tested-expression
+;   expected-value)
+
+(load "testing.rbl")
+(context 'test)
+;
+(test "1: is odd"
+  (odd? 2)
+  nil)
+(test "2: is odd"
+  (odd? 3)
+  true)
+

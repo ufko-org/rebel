@@ -1,0 +1,16 @@
+; Test for function "abs"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: absolute of negative integer"
+  (abs -1)
+  1
+)
+
+(test "2: absolute of negative float"
+  (abs -9.9)
+  9.9
+)

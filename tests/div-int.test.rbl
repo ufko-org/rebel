@@ -1,0 +1,16 @@
+; Test for function "/"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Numbers
+; ------------------------------------------------------------
+(test "1: divide large numbers"
+  (/ 15241578750190521 123456789)
+  123456789
+)
+
+(test "2: divide negative by positive"
+  (/ -10 5)
+  -2
+)
