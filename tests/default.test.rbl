@@ -1,0 +1,55 @@
+; Test for function "default"
+; ------------------------------------------------------------
+(load "testing.rbl")
+(context 'test)
+
+; Basic default functor get
+; ------------------------------------------------------------
+(test "1: get default functor via context symbol"
+  (begin
+    (define C:C 123)
+    (default C))
+  123
+)
+
+; Set default functor via setf and read back
+; ------------------------------------------------------------
+(test "2: set default functor value updates context"
+  (begin
+    (setf (default C) 456)
+    (default C))
+  456
+)
+
+; Default works when context is passed as a value
+; ------------------------------------------------------------
+(test "3: default respects context stored in variable"
+  (begin
+    (define C:C 789)
+    (set 'ctx C)
+    (default ctx))
+  789
+)
+
+; Updating through variable updates original context functor
+; ------------------------------------------------------------
+(test "4: setting default via context variable modifies context"
+  (begin
+    (setf 'C2:x 1)
+    (set 'ctx C)
+    (setf 'C2:x 1)
+    (setf (default ctx) 999)
+    C:C)
+  999
+)
+
+; Default on new top-level context returns nil
+; ------------------------------------------------------------
+;(test "5: default on new top-level context returns nil"
+;  (begin
+;    (context MAIN)           ; create context at top-level
+;    (set 'C2 (context 'Bar))  ; C is context Bar
+;    (context test)           ; switch back
+;    (default C2))
+;  nil
+;)
