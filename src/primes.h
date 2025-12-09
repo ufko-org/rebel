@@ -393,7 +393,7 @@ PRIMITIVE primitive[] =
     {"atom?",       p_isAtom,   0},
     {"quote?",      p_isQuote,  0},
     {"list?",       p_isList,   0},
-    {"lambda?",     p_isLambda, 0},
+    {"fn?",         p_isFn,     0},
     {"macro?",      p_isMacro,  0},
     {"array?",      p_isArray,  0},
     {"empty?",      p_isEmpty,  0},

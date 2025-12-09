@@ -483,8 +483,8 @@ MATCH_LIST:
 
         case CELL_QUOTE:
         case CELL_EXPRESSION:
-        case CELL_FEXPR:
-        case CELL_LAMBDA:
+        case CELL_FN_MACRO:
+        case CELL_FN:
             /* compare subexpressions */
             if(list->type == pattern->type)
             {

@@ -12,7 +12,7 @@
 ;;   ./rebel qa-comma (for countries and configurations with decimal , )
 ;;
 
-(set (sym "test-:" 'QA) (lambda () true))
+(set (sym "test-:" 'QA) (fn () true))
 (context 'Lex)  ; predeclare/create context for bayes-train
 (context MAIN)
 
@@ -136,7 +136,7 @@ true
    (if (primitive? (eval p)) 
     (begin 
      (set 'sm (sym (append "test-" (string p)))) 
-     (if (not (lambda? (eval sm))) 
+     (if (not (fn? (eval sm))) 
       (print sm "\n"))))))
 
 (define-macro (do-args p)
@@ -347,7 +347,7 @@ true
     (set 'A (array 3 2 (sequence 1 6)))
     (set 'B (array 2 2 (sequence 7 10)))
     (= (array 5 2 (sequence 1 10)) (append A B))
-    (lambda? (append '(lambda)))
+    (fn? (append '(fn)))
 	; default functor
 	(set 'D:D '(a b c))
 	(= '(a b c a b c a b c) (append D D D))
@@ -744,7 +744,7 @@ true
 
 (define (test-curry)
   (and
-    (= (set 'f (curry + 10)) (lambda ($x) (+ 10 $x)))
+    (= (set 'f (curry + 10)) (fn ($x) (+ 10 $x)))
     (= (filter (curry match '(a *)) '((a 10) (b 5) (a 3) (c 8) (a 9)))
        '((a 10) (a 3) (a 9)))
     (= (clean (curry match '(a *)) '((a 10) (b 5) (a 3) (c 8) (a 9)))
@@ -787,7 +787,7 @@ true
 
 (define (test-define , foo)
   (and 
-	(lambda? (define (foo (x 1) (y 2)) (list x y)))
+	(fn? (define (foo (x 1) (y 2)) (list x y)))
     (= (foo) '(1 2))
 	(= (foo 3) '(3 2))
 	(= (foo 3 4) '(3 4))
@@ -1102,7 +1102,7 @@ true
 
 
 (define (test-exit )
-  (or (primitive? exit) (lambda? exit)))
+  (or (primitive? exit) (fn? exit)))
 
 (define (test-exists)
   (and
@@ -1516,7 +1516,7 @@ true
 )
 
 (define (test-index )
-  (= '(1 3) (index (lambda (x) (> x 3)) '(1 5 2 6 2 0))))
+  (= '(1 3) (index (fn (x) (> x 3)) '(1 5 2 6 2 0))))
 
 (define (test-inf?)
 	(inf? (div 1 0)))
@@ -1636,8 +1636,8 @@ true
 
 
 
-(define (test-lambda? )
-        (lambda? qa)
+(define (test-fn? )
+        (fn? qa)
 )
 
 (define (test-last )
@@ -1755,7 +1755,7 @@ true
 
 (define (test-macro)
     (= (unless testmacro (macro (testmacro x) (+ x x))) 
-        (lambda-macro (x) (expand '(+ x x))))
+        (fn-macro (x) (expand '(+ x x))))
 )
 
 (define (test-macro? )
@@ -1777,7 +1777,7 @@ true
 
 (define (test-map )
   (and (= '(11 22 33) (map + '(10 20 30) '(1 2 3))) 
-       (= '(2 4 6) (map (lambda (x) (+ x x)) '(1 2 3)))
+       (= '(2 4 6) (map (fn (x) (+ x x)) '(1 2 3)))
 	   (set 'D:D '(1 2 3 4 5))
        (= (map pow D) '(1 4 9 16 25))
        (= (map pow (array 5 D))  '(1 4 9 16 25))
@@ -2025,7 +2025,7 @@ true
     (= '(nil true) (map nil? '(a nil)))))
 
 (define (test-null?)
-	(= (map null? '(1 0 2 0.0 "hello" "" (a b c) () nil true (lambda) (fn) (lambda ())))
+	(= (map null? '(1 0 2 0.0 "hello" "" (a b c) () nil true (fn) (fn) (fn ())))
 	'(nil true nil true nil true nil true true nil true true nil)))
 
 (define (test-normal )
@@ -3665,7 +3665,7 @@ true
 (if (not 
   (and
     (def-static 'foobar (fn (x) (+ x x)))
-    (= foobar:foobar (lambda (foobar:x) (+ foobar:x foobar:x)))
+    (= foobar:foobar (fn (foobar:x) (+ foobar:x foobar:x)))
     (= (foobar 10) 20)))
   (QA:failed " >>>> problem with static default function definition"))
 
@@ -3673,9 +3673,9 @@ true
 (if (not TST:test-context-change)
   (QA:failed " >>>> problem changing runtime context with symbol"))
 
-;; but calling with raw lambda doesn't
+;; but calling with raw fn doesn't
 (if ((eval TST:test-context-change))
-  (QA:failed " >>>> problem maintaining runtime context with lambda"))
+  (QA:failed " >>>> problem maintaining runtime context with fn"))
 
 ;; apply evaluates functor
 (if (not (apply 'TST:test-context-change))
@@ -3683,7 +3683,7 @@ true
 
 ;; apply evaluates functor
 (if (apply TST:test-context-change)
-  (QA:failed " >>>> problem maintaining runtime context with apply lambda"))
+  (QA:failed " >>>> problem maintaining runtime context with apply fn"))
 
 ;; map evaluates functor
 (if (!= (map 'TST:test-context-change '(a b c)) '(true true true))
@@ -3691,7 +3691,7 @@ true
 
 ;; map evaluates functor
 (if (!= (map TST:test-context-change '(a b c)) '(nil nil nil))
-  (QA:failed " >>>> problem maintaining runtime context with map lambda"))
+  (QA:failed " >>>> problem maintaining runtime context with map fn"))
 
 ;; hash-like access functions for namespaces
 (if (not (and

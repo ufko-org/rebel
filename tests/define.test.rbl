@@ -5,8 +5,8 @@
 
 ; Initial define with defaults
 ; ------------------------------------------------------------
-(test "1: define lambda? check"
-  (lambda? (define (foo (x 1) (y 2)) (list x y)))
+(test "1: define fn? check"
+  (fn? (define (foo (x 1) (y 2)) (list x y)))
   true
 )
 
@@ -29,7 +29,7 @@
 ; ------------------------------------------------------------
 (test "5: redefine foo with x default 10, y = x/2"
   (begin (define (foo (x 10) (y (div x 2))) (list x y))
-  (lambda? foo))
+  (fn? foo))
   true
 )
 

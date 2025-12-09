@@ -1,5 +1,5 @@
 ; apply-examples: demonstrates applying functions to lists using apply
-; shows standard operations (+, *, sqrt), lambdas, and repeated application
+; shows standard operations (+, *, sqrt), fns, and repeated application
 ; highlights the int-reduce parameter for left-fold style application
 ; ---------------------------------------------------------------------
 
@@ -18,8 +18,8 @@
 (apply sqrt '(25))
 ;-> 5
 
-; using a lambda with apply
-(apply (lambda (x y) (* x y)) '(3 4))
+; using an anonymous fn with apply
+(apply (fn (x y) (* x y)) '(3 4))
 ;-> 12
 
 ; repeated application using int-reduce

@@ -56,10 +56,10 @@
   (array 5 2 (sequence 1 10))
 )
 
-; Lambda / default functor
+; Fn / default functor
 ; ------------------------------------------------------------
-(test "10: append lambda list"
-  (lambda? (append '(lambda)))
+(test "10: append fn list"
+  (fn? (append '(fn)))
   true
 )
 

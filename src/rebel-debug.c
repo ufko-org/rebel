@@ -252,7 +252,7 @@ void traceEntry(CELL *cell, CELL *pCell, CELL *args)
         pCell = (CELL *)currentFunc->contents;
     }
 
-    if((pCell->type == CELL_LAMBDA || pCell->type == CELL_FEXPR)
+    if((pCell->type == CELL_FN || pCell->type == CELL_FN_MACRO)
             && args->type == CELL_SYMBOL)
     {
         if(debugStackIdx == 0) /* startup */
@@ -302,7 +302,7 @@ void traceExit(CELL *result, CELL *cell, CELL *pCell, CELL *args)
         }
     }
 
-    if( (pCell->type == CELL_LAMBDA || pCell->type == CELL_FEXPR)
+    if( (pCell->type == CELL_FN || pCell->type == CELL_FN_MACRO)
             && args->type == CELL_SYMBOL)
     {
         if((UINT)recursionCount == *(debugStack + debugStackIdx - 2) )

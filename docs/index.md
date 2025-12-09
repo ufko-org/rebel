@@ -5,14 +5,15 @@ css:rebel.css
 
 ---
 
-- Rebel is a pragmatic general-purpose scripting language written in ANSI C.
-- Rebel has no build system, just plain make.
-- Rebel builds cleanly with Clang, GCC, or TCC; with TCC under 0.5s.
-- Rebel comes with a core of over 373 [built-in functions](https://github.com/ufko-org/rebel/blob/main/docs/builtin.txt) plus FFI in a single binary under 350KB.
-- Rebel has **lisp-like** syntax and some **lisp-like** features.
-- Rebel hopes you understand the s-expression **(lisp-like)**.
-- Rebel doesn’t compete with other languages.
-- Rebel is simply Rebel.
+- Rebel is a general-purpose scripting language written in ANSI C.
+- Rebel builds with `make` using Clang, GCC, or TCC.
+- Rebel starts without initialization steps or external dependencies.
+- Rebel provides one binary under 350 KB containing 370+ functions and an FFI interface.
+- Rebel evaluates expressions as graphs of CELL objects.
+- Rebel uses a prefix expression syntax.
+- Rebel avoids implicit behavior and hidden evaluation rules.
+- Rebel does not target any language category.
+- Rebel is Rebel.
 
 ### Rebel Fields of Operation
 

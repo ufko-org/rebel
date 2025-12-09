@@ -184,8 +184,8 @@ UINT *envStackTop;
 UINT *resultStack = NULL;
 UINT *resultStackIdx;
 UINT *resultStackTop;
-UINT *lambdaStack = NULL;
-UINT *lambdaStackIdx;
+UINT *fnStack = NULL;
+UINT *fnStackIdx;
 
 /* internal dummy to carry FOOP object */
 SYMBOL objSymbol = {SYMBOL_GLOBAL | SYMBOL_BUILTIN,
@@ -214,7 +214,7 @@ char *prettyPrintFloat = "%1.16g";
 UINT prettyPrintMaxLength =  MAX_PRETTY_PRINT_LENGTH;
 int stringOutputRaw = TRUE;
 
-#define pushLambda(A) (*(lambdaStackIdx++) = (UINT)(A))
+#define pushFn(A) (*(fnStackIdx++) = (UINT)(A))
 
 int pushResultFlag = TRUE;
 
@@ -1010,7 +1010,7 @@ void reset(void)
     }
 
     envStackIdx = envStack;
-    lambdaStackIdx = lambdaStack;
+    fnStackIdx = fnStack;
 
     freeCellBlocks();
 
@@ -1400,15 +1400,15 @@ void initStacks(void)
     {
         freeMemory(resultStack);
     }
-    if(lambdaStack != NULL)
+    if(fnStack != NULL)
     {
-        freeMemory(lambdaStack);
+        freeMemory(fnStack);
     }
     envStackIdx = envStack = (UINT *)allocMemory((MAX_ENV_STACK + 16) * sizeof(UINT));
     envStackTop = envStack + MAX_ENV_STACK;
     resultStackIdx = resultStack = (UINT *)allocMemory((MAX_RESULT_STACK + 16) * sizeof(UINT));
     resultStackTop = resultStack + MAX_RESULT_STACK;
-    lambdaStackIdx = lambdaStack = (UINT *)allocMemory((MAX_RESULT_STACK + 16) * sizeof(UINT));
+    fnStackIdx = fnStack = (UINT *)allocMemory((MAX_RESULT_STACK + 16) * sizeof(UINT));
 }
 
 
@@ -1500,19 +1500,19 @@ CELL *evaluateExpression(CELL *cell)
                 break;
             }
 
-            if(pCell->type == CELL_LAMBDA)
+            if(pCell->type == CELL_FN)
             {
-                pushLambda(cell);
-                result = evaluateLambda((CELL *)pCell->contents, args->next, newContext);
-                --lambdaStackIdx;
+                pushFn(cell);
+                result = evaluateFn((CELL *)pCell->contents, args->next, newContext);
+                --fnStackIdx;
                 break;
             }
 
-            if(pCell->type == CELL_FEXPR)
+            if(pCell->type == CELL_FN_MACRO)
             {
-                pushLambda(cell);
-                result = evaluateLambdaMacro((CELL *)pCell->contents, args->next, newContext);
-                --lambdaStackIdx;
+                pushFn(cell);
+                result = evaluateFnMacro((CELL *)pCell->contents, args->next, newContext);
+                --fnStackIdx;
                 break;
             }
             /* simple ffi with CDECL or DLL and extended libffi */
@@ -1743,9 +1743,9 @@ void cleanupResults(UINT *from)
     }
 }
 
-/* -------------------- evaluate lambda function ----------------------- */
+/* -------------------- evaluate fn function ----------------------- */
 
-CELL *evaluateLambda(CELL *localLst, CELL *arg, SYMBOL *newContext)
+CELL *evaluateFn(CELL *localLst, CELL *arg, SYMBOL *newContext)
 {
     CELL *local;
     CELL *result = nilCell;
@@ -1762,13 +1762,13 @@ CELL *evaluateLambda(CELL *localLst, CELL *arg, SYMBOL *newContext)
 
     if(localLst->type != CELL_EXPRESSION)
     {
-        return(errorProcExt(ERR_INVALID_LAMBDA, localLst));
+        return(errorProcExt(ERR_INVALID_FN, localLst));
     }
 
     /* evaluate arguments */
     if(arg != nilCell)
     {
-        /* this symbol precheck does 10% speed improvement on lambdas  */
+        /* this symbol precheck does 10% speed improvement on fns  */
         if(arg->type == CELL_SYMBOL)
         {
             cell = result = copyCell((CELL *)((SYMBOL *)arg->contents)->contents);
@@ -1860,7 +1860,7 @@ CELL *evaluateLambda(CELL *localLst, CELL *arg, SYMBOL *newContext)
     objSymbol.contents = (UINT)objCell;
 
     #ifdef FOOP_DEBUG
-    printf("objCell in lambda:");
+    printf("objCell in fn:");
     printCell(objCell, TRUE, OUT_CONSOLE);
     printf(" context:%s\n", currentContext->name);
     #endif
@@ -1893,7 +1893,7 @@ CELL *evaluateLambda(CELL *localLst, CELL *arg, SYMBOL *newContext)
 }
 
 
-CELL *evaluateLambdaMacro(CELL *localLst, CELL *arg, SYMBOL *newContext)
+CELL *evaluateFnMacro(CELL *localLst, CELL *arg, SYMBOL *newContext)
 {
     CELL *local;
     CELL *result = nilCell;
@@ -2668,8 +2668,8 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
             break;
 
         case CELL_EXPRESSION:
-        case CELL_LAMBDA:
-        case CELL_FEXPR:
+        case CELL_FN:
+        case CELL_FN_MACRO:
             printExpression(cell, device);
             break;
 
@@ -2764,14 +2764,14 @@ void printExpression(CELL *cell, UINT device)
         prettyPrint(device);
     }
 
-    if(cell->type == CELL_LAMBDA)
+    if(cell->type == CELL_FN)
     {
-        varPrintf(device, "(lambda ");
+        varPrintf(device, "(fn ");
         ++prettyPrintPars;
     }
-    else if(cell->type == CELL_FEXPR)
+    else if(cell->type == CELL_FN_MACRO)
     {
-        varPrintf(device, "(lambda-macro ");
+        varPrintf(device, "(fn-macro ");
         ++prettyPrintPars;
     }
     else
@@ -2945,8 +2945,8 @@ void printSymbol(SYMBOL *sPtr, UINT device)
                 varPrintf(device,"))");
             }
             break;
-        case CELL_LAMBDA:
-        case CELL_FEXPR:
+        case CELL_FN:
+        case CELL_FN_MACRO:
             if(isProtected(sPtr->flags))
             {
                 varPrintf(device, "%s%s%s", LINE_FEED, LINE_FEED, setStr);
@@ -2956,13 +2956,13 @@ void printSymbol(SYMBOL *sPtr, UINT device)
             }
             else if (isGlobal(sPtr->flags))
             {
-                printLambda(sPtr, device);
+                printFn(sPtr, device);
                 varPrintf(device, "%s%s", LINE_FEED, LINE_FEED);
                 printSymbolNameExt(device, sPtr);
             }
             else
             {
-                printLambda(sPtr, device);
+                printFn(sPtr, device);
             }
             break;
         default:
@@ -2995,13 +2995,13 @@ void printSymbol(SYMBOL *sPtr, UINT device)
 }
 
 
-void printLambda(SYMBOL *sPtr, UINT device)
+void printFn(SYMBOL *sPtr, UINT device)
 {
-    CELL *lambda;
+    CELL *fnCell;
     CELL *cell;
 
-    lambda = (CELL *)sPtr->contents;
-    cell = (CELL *)lambda->contents;
+    fnCell = (CELL *)sPtr->contents;
+    cell = (CELL *)fnCell->contents;
     if(cell->type == CELL_EXPRESSION)
     {
         cell = (CELL *)cell->contents;
@@ -3017,7 +3017,7 @@ void printLambda(SYMBOL *sPtr, UINT device)
         return;
     }
 
-    if(symbolType(sPtr) == CELL_LAMBDA)
+    if(symbolType(sPtr) == CELL_FN)
     {
         varPrintf(device, "(define (");
     }
@@ -3043,7 +3043,7 @@ void printLambda(SYMBOL *sPtr, UINT device)
     --prettyPrintPars;
     prettyPrint(device);
 
-    cell = (CELL *)lambda->contents;
+    cell = (CELL *)fnCell->contents;
     while((cell = cell->next) != nilCell)
     {
         if(prettyPrintLength > prettyPrintMaxLength)
@@ -3096,7 +3096,7 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
     {
         varPrintf(device, "(global '");
         printSymbolName(device, sPtr);
-        if(symbolType(sPtr) == CELL_LAMBDA || symbolType(sPtr) == CELL_FEXPR)
+        if(symbolType(sPtr) == CELL_FN || symbolType(sPtr) == CELL_FN_MACRO)
         {
             varPrintf(device, ")");
         }
@@ -3181,10 +3181,10 @@ char *errorMessage[] =
     "list or number expected",      /* 19 */
     "array expected",               /* 20 */
     "array, list or string expected", /* 21 */
-    "lambda expected",              /* 22 */
-    "lambda-macro expected",        /* 23 */
+    "fn expected",                  /* 22 */
+    "fn-macro expected",            /* 23 */
     "invalid function",             /* 24 */
-    "invalid lambda expression",    /* 25 */
+    "invalid fn expression",        /* 25 */
     "invalid macro expression",     /* 26 */
     "invalid let parameter list",   /* 27 */
     "problem saving file",          /* 28 */
@@ -3305,9 +3305,9 @@ void fatalError(int errorNumber, CELL *expr, int deleteFlag)
 
 void printErrorMessage(UINT errorNumber, CELL *expr, int deleteFlag)
 {
-    CELL *lambdaFunc;
-    CELL *lambdaExpr;
-    UINT *stackIdx = lambdaStackIdx;
+    CELL *fnFuncCell;
+    CELL *fnExprCell;
+    UINT *stackIdx = fnStackIdx;
     SYMBOL *context;
     int i;
 
@@ -3347,22 +3347,22 @@ void printErrorMessage(UINT errorNumber, CELL *expr, int deleteFlag)
         }
     }
 
-    while(stackIdx > lambdaStack)
+    while(stackIdx > fnStack)
     {
-        lambdaExpr = (CELL *)*(--stackIdx);
-        lambdaFunc = (CELL *)lambdaExpr->contents;
-        if(lambdaFunc->type == CELL_SYMBOL)
+        fnExprCell = (CELL *)*(--stackIdx);
+        fnFuncCell = (CELL *)fnExprCell->contents;
+        if(fnFuncCell->type == CELL_SYMBOL)
         {
             writeStreamStr(&errorStream, LINE_FEED, 0);
             writeStreamStr(&errorStream, "called from user function ", 0);
-            context = ((SYMBOL *)lambdaFunc->contents)->context;
+            context = ((SYMBOL *)fnFuncCell->contents)->context;
             if(context != mainContext)
             {
                 writeStreamStr(&errorStream, context->name, 0);
                 writeStreamStr(&errorStream, ":", 0);
             }
-            /* writeStreamStr(&errorStream, ((SYMBOL *)lambdaFunc->contents)->name, 0); */
-            printCell(lambdaExpr, (errorNumber != ERR_USER_ERROR), (UINT)&errorStream); /* 10.6.3 */
+            /* writeStreamStr(&errorStream, ((SYMBOL *)fnFuncCell->contents)->name, 0); */
+            printCell(fnExprCell, (errorNumber != ERR_USER_ERROR), (UINT)&errorStream); /* 10.6.3 */
         }
     }
 
@@ -3401,29 +3401,29 @@ void printErrorMessage(UINT errorNumber, CELL *expr, int deleteFlag)
 }
 
 
-extern UINT *lambdaStack;
-extern UINT *lambdaStackIdx;
+extern UINT *fnStack;
+extern UINT *fnStackIdx;
 CELL *p_history(CELL *params)
 {
     CELL *history;
-    CELL *lambdaFunc;
-    CELL *lambdaExpr;
-    UINT *stackIdx = lambdaStackIdx;
+    CELL *fnFuncCell;
+    CELL *fnExprCell;
+    UINT *stackIdx = fnStackIdx;
 
     history = getCell(CELL_EXPRESSION);
-    while(stackIdx > lambdaStack)
+    while(stackIdx > fnStack)
     {
-        lambdaExpr = (CELL *)*(--stackIdx);
-        lambdaFunc = (CELL *)lambdaExpr->contents;
-        if(lambdaFunc->type == CELL_SYMBOL)
+        fnExprCell = (CELL *)*(--stackIdx);
+        fnFuncCell = (CELL *)fnExprCell->contents;
+        if(fnFuncCell->type == CELL_SYMBOL)
         {
             if(getFlag(params))
             {
-                addList(history, copyCell(lambdaExpr));
+                addList(history, copyCell(fnExprCell));
             }
             else
             {
-                addList(history, copyCell((CELL *)lambdaExpr->contents));
+                addList(history, copyCell((CELL *)fnExprCell->contents));
             }
         }
     }
@@ -3646,26 +3646,25 @@ GETNEXT:
             break;
 
         case TKN_SYMBOL:
-            if(strcmp(token, "lambda") == 0 || strcmp(token, "fn") == 0)
+            if(strcmp(token, "fn") == 0)
             {
-                /* ufko lambda aliases */
                 if(cell->type != CELL_EXPRESSION)
                 {
-                    errorProcExt2(ERR_INVALID_LAMBDA, stuffString(lastPtr));
+                    errorProcExt2(ERR_INVALID_FN, stuffString(lastPtr));
                     return(FALSE);
                 }
-                cell->type =  CELL_LAMBDA;
+                cell->type =  CELL_FN;
                 cell->aux = (UINT)nilCell;
                 goto GETNEXT;
             }
-            else if(strcmp(token, "lambda-macro") == 0 || strcmp(token, "fn-macro") == 0)
+            else if(strcmp(token, "fn-macro") == 0)
             {
                 if(cell->type != CELL_EXPRESSION)
                 {
-                    errorProcExt2(ERR_INVALID_LAMBDA, stuffString(lastPtr));
+                    errorProcExt2(ERR_INVALID_FN, stuffString(lastPtr));
                     return(FALSE);
                 }
-                cell->type =  CELL_FEXPR;
+                cell->type =  CELL_FN_MACRO;
                 cell->aux = (UINT)nilCell;
                 goto GETNEXT;
             }
@@ -4521,7 +4520,7 @@ CELL *getCreateSymbol(CELL *params, SYMBOL * * symbol, char *name)
         {
             *symbol = nilSymbol;
         }
-        else if(cell->type != CELL_LAMBDA && cell->type != CELL_FEXPR && cell->type != CELL_PRIMITIVE)
+        else if(cell->type != CELL_FN && cell->type != CELL_FN_MACRO && cell->type != CELL_PRIMITIVE)
         {
             *symbol = nilSymbol;
             deleteList(cellForDelete);
@@ -4679,7 +4678,7 @@ CELL *p_catch(CELL *params)
 {
     jmp_buf errorJumpSave;
     UINT *envStackIdxSave;
-    UINT *lambdaStackIdxSave;
+    UINT *fnStackIdxSave;
     int recursionCountSave;
     int value;
     CELL *expr;
@@ -4703,7 +4702,7 @@ CELL *p_catch(CELL *params)
     /* save general environment */
     envStackIdxSave = envStackIdx;
     recursionCountSave = recursionCount;
-    lambdaStackIdxSave = lambdaStackIdx;
+    fnStackIdxSave = fnStackIdx;
     contextSave = currentContext;
     /* save FOOP environment */
     objSave = (CELL *)objSymbol.contents;
@@ -4716,7 +4715,7 @@ CELL *p_catch(CELL *params)
         /* restore general environment */
         recoverEnvironment(envStackIdxSave);
         recursionCount = recursionCountSave;
-        lambdaStackIdx = lambdaStackIdxSave;
+        fnStackIdx = fnStackIdxSave;
         currentContext = contextSave;
         /* restore FOOP environment */
         objSymbol.contents = (UINT)objSave;
@@ -4935,11 +4934,11 @@ CELL *sysEvalString(char *evalString, SYMBOL *context, CELL *proc, int mode)
 
 CELL *p_curry(CELL *params)
 {
-    CELL *lambda;
+    CELL *fnCell;
     CELL *cell;
 
     cell = makeCell(CELL_EXPRESSION, (UINT)stuffSymbol(sysxSymbol));
-    lambda = makeCell(CELL_LAMBDA, (UINT)cell);
+    fnCell = makeCell(CELL_FN, (UINT)cell);
     cell->next = getCell(CELL_EXPRESSION);
     cell = cell->next;
     cell->contents = (UINT)copyCell(params);
@@ -4953,7 +4952,7 @@ CELL *p_curry(CELL *params)
     cell = cell->next;
     cell->next = copyCell(params->next);
     */
-    return(lambda);
+    return(fnCell);
 }
 
 
@@ -5233,7 +5232,7 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
 {
     SYMBOL *symbol;
     CELL *argsPtr;
-    CELL *lambda;
+    CELL *fnCell;
     CELL *args;
     CELL *body;
     CELL *cell;
@@ -5292,13 +5291,13 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
     }
 
     args->next = body;
-    lambda = makeCell(cellType, (UINT)args);
+    fnCell = makeCell(cellType, (UINT)args);
 
     deleteList((CELL *)symbol->contents);
-    symbol->contents = (UINT)lambda;
+    symbol->contents = (UINT)fnCell;
 
     pushResultFlag = FALSE;
-    return(lambda);
+    return(fnCell);
 }
 
 
@@ -5308,7 +5307,7 @@ CELL *p_define(CELL *params)
     {
         if(params->type != CELL_DYN_SYMBOL)
         {
-            return(defineOrMacro(params, CELL_LAMBDA, FALSE));
+            return(defineOrMacro(params, CELL_FN, FALSE));
         }
         return(setDefine(getDynamicSymbol(params), params->next, SET_SET));
     }
@@ -5318,12 +5317,12 @@ CELL *p_define(CELL *params)
 
 CELL *p_defineMacro(CELL *params)
 {
-    return(defineOrMacro(params, CELL_FEXPR, FALSE));
+    return(defineOrMacro(params, CELL_FN_MACRO, FALSE));
 }
 
 CELL *p_macro(CELL *params)
 {
-    return(defineOrMacro(params, CELL_FEXPR, TRUE));
+    return(defineOrMacro(params, CELL_FN_MACRO, TRUE));
 }
 
 /* also called from setq */
@@ -7497,9 +7496,9 @@ CELL *p_isList(CELL *params)
     return(isType(params, CELL_EXPRESSION));
 }
 
-CELL *p_isLambda(CELL *params)
+CELL *p_isFn(CELL *params)
 {
-    return(isType(params, CELL_LAMBDA));
+    return(isType(params, CELL_FN));
 }
 
 CELL *p_isMacro(CELL *params)
@@ -7511,7 +7510,7 @@ CELL *p_isMacro(CELL *params)
         return(errorProc(ERR_MISSING_ARGUMENT));
     }
     params = evaluateExpression(params);
-    if(params->type == CELL_FEXPR) /* lambda-macro */
+    if(params->type == CELL_FN_MACRO) /* fn-macro */
     {
         return(trueCell);
     }

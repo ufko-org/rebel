@@ -46,11 +46,11 @@
   '(x y)
 )
 
-; Lambda moved into a new context
+; Fn moved into a new context
 ; ------------------------------------------------------------
-(test "6: set tmp lambda"
-  (set 'tmp (lambda (x) (+ x x)))
-  '(lambda (x) (+ x x))
+(test "6: set tmp fn"
+  (set 'tmp (fn (x) (+ x x)))
+  '(fn (x) (+ x x))
 )
 
 (test "7: def-new tmp into C4:C4 returns symbol"
@@ -60,5 +60,5 @@
 
 (test "8: C4:C4 has remapped parameter"
   C4:C4
-  '(lambda (C4:x) (+ C4:x C4:x))
+  '(fn (C4:x) (+ C4:x C4:x))
 )

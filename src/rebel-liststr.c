@@ -231,8 +231,8 @@ CELL *p_length(CELL *params)
             length = strlen((char *)params->contents);
             break;
         case CELL_EXPRESSION:
-        case CELL_LAMBDA:
-        case CELL_FEXPR:
+        case CELL_FN:
+        case CELL_FN_MACRO:
             length = listlen((CELL *)params->contents);
             break;
         case CELL_ARRAY:

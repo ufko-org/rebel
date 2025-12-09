@@ -1476,8 +1476,8 @@ int compareCells(CELL *left, CELL *right)
 
         case CELL_QUOTE:
         case CELL_EXPRESSION:
-        case CELL_LAMBDA:
-        case CELL_FEXPR:
+        case CELL_FN:
+        case CELL_FN_MACRO:
             return(compareLists((CELL *)left->contents, (CELL *)right->contents));
         case CELL_ARRAY:
             return(compareArrays((CELL *)left, (CELL *)right));
@@ -2530,7 +2530,7 @@ CELL *p_series(CELL *params)
             cell = cell->next;
         }
     }
-    else /* assumes lambda or primitive */
+    else /* assumes fn or primitive */
     {
         cellIdx = initIteratorIndex();
         addList(series, copyCell(cell));

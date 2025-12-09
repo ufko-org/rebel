@@ -12,19 +12,20 @@
 
 ---
 
-- Rebel is a pragmatic general-purpose scripting language written in ANSI C.
-- Rebel has no build system, just plain make.
-- Rebel builds cleanly with Clang, GCC, or TCC; with TCC under 0.5s.
-- Rebel comes with a core of 373 [built-in functions](https://github.com/ufko-org/rebel/blob/main/docs/builtin.txt) plus FFI in a single binary under 350KB.
-- Rebel has **lisp-like** syntax and some **lisp-like** features.
-- Rebel hopes you understand the s-expression **(lisp-like)**.
-- Rebel doesn’t compete with other languages.
-- Rebel is simply Rebel.
+- Rebel is a general-purpose scripting language written in ANSI C.
+- Rebel builds with `make` using Clang, GCC, or TCC.
+- Rebel starts without initialization steps or external dependencies.
+- Rebel provides one binary under 350 KB containing 370+ functions and an FFI interface.
+- Rebel evaluates expressions as graphs of CELL objects.
+- Rebel uses a prefix expression syntax.
+- Rebel avoids implicit behavior and hidden evaluation rules.
+- Rebel does not target any language category.
+- Rebel is Rebel.
 
 ### Rebel Fields of Operation
 
 - **Core Scripting & Flow Control**
-  - loops, conditionals, list processing, lambda, functional programming
+  - loops, conditionals, list processing, anonymous functional programming
 - **Strings & Data Manipulation**
   - regex, parsing, conversion, unicode, text transformation
 - **Math & Statistics**
@@ -85,7 +86,7 @@ gringo ~ $: rebel
 Rebel v.1.0 64-bit on BSD IPv4/6 UTF-8 libffi, options: rebel -h
 
 > (define (sum x) (+ x x))
-(lambda (x) (+ x x))
+(fn (x) (+ x x))
 > (sum 2)
 4
 > (list? sum)
@@ -101,7 +102,7 @@ Rebel remembers things
 
 ```
 > (define (gen:gen) (inc 0))
-(lambda () (inc 0))
+(fn () (inc 0))
 > (gen)
 1
 > (gen)
