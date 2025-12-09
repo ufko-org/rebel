@@ -1222,6 +1222,7 @@ void sendHTTPpage(char *content, size_t size, char *media)
     #ifdef DEBUGHTTP
     puts("# Header sent:");
     printf("HTTP/1.0 %s\r\n", status);
+    /* ufko OK version as int in debug mode */
     printf("Server: Rebel v.%d (%s)\r\n", version, OSTYPE);
     #endif
 
