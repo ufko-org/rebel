@@ -8284,6 +8284,276 @@ In all other cases nil is returned.</p>
 </ul>
 <p>See: <a href="#f-fn-macro">fn-macro</a>, <a href="#f-define-macro">define-macro</a>, <a href="#f-macro">macro</a></p>
 <hr/>
+<p><a name="f-make-dir"></a></p>
+<h2 id="make-dir">make-dir</h2>
+<pre><code>syntax: (make-dir str-dir-name [int-mode])
+</code></pre>
+<p>Description:</p>
+<p>Creates a directory specified by str-dir-name.</p>
+<p>When int-mode is given, it specifies the access mode of
+the new directory. The function returns true on success
+and nil on failure.</p>
+<p>If no access mode is specified, the system default is
+used (typically drwxr-xr-x).</p>
+<p>The specified access mode is additionally masked by the
+process umask. The effective permissions are the result
+of:</p>
+<p>requested mode AND (NOT umask)</p>
+<p>The current umask can be inspected using the umask
+command in the shell.</p>
+<p>Examples:</p>
+<pre><code>; basic usage
+;------------------------------------------------------------
+(make-dir "adir")
+;-&#62; true
+
+; explicit access mode (octal)
+;------------------------------------------------------------
+; leading zero denotes an octal number
+(make-dir "secure-dir" 0750)
+;-&#62; true
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Permission modes must be specified in octal form.</li>
+<li>The final permissions may differ due to the system
+umask (commonly 0022).</li>
+<li>If the directory already exists or cannot be created,
+nil is returned.</li>
+</ul>
+<p>See: <a href="#f-remove-dir">remove-dir</a>, <a href="#f-change-dir">change-dir</a></p>
+<hr/>
+<p><a name="f-map"></a></p>
+<h2 id="map">map</h2>
+<pre><code>syntax: (map exp-functor list-args-1 [list-args-2 ... ])
+</code></pre>
+<p>Description:</p>
+<p>Successively applies exp-functor to elements taken from
+one or more argument lists and returns the collected
+results as a list.</p>
+<p>exp-functor can be a primitive function, a user-defined
+function, or an anonymous function created with fn.</p>
+<p>The number of arguments passed to exp-functor is
+determined by the number of argument lists. Evaluation
+stops when the first argument list is exhausted. Extra
+elements in other lists are ignored.</p>
+<p>The return value is always a list, even when arrays are
+used as input.</p>
+<p>Examples:</p>
+<pre><code>; basic mapping with multiple argument lists
+;------------------------------------------------------------
+(map + &#39;(1 2 3) &#39;(50 60 70))
+;-&#62; (51 62 73)
+
+(map if &#39;(true nil true nil true)
+        &#39;(1 2 3 4 5)
+        &#39;(6 7 8 9 10))
+;-&#62; (1 7 3 9 5)
+
+(map (fn (x y) (* x y)) &#39;(3 4) &#39;(20 10))
+;-&#62; (60 40)
+
+; generating a function dynamically
+;------------------------------------------------------------
+(define (make-adder n)
+  (fn (x) (+ n x)))
+
+(map (make-adder 2) &#39;(1 2 3 4 5))
+;-&#62; (3 4 5 6 7)
+
+(define (make-multiplier n)
+  (fn (x) (* n x)))
+
+(map (make-multiplier 3) &#39;(1 2 3 4 5))
+;-&#62; (3 6 9 12 15)
+
+; embedding map into a higher-level function
+;------------------------------------------------------------
+(define (map-with op p lst)
+  (map (fn (x) (op p x)) lst))
+
+(map-with + 2 &#39;(1 2 3 4))
+;-&#62; (3 4 5 6)
+
+(map-with * 1.5 &#39;(1 2 3 4))
+;-&#62; (1.5 3 4.5 6)
+
+; access to the internal index
+;------------------------------------------------------------
+(map (fn (x) (list $idx x)) &#39;(a b c))
+;-&#62; ((0 a) (1 b) (2 c))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The iteration length is determined by the first
+argument list.</li>
+<li>Missing elements in other lists stop argument
+collection at that position.</li>
+<li>Special forms with syntactic evaluation rules
+(e.g. case) cannot be mapped.</li>
+<li>The variable $idx contains the zero-based index of
+the current iteration.</li>
+</ul>
+<p>See: <a href="#f-apply">apply</a>, <a href="#f-fn">fn</a></p>
+<hr/>
+<p><a name="f-mat"></a></p>
+<h2 id="mat">mat</h2>
+<pre><code>syntax: (mat + | - | * | &#47; matrix-A matrix-B)
+syntax: (mat + | - | * | &#47; matrix-A number)
+</code></pre>
+<p>Description:</p>
+<p>Performs element-wise arithmetic operations on
+two-dimensional matrices.</p>
+<p>The operation is specified by one of the arithmetic
+operators +, -, *, or &#47;. All computations are performed
+using floating point arithmetic.</p>
+<p>In the first syntax, the operation is applied pairwise
+to corresponding elements of matrix-A and matrix-B.</p>
+<p>In the second syntax, each element of matrix-A is
+combined with the scalar value number.</p>
+<p>Matrices are represented as two-dimensional lists or
+arrays.</p>
+<p>Examples:</p>
+<pre><code>; matrix-to-matrix operations
+;------------------------------------------------------------
+(set &#39;A &#39;((1 2 3) (4 5 6)))
+(set &#39;B A)
+
+(mat + A B)
+;-&#62; ((2 4 6) (8 10 12))
+
+(mat - A B)
+;-&#62; ((0 0 0) (0 0 0))
+
+(mat * A B)
+;-&#62; ((1 4 9) (16 25 36))
+
+(mat &#47; A B)
+;-&#62; ((1 1 1) (1 1 1))
+
+; operator supplied as a variable
+;------------------------------------------------------------
+(set &#39;op +)
+(mat op A B)
+;-&#62; ((2 4 6) (8 10 12))
+
+; matrix-to-scalar operations
+;------------------------------------------------------------
+(mat + A 5)
+;-&#62; ((6 7 8) (9 10 11))
+
+(mat - A 2)
+;-&#62; ((-1 0 1) (2 3 4))
+
+(mat * A 3)
+;-&#62; ((3 6 9) (12 15 18))
+
+(mat &#47; A 10)
+;-&#62; ((0.1 0.2 0.3) (0.4 0.5 0.6))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Operations are applied element-wise.</li>
+<li>All results are computed as floating point values.</li>
+<li>Matrix dimensions must match for matrix-to-matrix
+operations.</li>
+</ul>
+<p>See: <a href="#f-det">det</a>, <a href="#f-invert">invert</a>, <a href="#f-multiply">multiply</a>, <a href="#f-transpose">transpose</a></p>
+<hr/>
+<p><a name="f-match"></a></p>
+<h2 id="match">match</h2>
+<pre><code>syntax: (match list-pattern list-match [bool])
+</code></pre>
+<p>Description:</p>
+<p>Matches list-pattern against list-match and returns a
+list of expressions captured by wildcard symbols in the
+pattern.</p>
+<p>The pattern may contain the wildcard symbols ?, +, and *:</p>
+<ul>
+<li>? matches exactly one element and returns that element</li>
+<li>* matches zero or more elements and returns them as a list</li>
+<li>+ matches one or more elements and returns them as a list</li>
+</ul>
+<p>Wildcards may be nested. If the pattern cannot be
+matched, match returns nil. If the pattern contains no
+wildcards, an empty list is returned.</p>
+<p>When the optional third argument evaluates to true, all
+elements involved in the match are returned instead of
+only the wildcard captures.</p>
+<p>Examples:</p>
+<pre><code>; simple element capture
+;------------------------------------------------------------
+(match &#39;(a ? c) &#39;(a b c))
+;-&#62; (b)
+
+(match &#39;(a ? ?) &#39;(a b c))
+;-&#62; (b c)
+
+(match &#39;(a ? c) &#39;(a (x y z) c))
+;-&#62; ((x y z))
+
+(match &#39;(a ? c) &#39;(a (x y z) c) true)
+;-&#62; (a (x y z) c)
+
+(match &#39;(a ? c) &#39;(a x y z c))
+;-&#62; nil
+
+; list capture with *
+;------------------------------------------------------------
+(match &#39;(a * c) &#39;(a x y z c))
+;-&#62; ((x y z))
+
+(match &#39;(a (b c ?) x y z) &#39;(a (b c d) x y z))
+;-&#62; (d)
+
+(match &#39;(a (*) x ? z) &#39;(a (b c d) x y z))
+;-&#62; ((b c d) y)
+
+; behavior of + and *
+;------------------------------------------------------------
+(match &#39;(+) &#39;())
+;-&#62; nil
+
+(match &#39;(+) &#39;(a))
+;-&#62; ((a))
+
+(match &#39;(+) &#39;(a b))
+;-&#62; ((a b))
+
+(match &#39;(a (*) x ? z) &#39;(a () x y z))
+;-&#62; (() y)
+
+(match &#39;(a (+) x ? z) &#39;(a () x y z))
+;-&#62; nil
+
+; binding matched values
+;------------------------------------------------------------
+(map set &#39;(x y)
+     (match &#39;(a (? c) d *) &#39;(a (b c) d e f)))
+
+x
+;-&#62; b
+
+y
+;-&#62; (e f)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The * wildcard matches the smallest possible sequence
+but may backtrack to allow a full match.</li>
+<li>The + wildcard behaves like *, but requires at least
+one element.</li>
+<li>match operates on lists only. String matching is not
+supported.</li>
+</ul>
+<p>match is commonly used as a comparison functor in
+<a href="#f-find">find</a>, <a href="#f-ref">ref</a>, <a href="#f-ref-all">ref-all</a>,
+and <a href="#f-replace">replace</a>.</p>
+<p>For logic-style pattern matching, see <a href="#f-unify">unify</a>.
+For string matching, use <a href="#f-regex">regex</a>,
+<a href="#f-find">find</a>, or <a href="#f-find-all">find-all</a>.</p>
+<p>See: <a href="#f-unify">unify</a>, <a href="#f-find">find</a>, <a href="#f-replace">replace</a></p>
+<hr/>
 
 </body>
 </html>

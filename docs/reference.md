@@ -10667,3 +10667,335 @@ Notes:
 See: [fn-macro](#f-fn-macro), [define-macro](#f-define-macro), [macro](#f-macro)
 
 ---
+
+
+<a name="f-make-dir"></a>
+## make-dir
+
+```
+syntax: (make-dir str-dir-name [int-mode])
+```
+
+Description:
+
+Creates a directory specified by str-dir-name.
+
+When int-mode is given, it specifies the access mode of
+the new directory. The function returns true on success
+and nil on failure.
+
+If no access mode is specified, the system default is
+used (typically drwxr-xr-x).
+
+The specified access mode is additionally masked by the
+process umask. The effective permissions are the result
+of:
+
+requested mode AND (NOT umask)
+
+The current umask can be inspected using the umask
+command in the shell.
+
+Examples:
+
+```
+; basic usage
+;------------------------------------------------------------
+(make-dir "adir")
+;-> true
+
+; explicit access mode (octal)
+;------------------------------------------------------------
+; leading zero denotes an octal number
+(make-dir "secure-dir" 0750)
+;-> true
+```
+
+Notes:
+
+- Permission modes must be specified in octal form.
+- The final permissions may differ due to the system
+  umask (commonly 0022).
+- If the directory already exists or cannot be created,
+  nil is returned.
+
+See: [remove-dir](#f-remove-dir), [change-dir](#f-change-dir)
+
+---
+
+
+<a name="f-map"></a>
+## map
+
+```
+syntax: (map exp-functor list-args-1 [list-args-2 ... ])
+```
+
+Description:
+
+Successively applies exp-functor to elements taken from
+one or more argument lists and returns the collected
+results as a list.
+
+exp-functor can be a primitive function, a user-defined
+function, or an anonymous function created with fn.
+
+The number of arguments passed to exp-functor is
+determined by the number of argument lists. Evaluation
+stops when the first argument list is exhausted. Extra
+elements in other lists are ignored.
+
+The return value is always a list, even when arrays are
+used as input.
+
+Examples:
+
+```
+; basic mapping with multiple argument lists
+;------------------------------------------------------------
+(map + '(1 2 3) '(50 60 70))
+;-> (51 62 73)
+
+(map if '(true nil true nil true)
+        '(1 2 3 4 5)
+        '(6 7 8 9 10))
+;-> (1 7 3 9 5)
+
+(map (fn (x y) (* x y)) '(3 4) '(20 10))
+;-> (60 40)
+
+; generating a function dynamically
+;------------------------------------------------------------
+(define (make-adder n)
+  (fn (x) (+ n x)))
+
+(map (make-adder 2) '(1 2 3 4 5))
+;-> (3 4 5 6 7)
+
+(define (make-multiplier n)
+  (fn (x) (* n x)))
+
+(map (make-multiplier 3) '(1 2 3 4 5))
+;-> (3 6 9 12 15)
+
+; embedding map into a higher-level function
+;------------------------------------------------------------
+(define (map-with op p lst)
+  (map (fn (x) (op p x)) lst))
+
+(map-with + 2 '(1 2 3 4))
+;-> (3 4 5 6)
+
+(map-with * 1.5 '(1 2 3 4))
+;-> (1.5 3 4.5 6)
+
+; access to the internal index
+;------------------------------------------------------------
+(map (fn (x) (list $idx x)) '(a b c))
+;-> ((0 a) (1 b) (2 c))
+```
+
+Notes:
+
+- The iteration length is determined by the first
+  argument list.
+- Missing elements in other lists stop argument
+  collection at that position.
+- Special forms with syntactic evaluation rules
+  (e.g. case) cannot be mapped.
+- The variable $idx contains the zero-based index of
+  the current iteration.
+
+See: [apply](#f-apply), [fn](#f-fn)
+
+---
+
+
+<a name="f-mat"></a>
+## mat
+
+```
+syntax: (mat + | - | * | / matrix-A matrix-B)
+syntax: (mat + | - | * | / matrix-A number)
+```
+
+Description:
+
+Performs element-wise arithmetic operations on
+two-dimensional matrices.
+
+The operation is specified by one of the arithmetic
+operators +, -, *, or /. All computations are performed
+using floating point arithmetic.
+
+In the first syntax, the operation is applied pairwise
+to corresponding elements of matrix-A and matrix-B.
+
+In the second syntax, each element of matrix-A is
+combined with the scalar value number.
+
+Matrices are represented as two-dimensional lists or
+arrays.
+
+Examples:
+
+```
+; matrix-to-matrix operations
+;------------------------------------------------------------
+(set 'A '((1 2 3) (4 5 6)))
+(set 'B A)
+
+(mat + A B)
+;-> ((2 4 6) (8 10 12))
+
+(mat - A B)
+;-> ((0 0 0) (0 0 0))
+
+(mat * A B)
+;-> ((1 4 9) (16 25 36))
+
+(mat / A B)
+;-> ((1 1 1) (1 1 1))
+
+; operator supplied as a variable
+;------------------------------------------------------------
+(set 'op +)
+(mat op A B)
+;-> ((2 4 6) (8 10 12))
+
+; matrix-to-scalar operations
+;------------------------------------------------------------
+(mat + A 5)
+;-> ((6 7 8) (9 10 11))
+
+(mat - A 2)
+;-> ((-1 0 1) (2 3 4))
+
+(mat * A 3)
+;-> ((3 6 9) (12 15 18))
+
+(mat / A 10)
+;-> ((0.1 0.2 0.3) (0.4 0.5 0.6))
+```
+
+Notes:
+
+- Operations are applied element-wise.
+- All results are computed as floating point values.
+- Matrix dimensions must match for matrix-to-matrix
+  operations.
+
+See: [det](#f-det), [invert](#f-invert), [multiply](#f-multiply), [transpose](#f-transpose)
+
+---
+
+
+<a name="f-match"></a>
+## match
+
+```
+syntax: (match list-pattern list-match [bool])
+```
+
+Description:
+
+Matches list-pattern against list-match and returns a
+list of expressions captured by wildcard symbols in the
+pattern.
+
+The pattern may contain the wildcard symbols ?, +, and *:
+
+- ? matches exactly one element and returns that element
+- * matches zero or more elements and returns them as a list
+- + matches one or more elements and returns them as a list
+
+Wildcards may be nested. If the pattern cannot be
+matched, match returns nil. If the pattern contains no
+wildcards, an empty list is returned.
+
+When the optional third argument evaluates to true, all
+elements involved in the match are returned instead of
+only the wildcard captures.
+
+Examples:
+
+```
+; simple element capture
+;------------------------------------------------------------
+(match '(a ? c) '(a b c))
+;-> (b)
+
+(match '(a ? ?) '(a b c))
+;-> (b c)
+
+(match '(a ? c) '(a (x y z) c))
+;-> ((x y z))
+
+(match '(a ? c) '(a (x y z) c) true)
+;-> (a (x y z) c)
+
+(match '(a ? c) '(a x y z c))
+;-> nil
+
+; list capture with *
+;------------------------------------------------------------
+(match '(a * c) '(a x y z c))
+;-> ((x y z))
+
+(match '(a (b c ?) x y z) '(a (b c d) x y z))
+;-> (d)
+
+(match '(a (*) x ? z) '(a (b c d) x y z))
+;-> ((b c d) y)
+
+; behavior of + and *
+;------------------------------------------------------------
+(match '(+) '())
+;-> nil
+
+(match '(+) '(a))
+;-> ((a))
+
+(match '(+) '(a b))
+;-> ((a b))
+
+(match '(a (*) x ? z) '(a () x y z))
+;-> (() y)
+
+(match '(a (+) x ? z) '(a () x y z))
+;-> nil
+
+; binding matched values
+;------------------------------------------------------------
+(map set '(x y)
+     (match '(a (? c) d *) '(a (b c) d e f)))
+
+x
+;-> b
+
+y
+;-> (e f)
+```
+
+Notes:
+
+- The * wildcard matches the smallest possible sequence
+  but may backtrack to allow a full match.
+- The + wildcard behaves like *, but requires at least
+  one element.
+- match operates on lists only. String matching is not
+  supported.
+
+match is commonly used as a comparison functor in
+[find](#f-find), [ref](#f-ref), [ref-all](#f-ref-all),
+and [replace](#f-replace).
+
+For logic-style pattern matching, see [unify](#f-unify).
+For string matching, use [regex](#f-regex),
+[find](#f-find), or [find-all](#f-find-all).
+
+See: [unify](#f-unify), [find](#f-find), [replace](#f-replace)
+
+---
+
+
