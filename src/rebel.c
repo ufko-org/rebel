@@ -703,7 +703,7 @@ int main(int argc, char *argv[])
 
         if(strcmp(argv[idx], "-v") == 0)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE, LIBFFI, ".");
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, ".");
             exit(0);
         }
 
@@ -738,7 +738,7 @@ AFTER_ERROR_ENTRY:
         isTTY = TRUE;
         if(!noPromptMode)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE, LIBFFI, banner2);
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, banner2);
         }
     }
     else
@@ -746,7 +746,7 @@ AFTER_ERROR_ENTRY:
         setbuf(IOchannel,0);
         if(forcePromptMode)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE, LIBFFI, banner2);
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, banner2);
         }
     }
 
@@ -943,7 +943,7 @@ void setupServer(int reconnect)
 
     if(!reconnect && !noPromptMode)
     {
-        varPrintf(OUT_CONSOLE, banner, OSTYPE, LIBFFI, ".");
+        varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, ".");
     }
 }
 

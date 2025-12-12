@@ -1217,13 +1217,13 @@ void sendHTTPpage(char *content, size_t size, char *media)
     }
 
     varPrintf(OUT_CONSOLE, "HTTP/1.0 %s\r\n", status);
-    /* ufko varPrintf(OUT_CONSOLE, "Server: Rebel v.%d (%s)\r\n", version, OSTYPE);*/
+    /* ufko varPrintf(OUT_CONSOLE, "Server: Rebel v.%d (%s)\r\n", version, OSTYPE_HUMAN);*/
     varPrintf(OUT_CONSOLE, "Server: Rebel\r\n");
     #ifdef DEBUGHTTP
     puts("# Header sent:");
     printf("HTTP/1.0 %s\r\n", status);
     /* ufko OK version as int in debug mode */
-    printf("Server: Rebel v.%d (%s)\r\n", version, OSTYPE);
+    printf("Server: Rebel v.%d (%s)\r\n", version, OSTYPE_HUMAN);
     #endif
 
     if(media != NULL)
