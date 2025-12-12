@@ -26,7 +26,7 @@ CFLAGS = -fPIC -Wall -Oz -c \
 	-Wno-format-truncation \
 	-Wno-restrict \
 	-I/usr/local/include \
-	-DLINUX -DSUPPORT_UTF8 -DREADLINE -DFFI
+	-D_LINUX -DSUPPORT_UTF8 -DREADLINE -DFFI
 
 default: rebel
 

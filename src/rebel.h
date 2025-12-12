@@ -36,26 +36,29 @@
 
 #define REBELDIR "/usr/local/share/rebel"
 
-#ifdef LINUX
-    #define OSTYPE "Linux"
+#ifdef _LINUX
+    #define OSTYPE "linux"
+    #define OSTYPE_HUMAN "Linux"
 #endif
 
 #ifdef _BSD
-    #define OSTYPE "BSD"
+    #define OSTYPE "bsd"
+    #define OSTYPE_HUMAN "BSD"
 #endif
 
-#ifdef MAC_OS
-    #define OSTYPE "OSX"
+#ifdef _MACOS
+    #define OSTYPE "macos"
+    #define OSTYPE_HUMAN "macOS"
 #endif
 
 /* include -DFFI in your makefile on the compile line
    and -lffi on the link line */
 #ifdef FFI
-    #if defined(MAC_OS)
+    #if defined(_MACOS)
         #include <ffi/ffi.h>
     #endif
 
-    #if defined(LINUX) || defined(_BSD)
+    #if defined(_LINUX) || defined(_BSD)
         #include <ffi.h>
     #endif
 
@@ -99,7 +102,7 @@ This is for 64bit large file support (LFS),
 #if 0
     /* ufko - should work on linux now */
     #ifdef SUPPORT_UTF8
-        #ifdef LINUX
+        #ifdef _LINUX
             #include <wchar.h>
             #define WCSFTIME
         #endif
@@ -121,11 +124,11 @@ This is for 64bit large file support (LFS),
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#ifdef LINUX
+#ifdef _LINUX
     #include <malloc.h>
 #endif
 
-#ifdef MAC_OS
+#ifdef _MACOS
     #include <alloca.h>
 #endif
 

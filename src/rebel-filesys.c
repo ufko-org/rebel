@@ -36,7 +36,7 @@ int init_argv(char *ptr, char *argv[]);
 char *getUUID(char *str, char *node);
 
 
-#ifdef LINUX
+#ifdef _LINUX
 union semun
 {
     int val;    /* Value for SETVAL */
@@ -53,7 +53,7 @@ extern char **environ;
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
 
-#ifdef LINUX
+#ifdef _LINUX
     char *strptime(const char *str, const char *fmt, struct tm *ttm);
 #endif
 
@@ -977,7 +977,7 @@ CELL *p_realpath(CELL *params)
         return(nilCell);
     }
 
-    #ifdef _BSD /* behaves like Windows */
+    #ifdef _BSD 
     if(isFile(path, 0))
     {
         return(nilCell);
@@ -1669,7 +1669,7 @@ CELL *getSelectReadyList(int mode)
     tv.tv_sec = 0;
     tv.tv_usec = 892 + (long int)arc4random() / 10000000;
 
-    #ifdef LINUX
+    #ifdef _LINUX
     memcpy(&thisFdSet, &myFdSet, sizeof(fd_set));
     #else
     FD_COPY(&myFdSet, &thisFdSet);
@@ -2020,7 +2020,7 @@ int semaphore(UINT sem_id, int value, int type)
     #ifdef SPARC
     #endif
 
-    #if defined(MAC_OS) || defined(LINUX)
+    #if defined(_MACOS) || defined(_LINUX)
     union semun semu;
 
     semu.val = 0;
@@ -2033,8 +2033,8 @@ int semaphore(UINT sem_id, int value, int type)
             if(value == 0)
             {
                 /* remove semaphore */
-                #if defined(MAC_OS) || defined(LINUX)
-                if(semctl(sem_id, 0, IPC_RMID, semu) == -1) /* MAC_OS, GNU/Linux, GNU/kFreeBSD */
+                #if defined(_MACOS) || defined(_LINUX)
+                if(semctl(sem_id, 0, IPC_RMID, semu) == -1) /* macOS, Linux */
                 #else
                 if(semctl(sem_id, 0, IPC_RMID, 0) == -1) /* BSD, TRU64 */
                 #endif
@@ -2055,7 +2055,7 @@ int semaphore(UINT sem_id, int value, int type)
 
         else
             /* return semaphore value */
-        #if defined(MAC_OS) || defined(LINUX)
+        #if defined(_MACOS) || defined(_LINUX)
             return(semctl(sem_id, 0, GETVAL, semu));
         #else
             return(semctl(sem_id, 0, GETVAL, 0));
@@ -2065,8 +2065,8 @@ int semaphore(UINT sem_id, int value, int type)
     /* create semaphore */
     sem_id = semget(IPC_PRIVATE, 1, 0666 );
 
-    #if defined(MAC_OS) || defined(LINUX)
-    if(semctl(sem_id, 0, SETVAL, semu) == -1) /* MAC_OS, GNU/Linux, GNU/kFreeBSD */
+    #if defined(_MACOS) || defined(_LINUX)
+    if(semctl(sem_id, 0, SETVAL, semu) == -1) /* macOS, Linux */
     #else
     if(semctl(sem_id, 0, SETVAL, 0) == -1) /* BSD, TRU64 */
     #endif
@@ -2745,7 +2745,7 @@ time_t calcDateValue(int year, int month, int day, int hour, int min, int sec)
 }
 
 #if 0 /* ufko */
-    #ifdef MAC_OS
+    #ifdef _MACOS
         extern int nanosleep();
     #endif
 #endif

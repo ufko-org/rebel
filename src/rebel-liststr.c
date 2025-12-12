@@ -74,7 +74,7 @@ size_t adjustCount(ssize_t count, ssize_t length)
     return(count);
 }
 
-#ifdef LINUX
+#ifdef _LINUX
     extern char *strcasestr(const char *haystack, const char *needle);
 #endif
 CELL *p_member(CELL *params)

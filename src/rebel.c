@@ -40,7 +40,7 @@
 
 
 
-#ifdef LINUX
+#ifdef _LINUX
     int opsys = 1;
 #endif
 
@@ -48,17 +48,13 @@
     int opsys = 2;
 #endif
 
-#ifdef MAC_OS
+#ifdef _MACOS
     int opsys = 3;
 #endif
-
-
-/* opsys = 11 taken for ANDROID; see LINUX */
 
 int bigEndian = 1; /* gets set in main() */
 
 int version = 10000; /*v.1.0*/
-
 char copyright[] =
     "\n Rebel v1.0 (C) 2025 Ufko (ufko.org).\n Usage: rebel [options] [file ...]\n Options:\n\n";
 
@@ -772,7 +768,7 @@ AFTER_ERROR_ENTRY:
     #ifdef READLINE
     rl_readline_name = "rebel";
     rl_attempted_completion_function = (char **(*) (const char *, int, int))rebel_completion;
-    #if defined(LINUX) || defined(_BSD)
+    #if defined(_LINUX) || defined(_BSD)
     /* in Bash .inputrc put 'set blink-matching-paren on' */
     rl_set_paren_blink_timeout(300000); /* 300 ms */
     #endif
@@ -2541,7 +2537,7 @@ void varPrintf(UINT device, char *format, ...)
             if(IOchannel == stdin)
             {
                 printf("%s", buffer);
-                #if defined(MAC_OS) || defined(_BSD) /* 10.7.3 */
+                #if defined(_MACOS) || defined(_BSD) /* 10.7.3 */
                 fflush(NULL);
                 #else
                 if(!isTTY)

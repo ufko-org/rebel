@@ -3732,17 +3732,17 @@ true
 (sys-info)
 (println "FFI test:")
 
-(if (= ostype "Linux")
+(if (= ostype "linux")
   (begin 
     (import "/lib/x86_64-linux-gnu/libc.so.6" "printf")
     (printf "Hello FFI %s\n" ostype)))
 
-(if (= ostype "OSX")
+(if (= ostype "macos")
   (begin
     (import "/usr/lib/libSystem.dylib" "printf")
     (printf "Hello FFI %s\n" ostype)))
 
-(if (= ostype "BSD")
+(if (= ostype "bsd")
   (begin
     (import "/usr/lib/libc.so.102.0" "printf")
     (printf "Hello FFI %s\n" ostype)))

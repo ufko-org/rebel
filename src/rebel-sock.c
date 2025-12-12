@@ -2116,7 +2116,7 @@ CELL *ping(CELL *address, int maxwait, int listmode, int maxCount, int flag)
     CELL *link = NULL;
     char buff[64];
 
-    #ifdef MAC_OS /* no superuser rights necessary */
+    #ifdef _MACOS /* no superuser rights necessary */
     if ((s = socket(ADDR_FAMILY, SOCK_DGRAM, ICMP_TYPE)) < 0)
     #else
     if ((s = socket(ADDR_FAMILY, SOCK_RAW, ICMP_TYPE)) < 0)
@@ -2216,7 +2216,7 @@ CELL *ping(CELL *address, int maxwait, int listmode, int maxCount, int flag)
             /* printf("->%s\n", hostaddr); */
 
             memset((char *)whereto, 0, sockaddr_len);
-            #ifdef  MAC_OS
+            #ifdef  _MACOS
             if(getHostAddr(whereto, SOCK_DGRAM, hostaddr) != 0)
             #else
             if(getHostAddr(whereto, SOCK_RAW, hostaddr) != 0)
@@ -2490,9 +2490,9 @@ CELL *p_netPacket(CELL *params)
 
        Curently net-packet is IPv4 only.
     */
-    #if defined(MAC_OS)
+    #if defined(_MACOS)
     UINT configFlags = 3; /* ntohs() for both ip_len and ip_off */
-    #elif defined(LINUX)
+    #elif defined(_LINUX)
     UINT configFlags = 1; /* ntohs() for ip_len only */
     #else /* works for OpenBSD */
     UINT configFlags = 0; /* none */
