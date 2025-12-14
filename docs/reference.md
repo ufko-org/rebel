@@ -13750,9 +13750,9 @@ See: [regex](#f-regex), [find](#f-find),
 <a name="f-peek"></a>
 ## peek
 
-:::
+```
 syntax: (peek int-handle)
-:::
+```
 
 Description:
 
@@ -13767,10 +13767,10 @@ The value 0 may be used to check standard input.
 
 Examples:
 
-:::
+```
 (peek 0)
 ;-> 12
-:::
+```
 
 This example checks how many bytes are currently
 available on standard input.
@@ -13793,9 +13793,9 @@ See: [net-peek](#f-net-peek), [read](#f-read),
 <a name="f-pipe"></a>
 ## pipe
 
-:::
+```
 syntax: (pipe)
-:::
+```
 
 Description:
 
@@ -13809,10 +13809,10 @@ communication between processes.
 
 Examples:
 
-:::
+```
 (pipe)
 ;-> (3 4)
-:::
+```
 
 In this example, descriptor 3 is used for reading
 and descriptor 4 for writing.
@@ -13838,10 +13838,10 @@ See: [process](#f-process), [fork](#f-fork),
 <a name="f-pmt"></a>
 ## pmt
 
-:::
+```
 syntax: (pmt num-interest num-periods num-principal
            [num-future-value [int-type]])
-:::
+```
 
 Description:
 
@@ -13864,10 +13864,10 @@ an outgoing payment.
 
 Examples:
 
-:::
+```
 (pmt (div 0.07 12) 240 100000)
 ;-> -775.2989356
-:::
+```
 
 This example calculates the monthly payment for a
 loan of 100000 at a yearly interest rate of 7 percent,
@@ -13888,11 +13888,11 @@ See: [fv](#f-fv), [irr](#f-irr), [nper](#f-nper),
 <a name="f-pop"></a>
 ## pop
 
-:::
+```
 syntax: (pop list [int-index-1 [int-index-2 ... ]])
 syntax: (pop list [list-indexes])
 syntax: (pop str [int-index [int-length]])
-:::
+```
 
 Description:
 
@@ -13920,7 +13920,7 @@ is removed and returned.
 
 Examples:
 
-:::
+```
 (set 'lst '((f g) a b c "hello" d e 10))
 
 (pop lst)
@@ -13999,7 +13999,7 @@ str
 
 (pop str)
 ;-> ""
-:::
+```
 
 Notes:
 
@@ -14017,10 +14017,10 @@ See: [push](#f-push), [ref](#f-ref), [ref-all](#f-ref-all)
 <a name="f-pop-assoc"></a>
 ## pop-assoc
 
-:::
+```
 syntax: (pop-assoc exp-key list-assoc)
 syntax: (pop-assoc list-keys list-assoc)
-:::
+```
 
 Description:
 
@@ -14040,7 +14040,7 @@ pop-assoc modifies list-assoc in place.
 
 Examples:
 
-:::
+```
 ; simple associations
 (set 'lst '((a 1) (b 2) (c 3)))
 
@@ -14075,7 +14075,7 @@ lst
 
 lst
 ;-> ((a (b 1)))
-:::
+```
 
 Notes:
 
@@ -14092,9 +14092,9 @@ See: [assoc](#f-assoc), [setf](#f-setf)
 <a name="f-post-url"></a>
 ## post-url
 
-:::
+```
 syntax: (post-url str-url str-content [str-content-type [str-option] [int-timeout [str-header]]])
-:::
+```
 
 Description:
 
@@ -14118,13 +14118,13 @@ ERR: timeout is returned.
 When str-content-type is omitted, the default
 content type is assumed to be:
 
-:::
+```
 application/x-www-form-urlencoded
-:::
+```
 
 Examples:
 
-:::
+```
 ; specify content type
 (post-url "https://example.com/form.cgi"
           "name=johnDoe&city=New%20York"
@@ -14140,7 +14140,7 @@ Examples:
 ; default content type, no timeout
 (post-url "https://example.com/form.rbl"
           "name=johnDoe&city=New%20York")
-:::
+```
 
 Notes:
 
@@ -14165,10 +14165,10 @@ See: [get-url](#f-get-url), [put-url](#f-put-url)
 <a name="f-pow"></a>
 ## pow
 
-:::
+```
 syntax: (pow num-1 num-2 [num-3 ... ])
 syntax: (pow num-1)
-:::
+```
 
 Description:
 
@@ -14184,7 +14184,7 @@ of 2.
 
 Examples:
 
-:::
+```
 (pow 100 2)
 ;-> 10000
 
@@ -14196,7 +14196,7 @@ Examples:
 
 (pow 3)
 ;-> 9
-:::
+```
 
 Notes:
 
@@ -14211,9 +14211,9 @@ See: [sqrt](#f-sqrt), [exp](#f-exp), [log](#f-log)
 <a name="f-prefix"></a>
 ## prefix
 
-:::
+```
 syntax: (prefix sym)
-:::
+```
 
 Description:
 
@@ -14221,7 +14221,7 @@ Returns the context part of the symbol sym.
 
 Examples:
 
-:::
+```
 (setf s 'ctx:var)
 ;-> ctx:var
 
@@ -14239,7 +14239,7 @@ Examples:
 
 (context (prefix s))
 ;-> ctx
-:::
+```
 
 Notes:
 
@@ -14255,9 +14255,9 @@ See: [term](#f-term), [sym](#f-sym), [context](#f-context)
 <a name="f-prefix"></a>
 ## prefix
 
-:::
+```
 syntax: (prefix sym)
-:::
+```
 
 Description:
 
@@ -14265,7 +14265,7 @@ Returns the context part of the symbol sym.
 
 Examples:
 
-:::
+```
 (setf s 'ctx:var)
 ;-> ctx:var
 
@@ -14283,7 +14283,7 @@ Examples:
 
 (context (prefix s))
 ;-> ctx
-:::
+```
 
 Notes:
 
@@ -14299,9 +14299,9 @@ See: [term](#f-term), [sym](#f-sym), [context](#f-context)
 <a name="f-pretty-print"></a>
 ## pretty-print
 
-:::
+```
 syntax: (pretty-print [int-length [str-tab [str-fp-format]]])
-:::
+```
 
 Description:
 
@@ -14323,7 +14323,7 @@ are returned.
 
 Examples:
 
-:::
+```
 (pretty-print)
 ;-> (80 " " "%1.15g")
 
@@ -14344,7 +14344,7 @@ Examples:
 (set 'x 0.0)
 x
 ;-> 0.000
-:::
+```
 
 The default settings use a maximum line length of 80,
 a single space for indentation, and a high-precision
@@ -14367,9 +14367,9 @@ Notes:
 
 Examples without formatting:
 
-:::
+```
 (print (string my-expression))
-:::
+```
 
 See: [string](#f-string), [print](#f-print)
 
@@ -14379,9 +14379,9 @@ See: [string](#f-string), [print](#f-print)
 <a name="f-primitivep"></a>
 ## primitive?
 
-:::
+```
 syntax: (primitive? exp)
-:::
+```
 
 Description:
 
@@ -14393,12 +14393,12 @@ and functions created using import.
 
 Examples:
 
-:::
+```
 (set 'var define)
 
 (primitive? var)
 ;-> true
-:::
+```
 
 Notes:
 
@@ -14414,9 +14414,9 @@ See: [import](#f-import), [define](#f-define)
 <a name="f-print"></a>
 ## print
 
-:::
+```
 syntax: (print exp-1 [exp-2 ... ])
-:::
+```
 
 Description:
 
@@ -14436,7 +14436,7 @@ the backslash character.
 
 Escape sequences:
 
-:::
+```
 code   description
 -----  -----------------------------------------
 \n     line feed (ASCII 10)
@@ -14444,17 +14444,17 @@ code   description
 \t     tab character (ASCII 9)
 \nnn   decimal ASCII code (000–255)
 \xnn   hexadecimal ASCII code (00–FF)
-:::
+```
 
 Examples:
 
-:::
+```
 (print (set 'res (+ 1 2 3)))
 (print "the result is " res "\n")
 
 "\065\066\067"
 ;-> "ABC"
-:::
+```
 
 Notes:
 
@@ -14471,9 +14471,9 @@ See: [println](#f-println), [device](#f-device),
 <a name="f-println"></a>
 ## println
 
-:::
+```
 syntax: (println exp-1 [exp-2 ... ])
-:::
+```
 
 Description:
 
@@ -14489,13 +14489,13 @@ device function.
 
 Examples:
 
-:::
+```
 (println "hello world")
 ;-> "hello world\n"
 
 (println "the result is " (+ 1 2 3))
 ;-> "the result is 6\n"
-:::
+```
 
 Notes:
 
@@ -14512,9 +14512,9 @@ See: [print](#f-print), [write-line](#f-write-line),
 <a name="f-prob-chi2"></a>
 ## prob-chi2
 
-:::
+```
 syntax: (prob-chi2 num-chi2 int-df)
-:::
+```
 
 Description:
 
@@ -14528,10 +14528,10 @@ function gammai.
 
 Examples:
 
-:::
+```
 (prob-chi2 10 6)
 ;-> 0.1246520195
-:::
+```
 
 Notes:
 
@@ -14548,9 +14548,9 @@ See: [crit-chi2](#f-crit-chi2), [gammai](#f-gammai)
 <a name="f-prob-f"></a>
 ## prob-f
 
-:::
+```
 syntax: (prob-f num-f int-df1 int-df2)
-:::
+```
 
 Description:
 
@@ -14563,10 +14563,10 @@ denominator degrees of freedom.
 
 Examples:
 
-:::
+```
 (prob-f 2.75 10 12)
 ;-> 0.0501990804
-:::
+```
 
 Notes:
 
@@ -14583,9 +14583,9 @@ See: [crit-f](#f-crit-f)
 <a name="f-prob-t"></a>
 ## prob-t
 
-:::
+```
 syntax: (prob-t num-t int-df)
-:::
+```
 
 Description:
 
@@ -14596,10 +14596,10 @@ int-df degrees of freedom.
 
 Examples:
 
-:::
+```
 (prob-t 1.76 14)
 ;-> 0.05011454551
-:::
+```
 
 Notes:
 
@@ -14616,9 +14616,9 @@ See: [crit-t](#f-crit-t)
 <a name="f-prob-z"></a>
 ## prob-z
 
-:::
+```
 syntax: (prob-z num-z)
-:::
+```
 
 Description:
 
@@ -14631,10 +14631,10 @@ function (CDF) of the standard normal distribution.
 
 Examples:
 
-:::
+```
 (prob-z 0.0)
 ;-> 0.5
-:::
+```
 
 Notes:
 
@@ -14652,11 +14652,11 @@ See: [crit-z](#f-crit-z)
 <a name="f-process"></a>
 ## process
 
-:::
+```
 syntax: (process str-command)
 syntax: (process str-command int-pipe-in int-pipe-out)
 syntax: (process str-command int-pipe-in int-pipe-out int-pipe-error)
-:::
+```
 
 Description:
 
@@ -14682,14 +14682,14 @@ child process may be redirected using pipe handles.
 
 Examples:
 
-:::
+```
 (process "/usr/bin/true")
 ;-> 12345
-:::
+```
 
 Redirecting standard input and output using pipes:
 
-:::
+```
 (map set '(in out) (pipe))
 (map set '(cin cout) (pipe))
 
@@ -14701,11 +14701,11 @@ Redirecting standard input and output using pipes:
 ;-> "7"
 
 (destroy 7916)
-:::
+```
 
 Using an additional pipe for standard error:
 
-:::
+```
 (map set '(in out) (pipe))
 (map set '(cin cout) (pipe))
 (map set '(errin errout) (pipe))
@@ -14713,11 +14713,11 @@ Using an additional pipe for standard error:
 (process "/usr/bin/bc" cin out errout)
 
 (write-line cout "invalid")
-:::
+```
 
 Waiting for output or error data:
 
-:::
+```
 (while (and (= (peek in) 0)
             (= (peek errin) 0))
   (sleep 10))
@@ -14727,14 +14727,14 @@ Waiting for output or error data:
 
 (if (> (peek in) 0)
   (println (read-line in)))
-:::
+```
 
 If a stream is not required, specify 0 for the
 corresponding pipe handle:
 
-:::
+```
 (process "app" 0 appout)
-:::
+```
 
 Notes:
 
@@ -14755,10 +14755,10 @@ See: [pipe](#f-pipe), [peek](#f-peek),
 <a name="f-prompt-event"></a>
 ## prompt-event
 
-:::
+```
 syntax: (prompt-event sym-event-handler | func-event-handler)
 syntax: (prompt-event nil)
-:::
+```
 
 Description:
 
@@ -14781,10 +14781,10 @@ prompt remains unchanged.
 
 Examples:
 
-:::
+```
 (prompt-event (fn (ctx)
   (string ctx ":" (real-path) "$ ")))
-:::
+```
 
 After this call, the prompt shows the current
 context, a colon, the current directory, and
@@ -14813,9 +14813,9 @@ See: [command-event](#f-command-event),
 <a name="f-protectedp"></a>
 ## protected?
 
-:::
+```
 syntax: (protected? sym)
-:::
+```
 
 Description:
 
@@ -14830,7 +14830,7 @@ otherwise, it returns nil.
 
 Examples:
 
-:::
+```
 (protected? 'println)
 ;-> true
 
@@ -14838,7 +14838,7 @@ Examples:
 
 (protected? 'var)
 ;-> true
-:::
+```
 
 Notes:
 
@@ -14853,12 +14853,12 @@ See: [constant](#f-constant)
 <a name="f-push"></a>
 ## push
 
-:::
+```
 syntax: (push exp list [int-index-1 [int-index-2 ... ]])
 syntax: (push exp list [list-indexes])
 
 syntax: (push str-1 str-2 [int-index])
-:::
+```
 
 Description:
 
@@ -14889,7 +14889,7 @@ as single characters.
 
 Examples:
 
-:::
+```
 ; inserting at the front
 (set 'lst '(b c))
 (push 'a lst)
@@ -14996,7 +14996,7 @@ str
 
 lst
 ;-> ("xabc" "xyz")
-:::
+```
 
 Notes:
 
@@ -15013,9 +15013,9 @@ See: [pop](#f-pop), [ref](#f-ref), [ref-all](#f-ref-all)
 <a name="f-put-url"></a>
 ## put-url
 
-:::
+```
 syntax: (put-url str-url str-content [str-option] [int-timeout [str-header]])
-:::
+```
 
 Description:
 
@@ -15041,7 +15041,7 @@ ERR: timeout is returned.
 
 Examples:
 
-:::
+```
 ; upload text to a remote resource
 (put-url "https://example.com/data.txt" "Hello world")
 
@@ -15054,7 +15054,7 @@ Examples:
 
 ; write to local file system
 (put-url "file:///home/user/file.txt" "Hello world")
-:::
+```
 
 Notes:
 
@@ -15078,9 +15078,9 @@ See: [get-url](#f-get-url), [post-url](#f-post-url)
 <a name="f-pv"></a>
 ## pv
 
-:::
+```
 syntax: (pv num-int num-nper num-pmt [num-fv [int-type]])
-:::
+```
 
 Description:
 
@@ -15103,10 +15103,10 @@ an initial outgoing amount.
 
 Examples:
 
-:::
+```
 (pv (div 0.07 12) 240 775.30)
 ;-> -100000.1373
-:::
+```
 
 This example computes the present value of a loan
 paid off over 240 periods with constant payments
@@ -15127,9 +15127,9 @@ See: [fv](#f-fv), [irr](#f-irr), [nper](#f-nper),
 <a name="f-quote"></a>
 ## quote
 
-:::
+```
 syntax: (quote exp)
-:::
+```
 
 Description:
 
@@ -15144,7 +15144,7 @@ reading into a quoted expression.
 
 Examples:
 
-:::
+```
 (quote x)
 ;-> x
 
@@ -15156,7 +15156,7 @@ Examples:
 
 (= (quote x) 'x)
 ;-> true
-:::
+```
 
 Notes:
 
@@ -15173,9 +15173,9 @@ See: [eval](#f-eval), [list](#f-list)
 <a name="f-rand"></a>
 ## rand
 
-:::
+```
 syntax: (rand int-range [int-N])
-:::
+```
 
 Description:
 
@@ -15194,14 +15194,14 @@ rand returns a list of int-N random integers.
 
 Examples:
 
-:::
+```
 (dotimes (x 100)
   (print (rand 2)))
 ;-> 11100000110100111100111101...
 
 (rand 3 100)
 ;-> (2 0 1 1 2 0 ...)
-:::
+```
 
 The first example prints a stream of equally
 distributed 0 and 1 values. The second example
@@ -15224,10 +15224,10 @@ See: [random](#f-random), [normal](#f-normal),
 <a name="f-random"></a>
 ## random
 
-:::
+```
 syntax: (random float-offset float-scale int-n)
 syntax: (random float-offset float-scale)
-:::
+```
 
 Description:
 
@@ -15248,14 +15248,14 @@ seed.
 
 Examples:
 
-:::
+```
 (random 0 1 10)
 ;-> (0.10898973 0.69823783 0.56434872 0.041507289 0.16516733
 ;    0.81540917 0.68553784 0.76471068 0.82314585 0.95924564)
 
 (random 10 5)
 ;-> 11.0971
-:::
+```
 
 When no parameters are given, random assumes a
 default offset of 0.0 and a scale of 1.0.
@@ -15270,6 +15270,1841 @@ Notes:
 
 See: [rand](#f-rand), [normal](#f-normal),
 [seed](#f-seed)
+
+---
+
+
+<a name="f-randomize"></a>
+## randomize
+
+```
+syntax: (randomize list [bool])
+```
+
+Description:
+
+Rearranges the elements of list into a random order and
+returns the resulting list.
+
+By default, randomize guarantees that the returned
+sequence differs from the previous result produced for
+the same list length. To enforce this, the function may
+internally generate multiple candidate permutations
+until a different ordering is obtained. As a result,
+execution time may vary between calls even when the
+input list length is identical.
+
+When the optional bool argument evaluates to not nil,
+the result is allowed to be identical to the input
+ordering. This disables the guarantee of producing a
+different sequence and avoids the extra work required
+to reject equal permutations.
+
+randomize operates on lists only and does not modify
+the original list.
+
+The function relies on an internal pseudo-random number
+generator that produces the same sequence of values
+each time Rebel is started. Use the seed function to
+initialize the generator with a different starting
+value.
+
+Examples:
+
+```
+(randomize '(a b c d e f g))
+;-> (b a c g d e f)
+
+(randomize (sequence 1 5))
+;-> (3 5 4 1 2)
+
+(randomize '(a b c d) true)
+;-> (a b c d)
+```
+
+Notes:
+
+- Without the optional bool argument, randomize will
+  never return the same ordering twice in succession
+  for lists of the same length.
+- Allowing identical output may improve performance
+  when repeated randomization is required.
+
+See: [seed](#f-seed), [sequence](#f-sequence)
+
+---
+
+
+<a name="f-read"></a>
+## read
+
+```
+syntax: (read int-file sym-buffer int-size [str-wait])
+```
+
+Description:
+
+Reads up to int-size bytes from the file referenced by
+int-file and stores the data into the symbol sym-buffer.
+
+Any previous content referenced by sym-buffer is deleted
+before reading. After the operation, sym-buffer contains
+a string with the data read or nil if no new data was
+available.
+
+The file handle in int-file must originate from a
+previous open call. The file position is advanced by
+the number of bytes read.
+
+sym-buffer may also be a default functor supplied by a
+context symbol, allowing reference-style input and
+output in user-defined functions.
+
+read is a short form of read-buffer. The longer form
+is deprecated and should not be used in new code.
+
+When the optional str-wait argument is specified, read
+stops early if the given string is encountered in the
+input. The wait string is included in the returned
+data. The string must not contain binary zero bytes.
+
+If str-wait is specified and not found within the
+int-size limit, read returns nil. In all cases, any
+bytes read are still placed into sym-buffer.
+
+Examples:
+
+```
+(set 'handle (open "file.txt" "read"))
+
+(read handle buf 200)
+;-> 200
+
+buf
+;-> "..."
+
+(read handle buf 1000 "password:")
+;-> 143
+
+buf
+;-> "...password:"
+```
+
+Notes:
+
+- sym-buffer is always updated when data is read,
+  even if the function returns nil.
+- When no new bytes are read, sym-buffer contains nil.
+- Binary zero bytes are not allowed in str-wait.
+
+See: [write](#f-write), [seek](#f-seek), [open](#f-open)
+
+---
+
+
+<a name="f-read-char"></a>
+## read-char
+
+```
+syntax: (read-char [int-file])
+```
+
+Description:
+
+Reads a single byte from the file referenced by
+int-file or from the current I/O device when no
+file handle is specified.
+
+The file handle in int-file must originate from a
+previous open call. Each invocation of read-char
+advances the file position by one byte.
+
+When the end of the file or device is reached,
+read-char returns nil.
+
+read-char is intended for byte-wise processing.
+For line-oriented input, use read-line together
+with device.
+
+Examples:
+
+```
+(define (copy-bytes from-file to-file)
+  (set 'in-file (open from-file "read"))
+  (set 'out-file (open to-file "write"))
+  (while (set 'chr (read-char in-file))
+    (write-char out-file chr))
+  (close in-file)
+  (close out-file)
+  "finished")
+```
+
+Notes:
+
+- read-char always returns a number representing
+  the byte value, or nil at end of input.
+- The file pointer is advanced by one byte on
+  each successful read.
+
+See: [write-char](#f-write-char), [read-line](#f-read-line),
+[device](#f-device), [copy-file](#f-copy-file)
+
+---
+
+
+<a name="f-read-expr"></a>
+## read-expr
+
+```
+syntax: (read-expr str-source [sym-context [exp-error [int-offset]]])
+```
+
+Description:
+
+Parses the first expression found in str-source and
+returns the translated expression without evaluating
+it.
+
+The optional sym-context argument specifies the context
+in which the expression is translated. This controls
+symbol resolution during parsing but does not trigger
+evaluation.
+
+After a successful call, the system variable $count
+contains the number of characters consumed from
+str-source.
+
+If an error occurs while translating the source text,
+the expression in exp-error is evaluated and its result
+is returned instead.
+
+The optional int-offset argument specifies the starting
+position inside str-source. This is typically used when
+calling read-expr repeatedly, advancing the offset by
+the value stored in $count.
+
+read-expr behaves like eval-string without executing
+the resulting expression.
+
+Examples:
+
+```
+(set 'code "; a statement
+(define (double x) (+ x x))")
+
+(read-expr code)
+;-> (define (double x) (+ x x))
+
+$count
+;-> 41
+
+(read-expr "(+ 3 4)")
+;-> (+ 3 4)
+
+(eval-string "(+ 3 4)")
+;-> 7
+```
+
+Notes:
+
+- read-expr never evaluates the returned expression.
+- $count always reflects the number of characters
+  processed during the last call.
+- int-offset allows incremental parsing of a larger
+  source string.
+
+See: [eval-string](#f-eval-string), [reader-event](#f-reader-event)
+
+---
+
+
+<a name="f-read-file"></a>
+## read-file
+
+```
+syntax: (read-file str-file-name)
+```
+
+Description:
+
+Reads the entire contents of the file specified by
+str-file-name and returns it as a string.
+
+On failure, read-file returns nil. When operating on
+local files, error details can be retrieved using
+sys-error. When used with network resources, additional
+information is available through net-error.
+
+The function reads the file in one operation and does
+not modify the file position of any open handle.
+
+read-file also accepts URLs. When str-file-name starts
+with http:// or file://, the function behaves like
+get-url and supports the same optional parameters.
+
+Examples:
+
+```
+(write-file "file.enc"
+  (encrypt (read-file "file.txt") "secret"))
+```
+
+The file file.txt is read, encrypted using the password
+"secret", and written to a new file named file.enc.
+
+```
+(read-file "http://example.com/file.tgz" 10000)
+```
+
+The remote file file.tgz is retrieved via HTTP. The
+transfer times out after 10 seconds if not completed.
+
+Notes:
+
+- read-file always returns a string or nil.
+- The entire file is loaded into memory at once.
+- URL handling follows the same rules as get-url.
+
+See: [write-file](#f-write-file), [append-file](#f-append-file),
+[get-url](#f-get-url)
+
+---
+
+
+<a name="f-read-key"></a>
+## read-key
+
+```
+syntax: (read-key [true])
+```
+
+Description:
+
+Reads a key from the keyboard and returns its numeric
+value.
+
+For keys representing ASCII characters, the returned
+value corresponds to the ASCII code. For navigation
+keys and control sequences, multiple read-key calls may
+be required to read the complete sequence.
+
+When the optional true flag is specified, read-key
+operates in non-blocking mode and returns 0 when no key
+is available. Without this flag, the call blocks until
+a key is pressed.
+
+read-key reads from standard input and requires an
+interactive terminal.
+
+Examples:
+
+```
+(read-key)
+;-> 97    ; after pressing the A key
+
+(read-key)
+;-> 65    ; after pressing shifted A
+
+(read-key true)
+;-> 0     ; when no key has been pressed
+
+(while (!= (set 'c (read-key)) 1)
+  (println c))
+```
+
+The loop above can be used to inspect key and control
+sequences. To terminate the loop, press Ctrl-A.
+
+Notes:
+
+- ASCII character keys return consistent values.
+- Navigation and function keys may emit multi-byte
+  sequences and require multiple reads.
+- Non-blocking mode returns 0 when no input is present.
+
+See: [read-char](#f-read-char), [device](#f-device)
+
+---
+
+
+<a name="f-read-line"></a>
+## read-line
+
+```
+syntax: (read-line [int-file])
+```
+
+Description:
+
+Reads a line of text terminated by a line-feed
+character (ASCII 10) and returns it as a string.
+
+The terminating line-feed is not included in the
+returned value. A carriage return (ASCII 13) breaks
+the line only when followed by a line-feed, in which
+case both characters are discarded. A lone carriage
+return breaks the line only if it is the final
+character in the input stream.
+
+By default, input is read from the current I/O device.
+A different device can be selected using device, or a
+file handle obtained from open may be supplied in
+int-file.
+
+There is no intrinsic limit on line length when
+reading from files or pipes. When reading from
+standard input interactively, line length is limited
+and input is optimized for speed.
+
+The contents of the most recent read-line operation
+are stored internally and can be retrieved using
+current-line.
+
+When input is exhausted, read-line returns nil.
+
+Examples:
+
+```
+(print "Enter a num:")
+(set 'num (int (read-line)))
+```
+
+```
+(set 'in-file (open "file.txt" "read"))
+(while (read-line in-file)
+  (write-line))
+(close in-file)
+```
+
+In the second example, write-line is called without
+arguments and outputs the contents of the internal
+line buffer filled by the last read-line call.
+
+Notes:
+
+- The returned string never includes line terminators.
+- current-line provides access to the last line read.
+- nil signals end of input.
+
+See: [current-line](#f-current-line), [write-line](#f-write-line),
+[device](#f-device), [open](#f-open)
+
+---
+
+
+<a name="f-read-utf8"></a>
+## read-utf8
+
+```
+syntax: (read-utf8 int-file)
+```
+
+Description:
+
+Reads a single UTF-8 encoded character from the file
+referenced by int-file and returns its Unicode code
+point as an integer.
+
+The file handle in int-file must originate from a
+previous open call. Each invocation of read-utf8
+advances the file position by the number of bytes
+used by the UTF-8 character.
+
+When the end of the file is reached, read-utf8
+returns nil.
+
+The returned integer value can be converted to a
+displayable UTF-8 character string using char.
+
+Examples:
+
+```
+(set 'in-file (open "utf8.txt" "read"))
+(while (set 'chr (read-utf8 in-file))
+  (print (char chr)))
+(close in-file)
+```
+
+The example reads UTF-8 encoded text from a file and
+writes it to the terminal.
+
+Notes:
+
+- read-utf8 reads logical characters, not bytes.
+- The file position advances by the UTF-8 byte length.
+- nil signals end of input.
+
+See: [char](#f-char), [read-char](#f-read-char), [open](#f-open)
+
+---
+
+
+<a name="f-reader-event"></a>
+## reader-event
+
+```
+syntax: (reader-event [sym-event-handler | func-event-handler])
+syntax: (reader-event nil)
+```
+
+Description:
+
+Installs or removes a reader event handler that is
+invoked between the parsing and evaluation stages of
+expression processing.
+
+When a handler is set, it is called after an expression
+has been read and translated, but before it is
+evaluated. The handler receives the translated
+expression and may return a modified one, which is then
+used for evaluation.
+
+Specifying nil removes the handler and restores the
+default behavior.
+
+The handler may be specified as a symbol referring to a
+function or as an inline function value.
+
+reader-event affects expressions read by load and
+eval-string.
+
+Examples:
+
+```
+(reader-event (fn (ex)
+  (print " => " ex)
+  ex))
+
+(+ 1 2 3)
+; prints:  => (+ 1 2 3)
+;-> 6
+```
+
+The example installs a handler that traces expressions
+before evaluation while leaving them unchanged.
+
+Notes:
+
+- The handler runs after parsing and before evaluation.
+- Returning the original expression preserves behavior.
+- Returning a modified expression alters evaluation.
+- Setting reader-event to nil disables interception.
+
+See: [read-expr](#f-read-expr), [eval-string](#f-eval-string),
+[load](#f-load)
+
+---
+
+
+<a name="f-real-path"></a>
+## real-path
+
+```
+syntax: (real-path [str-path])
+syntax: (real-path str-exec-name true)
+```
+
+Description:
+
+Returns an absolute path resolved from a relative
+filesystem path or from an executable name.
+
+In the first form, real-path resolves str-path to its
+absolute form. When str-path is omitted, the current
+directory "." is used.
+
+In the second form, real-path resolves the full path
+of an executable specified by str-exec-name. The
+lookup is performed using the search path defined
+by the environment.
+
+If resolution fails, nil is returned.
+
+The returned path length is limited by the maximum
+path length supported by the system.
+
+Examples:
+
+```
+(real-path)
+;-> "/home/user"
+
+(real-path "./file.txt")
+;-> "/home/user/file.txt"
+
+(real-path "make" true)
+;-> "/usr/bin/make"
+```
+
+Notes:
+
+- Relative paths are resolved to absolute paths.
+- Executable lookup uses the environment search path.
+- nil indicates that the path could not be resolved.
+
+See: [env](#f-env), [which](#f-which)
+
+---
+
+
+<a name="f-receive"></a>
+## receive
+
+```
+syntax: (receive int-pid sym-message)
+syntax: (receive)
+```
+
+Description:
+
+Receives messages sent from child processes created
+with spawn.
+
+In the first form, receive reads one message from the
+message queue of the child process identified by
+int-pid. The received message replaces the contents
+of sym-message.
+
+Each call reads at most one message. When the message
+queue is empty, receive returns nil.
+
+Examples:
+
+```
+; sending process
+(send spid "hello")
+;-> true
+
+; receiving process
+(receive pid msg)
+;-> true
+
+msg
+;-> "hello"
+```
+
+To wait until a message arrives, receive can be used
+in a loop:
+
+```
+(until (receive pid msg))
+```
+
+In the second form, receive returns a list of process
+IDs for all child processes that currently have
+pending messages for the parent process.
+
+Examples:
+
+```
+(dolist (pid (receive))
+  (receive pid msg)
+  (println "received message: " msg " from:" pid))
+```
+
+The list returned by (receive) contains only process
+IDs with unread messages. Calling (receive pid msg)
+for these processes is guaranteed to succeed without
+blocking.
+
+Notes:
+
+- Each receive call retrieves a single queued message.
+- nil indicates that no message is available.
+- Message queues are maintained per child process.
+
+See: [send](#f-send)
+
+---
+
+
+
+<a name="f-ref"></a>
+## ref
+
+```
+syntax: (ref exp-key list [func-compare [true]])
+```
+
+Description:
+
+Searches for the expression exp-key in list and
+returns an index vector identifying the position
+of the first matching element in a nested list.
+
+If no match is found, ref returns nil.
+
+By default, ref compares expressions using equality.
+When func-compare is supplied, it is used as a
+comparison function. The comparison function always
+receives two arguments, even if only one is used.
+
+When the optional true argument is present, the
+matched element itself is returned instead of the
+index vector.
+
+The index vector returned by ref can be used directly
+to index into the original list.
+
+Examples:
+
+```
+(set 'lst '(a b (c d (x) e)))
+
+(ref 'x lst)
+;-> (2 2 0)
+
+(ref '(x) lst)
+;-> (2 2)
+
+(set 'p '(c d (x) e))
+(ref p lst)
+;-> (2)
+
+(set 'v (ref '(x) lst))
+(lst v)
+;-> (x)
+
+(ref 'foo lst)
+;-> nil
+```
+
+Using comparison functions:
+
+```
+(set 'lst '(a b (c d (e) f)))
+
+(ref 'e lst)
+;-> (2 2 0)
+
+(ref 'e lst =)
+;-> (2 2 0)
+
+(ref 'e lst >)
+;-> (0)
+
+(ref 'e lst > true)
+;-> a
+```
+
+Using an anonymous comparison function:
+
+```
+(ref 'e lst (fn (x y) (or (= x y) (= y 'd))))
+;-> (2 1)
+
+(ref 'e lst (fn (x y) (or (= x y) (= y 'd))) true)
+;-> d
+```
+
+Using match and unify as comparison functions:
+
+```
+(set 'lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
+
+(ref '(a ?) lst match)
+;-> (1)
+
+(set 'lst '(((a b) (c d)) ((e e) (f g))))
+
+(ref '(X X) lst unify)
+;-> (1 0)
+
+(ref '(X g) lst unify)
+;-> (1 1)
+
+(ref '(X g) lst unify true)
+;-> (f g)
+```
+
+Passing the list by reference using a context:
+
+```
+(set 'ctx:ctx '(a b (c d) e f))
+
+(ref 'd ctx)
+;-> (2 1)
+```
+
+Notes:
+
+- ref returns the first match only.
+- The returned index vector can be used directly
+  for list indexing.
+- Quoted patterns are required when using unify
+  or match to prevent evaluation.
+
+See: [ref-all](#f-ref-all), [match](#f-match), [unify](#f-unify)
+
+---
+
+
+<a name="f-ref-all"></a>
+## ref-all
+
+```
+syntax: (ref-all exp-key list [func-compare [true]])
+```
+
+Description:
+
+Works like ref, but returns a list of all index
+vectors found for exp-key in list.
+
+When no match is found, an empty list is returned.
+
+By default, ref-all compares expressions using
+equality. When func-compare is supplied, it is used
+as a comparison function. The comparison function
+always receives two arguments, even if only one is
+used.
+
+When the optional true argument is present, the
+matched elements are returned instead of the index
+vectors.
+
+After execution, the system variable $count contains
+the number of matches found.
+
+Examples:
+
+```
+; basic usage
+;----------------------------------------------------------
+(set 'lst '(a b c (d a f (a h a)) (k a (m n a) (x))))
+
+(ref-all 'a lst)
+;-> ((0) (3 1) (3 3 0) (3 3 2) (4 1) (4 2 2))
+
+$count
+;-> 6
+
+(lst '(3 1))
+;-> a
+
+(map 'lst (ref-all 'a lst))
+;-> (a a a a a a)
+
+; comparison functions
+;----------------------------------------------------------
+(set 'lst '(a b c (d f (h l a)) (k a (m n) (x))))
+
+(ref-all 'c lst)
+;-> ((2))
+
+(ref-all 'c lst =)
+;-> ((2))
+
+(ref-all 'c lst >)
+;-> ((0) (1) (3 2 2) (4 1))
+
+(ref-all 'c lst > true)
+;-> (a b a a)
+
+; Using an anonymous comparison function:
+;----------------------------------------------------------
+(ref-all 'a lst (fn (x y) (or (= x y) (= y 'k))))
+;-> ((0) (3 2 2) (4 0) (4 1))
+
+; comparison ignoring the key
+;----------------------------------------------------------
+(ref-all nil lst (fn (x y) (> (length y) 2)))
+;-> ((3) (3 2) (4))
+
+; named comparison functions
+;----------------------------------------------------------
+(define (is-long? x y)
+  (> (length y) 2))
+
+(ref-all nil lst is-long?)
+;-> ((3) (3 2) (4))
+
+(define (is-it-or-d x y)
+  (or (= x y) (= y 'd)))
+
+(set 'lst '(a b (c d (e) f)))
+
+(ref-all 'e lst is-it-or-d)
+;-> ((2 1) (2 2 0))
+
+; using match and unify
+;----------------------------------------------------------
+(set 'lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
+
+(ref-all '(a ?) lst match)
+;-> ((1) (3))
+
+(ref-all '(a ?) lst match true)
+;-> ((a 12) (a 10))
+
+(set 'lst '(((a b) (c d)) ((e e) (f g)) ((z) (z))))
+
+(ref-all '(X X) lst unify)
+;-> ((1 0) (2))
+
+(ref-all '(X X) lst unify true)
+;-> ((e e) ((z) (z)))
+
+(set 'lst '(((x y z) g) ((a b) (c d)) ((e e) (f g))))
+
+(ref-all '(X g) lst unify)
+;-> ((0) (2 1))
+
+(ref-all '(X g) lst unify true)
+;-> (((x y z) g) (f g))
+```
+
+Notes:
+
+- ref-all returns all matches, not just the first.
+- The returned index vectors can be used directly
+  for list indexing.
+- Quoted patterns are required when using unify
+  or match to prevent evaluation.
+
+See: [ref](#f-ref)
+
+---
+
+
+<a name="f-regex"></a>
+## regex
+
+```
+syntax: (regex str-pattern str-text [regex-option [int-offset]])
+```
+
+Description:
+
+Performs a Perl Compatible Regular Expression (PCRE)
+search on str-text using the pattern in str-pattern.
+
+regex returns a list containing the matched string,
+followed by the offset and length of the match, and
+optionally any captured subexpressions with their
+offsets and lengths. If no match is found, nil is
+returned.
+
+The optional regex-option argument controls matching
+behavior. Options can be specified as numbers or as
+letters in a string. Multiple options may be combined.
+
+The optional int-offset argument specifies the starting
+position in str-text where matching begins.
+
+After a successful match, the system variables $0,
+$1, $2, ... contain the full match and captured
+subexpressions. These variables are not reset when
+no match is found.
+
+When no UTF-8 option is specified, offsets and lengths
+are reported in bytes. When PCRE_UTF8 is enabled,
+offsets and lengths are reported in UTF-8 characters.
+
+Examples:
+
+```
+; basic matching
+;----------------------------------------------------------
+(regex "b+" "aaaabbbaaaa")
+;-> ("bbb" 4 3)
+
+(regex "b+" "AAAABBBAAAA" 1)
+;-> ("BBB" 4 3)
+
+(regex "b+" "AAAABBBAAAA" "i")
+;-> ("BBB" 4 3)
+
+(regex "[bB]+" "AAAABbBAAAA")
+;-> ("BbB" 4 3)
+
+; subexpressions
+;----------------------------------------------------------
+(regex "http://(.*):(.*)" "http://example.com:80")
+;-> ("http://example.com:80" 0 22 "example.com" 7 11 "80" 19 2)
+
+$0
+;-> "http://example.com:80"
+
+$1
+;-> "example.com"
+
+$2
+;-> "80"
+
+; escaping rules
+;----------------------------------------------------------
+(regex "\\(abc\\)" "xyz(abc)xyz")
+;-> ("(abc)" 3 5)
+
+(regex "\\d{1,3}" "qwerty567asdfg")
+;-> ("567" 6 3)
+
+(regex "\"" "abc\"def")
+;-> ("\"" 3 1)
+
+(regex {\(abc\)} "xyz(abc)xyz")
+;-> ("(abc)" 3 5)
+
+(regex {"} "abc\"def")
+;-> ("\"" 3 1)
+
+(regex [text]\(abc\)[/text] "xyz(abc)xyz")
+;-> ("(abc)" 3 5)
+
+; balanced brackets
+;----------------------------------------------------------
+(regex {\d{1,3}} "qwerty567asdfg")
+;-> ("567" 6 3)
+```
+
+Regex options:
+
+```
+no        letter    description
+--------  --------  -----------------------------------------
+1         i         case-insensitive matching
+2         m         multiline mode
+4         s         dot matches newline
+8         x         ignore whitespace in pattern
+16        A         anchor at start of string
+32        D         $ matches end of string only
+64                  extra functionality (unused)
+128                 ^ does not match start of string
+256                 $ does not match end of string
+512       U         ungreedy quantifiers
+1024                empty string considered invalid
+2048      u         UTF-8 mode
+0x8000              replace once (replace only)
+0x10000   p         precompiled pattern
+```
+
+Notes:
+
+- Captured subexpressions are returned in order.
+- Offsets and lengths are useful for incremental
+  processing.
+- Regular expression syntax follows PCRE rules.
+
+See: [regex-comp](#f-regex-comp), [find](#f-find),
+[find-all](#f-find-all), [replace](#f-replace),
+[search](#f-search)
+
+---
+
+
+<a name="f-regex-comp"></a>
+## regex-comp
+
+```
+syntax: (regex-comp str-pattern [int-option])
+```
+
+Description:
+
+Pre-compiles a regular expression pattern for reuse
+in subsequent regular expression operations.
+
+Rebel automatically compiles regular expression
+patterns and caches the most recent compilation.
+This is sufficient when the same pattern is used
+repeatedly. When multiple different patterns are
+used in a loop, the cache is not effective.
+
+regex-comp allows patterns to be compiled once and
+reused efficiently. The compiled pattern is returned
+and can be passed to functions that accept regular
+expressions.
+
+Normal pattern options are specified during
+pre-compilation using int-option. When a pre-compiled
+pattern is later used, the option value 0x10000 must
+be supplied to signal that the pattern is already
+compiled.
+
+The option 0x10000 may only be combined with 0x8000,
+which limits replace to a single substitution.
+
+Examples:
+
+```
+; slower without pre-compilation
+;----------------------------------------------------------
+(dolist (line page)
+  (replace pattern-str1 line repl1 0)
+  (replace pattern-str2 line repl2 512))
+
+; faster with pre-compilation
+;----------------------------------------------------------
+(set 'p1 (regex-comp pattern-str1))
+(set 'p2 (regex-comp pattern-str2 512))
+
+(dolist (line page)
+  (replace p1 line repl1 0x10000)
+  (replace p2 line repl2 0x10000))
+```
+
+Notes:
+
+- Regular expression options are identical to those
+  used by the [regex](#f-regex) function.
+- Pre-compiled patterns improve performance when
+  multiple different patterns are reused.
+- The option 0x10000 signals use of a compiled pattern.
+- The option 0x10000 can only be combined with 0x8000.
+- The function ends-with must not be used with
+  compiled patterns.
+
+See: [regex](#f-regex), [replace](#f-replace),
+[ends-with](#f-ends-with)
+
+---
+
+
+<a name="f-remove-dir"></a>
+## remove-dir
+
+```
+syntax: (remove-dir str-path)
+```
+
+Description:
+
+Removes the directory specified by str-path.
+
+The directory must be empty for remove-dir to
+succeed. If the directory cannot be removed,
+nil is returned.
+
+Examples:
+
+```
+(remove-dir "tmp")
+;-> true
+```
+
+Notes:
+
+- The directory must be empty.
+- The operation affects the filesystem immediately.
+- nil indicates failure.
+
+---
+
+
+<a name="f-rename-file"></a>
+## rename-file
+
+```
+syntax: (rename-file str-path-old str-path-new)
+```
+
+Description:
+
+Renames a file or directory entry from str-path-old
+to str-path-new.
+
+If the operation succeeds, true is returned.
+On failure, rename-file returns nil.
+
+Examples:
+
+```
+(rename-file "data.txt" "data.backup")
+;-> true
+```
+
+Notes:
+
+- Both files and directories can be renamed.
+- The target path must not violate filesystem rules.
+- nil indicates that the rename operation failed.
+
+---
+
+
+<a name="f-replace"></a>
+## replace
+
+```
+syntax: (replace exp-key list exp-replacement [func-compare])
+syntax: (replace exp-key list)
+
+syntax: (replace str-key str-data exp-replacement)
+syntax: (replace str-pattern str-data exp-replacement regex-option)
+```
+
+Description:
+
+Performs replacement operations on lists or strings.
+
+replace is a destructive function. When operating on
+lists, it modifies the list in place and also returns
+the modified list. When operating on strings, a new
+string is returned.
+
+The number of replacements performed is stored in the
+system variable $count.
+
+During replacement, the anaphoric system variable
+$it is bound to the current element or match being
+replaced.
+
+List replacement:
+
+When the second argument is a list, all elements
+matching exp-key are replaced with exp-replacement.
+If exp-replacement is omitted, all matching elements
+are removed from the list.
+
+By default, equality is used for comparison. An
+optional func-compare argument may specify a
+comparison operator or user-defined function. The
+comparison function always receives two arguments.
+
+String replacement:
+
+When the first two arguments are strings, replace
+substitutes all occurrences of str-key in str-data
+with the evaluated exp-replacement.
+
+Regular expression replacement:
+
+When a fourth argument is present, str-pattern is
+interpreted as a regular expression and regex-option
+controls the matching behavior. Replacement proceeds
+from left to right. By default, all matches are
+replaced.
+
+Examples:
+
+```
+; list replacement
+;----------------------------------------------------------
+(set 'lst '(a b c d e a b c d))
+
+(replace 'b lst 'B)
+;-> (a B c d e a B c d)
+
+lst
+;-> (a B c d e a B c d)
+
+$count
+;-> 2
+
+; list replacement with comparison function
+;----------------------------------------------------------
+(set 'lst '(1 4 22 5 6 89 2 3 24))
+
+(replace 10 lst 10 <)
+;-> (1 4 10 5 6 10 2 3 10)
+
+$count
+;-> 3
+
+(replace 10 lst 10 (fn (x y) (< x y)))
+;-> (1 4 10 5 6 10 2 3 10)
+
+; dynamic replacement using $it and $count
+;----------------------------------------------------------
+(replace 'a '(a b a b a b) (list $count $it) =)
+;-> ((1 a) b (2 a) b (3 a) b)
+
+; using match and unify on lists
+;----------------------------------------------------------
+(set 'lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+
+(replace '(mary *) lst
+         (list 'mary (apply + (rest $it)))
+         match)
+;-> ((john 5 6 4) (mary 14) (bob 4 2 7 9) (jane 3))
+
+(set 'lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+
+(replace '(*) lst
+         (list ($it 0) (apply + (rest $it)))
+         match)
+;-> ((john 15) (mary 14) (bob 22) (jane 3))
+
+(replace '(X X)
+         '((3 10) (2 5) (4 4) (6 7) (8 8))
+         (list ($it 0) 'double ($it 1))
+         unify)
+;-> ((3 10) (2 5) (4 double 4) (6 7) (8 double 8))
+
+; list removal
+;----------------------------------------------------------
+(set 'lst '(a b a a c d a f g))
+
+(replace 'a lst)
+;-> (b c d f g)
+
+lst
+;-> (b c d f g)
+
+$count
+;-> 4
+
+; string replacement without regex
+;----------------------------------------------------------
+(set 'str "this isa sentence")
+
+(replace "isa" str "is a")
+;-> "this is a sentence"
+
+$count
+;-> 1
+
+; regular expression replacement
+;----------------------------------------------------------
+(set 'str "ZZZZZxZZZZyy")
+
+(replace "x|y" str "PP" 0)
+;-> "ZZZZZPPZZZZPPPP"
+
+(set 'str "---axb---ayb---")
+
+(replace "(a)(.)(b)" str (append $3 $2 $1) 0)
+;-> "---bxa---bya---"
+
+(replace "a" "aaa" "X" 0)
+;-> "XXX"
+
+(replace "a" "aaa" "X" 0x8000)
+;-> "Xaa"
+
+; dynamic regex replacement
+;----------------------------------------------------------
+(set 'str "xxx%41xxx%42")
+
+(replace "%([0-9A-F][0-9A-F])" str
+         (char (int (append "0x" $1)))
+         1)
+
+str
+;-> "xxxAxxxB"
+
+$count
+;-> 2
+```
+
+Notes:
+
+- replace is destructive when operating on lists.
+- The system variable $count contains the number of
+  replacements performed.
+- The anaphoric variable $it refers to the current
+  match or element.
+- Regular expression options are identical to those
+  used by the [regex](#f-regex) function.
+- The regex options table is documented only once
+  with regex to avoid duplication.
+
+See: [regex](#f-regex), [find](#f-find),
+[find-all](#f-find-all), [parse](#f-parse),
+[search](#f-search)
+
+---
+
+
+<a name="f-reset"></a>
+## reset
+
+```
+syntax: (reset)
+syntax: (reset true)
+syntax: (reset int-max-cells)
+```
+
+Description:
+
+Resets the execution environment.
+
+In the first form, reset returns execution to the
+top-level evaluator, disables trace mode, and switches
+to the MAIN context. Variable environments are restored
+from the saved environments on the stack.
+
+reset raises the error condition
+"user reset - no error", which can be intercepted by
+user-defined error handlers. It also interrupts
+command-line parameter processing and is invoked
+automatically after an error condition.
+
+During execution, reset walks the entire cell space,
+which may take noticeable time in a heavily loaded
+system.
+
+In the second form, reset terminates the current
+process and starts a new clean process using the same
+command-line parameters.
+
+In the third form, reset changes the maximum number of
+cells available to the runtime system. The new limit
+is reported by sys-info. Cell memory does not include
+string storage referenced by cells.
+
+The minimum allowed cell count is 4095. Values below
+this threshold are clamped to 4095. The program exits
+when attempting to allocate more cells than permitted.
+
+Examples:
+
+```
+(sys-info)
+;-> (437 576460752303423488 409 1 0 2048 0 60391 10602 1411)
+
+; allocate approximately 1 MB of cell memory
+(reset 32768)
+;-> true
+
+(sys-info)
+;-> (437 32768 409 1 0 2048 0 60392 10602 1411)
+```
+
+Notes:
+
+- reset restores the top-level evaluation state.
+- reset is automatically triggered after errors.
+- Changing the maximum cell count does not restart
+  the system.
+- Cell memory is allocated in blocks of 4095 cells.
+
+See: [sys-info](#f-sys-info)
+
+---
+
+
+
+<a name="f-rest"></a>
+## rest
+
+```
+syntax: (rest list)
+syntax: (rest array)
+syntax: (rest str)
+```
+
+Description:
+
+Returns all elements of a list or array except the
+first one.
+
+When applied to a string, rest returns a new string
+containing all characters except the first character.
+
+For empty lists, rest returns an empty list.
+
+rest operates on character boundaries when UTF-8
+support is enabled.
+
+Examples:
+
+```
+; list usage
+;----------------------------------------------------------
+(rest '(1 2 3 4))
+;-> (2 3 4)
+
+(rest '((a b) c d))
+;-> (c d)
+
+(set 'lst '(a b c d e))
+
+(rest lst)
+;-> (b c d e)
+
+(first (rest lst))
+;-> b
+
+(rest (rest lst))
+;-> (d e)
+
+(rest (first '((a b) c d)))
+;-> (b)
+
+(rest '())
+;-> ()
+
+; array usage
+;----------------------------------------------------------
+(set 'A (array 2 3 (sequence 1 6)))
+;-> ((1 2) (3 4) (5 6))
+
+(rest A)
+;-> ((3 4) (5 6))
+
+; string usage
+;----------------------------------------------------------
+(rest "Rebel")
+;-> "ebel"
+
+(first (rest "Rebel"))
+;-> "e"
+```
+
+Notes:
+
+- rest returns a new value and does not modify the
+  original list, array, or string.
+- For UTF-8 strings, rest advances by characters,
+  not bytes.
+- An implicit rest is available for lists; see the
+  chapter on implicit rest and slice.
+
+See: [first](#f-first), [last](#f-last)
+
+---
+
+
+<a name="f-reverse"></a>
+## reverse
+
+```
+syntax: (reverse list)
+syntax: (reverse array)
+syntax: (reverse str)
+```
+
+Description:
+
+Reverses the order of elements in a list or array,
+or the order of characters in a string.
+
+When applied to a list or array, reverse is
+destructive: it modifies the original object and
+also returns it.
+
+When applied to a string, reverse returns a new
+string with characters in reverse order.
+
+For UTF-8 strings, reversing operates on character
+boundaries when combined with explode.
+
+Examples:
+
+```
+; reverse a list
+;----------------------------------------------------------
+(set 'lst '(a b c d e f))
+
+(reverse lst)
+;-> (f e d c b a)
+
+lst
+;-> (f e d c b a)
+
+; reverse an array
+;----------------------------------------------------------
+(set 'arr (array 3 2 '(1 2 3 4 5 6)))
+;-> ((1 2) (3 4) (5 6))
+
+(reverse arr)
+;-> ((5 6) (3 4) (1 2))
+
+arr
+;-> ((5 6) (3 4) (1 2))
+
+; reverse a byte string
+;----------------------------------------------------------
+(set 'str "Rebel")
+
+(reverse str)
+;-> "lebeR"
+
+str
+;-> "lebeR"
+
+; reverse a UTF-8 string
+;----------------------------------------------------------
+(join (reverse (explode "ΑΒΓΔΕΖΗΘ")))
+;-> "ΘΗΖΕΔΓΒΑ"
+```
+
+Notes:
+
+- reverse is destructive for lists and arrays.
+- Strings are not modified in place.
+- For UTF-8 text, use explode to reverse by
+  characters instead of bytes.
+
+See: [sort](#f-sort)
+
+---
+
+
+<a name="f-rotate"></a>
+## rotate
+
+```
+syntax: (rotate list [int-count])
+syntax: (rotate str  [int-count])
+```
+
+Description:
+
+Rotates the elements of a list or the bytes of a
+string and returns the result.
+
+rotate is destructive: it modifies the original
+list or string and also returns it.
+
+When int-count is positive, rotation is performed
+to the right. When int-count is negative, rotation
+is performed to the left. If int-count is omitted,
+a rotation of one position to the right is applied.
+
+Examples:
+
+```
+; list rotation
+;----------------------------------------------------------
+(set 'lst '(1 2 3 4 5 6 7 8 9))
+
+(rotate lst)
+;-> (9 1 2 3 4 5 6 7 8)
+
+(rotate lst 2)
+;-> (7 8 9 1 2 3 4 5 6)
+
+lst
+;-> (7 8 9 1 2 3 4 5 6)
+
+(rotate lst -3)
+;-> (1 2 3 4 5 6 7 8 9)
+
+; string rotation (byte-based)
+;----------------------------------------------------------
+(set 'str "Rebel")
+
+(rotate str)
+;-> "lRebe"
+
+(rotate str 2)
+;-> "elReb"
+
+(rotate str -2)
+;-> "Rebel"
+
+; UTF-8 character rotation using explode
+;----------------------------------------------------------
+(join (rotate (explode "ΑΒΓΔΕΖΗΘ")))
+;-> "ΘΑΒΓΔΕΖΗ"
+```
+
+Notes:
+
+- rotate modifies the original list or string.
+- String rotation operates on byte boundaries.
+- For UTF-8 text, use explode to rotate by
+  character boundaries.
+
+---
+
+
+<a name="f-round"></a>
+## round
+
+```
+syntax: (round number [int-digits])
+```
+
+Description:
+
+Rounds number to the precision specified by
+int-digits.
+
+When int-digits is positive, rounding is applied
+to the integer part of the number. When int-digits
+is negative, rounding is applied to decimal places.
+
+If int-digits is omitted, rounding is performed
+to zero decimal digits.
+
+Examples:
+
+```
+; integer rounding
+;----------------------------------------------------------
+(round 123.49 2)
+;-> 100
+
+(round 123.49 1)
+;-> 120
+
+(round 123.49 0)
+;-> 123
+
+(round 123.49)
+;-> 123
+
+; decimal rounding
+;----------------------------------------------------------
+(round 123.49 -1)
+;-> 123.5
+
+(round 123.49 -2)
+;-> 123.49
+```
+
+Notes:
+
+- Positive int-digits round the integer magnitude.
+- Negative int-digits round fractional digits.
+- For formatting numbers for display, use format.
+
+See: [format](#f-format)
+
+---
+
+
+<a name="f-save"></a>
+## save
+
+```
+syntax: (save str-file)
+syntax: (save str-file sym-1 [sym-2 ... ])
+```
+
+Description:
+
+Writes symbols and contexts to a file in textual
+form.
+
+In the first form, save writes the entire workspace
+to str-file. Loading this file later restores the
+workspace to the same state as when save was invoked.
+
+System symbols, built-in function symbols, symbols
+starting with the $ character, and symbols containing
+nil are not saved automatically.
+
+In the second form, one or more symbols may be
+specified. When a symbol is given, only that symbol
+is saved. When a context symbol is given, all symbols
+contained in that context are saved. Symbols and
+contexts may be mixed.
+
+System symbols are saved only when specified
+explicitly.
+
+Symbols are serialized using set statements, or
+using define / define-macro when the symbol contains
+a function or macro definition.
+
+save always serializes symbols as if the current
+context were MAIN, ensuring consistent output
+regardless of the active context.
+
+On successful completion, save returns true.
+
+Examples:
+
+```
+; save entire workspace
+;----------------------------------------------------------
+(save "workspace.txt")
+;-> true
+
+; save a single function
+;----------------------------------------------------------
+(save "fn.txt" 'fn)
+
+; save a context
+;----------------------------------------------------------
+(save "ctx.txt" 'ctx:ctx)
+
+; save multiple symbols and contexts
+;----------------------------------------------------------
+(save "stuff.txt" 'ctx:ctx 'fn '$main-args)
+
+; save to a remote location (HTTP PUT)
+;----------------------------------------------------------
+(save "http://example.com/source.txt" 'fn)
+```
+
+Notes:
+
+- Saving the MAIN context saves all contexts.
+- System symbols and $-prefixed symbols are excluded
+  unless explicitly listed.
+- Symbols incompatible with standard syntax are
+  serialized using sym instead of set.
+- Output is deterministic and independent of the
+  current context.
+
+See: [load](#f-load), [source](#f-source)
+
+---
+
+
+<a name="f-search"></a>
+## search
+
+```
+syntax: (search int-file str-search [bool-flag [regex-option]])
+```
+
+Description:
+
+Searches a file referenced by int-file for the
+string or pattern specified in str-search.
+
+The file handle in int-file must originate from a
+previous open call. After the search, the file
+position is updated as follows:
+
+- by default, the file pointer is positioned at the
+  beginning of the matched string
+- when bool-flag evaluates to true, the file pointer
+  is positioned at the end of the matched string
+- when nothing is found, the file pointer is placed
+  at the end of the file and nil is returned
+
+When regex-option is not specified, a fast plain
+string search is performed.
+
+When regex-option is specified, str-search is treated
+as a regular expression and matching follows PCRE
+rules. In this case, captured subexpressions are
+stored in the system variables $0 to $15.
+
+On success, search returns the new file position.
+On failure, nil is returned.
+
+Examples:
+
+```
+; plain string search
+;----------------------------------------------------------
+(set 'file (open "file.txt" "read"))
+
+(search file "define")
+(print (read-line file) "\n")
+
+(close file)
+
+; regular expression search
+;----------------------------------------------------------
+(set 'file (open "program.c" "read"))
+
+(while (search file "#define (.*)" true 0)
+  (println $1))
+
+(close file)
+```
+
+Notes:
+
+- search operates on open file handles only.
+- When regex options are used, match data is
+  available in $0 to $15.
+- Regular expression options are identical to those
+  used by the [regex](#f-regex) function.
+
+See: [regex](#f-regex), [find](#f-find),
+[find-all](#f-find-all), [parse](#f-parse),
+[replace](#f-replace)
 
 ---
 
