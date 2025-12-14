@@ -8556,9 +8556,8 @@ For string matching, use <a href="#f-regex">regex</a>,
 <hr/>
 <p><a name="f-max"></a></p>
 <h2 id="max">max</h2>
-<p>:::
-syntax: (max num-1 [num-2 &#8230; ])
-:::</p>
+<pre><code>syntax: (max num-1 [num-2 ... ])
+</code></pre>
 <p>Description:</p>
 <p>Evaluates the expressions num-1 and any following numbers
 and returns the largest numeric value.</p>
@@ -8566,22 +8565,22 @@ and returns the largest numeric value.</p>
 floating-point numbers may be mixed. The return value uses
 the numeric type required to represent the maximum value.</p>
 <p>Examples:</p>
-<p>:::
-(max 4 6 2 3.54 7.1)
-;-&#62; 7.1</p>
-<p>(max 10 -5 3)
-;-&#62; 10</p>
-<p>(max 2)
+<pre><code>(max 4 6 2 3.54 7.1)
+;-&#62; 7.1
+
+(max 10 -5 3)
+;-&#62; 10
+
+(max 2)
 ;-&#62; 2
-:::</p>
+</code></pre>
 <p>See: <a href="#f-min">min</a></p>
 <hr/>
 <p><a name="f-member"></a></p>
 <h2 id="member">member</h2>
-<p>:::
-syntax: (member exp list)
+<pre><code>syntax: (member exp list)
 syntax: (member str-key str [num-option])
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>In the first syntax, member searches for the element exp
 in the list list. If exp is found, a new list is returned
@@ -8594,31 +8593,36 @@ str-key in the string str. If found, the substring of str
 starting at the match position is returned. If no match
 is found, nil is returned.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;lst &#8216;(a b c d e f g h))
-;-&#62; (a b c d e f g h)</p>
-<p>(member &#8216;d lst)
-;-&#62; (d e f g h)</p>
-<p>(member 55 lst)
-;-&#62; nil</p>
-<p>(member &#8220;REBEL&#8221; &#8220;HelloREBEL&#8221;)
-;-&#62; &#8220;REBEL&#8221;</p>
-<p>(member &#8220;RE&#8221; &#8220;HelloREBEL&#8221;)
-;-&#62; &#8220;REBEL&#8221;</p>
-<p>(member &#8220;&#8220; &#8220;HelloREBEL&#8221;)
-;-&#62; &#8220;HelloREBEL&#8221;</p>
-<p>(member &#8220;xyz&#8221; &#8220;HelloREBEL&#8221;)
-;-&#62; nil</p>
-<p>(member &#8220;re&#8221; &#8220;HelloREBEL&#8221; 1)
-;-&#62; &#8220;REBEL&#8221;
-:::</p>
+<pre><code>(set &#39;lst &#39;(a b c d e f g h))
+;-&#62; (a b c d e f g h)
+
+(member &#39;d lst)
+;-&#62; (d e f g h)
+
+(member 55 lst)
+;-&#62; nil
+
+(member "REBEL" "HelloREBEL")
+;-&#62; "REBEL"
+
+(member "RE" "HelloREBEL")
+;-&#62; "REBEL"
+
+(member "" "HelloREBEL")
+;-&#62; "HelloREBEL"
+
+(member "xyz" "HelloREBEL")
+;-&#62; nil
+
+(member "re" "HelloREBEL" 1)
+;-&#62; "REBEL"
+</code></pre>
 <p>See: <a href="#f-slice">slice</a>, <a href="#f-find">find</a></p>
 <hr/>
 <p><a name="f-min"></a></p>
 <h2 id="min">min</h2>
-<p>:::
-syntax: (min num-1 [num-2 &#8230; ])
-:::</p>
+<pre><code>syntax: (min num-1 [num-2 ... ])
+</code></pre>
 <p>Description:</p>
 <p>Evaluates the expressions num-1 and any following numbers
 and returns the smallest numeric value.</p>
@@ -8626,22 +8630,22 @@ and returns the smallest numeric value.</p>
 floating-point numbers may be mixed. The return value uses
 the numeric type required to represent the minimum value.</p>
 <p>Examples:</p>
-<p>:::
-(min 4 6 2 3.54 7.1)
-;-&#62; 2</p>
-<p>(min 10 -5 3)
-;-&#62; -5</p>
-<p>(min 2)
+<pre><code>(min 4 6 2 3.54 7.1)
 ;-&#62; 2
-:::</p>
+
+(min 10 -5 3)
+;-&#62; -5
+
+(min 2)
+;-&#62; 2
+</code></pre>
 <p>See: <a href="#f-max">max</a></p>
 <hr/>
 <p><a name="f-mod"></a></p>
 <h2 id="mod">mod</h2>
-<p>:::
-syntax: (mod num-1 num-2 [num-3 &#8230; ])
+<pre><code>syntax: (mod num-1 num-2 [num-3 ... ])
 syntax: (mod num-1)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Calculates the modular value of the numbers in num-1 and
 num-2. mod computes the remainder from the division of the
@@ -8657,22 +8661,22 @@ applied successively from left to right.</p>
 <p>In the second syntax, 1 is assumed for num-2 and the
 result is the fractional part of num-1.</p>
 <p>Examples:</p>
-<p>:::
-(mod 10.5 3.3)
-;-&#62; 0.6</p>
-<p>(mod -10.5 3.3)
-;-&#62; -0.6</p>
-<p>(mod -10.5)
+<pre><code>(mod 10.5 3.3)
+;-&#62; 0.6
+
+(mod -10.5 3.3)
+;-&#62; -0.6
+
+(mod -10.5)
 ;-&#62; -0.5
-:::</p>
+</code></pre>
 <p>Use the [%](#f-percent) function when working with
 integers only.</p>
 <hr/>
 <p><a name="f-mul"></a></p>
 <h2 id="mul">mul</h2>
-<p>:::
-syntax: (mul num-1 num-2 [num-3 &#8230; ])
-:::</p>
+<pre><code>syntax: (mul num-1 num-2 [num-3 ... ])
+</code></pre>
 <p>Description:</p>
 <p>Evaluates all expressions num-1 and any following numbers,
 calculating and returning their product.</p>
@@ -8680,18 +8684,17 @@ calculating and returning their product.</p>
 floating-point value. If any argument is NaN, the result
 is also NaN.</p>
 <p>Examples:</p>
-<p>:::
-(mul 1 2 3 4 5 1.1)
-;-&#62; 132</p>
-<p>(mul 0.5 0.5)
+<pre><code>(mul 1 2 3 4 5 1.1)
+;-&#62; 132
+
+(mul 0.5 0.5)
 ;-&#62; 0.25
-:::</p>
+</code></pre>
 <hr/>
 <p><a name="f-multiply"></a></p>
 <h2 id="multiply">multiply</h2>
-<p>:::
-syntax: (multiply matrix-A matrix-B)
-:::</p>
+<pre><code>syntax: (multiply matrix-A matrix-B)
+</code></pre>
 <p>Description:</p>
 <p>Returns the matrix multiplication of matrix-A and
 matrix-B.</p>
@@ -8708,15 +8711,16 @@ matrices, 0.0 is assumed.</p>
 <p>A matrix may be represented as either a nested list
 or an array.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;A &#8216;((1 2 3) (4 5 6)))
-(set &#8216;B &#8216;((1 2) (1 2) (1 2)))</p>
-<p>(multiply A B)
-;-&#62; ((6 12) (15 30))</p>
-<p>(set &#8216;v &#8216;(10 20 30))
+<pre><code>(set &#39;A &#39;((1 2 3) (4 5 6)))
+(set &#39;B &#39;((1 2) (1 2) (1 2)))
+
+(multiply A B)
+;-&#62; ((6 12) (15 30))
+
+(set &#39;v &#39;(10 20 30))
 (multiply A (transpose (list v)))
 ;-&#62; ((140) (320))
-:::</p>
+</code></pre>
 <p>When multiplying a matrix with a vector of n elements,
 the vector must first be transformed into an n by 1
 matrix using transpose.</p>
@@ -8726,9 +8730,8 @@ performed on arrays.</p>
 <hr/>
 <p><a name="f-nanp"></a></p>
 <h2 id="nan">NaN?</h2>
-<p>:::
-syntax: (NaN? float)
-:::</p>
+<pre><code>syntax: (NaN? float)
+</code></pre>
 <p>Description:</p>
 <p>Tests whether the result of a floating-point arithmetic
 operation is a NaN value.</p>
@@ -8739,61 +8742,68 @@ undefined numeric operations.</p>
 NaN return NaN. All comparisons with NaN return nil.
 Integer arithmetic treats NaN as the value 0.</p>
 <p>Examples:</p>
-<p>:::
-; floating-point operations on NaN yield NaN
-(set &#8216;x (sqrt -1))
-;-&#62; -nan</p>
-<p>(NaN? x)
-;-&#62; true</p>
-<p>(add x 123)
-;-&#62; -nan</p>
-<p>(mul x 123)
-;-&#62; -nan</p>
-<p>; integer operations treat NaN as zero
-(+ x 123)
-;-&#62; 123</p>
-<p>(* x 123)
-;-&#62; 0</p>
-<p>; comparisons with NaN yield nil
-(&#62; x 0)
-;-&#62; nil</p>
-<p>(&#60;= x 0)
-;-&#62; nil</p>
-<p>(= x x)
-;-&#62; nil</p>
-<p>(set &#8216;infinity (mul 1.0e200 1.0e200))
-;-&#62; inf</p>
-<p>(NaN? (sub infinity infinity))
+<pre><code>; floating-point operations on NaN yield NaN
+(set &#39;x (sqrt -1))
+;-&#62; -nan
+
+(NaN? x)
 ;-&#62; true
-:::</p>
+
+(add x 123)
+;-&#62; -nan
+
+(mul x 123)
+;-&#62; -nan
+
+; integer operations treat NaN as zero
+(+ x 123)
+;-&#62; 123
+
+(* x 123)
+;-&#62; 0
+
+; comparisons with NaN yield nil
+(&#62; x 0)
+;-&#62; nil
+
+(&#60;= x 0)
+;-&#62; nil
+
+(= x x)
+;-&#62; nil
+
+(set &#39;infinity (mul 1.0e200 1.0e200))
+;-&#62; inf
+
+(NaN? (sub infinity infinity))
+;-&#62; true
+</code></pre>
 <p>See: <a href="#f-infp">inf?</a></p>
 <hr/>
 <p><a name="f-net-accept"></a></p>
 <h2 id="net-accept">net-accept</h2>
-<p>:::
-syntax: (net-accept int-socket)
-:::</p>
+<pre><code>syntax: (net-accept int-socket)
+</code></pre>
 <p>Description:</p>
 <p>Accepts an incoming connection on a socket that was
 previously put into listening mode.</p>
 <p>Returns a newly created socket handle that can be used
 to receive and send data on the accepted connection.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;sock (net-listen 1234))
-;-&#62; <socket></p>
-<p>(net-accept sock)
-;-&#62; <socket>
-:::</p>
+<pre><code>(set &#39;sock (net-listen 1234))
+;-&#62; &#60;socket&#62;
+
+(net-accept sock)
+;-&#62; &#60;socket&#62;
+</code></pre>
 <p>Listening on ports below 1024 requires superuser
 privileges.</p>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-close">net-close</a></p>
 <hr/>
 <p><a name="f-net-close"></a></p>
 <h2 id="net-close">net-close</h2>
-<p>:::
-syntax: (net-close int-socket [true])
-:::</p>
+<pre><code>syntax: (net-close int-socket [true])
+</code></pre>
 <p>Description:</p>
 <p>Closes the network socket specified by int-socket.
 The socket must have been previously created by
@@ -8804,19 +8814,17 @@ shutdown is suppressed and the function waits for
 any pending data transmissions to finish before
 closing the socket.</p>
 <p>Examples:</p>
-<p>:::
-(net-close sock)
+<pre><code>(net-close sock)
 ;-&#62; true
-:::</p>
+</code></pre>
 <p>See: <a href="#f-net-connect">net-connect</a>, <a href="#f-net-accept">net-accept</a></p>
 <hr/>
 <p><a name="f-net-connect"></a></p>
 <h2 id="net-connect">net-connect</h2>
-<p>:::
-syntax: (net-connect str-remote-host int-port [int-timeout-ms])
+<pre><code>syntax: (net-connect str-remote-host int-port [int-timeout-ms])
 syntax: (net-connect str-remote-host int-port [str-mode [int-ttl]])
 syntax: (net-connect str-file-path)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Creates a network socket and prepares it for communication.</p>
 <p>In the first syntax, connects to remote host specified by
@@ -8839,26 +8847,30 @@ time-to-live value. Default is 3.</p>
 specified by str-file-path. On success, returns a socket
 handle. On failure, returns nil.</p>
 <p>Examples:</p>
-<p>:::
-; TCP
-(set &#8216;sock (net-connect &#8220;example.org&#8221; 80))
-;-&#62; <socket></p>
-<p>; timeout
-(net-connect &#8220;example.org&#8221; 22 500)
-;-&#62; <socket>|nil</p>
-<p>; UDP
-(net-connect &#8220;226.0.0.1&#8221; 4096 &#8220;udp&#8221;)
-;-&#62; <socket></p>
-<p>; UDP multicast
-(net-connect &#8220;&#8220; 4096 &#8220;multi&#8221;)
-;-&#62; <socket></p>
-<p>; UDP broadcast
-(net-connect &#8220;192.168.2.255&#8221; 3000 &#8220;broadcast&#8221;)
-;-&#62; <socket></p>
-<p>; local domain socket
-(net-connect &#8220;&#47;tmp&#47;rebel.sock&#8221;)
-;-&#62; <socket>
-:::</p>
+<pre><code>; TCP
+(set &#39;sock (net-connect "example.org" 80))
+;-&#62; &#60;socket&#62;
+
+; timeout
+(net-connect "example.org" 22 500)
+;-&#62; &#60;socket&#62;|nil
+
+; UDP
+(net-connect "226.0.0.1" 4096 "udp")
+;-&#62; &#60;socket&#62;
+
+; UDP multicast
+(net-connect "" 4096 "multi")
+;-&#62; &#60;socket&#62;
+
+; UDP broadcast
+(net-connect "192.168.2.255" 3000 "broadcast")
+;-&#62; &#60;socket&#62;
+
+; local domain socket
+(net-connect "&#47;tmp&#47;rebel.sock")
+;-&#62; &#60;socket&#62;
+</code></pre>
 <p>When using UDP modes, data transfer is performed using
 net-send, net-send-to, net-receive, or net-receive-from.</p>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-accept">net-accept</a>,
@@ -8866,10 +8878,9 @@ net-send, net-send-to, net-receive, or net-receive-from.</p>
 <hr/>
 <p><a name="f-net-error"></a></p>
 <h2 id="net-error">net-error</h2>
-<p>:::
-syntax: (net-error)
+<pre><code>syntax: (net-error)
 syntax: (net-error int-error)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Retrieves information about the last error produced by
 network-related functions.</p>
@@ -8890,10 +8901,9 @@ number and description.</p>
 <p>When int-error is specified, net-error returns the error
 number and description for that specific error code.</p>
 <p>Error codes:</p>
-<p>:::
-no   description</p>
-<hr/>
-<p>1    Cannot open socket
+<pre><code>no   description
+--   ------------------------------------------------
+1    Cannot open socket
 2    DNS resolution failed
 3    Not a valid service
 4    Connection failed
@@ -8919,26 +8929,27 @@ no   description</p>
 24   HTTP no content
 25   HTTP error in header
 26   HTTP error in chunked format
-:::</p>
+</code></pre>
 <p>Examples:</p>
-<p>:::
+<pre><code>(net-error)
+;-&#62; nil
+
+(net-connect "jhghjgkjhg" 80)
+;-&#62; nil
+
 (net-error)
-;-&#62; nil</p>
-<p>(net-connect &#8220;jhghjgkjhg&#8221; 80)
-;-&#62; nil</p>
-<p>(net-error)
-;-&#62; (2 &#8220;DNS resolution failed&#8221;)</p>
-<p>(net-error 10)
-;-&#62; (10 &#8220;Cannot bind socket&#8221;)
-:::</p>
+;-&#62; (2 "DNS resolution failed")
+
+(net-error 10)
+;-&#62; (10 "Cannot bind socket")
+</code></pre>
 <p>See: <a href="#f-last-error">last-error</a>, <a href="#f-sys-error">sys-error</a></p>
 <hr/>
 <p><a name="f-net-eval"></a></p>
 <h2 id="net-eval">net-eval</h2>
-<p>:::
-syntax: (net-eval str-host int-port exp [int-timeout [func-handler]])
-syntax: (net-eval &#8216;((str-host int-port exp) &#8230; ) [int-timeout [func-handler]])
-:::</p>
+<pre><code>syntax: (net-eval str-host int-port exp [int-timeout [func-handler]])
+syntax: (net-eval &#39;((str-host int-port exp) ... ) [int-timeout [func-handler]])
+</code></pre>
 <p>Description:</p>
 <p>Evaluates source code remotely on one or more Rebel
 nodes.</p>
@@ -8962,18 +8973,21 @@ On timeout or failure, nil is returned.</p>
 <p>Optional int-timeout specifies timeout in milliseconds.
 Default timeout is 60000 ms.</p>
 <p>Examples:</p>
-<p>:::
-(net-eval &#8220;192.168.1.94&#8221; 7306 &#8216;(+ 3 4))
-;-&#62; 7</p>
-<p>(net-eval &#8220;192.168.1.94&#8221; 7306 &#8220;(+ 3 4)&#8221;)
-;-&#62; 7</p>
-<p>(net-eval &#8220;192.168.1.94&#8221; 7306 &#8216;(+ 3 4) 1)
-;-&#62; nil</p>
-<p>(net-error)
-;-&#62; (18 &#8220;Operation timed out&#8221;)</p>
-<p>(net-eval &#8220;&#47;tmp&#47;rebel.sock&#8221; 0 &#8216;(+ 3 4))
+<pre><code>(net-eval "192.168.1.94" 7306 &#39;(+ 3 4))
 ;-&#62; 7
-:::</p>
+
+(net-eval "192.168.1.94" 7306 "(+ 3 4)")
+;-&#62; 7
+
+(net-eval "192.168.1.94" 7306 &#39;(+ 3 4) 1)
+;-&#62; nil
+
+(net-error)
+;-&#62; (18 "Operation timed out")
+
+(net-eval "&#47;tmp&#47;rebel.sock" 0 &#39;(+ 3 4))
+;-&#62; 7
+</code></pre>
 <p>In the second syntax, net-eval evaluates expressions on
 multiple remote nodes.</p>
 <p>Each element of the list specifies a target node and
@@ -8981,13 +8995,12 @@ expression. The function returns a list of results in
 the same order. Nodes that time out return nil. Errors
 are returned as (error-number error-text) lists.</p>
 <p>Examples:</p>
-<p>:::
-(net-eval &#8216;(
-  (&#8220;192.168.1.94&#8221; 7306 &#8216;(+ 3 4))
-  (&#8220;192.168.1.95&#8221; 7306 &#8216;(+ 5 6))
+<pre><code>(net-eval &#39;(
+  ("192.168.1.94" 7306 &#39;(+ 3 4))
+  ("192.168.1.95" 7306 &#39;(+ 5 6))
 ) 5000)
 ;-&#62; (7 11)
-:::</p>
+</code></pre>
 <p>When int-port is 0, str-host is interpreted as a local
 domain socket path.</p>
 <p>Optional func-handler specifies a handler function that
@@ -8999,24 +9012,23 @@ result is received, it is called with:</p>
 <p>net-eval returns true if all evaluations complete
 before timeout, or nil if the timeout expires.</p>
 <p>Examples:</p>
-<p>:::
-(define (handler msg)
+<pre><code>(define (handler msg)
   (if msg
       (println msg))
-)</p>
-<p>(net-eval &#8216;(
-  (&#8220;192.168.1.94&#8221; 7306 &#8216;(+ 3 4))
-  (&#8220;192.168.1.95&#8221; 7306 &#8216;(+ 5 6))
+)
+
+(net-eval &#39;(
+  ("192.168.1.94" 7306 &#39;(+ 3 4))
+  ("192.168.1.95" 7306 &#39;(+ 5 6))
 ) 5000 handler)
-:::</p>
+</code></pre>
 <p>See: <a href="#f-net-connect">net-connect</a>, <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-interface"></a></p>
 <h2 id="net-interface">net-interface</h2>
-<p>:::
-syntax: (net-interface str-ip-addr)
+<pre><code>syntax: (net-interface str-ip-addr)
 syntax: (net-interface)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Sets or retrieves the default local interface address
 used for network connections.</p>
@@ -9037,22 +9049,22 @@ select the interface automatically.</p>
 <p>On error, the function returns nil. Use net-error to
 retrieve error information.</p>
 <p>Examples:</p>
-<p>:::
-(net-interface &#8220;192.168.1.95&#8221;)
-;-&#62; &#8220;192.168.1.95&#8221;</p>
-<p>(net-interface &#8220;localhost&#8221;)
-;-&#62; &#8220;127.0.0.1&#8221;</p>
-<p>(net-interface)
-;-&#62; &#8220;127.0.0.1&#8221;
-:::</p>
+<pre><code>(net-interface "192.168.1.95")
+;-&#62; "192.168.1.95"
+
+(net-interface "localhost")
+;-&#62; "127.0.0.1"
+
+(net-interface)
+;-&#62; "127.0.0.1"
+</code></pre>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-ipv"></a></p>
 <h2 id="net-ipv">net-ipv</h2>
-<p>:::
-syntax: (net-ipv int-version)
+<pre><code>syntax: (net-ipv int-version)
 syntax: (net-ipv)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Sets or retrieves the default Internet Protocol version
 used for network operations.</p>
@@ -9071,22 +9083,22 @@ created after the change.</p>
 <p>net-packet operates in IPv4 mode regardless of the
 current protocol setting.</p>
 <p>Examples:</p>
-<p>:::
-(net-ipv)
-;-&#62; 4</p>
-<p>(net-ipv 6)
-;-&#62; 6</p>
-<p>(net-ipv)
+<pre><code>(net-ipv)
+;-&#62; 4
+
+(net-ipv 6)
 ;-&#62; 6
-:::</p>
+
+(net-ipv)
+;-&#62; 6
+</code></pre>
 <p>See: <a href="#f-net-connect">net-connect</a>, <a href="#f-net-listen">net-listen</a></p>
 <hr/>
 <p><a name="f-net-listen"></a></p>
 <h2 id="net-listen">net-listen</h2>
-<p>:::
-syntax: (net-listen int-port [str-ip-addr [str-mode]])
+<pre><code>syntax: (net-listen int-port [str-ip-addr [str-mode]])
 syntax: (net-listen str-file-path)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Creates a listening socket.</p>
 <p>In the first syntax, binds to int-port and returns a
@@ -9101,27 +9113,28 @@ privileges.</p>
 to that local interface address or name. If omitted,
 the default interface is used.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;port 7306)
-(set &#8216;listen (net-listen port))</p>
-<p>(unless listen
-  (exit))</p>
-<p>(set &#8216;conn (net-accept listen))
+<pre><code>(set &#39;port 7306)
+(set &#39;listen (net-listen port))
+
+(unless listen
+  (exit))
+
+(set &#39;conn (net-accept listen))
 (if conn
-    (while (net-receive conn buff 1024 &#8220;\n&#8221;)
+    (while (net-receive conn buff 1024 "\n")
       (print buff)
-      (if (= buff &#8220;\r\n&#8221;) (exit))))
-:::</p>
+      (if (= buff "\r\n") (exit))))
+</code></pre>
 <p>In the second syntax, net-listen creates a local domain
 socket specified by str-file-path. On success, returns
 a socket handle usable with net-accept.</p>
 <p>Examples:</p>
-<p>:::
-(net-listen &#8220;&#47;tmp&#47;rebel.sock&#8221;)
-;-&#62; <socket></p>
-<p>(net-accept <socket>)
-;-&#62; <socket>
-:::</p>
+<pre><code>(net-listen "&#47;tmp&#47;rebel.sock")
+;-&#62; &#60;socket&#62;
+
+(net-accept &#60;socket&#62;)
+;-&#62; &#60;socket&#62;
+</code></pre>
 <p>After a connection is accepted, net-send, net-receive,
 net-select, and net-peek can be used as with TCP
 connections.</p>
@@ -9132,11 +9145,11 @@ mode, net-accept is not used.</p>
 <p>The socket can be used directly with net-receive-from,
 net-send-to, net-select, or net-peek.</p>
 <p>Examples:</p>
-<p>:::
-(net-listen 10002 &#8220;&#8220; &#8220;udp&#8221;)
-;-&#62; <socket></p>
-<p>(net-receive-from <socket> 1024)
-:::</p>
+<pre><code>(net-listen 10002 "" "udp")
+;-&#62; &#60;socket&#62;
+
+(net-receive-from &#60;socket&#62; 1024)
+</code></pre>
 <p>In UDP mode, net-listen binds the socket but does not
 establish a connection.</p>
 <p>UDP multicast mode:</p>
@@ -9144,11 +9157,11 @@ establish a connection.</p>
 socket for multicast reception. str-ip-addr specifies
 the multicast group address.</p>
 <p>Examples:</p>
-<p>:::
-(net-listen 4096 &#8220;226.0.0.1&#8221; &#8220;multi&#8221;)
-;-&#62; <socket></p>
-<p>(net-receive-from <socket> 1024)
-:::</p>
+<pre><code>(net-listen 4096 "226.0.0.1" "multi")
+;-&#62; &#60;socket&#62;
+
+(net-receive-from &#60;socket&#62; 1024)
+</code></pre>
 <p>Packet divert mode:</p>
 <p>When str-mode is &#8220;divert&#8221; or &#8220;d&#8221;, net-listen creates a
 divert socket bound to int-port. str-ip-addr is ignored.</p>
@@ -9163,9 +9176,8 @@ and writing packets on a divert socket.</p>
 <hr/>
 <p><a name="f-net-local"></a></p>
 <h2 id="net-local">net-local</h2>
-<p>:::
-syntax: (net-local int-socket)
-:::</p>
+<pre><code>syntax: (net-local int-socket)
+</code></pre>
 <p>Description:</p>
 <p>Returns local address information for a network
 connection associated with int-socket.</p>
@@ -9176,20 +9188,18 @@ selected automatically by the operating system.</p>
 <p>On error, the function returns nil. Use net-error
 to retrieve error information.</p>
 <p>Examples:</p>
-<p>:::
-(net-local sock)
-;-&#62; (&#8220;204.179.131.73&#8221; 1689)
-:::</p>
+<pre><code>(net-local sock)
+;-&#62; ("204.179.131.73" 1689)
+</code></pre>
 <p>Use net-peer to retrieve the remote address and port
 for the same connection.</p>
 <p>See: <a href="#f-net-peer">net-peer</a>, <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-lookup"></a></p>
 <h2 id="net-lookup">net-lookup</h2>
-<p>:::
-syntax: (net-lookup str-ip-number)
+<pre><code>syntax: (net-lookup str-ip-number)
 syntax: (net-lookup str-hostname [bool])
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Resolves host names and IP addresses.</p>
 <p>In the first syntax, net-lookup returns the host name
@@ -9202,19 +9212,18 @@ starts with a numeric IP prefix.</p>
 <p>On failure, the function returns nil. Use net-error
 to retrieve error information.</p>
 <p>Examples:</p>
-<p>:::
-(net-lookup &#8220;example.com&#8221;)
-;-&#62; &#8220;23.220.75.232&#8221;</p>
-<p>(net-lookup &#8220;23.220.75.232&#8221;)
-;-&#62; &#8220;a23-220-75-232.deploy.static.akamaitechnologies.com&#8221;
-:::</p>
+<pre><code>(net-lookup "example.com")
+;-&#62; "23.220.75.232"
+
+(net-lookup "23.220.75.232")
+;-&#62; "a23-220-75-232.deploy.static.akamaitechnologies.com"
+</code></pre>
 <p>See: <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-packet"></a></p>
 <h2 id="net-packet">net-packet</h2>
-<p>:::
-syntax: (net-packet str-packet)
-:::</p>
+<pre><code>syntax: (net-packet str-packet)
+</code></pre>
 <p>Description:</p>
 <p>Sends a custom network packet using a raw socket.</p>
 <p>str-packet must contain a complete IPv4 packet starting
@@ -9229,19 +9238,20 @@ to retrieve error information.</p>
 correct checksums are calculated and inserted
 automatically. Existing checksums are left unchanged.</p>
 <p>Examples:</p>
-<p>:::
-; UDP packet with zeroed checksums (recalculated internally)</p>
-<p>(set &#8216;pkt (pack (dup &#8220;b&#8221; 39) &#8216;(
+<pre><code>; UDP packet with zeroed checksums (recalculated internally)
+
+(set &#39;pkt (pack (dup "b" 39) &#39;(
   0x45 0x00 0x00 0x27 0x4b 0x8f 0x00 0x00 0x40 0x11 0x00 0x00
   192 168 1 95
   192 168 1 92
   0xf2 0xc8 0x30 0x39 0x00 0x13 0x00 0x00
   0x48 0x65 0x6c 0x6c 0x6f 0x20 0x57 0x6f 0x72 0x6c 0x64
-)))</p>
-<p>(unless (net-packet pkt)
+)))
+
+(unless (net-packet pkt)
   (println (net-error))
   (println (sys-error)))
-:::</p>
+</code></pre>
 <p>Warning:</p>
 <p>Incorrect use can disrupt network devices. Use only on
 isolated networks and only if you understand raw packet
@@ -9250,9 +9260,8 @@ processing.</p>
 <hr/>
 <p><a name="f-net-peek"></a></p>
 <h2 id="net-peek">net-peek</h2>
-<p>:::
-syntax: (net-peek int-socket)
-:::</p>
+<pre><code>syntax: (net-peek int-socket)
+</code></pre>
 <p>Description:</p>
 <p>Returns the number of bytes ready for reading on the
 network socket specified by int-socket.</p>
@@ -9261,20 +9270,20 @@ occurs or the connection is closed, nil is returned.</p>
 <p>This function can be used to implement non-blocking
 I&#47;O loops.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;sock (net-connect &#8220;example.com&#8221; 7306))</p>
-<p>(while (= (net-peek sock) 0)
-  (do-something-else))</p>
-<p>(net-receive sock buff 1024)
-:::</p>
+<pre><code>(set &#39;sock (net-connect "example.com" 7306))
+
+(while (= (net-peek sock) 0)
+  (do-something-else))
+
+(net-receive sock buff 1024)
+</code></pre>
 <p>Use peek to check file descriptors and standard input.</p>
 <p>See: <a href="#f-net-receive">net-receive</a>, <a href="#f-peek">peek</a></p>
 <hr/>
 <p><a name="f-net-peer"></a></p>
 <h2 id="net-peer">net-peer</h2>
-<p>:::
-syntax: (net-peer int-socket)
-:::</p>
+<pre><code>syntax: (net-peer int-socket)
+</code></pre>
 <p>Description:</p>
 <p>Returns remote address information for a network
 connection associated with int-socket.</p>
@@ -9283,20 +9292,18 @@ address and port number for the connection.</p>
 <p>On error, the function returns nil. Use net-error
 to retrieve error information.</p>
 <p>Examples:</p>
-<p>:::
-(net-peer sock)
-;-&#62; (&#8220;192.100.81.100&#8221; 13)
-:::</p>
+<pre><code>(net-peer sock)
+;-&#62; ("192.100.81.100" 13)
+</code></pre>
 <p>Use net-local to retrieve the local address and port
 for the same connection.</p>
 <p>See: <a href="#f-net-local">net-local</a>, <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-ping"></a></p>
 <h2 id="net-ping">net-ping</h2>
-<p>:::
-syntax: (net-ping str-address [int-timeout [int-count bool]])
+<pre><code>syntax: (net-ping str-address [int-timeout [int-count bool]])
 syntax: (net-ping list-addresses [int-timeout [int-count bool]])
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Sends ICMP echo requests and collects reply information.</p>
 <p>net-ping uses raw sockets and requires sufficient
@@ -9315,12 +9322,12 @@ an empty list is returned.</p>
 <p>A return value of nil indicates an error. Use net-error
 to retrieve error information.</p>
 <p>Examples:</p>
-<p>:::
-(net-ping &#8220;localhost&#8221;)
-;-&#62; ((&#8220;127.0.0.1&#8221; 222))</p>
-<p>(net-ping &#8220;example.com&#8221; 3000)
+<pre><code>(net-ping "localhost")
+;-&#62; (("127.0.0.1" 222))
+
+(net-ping "example.com" 3000)
 ;-&#62; ()
-:::</p>
+</code></pre>
 <p>In the second syntax, net-ping operates in batch mode.
 Multiple addresses are pinged using a single socket.
 Addresses may be specified as a list, wildcard (*),
@@ -9333,12 +9340,12 @@ assumes all replies.</p>
 <p>When bool evaluates to true, an error string is returned
 instead of a response time for hosts that do not reply.</p>
 <p>Examples:</p>
-<p>:::
-(net-ping &#8216;(&#8220;example.com&#8221; &#8220;192.168.1.255&#8221;) 2000 20)
-;-&#62; ((&#8220;23.220.75.232&#8221; 826420) (&#8220;192.168.1.1&#8221; 124))</p>
-<p>(net-ping &#8220;192.168.1.*&#8221; 500)
-;-&#62; ((&#8220;192.168.1.1&#8221; 120) (&#8220;192.168.1.2&#8221; 245))
-:::</p>
+<pre><code>(net-ping &#39;("example.com" "192.168.1.255") 2000 20)
+;-&#62; (("23.220.75.232" 826420) ("192.168.1.1" 124))
+
+(net-ping "192.168.1.*" 500)
+;-&#62; (("192.168.1.1" 120) ("192.168.1.2" 245))
+</code></pre>
 <p>Broadcast mode sends a single packet to a broadcast
 address and may produce multiple replies. Batch mode
 sends one packet per address.</p>
@@ -9350,9 +9357,8 @@ incomplete list.</p>
 <hr/>
 <p><a name="f-net-receive"></a></p>
 <h2 id="net-receive">net-receive</h2>
-<p>:::
-syntax: (net-receive int-socket sym-buffer int-max-bytes [wait-string])
-:::</p>
+<pre><code>syntax: (net-receive int-socket sym-buffer int-max-bytes [wait-string])
+</code></pre>
 <p>Description:</p>
 <p>Receives data from a network socket.</p>
 <p>Reads up to int-max-bytes from int-socket and stores the
@@ -9371,25 +9377,23 @@ soon as the given string is received. The wait-string is
 included in the contents of sym-buffer. In this mode,
 data is read character-by-character and may be slower.</p>
 <p>Examples:</p>
-<p>:::
-(net-receive sock buf 1024)
+<pre><code>(net-receive sock buf 1024)
 ;-&#62; 128
-:::</p>
+</code></pre>
 <p>Read until newline:</p>
-<p>:::
-(define (net-receive-line sock buf)
-  (net-receive sock buf 256 &#8220;\n&#8221;))</p>
-<p>(net-receive-line sock line)
+<pre><code>(define (net-receive-line sock buf)
+  (net-receive sock buf 256 "\n"))
+
+(net-receive-line sock line)
 ;-&#62; 42
-:::</p>
+</code></pre>
 <p>See: <a href="#f-net-peek">net-peek</a>, <a href="#f-net-select">net-select</a>,
 <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-receive-from"></a></p>
 <h2 id="net-receive-from">net-receive-from</h2>
-<p>:::
-syntax: (net-receive-from int-socket int-max-size)
-:::</p>
+<pre><code>syntax: (net-receive-from int-socket int-max-size)
+</code></pre>
 <p>Description:</p>
 <p>Receives a UDP datagram from int-socket and returns
 sender information.</p>
@@ -9404,16 +9408,19 @@ error information.</p>
 <p>net-receive-from may be used in blocking mode or combined
 with net-select or net-peek for non-blocking operation.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;sock (net-listen 1001 &#8220;&#8220; &#8220;udp&#8221;))
-;-&#62; <socket></p>
-<p>(while (not (net-select sock &#8220;r&#8221; 100000))
-  (do-something))</p>
-<p>(net-receive-from sock 20)
-;-&#62; (&#8220;hello&#8221; &#8220;192.168.0.5&#8221; 3240)</p>
-<p>(net-send-to &#8220;192.168.0.5&#8221; 3240 &#8220;hello to you&#8221; sock)</p>
-<p>(net-close sock)
-:::</p>
+<pre><code>(set &#39;sock (net-listen 1001 "" "udp"))
+;-&#62; &#60;socket&#62;
+
+(while (not (net-select sock "r" 100000))
+  (do-something))
+
+(net-receive-from sock 20)
+;-&#62; ("hello" "192.168.0.5" 3240)
+
+(net-send-to "192.168.0.5" 3240 "hello to you" sock)
+
+(net-close sock)
+</code></pre>
 <p>In UDP communication, sender address and port are carried
 in the packet itself. net-receive does not provide this
 information and is therefore not suitable for replying
@@ -9424,9 +9431,8 @@ to UDP senders.</p>
 <hr/>
 <p><a name="f-net-receive-udp"></a></p>
 <h2 id="net-receive-udp">net-receive-udp</h2>
-<p>:::
-syntax: (net-receive-udp int-port int-maxsize [int-microsec [str-addr-if]])
-:::</p>
+<pre><code>syntax: (net-receive-udp int-port int-maxsize [int-microsec [str-addr-if]])
+</code></pre>
 <p>Description:</p>
 <p>Receives a UDP datagram on int-port.</p>
 <p>Up to int-maxsize bytes are read. Bytes beyond this
@@ -9444,23 +9450,27 @@ retrieve error information.</p>
 to the given local interface address or name. When
 using str-addr-if, a timeout must also be specified.</p>
 <p>Examples:</p>
-<p>:::
-; wait for datagram (max 20 bytes)
-(net-receive-udp 10001 20)</p>
-<p>; wait with timeout (5 seconds)
-(net-receive-udp 10001 20 5000000)</p>
-<p>; sender
-(net-send-udp &#8220;example.com&#8221; 10001 &#8220;Hello&#8221;)
-;-&#62; 5</p>
-<p>; receiver result
-;-&#62; (&#8220;Hello&#8221; &#8220;203.0.113.10&#8221; 3312)</p>
-<p>; binary payload
-(net-send-udp &#8220;example.com&#8221; 2222 (pack &#8220;c c c c&#8221; 0 1 2 3))
-;-&#62; 4</p>
-<p>(set &#8216;buf (first (net-receive-udp 2222 10)))
-(unpack &#8220;c c c c&#8221; buf)
+<pre><code>; wait for datagram (max 20 bytes)
+(net-receive-udp 10001 20)
+
+; wait with timeout (5 seconds)
+(net-receive-udp 10001 20 5000000)
+
+; sender
+(net-send-udp "example.com" 10001 "Hello")
+;-&#62; 5
+
+; receiver result
+;-&#62; ("Hello" "203.0.113.10" 3312)
+
+; binary payload
+(net-send-udp "example.com" 2222 (pack "c c c c" 0 1 2 3))
+;-&#62; 4
+
+(set &#39;buf (first (net-receive-udp 2222 10)))
+(unpack "c c c c" buf)
 ;-&#62; (0 1 2 3)
-:::</p>
+</code></pre>
 <p>net-receive-udp is suitable for short, blocking UDP
 transactions. For non-blocking UDP communication or
 when replying to multiple senders, use net-listen or
@@ -9471,10 +9481,9 @@ and net-send-to.</p>
 <hr/>
 <p><a name="f-net-select"></a></p>
 <h2 id="net-select">net-select</h2>
-<p>:::
-syntax: (net-select int-socket str-mode int-micro-seconds)
+<pre><code>syntax: (net-select int-socket str-mode int-micro-seconds)
 syntax: (net-select list-sockets str-mode int-micro-seconds)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Checks readiness of one or more network sockets.</p>
 <p>str-mode specifies the condition to test:</p>
@@ -9496,25 +9505,28 @@ becomes ready before timeout, an empty list is returned.</p>
 operations while allowing other parts of the program to
 run.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;listen (net-listen 7306))</p>
-<p>; wait for incoming connection
-(while (not (net-select listen &#8220;r&#8221; 1000000))
-  (if (net-error) (print (net-error))))</p>
-<p>(set &#8216;conn (net-accept listen))
-(net-send conn &#8220;hello&#8221;)</p>
-<p>; wait for incoming data
-(while (not (net-select conn &#8220;r&#8221; 1000000))
-  (do-something))</p>
-<p>(net-receive conn buf 1024)
-:::</p>
+<pre><code>(set &#39;listen (net-listen 7306))
+
+; wait for incoming connection
+(while (not (net-select listen "r" 1000000))
+  (if (net-error) (print (net-error))))
+
+(set &#39;conn (net-accept listen))
+(net-send conn "hello")
+
+; wait for incoming data
+(while (not (net-select conn "r" 1000000))
+  (do-something))
+
+(net-receive conn buf 1024)
+</code></pre>
 <p>Multiple sockets:</p>
-<p>:::
-(set &#8216;listen-list &#8216;(1001 1002))</p>
-<p>(while (not (net-error))
-  (dolist (s (net-select listen-list &#8220;r&#8221; 1000000))
+<pre><code>(set &#39;listen-list &#39;(1001 1002))
+
+(while (not (net-error))
+  (dolist (s (net-select listen-list "r" 1000000))
     (accept-connection s)))
-:::</p>
+</code></pre>
 <p>Supplying an invalid or closed socket causes an error
 to be set in net-error.</p>
 <p>See: <a href="#f-net-accept">net-accept</a>, <a href="#f-net-receive">net-receive</a>,
@@ -9522,9 +9534,8 @@ to be set in net-error.</p>
 <hr/>
 <p><a name="f-net-send"></a></p>
 <h2 id="net-send">net-send</h2>
-<p>:::
-syntax: (net-send int-socket str-buffer [int-num-bytes])
-:::</p>
+<pre><code>syntax: (net-send int-socket str-buffer [int-num-bytes])
+</code></pre>
 <p>Description:</p>
 <p>Sends data on a network connection.</p>
 <p>The contents of str-buffer are sent on the connection
@@ -9536,23 +9547,24 @@ the entire contents of str-buffer are sent.</p>
 On failure, nil is returned. Use net-error to retrieve
 error information.</p>
 <p>Examples:</p>
-<p>:::
-(set &#8216;buf &#8220;hello there&#8221;)</p>
-<p>(net-send sock buf)
-;-&#62; 11</p>
-<p>(net-send sock buf 5)
-;-&#62; 5</p>
-<p>(net-send sock &#8220;bye bye&#8221;)
+<pre><code>(set &#39;buf "hello there")
+
+(net-send sock buf)
+;-&#62; 11
+
+(net-send sock buf 5)
+;-&#62; 5
+
+(net-send sock "bye bye")
 ;-&#62; 7
-:::</p>
+</code></pre>
 <p>See: <a href="#f-net-receive">net-receive</a>, <a href="#f-net-send-to">net-send-to</a>,
 <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-send-to"></a></p>
 <h2 id="net-send-to">net-send-to</h2>
-<p>:::
-syntax: (net-send-to str-remotehost int-remoteport str-buffer int-socket)
-:::</p>
+<pre><code>syntax: (net-send-to str-remotehost int-remoteport str-buffer int-socket)
+</code></pre>
 <p>Description:</p>
 <p>Sends data to a specified remote address using an
 existing network socket.</p>
@@ -9570,20 +9582,20 @@ address.</p>
 failure, nil is returned. Use net-error to retrieve
 error information.</p>
 <p>Examples:</p>
-<p>:::
-; UDP server
-(set &#8216;srv (net-listen 10001 &#8220;&#8220; &#8220;udp&#8221;))</p>
-<p>(while (not (net-error))
-  (set &#8216;msg (net-receive-from srv 255))
+<pre><code>; UDP server
+(set &#39;srv (net-listen 10001 "" "udp"))
+
+(while (not (net-error))
+  (set &#39;msg (net-receive-from srv 255))
   (net-send-to (nth 1 msg) (nth 2 msg)
                (upper-case (first msg)) srv))
-:::</p>
-<p>:::
-; UDP client
-(set &#8216;cli (net-listen 10002 &#8220;&#8220; &#8220;udp&#8221;))</p>
-<p>(net-send-to &#8220;127.0.0.1&#8221; 10001 &#8220;hello&#8221; cli)
+</code></pre>
+<pre><code>; UDP client
+(set &#39;cli (net-listen 10002 "" "udp"))
+
+(net-send-to "127.0.0.1" 10001 "hello" cli)
 (net-receive cli buf 255)
-:::</p>
+</code></pre>
 <p>In UDP communication, the sender address and port are
 taken from the received packet when replying.</p>
 <p>For short blocking UDP transactions, use net-send-udp
@@ -9593,9 +9605,8 @@ and net-receive-udp.</p>
 <hr/>
 <p><a name="f-net-send-udp"></a></p>
 <h2 id="net-send-udp">net-send-udp</h2>
-<p>:::
-syntax: (net-send-udp str-remotehost int-remoteport str-buffer [bool])
-:::</p>
+<pre><code>syntax: (net-send-udp str-remotehost int-remoteport str-buffer [bool])
+</code></pre>
 <p>Description:</p>
 <p>Sends a UDP datagram to a remote host and port.</p>
 <p>No prior setup using net-connect or net-listen is
@@ -9612,18 +9623,16 @@ application.</p>
 dependent. Sizes around 8 KB are generally safe.</p>
 <p>Binary data can be sent using str-buffer.</p>
 <p>Examples:</p>
-<p>:::
-(net-send-udp &#8220;example.com&#8221; 3333 &#8220;Hello&#8221;)
+<pre><code>(net-send-udp "example.com" 3333 "Hello")
 ;-&#62; 5
-:::</p>
+</code></pre>
 <p>Broadcast mode:</p>
 <p>When bool evaluates to true, the socket is put into
 broadcast mode and the datagram is sent to all hosts
 on the target network.</p>
-<p>:::
-(net-send-udp &#8220;192.168.1.255&#8221; 2000 &#8220;Hello&#8221; true)
+<pre><code>(net-send-udp "192.168.1.255" 2000 "Hello" true)
 ;-&#62; 5
-:::</p>
+</code></pre>
 <p>For non-blocking UDP communication or when maintaining
 a socket for multiple sends, use net-connect or
 net-listen with UDP mode together with net-send-to.</p>
@@ -9634,10 +9643,9 @@ net-listen with UDP mode together with net-send-to.</p>
 <hr/>
 <p><a name="f-net-service"></a></p>
 <h2 id="net-service">net-service</h2>
-<p>:::
-syntax: (net-service str-service str-protocol)
+<pre><code>syntax: (net-service str-service str-protocol)
 syntax: (net-service int-port str-protocol)
-:::</p>
+</code></pre>
 <p>Description:</p>
 <p>Looks up service names and port numbers using the
 system services database.</p>
@@ -9649,21 +9657,21 @@ name associated with int-port for the given protocol.</p>
 <p>str-protocol is typically &#8220;tcp&#8221; or &#8220;udp&#8221;.</p>
 <p>On failure, the function returns nil.</p>
 <p>Examples:</p>
-<p>:::
-(net-service &#8220;ftp&#8221; &#8220;tcp&#8221;)
-;-&#62; 21</p>
-<p>(net-service &#8220;http&#8221; &#8220;tcp&#8221;)
-;-&#62; 80</p>
-<p>(net-service 22 &#8220;tcp&#8221;)
-;-&#62; &#8220;ssh&#8221;
-:::</p>
+<pre><code>(net-service "ftp" "tcp")
+;-&#62; 21
+
+(net-service "http" "tcp")
+;-&#62; 80
+
+(net-service 22 "tcp")
+;-&#62; "ssh"
+</code></pre>
 <p>See: <a href="#f-net-error">net-error</a></p>
 <hr/>
 <p><a name="f-net-sessions"></a></p>
 <h2 id="net-sessions">net-sessions</h2>
-<p>:::
-syntax: (net-sessions)
-:::</p>
+<pre><code>syntax: (net-sessions)
+</code></pre>
 <p>Description:</p>
 <p>Returns a list of active network sockets currently
 managed by the runtime.</p>
@@ -9674,10 +9682,9 @@ or net-accept.</p>
 and monitoring of open network resources.</p>
 <p>If no sockets are active, an empty list is returned.</p>
 <p>Examples:</p>
-<p>:::
-(net-sessions)
+<pre><code>(net-sessions)
 ;-&#62; (3 4 7)
-:::</p>
+</code></pre>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-connect">net-connect</a>,
 <a href="#f-net-accept">net-accept</a>, <a href="#f-net-close">net-close</a></p>
 <hr/>
