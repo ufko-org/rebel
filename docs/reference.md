@@ -10999,3 +10999,1649 @@ See: [unify](#f-unify), [find](#f-find), [replace](#f-replace)
 ---
 
 
+<a name="f-max"></a>
+## max
+
+:::
+syntax: (max num-1 [num-2 ... ])
+:::
+
+Description:
+
+Evaluates the expressions num-1 and any following numbers
+and returns the largest numeric value.
+
+All arguments are evaluated before comparison. Integer and
+floating-point numbers may be mixed. The return value uses
+the numeric type required to represent the maximum value.
+
+Examples:
+
+:::
+(max 4 6 2 3.54 7.1)
+;-> 7.1
+
+(max 10 -5 3)
+;-> 10
+
+(max 2)
+;-> 2
+:::
+
+See: [min](#f-min)
+
+---
+
+
+<a name="f-member"></a>
+## member
+
+:::
+syntax: (member exp list)
+syntax: (member str-key str [num-option])
+:::
+
+Description:
+
+In the first syntax, member searches for the element exp
+in the list list. If exp is found, a new list is returned
+starting with the matched element followed by the rest of
+the original list. If exp is not found, nil is returned.
+
+When num-option is specified, member performs a regular
+expression search instead of a direct comparison.
+
+In the second syntax, member searches for the substring
+str-key in the string str. If found, the substring of str
+starting at the match position is returned. If no match
+is found, nil is returned.
+
+Examples:
+
+:::
+(set 'lst '(a b c d e f g h))
+;-> (a b c d e f g h)
+
+(member 'd lst)
+;-> (d e f g h)
+
+(member 55 lst)
+;-> nil
+
+(member "REBEL" "HelloREBEL")
+;-> "REBEL"
+
+(member "RE" "HelloREBEL")
+;-> "REBEL"
+
+(member "" "HelloREBEL")
+;-> "HelloREBEL"
+
+(member "xyz" "HelloREBEL")
+;-> nil
+
+(member "re" "HelloREBEL" 1)
+;-> "REBEL"
+:::
+
+See: [slice](#f-slice), [find](#f-find)
+
+---
+
+
+<a name="f-min"></a>
+## min
+
+:::
+syntax: (min num-1 [num-2 ... ])
+:::
+
+Description:
+
+Evaluates the expressions num-1 and any following numbers
+and returns the smallest numeric value.
+
+All arguments are evaluated before comparison. Integer and
+floating-point numbers may be mixed. The return value uses
+the numeric type required to represent the minimum value.
+
+Examples:
+
+:::
+(min 4 6 2 3.54 7.1)
+;-> 2
+
+(min 10 -5 3)
+;-> -5
+
+(min 2)
+;-> 2
+:::
+
+See: [max](#f-max)
+
+---
+
+
+<a name="f-mod"></a>
+## mod
+
+:::
+syntax: (mod num-1 num-2 [num-3 ... ])
+syntax: (mod num-1)
+:::
+
+Description:
+
+Calculates the modular value of the numbers in num-1 and
+num-2. mod computes the remainder from the division of the
+numerator num-i by the denominator num-i + 1.
+
+The return value is computed as:
+
+numerator - n * denominator
+
+where n is the quotient of the numerator divided by the
+denominator, rounded toward zero to an integer. The result
+has the same sign as the numerator and its magnitude is
+less than the magnitude of the denominator.
+
+When multiple arguments are given, the operation is
+applied successively from left to right.
+
+In the second syntax, 1 is assumed for num-2 and the
+result is the fractional part of num-1.
+
+Examples:
+
+:::
+(mod 10.5 3.3)
+;-> 0.6
+
+(mod -10.5 3.3)
+;-> -0.6
+
+(mod -10.5)
+;-> -0.5
+:::
+
+Use the [%](#f-percent) function when working with
+integers only.
+
+---
+
+
+<a name="f-mul"></a>
+## mul
+
+:::
+syntax: (mul num-1 num-2 [num-3 ... ])
+:::
+
+Description:
+
+Evaluates all expressions num-1 and any following numbers,
+calculating and returning their product.
+
+mul performs mixed-type arithmetic but always returns a
+floating-point value. If any argument is NaN, the result
+is also NaN.
+
+Examples:
+
+:::
+(mul 1 2 3 4 5 1.1)
+;-> 132
+
+(mul 0.5 0.5)
+;-> 0.25
+:::
+
+---
+
+
+<a name="f-multiply"></a>
+## multiply
+
+:::
+syntax: (multiply matrix-A matrix-B)
+:::
+
+Description:
+
+Returns the matrix multiplication of matrix-A and
+matrix-B.
+
+If matrix-A has dimensions n by m and matrix-B has
+dimensions k by l, the values m and k must be equal.
+The result is an n by l matrix.
+
+multiply supports mixed-type arithmetic, but the
+result always consists of double-precision floating
+point values, even if all input elements are integers.
+
+The dimensions of a matrix are determined by the
+number of rows and the number of elements in the
+first row. For missing elements in non-rectangular
+matrices, 0.0 is assumed.
+
+A matrix may be represented as either a nested list
+or an array.
+
+Examples:
+
+:::
+(set 'A '((1 2 3) (4 5 6)))
+(set 'B '((1 2) (1 2) (1 2)))
+
+(multiply A B)
+;-> ((6 12) (15 30))
+
+(set 'v '(10 20 30))
+(multiply A (transpose (list v)))
+;-> ((140) (320))
+:::
+
+When multiplying a matrix with a vector of n elements,
+the vector must first be transformed into an n by 1
+matrix using transpose.
+
+All operations shown here on lists can also be
+performed on arrays.
+
+See: [det](#f-det), [invert](#f-invert), [mat](#f-mat), [transpose](#f-transpose)
+
+---
+
+
+<a name="f-nanp"></a>
+## NaN?
+
+:::
+syntax: (NaN? float)
+:::
+
+Description:
+
+Tests whether the result of a floating-point arithmetic
+operation is a NaN value.
+
+NaN stands for "Not a Number" and is a special IEEE 754
+floating-point value produced by certain invalid or
+undefined numeric operations.
+
+All floating-point arithmetic operations involving a
+NaN return NaN. All comparisons with NaN return nil.
+Integer arithmetic treats NaN as the value 0.
+
+Examples:
+
+:::
+; floating-point operations on NaN yield NaN
+(set 'x (sqrt -1))
+;-> -nan
+
+(NaN? x)
+;-> true
+
+(add x 123)
+;-> -nan
+
+(mul x 123)
+;-> -nan
+
+; integer operations treat NaN as zero
+(+ x 123)
+;-> 123
+
+(* x 123)
+;-> 0
+
+; comparisons with NaN yield nil
+(> x 0)
+;-> nil
+
+(<= x 0)
+;-> nil
+
+(= x x)
+;-> nil
+
+(set 'infinity (mul 1.0e200 1.0e200))
+;-> inf
+
+(NaN? (sub infinity infinity))
+;-> true
+:::
+
+See: [inf?](#f-infp)
+
+---
+
+
+<a name="f-net-accept"></a>
+## net-accept
+
+:::
+syntax: (net-accept int-socket)
+:::
+
+Description:
+
+Accepts an incoming connection on a socket that was
+previously put into listening mode.
+
+Returns a newly created socket handle that can be used
+to receive and send data on the accepted connection.
+
+Examples:
+
+:::
+(set 'sock (net-listen 1234))
+;-> <socket>
+
+(net-accept sock)
+;-> <socket>
+:::
+
+Listening on ports below 1024 requires superuser
+privileges.
+
+See: [net-listen](#f-net-listen), [net-close](#f-net-close)
+
+---
+
+
+<a name="f-net-close"></a>
+## net-close
+
+:::
+syntax: (net-close int-socket [true])
+:::
+
+Description:
+
+Closes the network socket specified by int-socket.
+The socket must have been previously created by
+net-connect or net-accept.
+
+Returns true on success and nil on failure.
+
+When the optional true flag is given, immediate
+shutdown is suppressed and the function waits for
+any pending data transmissions to finish before
+closing the socket.
+
+Examples:
+
+:::
+(net-close sock)
+;-> true
+:::
+
+See: [net-connect](#f-net-connect), [net-accept](#f-net-accept)
+
+---
+
+
+<a name="f-net-connect"></a>
+## net-connect
+
+:::
+syntax: (net-connect str-remote-host int-port [int-timeout-ms])
+syntax: (net-connect str-remote-host int-port [str-mode [int-ttl]])
+syntax: (net-connect str-file-path)
+:::
+
+Description:
+
+Creates a network socket and prepares it for communication.
+
+In the first syntax, connects to remote host specified by
+str-remote-host and port specified by int-port. On success,
+returns a socket handle. On failure, returns nil.
+
+Optional int-timeout-ms specifies connection timeout in
+milliseconds. If omitted, a default timeout is used.
+
+In the second syntax, str-mode selects UDP-related behavior.
+Supported values:
+
+- "udp" or "u"       create UDP socket
+- "multi" or "m"     create UDP multicast socket
+- "broadcast" or "b" create UDP broadcast socket
+
+When using UDP modes, net-connect does not establish a
+stream connection. The socket is prepared for sending and
+receiving datagrams. Optional int-ttl specifies multicast
+time-to-live value. Default is 3.
+
+In the third syntax, connects to a local domain socket
+specified by str-file-path. On success, returns a socket
+handle. On failure, returns nil.
+
+Examples:
+
+:::
+; TCP
+(set 'sock (net-connect "example.org" 80))
+;-> <socket>
+
+; timeout
+(net-connect "example.org" 22 500)
+;-> <socket>|nil
+
+; UDP
+(net-connect "226.0.0.1" 4096 "udp")
+;-> <socket>
+
+; UDP multicast
+(net-connect "" 4096 "multi")
+;-> <socket>
+
+; UDP broadcast
+(net-connect "192.168.2.255" 3000 "broadcast")
+;-> <socket>
+
+; local domain socket
+(net-connect "/tmp/rebel.sock")
+;-> <socket>
+:::
+
+When using UDP modes, data transfer is performed using
+net-send, net-send-to, net-receive, or net-receive-from.
+
+See: [net-listen](#f-net-listen), [net-accept](#f-net-accept),
+[net-send](#f-net-send), [net-receive](#f-net-receive)
+
+---
+
+
+<a name="f-net-error"></a>
+## net-error
+
+:::
+syntax: (net-error)
+syntax: (net-error int-error)
+:::
+
+Description:
+
+Retrieves information about the last error produced by
+network-related functions.
+
+net-error reports errors from the following functions:
+net-accept, net-connect, net-eval, net-listen,
+net-lookup, net-receive, net-receive-udp, net-select,
+net-send, net-send-udp, and net-service.
+
+When one of these functions fails, it returns nil and
+net-error can be used to obtain the error number and
+message.
+
+Each successful call to a net-* function clears the
+stored error.
+
+Functions that use sockets close the socket automatically
+on failure and remove it from the net-sessions list.
+
+When called without arguments, net-error returns nil if
+no error is stored, or a list containing the last error
+number and description.
+
+When int-error is specified, net-error returns the error
+number and description for that specific error code.
+
+Error codes:
+
+:::
+no   description
+--   ------------------------------------------------
+1    Cannot open socket
+2    DNS resolution failed
+3    Not a valid service
+4    Connection failed
+5    Accept failed
+6    Connection closed
+7    Connection broken
+8    Socket send() failed
+9    Socket recv() failed
+10   Cannot bind socket
+11   Too many sockets in net-select
+12   Listen failed
+13   Badly formed IP
+14   Select failed
+15   Peek failed
+16   Not a valid socket
+17   Cannot unblock socket
+18   Operation timed out
+19   HTTP badly formed URL
+20   HTTP file operation failed
+21   HTTP transfer failed
+22   HTTP invalid response from server
+23   HTTP no response from server
+24   HTTP no content
+25   HTTP error in header
+26   HTTP error in chunked format
+:::
+
+Examples:
+
+:::
+(net-error)
+;-> nil
+
+(net-connect "jhghjgkjhg" 80)
+;-> nil
+
+(net-error)
+;-> (2 "DNS resolution failed")
+
+(net-error 10)
+;-> (10 "Cannot bind socket")
+:::
+
+See: [last-error](#f-last-error), [sys-error](#f-sys-error)
+
+---
+
+
+<a name="f-net-eval"></a>
+## net-eval
+
+:::
+syntax: (net-eval str-host int-port exp [int-timeout [func-handler]])
+syntax: (net-eval '((str-host int-port exp) ... ) [int-timeout [func-handler]])
+:::
+
+Description:
+
+Evaluates source code remotely on one or more Rebel
+nodes.
+
+net-eval handles connection setup, transmission of
+source code, evaluation on the remote node, and
+collection of results.
+
+The expression exp is evaluated in the environment of
+the target node. exp may be:
+
+- quoted expression
+- string containing a single expression
+- multiline program using [text] ... [/text]
+
+When multiple expressions are provided in a string,
+all are evaluated, but only the result of the first
+expression is returned.
+
+In the first syntax, net-eval sends exp to a single
+remote node specified by str-host and int-port.
+
+On success, the result of evaluating exp is returned.
+On timeout or failure, nil is returned.
+
+Optional int-timeout specifies timeout in milliseconds.
+Default timeout is 60000 ms.
+
+Examples:
+
+:::
+(net-eval "192.168.1.94" 7306 '(+ 3 4))
+;-> 7
+
+(net-eval "192.168.1.94" 7306 "(+ 3 4)")
+;-> 7
+
+(net-eval "192.168.1.94" 7306 '(+ 3 4) 1)
+;-> nil
+
+(net-error)
+;-> (18 "Operation timed out")
+
+(net-eval "/tmp/rebel.sock" 0 '(+ 3 4))
+;-> 7
+:::
+
+In the second syntax, net-eval evaluates expressions on
+multiple remote nodes.
+
+Each element of the list specifies a target node and
+expression. The function returns a list of results in
+the same order. Nodes that time out return nil. Errors
+are returned as (error-number error-text) lists.
+
+Examples:
+
+:::
+(net-eval '(
+  ("192.168.1.94" 7306 '(+ 3 4))
+  ("192.168.1.95" 7306 '(+ 5 6))
+) 5000)
+;-> (7 11)
+:::
+
+When int-port is 0, str-host is interpreted as a local
+domain socket path.
+
+Optional func-handler specifies a handler function that
+is called repeatedly while waiting and once for each
+completed remote evaluation.
+
+The handler is called with nil while waiting. When a
+result is received, it is called with:
+
+(str-host int-port result)
+
+net-eval returns true if all evaluations complete
+before timeout, or nil if the timeout expires.
+
+Examples:
+
+:::
+(define (handler msg)
+  (if msg
+      (println msg))
+)
+
+(net-eval '(
+  ("192.168.1.94" 7306 '(+ 3 4))
+  ("192.168.1.95" 7306 '(+ 5 6))
+) 5000 handler)
+:::
+
+See: [net-connect](#f-net-connect), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-interface"></a>
+## net-interface
+
+:::
+syntax: (net-interface str-ip-addr)
+syntax: (net-interface)
+:::
+
+Description:
+
+Sets or retrieves the default local interface address
+used for network connections.
+
+When str-ip-addr is specified, it becomes the default
+local interface for subsequent network operations.
+The address may be given as an IP address or a name.
+
+When called without arguments, net-interface returns
+the current default interface address. If no interface
+has been set yet, the value "0.0.0.0" is returned. This
+means the default address selected by the operating
+system is used.
+
+An explicitly set interface may be overridden by an
+optional interface address provided to net-listen.
+
+This function is useful on systems with multiple
+network interfaces or multiple assigned IP addresses.
+On systems with a single interface, network functions
+select the interface automatically.
+
+On error, the function returns nil. Use net-error to
+retrieve error information.
+
+Examples:
+
+:::
+(net-interface "192.168.1.95")
+;-> "192.168.1.95"
+
+(net-interface "localhost")
+;-> "127.0.0.1"
+
+(net-interface)
+;-> "127.0.0.1"
+:::
+
+See: [net-listen](#f-net-listen), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-ipv"></a>
+## net-ipv
+
+:::
+syntax: (net-ipv int-version)
+syntax: (net-ipv)
+:::
+
+Description:
+
+Sets or retrieves the default Internet Protocol version
+used for network operations.
+
+int-version must be either 4 for IPv4 or 6 for IPv6.
+When called without arguments, net-ipv returns the
+current setting.
+
+The default protocol version is IPv4.
+
+Once a socket is created using net-connect or
+net-listen, all subsequent operations on that socket
+automatically use the protocol version selected at
+creation time. Different sockets may use different
+IPv4 or IPv6 settings at the same time.
+
+The current protocol setting affects only sockets
+created after the change.
+
+Note:
+
+net-packet operates in IPv4 mode regardless of the
+current protocol setting.
+
+Examples:
+
+:::
+(net-ipv)
+;-> 4
+
+(net-ipv 6)
+;-> 6
+
+(net-ipv)
+;-> 6
+:::
+
+See: [net-connect](#f-net-connect), [net-listen](#f-net-listen)
+
+---
+
+
+<a name="f-net-listen"></a>
+## net-listen
+
+:::
+syntax: (net-listen int-port [str-ip-addr [str-mode]])
+syntax: (net-listen str-file-path)
+:::
+
+Description:
+
+Creates a listening socket.
+
+In the first syntax, binds to int-port and returns a
+socket handle immediately. The returned socket is used
+with net-accept to wait for an incoming connection.
+
+After a connection is accepted, net-accept returns a
+new socket handle that is used for communication with
+the client.
+
+Listening on ports below 1024 requires superuser
+privileges.
+
+When str-ip-addr is specified, listening is restricted
+to that local interface address or name. If omitted,
+the default interface is used.
+
+Examples:
+
+:::
+(set 'port 7306)
+(set 'listen (net-listen port))
+
+(unless listen
+  (exit))
+
+(set 'conn (net-accept listen))
+(if conn
+    (while (net-receive conn buff 1024 "\n")
+      (print buff)
+      (if (= buff "\r\n") (exit))))
+:::
+
+In the second syntax, net-listen creates a local domain
+socket specified by str-file-path. On success, returns
+a socket handle usable with net-accept.
+
+Examples:
+
+:::
+(net-listen "/tmp/rebel.sock")
+;-> <socket>
+
+(net-accept <socket>)
+;-> <socket>
+:::
+
+After a connection is accepted, net-send, net-receive,
+net-select, and net-peek can be used as with TCP
+connections.
+
+UDP mode:
+
+When str-mode is "udp" or "u", net-listen creates a
+UDP socket bound to the local address and port. In this
+mode, net-accept is not used.
+
+The socket can be used directly with net-receive-from,
+net-send-to, net-select, or net-peek.
+
+Examples:
+
+:::
+(net-listen 10002 "" "udp")
+;-> <socket>
+
+(net-receive-from <socket> 1024)
+:::
+
+In UDP mode, net-listen binds the socket but does not
+establish a connection.
+
+UDP multicast mode:
+
+When str-mode is "multi" or "m", net-listen creates a
+socket for multicast reception. str-ip-addr specifies
+the multicast group address.
+
+Examples:
+
+:::
+(net-listen 4096 "226.0.0.1" "multi")
+;-> <socket>
+
+(net-receive-from <socket> 1024)
+:::
+
+Packet divert mode:
+
+When str-mode is "divert" or "d", net-listen creates a
+divert socket bound to int-port. str-ip-addr is ignored.
+
+This mode requires superuser privileges. The socket
+receives raw packets diverted to the specified port
+and may re-inject packets back into the kernel.
+
+net-receive-from and net-send-to are used for reading
+and writing packets on a divert socket.
+
+See: [net-accept](#f-net-accept), [net-connect](#f-net-connect),
+[net-receive](#f-net-receive), [net-receive-from](#f-net-receive-from),
+[net-send-to](#f-net-send-to), [net-select](#f-net-select)
+
+---
+
+
+<a name="f-net-local"></a>
+## net-local
+
+:::
+syntax: (net-local int-socket)
+:::
+
+Description:
+
+Returns local address information for a network
+connection associated with int-socket.
+
+The return value is a list containing the local IP
+address and port number used by the socket.
+
+This is useful when the local address or port was
+selected automatically by the operating system.
+
+On error, the function returns nil. Use net-error
+to retrieve error information.
+
+Examples:
+
+:::
+(net-local sock)
+;-> ("204.179.131.73" 1689)
+:::
+
+Use net-peer to retrieve the remote address and port
+for the same connection.
+
+See: [net-peer](#f-net-peer), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-lookup"></a>
+## net-lookup
+
+:::
+syntax: (net-lookup str-ip-number)
+syntax: (net-lookup str-hostname [bool])
+:::
+
+Description:
+
+Resolves host names and IP addresses.
+
+In the first syntax, net-lookup returns the host name
+associated with the IP address given in str-ip-number.
+
+In the second syntax, net-lookup returns the IP address
+associated with the host name given in str-hostname.
+
+When the optional bool argument evaluates to true,
+host-by-name lookup is forced even if str-hostname
+starts with a numeric IP prefix.
+
+On failure, the function returns nil. Use net-error
+to retrieve error information.
+
+Examples:
+
+:::
+(net-lookup "example.com")
+;-> "23.220.75.232"
+
+(net-lookup "23.220.75.232")
+;-> "a23-220-75-232.deploy.static.akamaitechnologies.com"
+:::
+
+See: [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-packet"></a>
+## net-packet
+
+:::
+syntax: (net-packet str-packet)
+:::
+
+Description:
+
+Sends a custom network packet using a raw socket.
+
+str-packet must contain a complete IPv4 packet starting
+with an IP header, followed by a TCP, UDP, or ICMP header
+and optional payload data.
+
+The function requires superuser privileges.
+
+Only IPv4 is supported.
+
+On success, net-packet returns the number of bytes sent.
+On failure, it returns nil. Use net-error and sys-error
+to retrieve error information.
+
+If checksum fields in the packet headers are zero, the
+correct checksums are calculated and inserted
+automatically. Existing checksums are left unchanged.
+
+Examples:
+
+:::
+; UDP packet with zeroed checksums (recalculated internally)
+
+(set 'pkt (pack (dup "b" 39) '(
+  0x45 0x00 0x00 0x27 0x4b 0x8f 0x00 0x00 0x40 0x11 0x00 0x00
+  192 168 1 95
+  192 168 1 92
+  0xf2 0xc8 0x30 0x39 0x00 0x13 0x00 0x00
+  0x48 0x65 0x6c 0x6c 0x6f 0x20 0x57 0x6f 0x72 0x6c 0x64
+)))
+
+(unless (net-packet pkt)
+  (println (net-error))
+  (println (sys-error)))
+:::
+
+Warning:
+
+Incorrect use can disrupt network devices. Use only on
+isolated networks and only if you understand raw packet
+processing.
+
+See: [net-error](#f-net-error), [sys-error](#f-sys-error)
+
+---
+
+
+<a name="f-net-peek"></a>
+## net-peek
+
+:::
+syntax: (net-peek int-socket)
+:::
+
+Description:
+
+Returns the number of bytes ready for reading on the
+network socket specified by int-socket.
+
+If no data is available, 0 is returned. If an error
+occurs or the connection is closed, nil is returned.
+
+This function can be used to implement non-blocking
+I/O loops.
+
+Examples:
+
+:::
+(set 'sock (net-connect "example.com" 7306))
+
+(while (= (net-peek sock) 0)
+  (do-something-else))
+
+(net-receive sock buff 1024)
+:::
+
+Use peek to check file descriptors and standard input.
+
+See: [net-receive](#f-net-receive), [peek](#f-peek)
+
+---
+
+
+<a name="f-net-peer"></a>
+## net-peer
+
+:::
+syntax: (net-peer int-socket)
+:::
+
+Description:
+
+Returns remote address information for a network
+connection associated with int-socket.
+
+The return value is a list containing the remote IP
+address and port number for the connection.
+
+On error, the function returns nil. Use net-error
+to retrieve error information.
+
+Examples:
+
+:::
+(net-peer sock)
+;-> ("192.100.81.100" 13)
+:::
+
+Use net-local to retrieve the local address and port
+for the same connection.
+
+See: [net-local](#f-net-local), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-ping"></a>
+## net-ping
+
+:::
+syntax: (net-ping str-address [int-timeout [int-count bool]])
+syntax: (net-ping list-addresses [int-timeout [int-count bool]])
+:::
+
+Description:
+
+Sends ICMP echo requests and collects reply information.
+
+net-ping uses raw sockets and requires sufficient
+privileges to create them. When executed without the
+required privileges, the function returns nil and sets
+an error retrievable with net-error.
+
+In the first syntax, a single address is pinged.
+str-address may be a host name, IP address, broadcast
+address, wildcard, or range specification.
+
+An optional int-timeout specifies the maximum wait
+time in milliseconds. If omitted, the default timeout
+is 1000 ms.
+
+The return value is a list of (ip-address time-us)
+pairs for each responding host. If no host responds,
+an empty list is returned.
+
+A return value of nil indicates an error. Use net-error
+to retrieve error information.
+
+Examples:
+
+:::
+(net-ping "localhost")
+;-> (("127.0.0.1" 222))
+
+(net-ping "example.com" 3000)
+;-> ()
+:::
+
+In the second syntax, net-ping operates in batch mode.
+Multiple addresses are pinged using a single socket.
+Addresses may be specified as a list, wildcard (*),
+or numeric range (-).
+
+Packets are sent as fast as possible. Multiple replies
+may be received.
+
+Optional int-count limits the number of replies to
+collect before returning. A value of 0 or omission
+assumes all replies.
+
+When bool evaluates to true, an error string is returned
+instead of a response time for hosts that do not reply.
+
+Examples:
+
+:::
+(net-ping '("example.com" "192.168.1.255") 2000 20)
+;-> (("23.220.75.232" 826420) ("192.168.1.1" 124))
+
+(net-ping "192.168.1.*" 500)
+;-> (("192.168.1.1" 120) ("192.168.1.2" 245))
+:::
+
+Broadcast mode sends a single packet to a broadcast
+address and may produce multiple replies. Batch mode
+sends one packet per address.
+
+Longer timeouts may be required when sending large
+address lists. If the timeout expires before all
+responses are received, net-ping may return an
+incomplete list.
+
+See: [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-receive"></a>
+## net-receive
+
+:::
+syntax: (net-receive int-socket sym-buffer int-max-bytes [wait-string])
+:::
+
+Description:
+
+Receives data from a network socket.
+
+Reads up to int-max-bytes from int-socket and stores the
+data in sym-buffer. The buffer size is adjusted to the
+number of bytes actually received.
+
+The return value is the number of bytes read. If the
+connection is closed or an error occurs, nil is returned.
+Use net-error to retrieve error information.
+
+net-receive is a blocking call and waits until data
+becomes available. Use net-peek or net-select to check
+read readiness.
+
+sym-buffer may be a symbol or a default functor used for
+reference passing in user-defined functions.
+
+When wait-string is specified, net-receive returns as
+soon as the given string is received. The wait-string is
+included in the contents of sym-buffer. In this mode,
+data is read character-by-character and may be slower.
+
+Examples:
+
+:::
+(net-receive sock buf 1024)
+;-> 128
+:::
+
+Read until newline:
+
+:::
+(define (net-receive-line sock buf)
+  (net-receive sock buf 256 "\n"))
+
+(net-receive-line sock line)
+;-> 42
+:::
+
+See: [net-peek](#f-net-peek), [net-select](#f-net-select),
+[net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-receive-from"></a>
+## net-receive-from
+
+:::
+syntax: (net-receive-from int-socket int-max-size)
+:::
+
+Description:
+
+Receives a UDP datagram from int-socket and returns
+sender information.
+
+The socket must have been created using net-listen or
+net-connect with UDP mode enabled.
+
+Up to int-max-size bytes are received. Excess bytes are
+discarded.
+
+On success, the function returns a list containing:
+
+(data-string ip-address port)
+
+On failure, nil is returned. Use net-error to retrieve
+error information.
+
+net-receive-from may be used in blocking mode or combined
+with net-select or net-peek for non-blocking operation.
+
+Examples:
+
+:::
+(set 'sock (net-listen 1001 "" "udp"))
+;-> <socket>
+
+(while (not (net-select sock "r" 100000))
+  (do-something))
+
+(net-receive-from sock 20)
+;-> ("hello" "192.168.0.5" 3240)
+
+(net-send-to "192.168.0.5" 3240 "hello to you" sock)
+
+(net-close sock)
+:::
+
+In UDP communication, sender address and port are carried
+in the packet itself. net-receive does not provide this
+information and is therefore not suitable for replying
+to UDP senders.
+
+See: [net-listen](#f-net-listen), [net-connect](#f-net-connect),
+[net-send-to](#f-net-send-to), [net-select](#f-net-select),
+[net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-receive-udp"></a>
+## net-receive-udp
+
+:::
+syntax: (net-receive-udp int-port int-maxsize [int-microsec [str-addr-if]])
+:::
+
+Description:
+
+Receives a UDP datagram on int-port.
+
+Up to int-maxsize bytes are read. Bytes beyond this
+limit are discarded.
+
+The call blocks until a datagram arrives or until the
+optional timeout int-microsec (microseconds) expires.
+
+No prior setup using net-listen or net-connect is
+required. When setting up a sender/receiver pair, the
+receiver must be started first.
+
+On success, net-receive-udp returns a list containing:
+
+(data-string ip-address port)
+
+On timeout or error, nil is returned. Use net-error to
+retrieve error information.
+
+When str-addr-if is specified, listening is restricted
+to the given local interface address or name. When
+using str-addr-if, a timeout must also be specified.
+
+Examples:
+
+:::
+; wait for datagram (max 20 bytes)
+(net-receive-udp 10001 20)
+
+; wait with timeout (5 seconds)
+(net-receive-udp 10001 20 5000000)
+
+; sender
+(net-send-udp "example.com" 10001 "Hello")
+;-> 5
+
+; receiver result
+;-> ("Hello" "203.0.113.10" 3312)
+
+; binary payload
+(net-send-udp "example.com" 2222 (pack "c c c c" 0 1 2 3))
+;-> 4
+
+(set 'buf (first (net-receive-udp 2222 10)))
+(unpack "c c c c" buf)
+;-> (0 1 2 3)
+:::
+
+net-receive-udp is suitable for short, blocking UDP
+transactions. For non-blocking UDP communication or
+when replying to multiple senders, use net-listen or
+net-connect with UDP mode together with net-receive-from
+and net-send-to.
+
+See: [net-send-udp](#f-net-send-udp), [net-receive-from](#f-net-receive-from),
+[pack](#f-pack), [unpack](#f-unpack), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-select"></a>
+## net-select
+
+:::
+syntax: (net-select int-socket str-mode int-micro-seconds)
+syntax: (net-select list-sockets str-mode int-micro-seconds)
+:::
+
+Description:
+
+Checks readiness of one or more network sockets.
+
+str-mode specifies the condition to test:
+
+- "read" or "r"       ready for reading or accepting
+- "write" or "w"      ready for writing
+- "exception" or "e"  error condition
+
+int-micro-seconds specifies the timeout in microseconds.
+When set to -1, the call does not time out.
+
+In the first syntax, net-select tests a single socket.
+It returns true when the socket is ready, or nil on
+timeout or error.
+
+In the second syntax, net-select tests a list of sockets.
+It returns a list of sockets that are ready. If no socket
+becomes ready before timeout, an empty list is returned.
+
+On error, net-error is set.
+
+net-select enables non-blocking read, write, and accept
+operations while allowing other parts of the program to
+run.
+
+Examples:
+
+:::
+(set 'listen (net-listen 7306))
+
+; wait for incoming connection
+(while (not (net-select listen "r" 1000000))
+  (if (net-error) (print (net-error))))
+
+(set 'conn (net-accept listen))
+(net-send conn "hello")
+
+; wait for incoming data
+(while (not (net-select conn "r" 1000000))
+  (do-something))
+
+(net-receive conn buf 1024)
+:::
+
+Multiple sockets:
+
+:::
+(set 'listen-list '(1001 1002))
+
+(while (not (net-error))
+  (dolist (s (net-select listen-list "r" 1000000))
+    (accept-connection s)))
+:::
+
+Supplying an invalid or closed socket causes an error
+to be set in net-error.
+
+See: [net-accept](#f-net-accept), [net-receive](#f-net-receive),
+[net-send](#f-net-send), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-send"></a>
+## net-send
+
+:::
+syntax: (net-send int-socket str-buffer [int-num-bytes])
+:::
+
+Description:
+
+Sends data on a network connection.
+
+The contents of str-buffer are sent on the connection
+specified by int-socket.
+
+When int-num-bytes is specified, at most that many bytes
+are sent from the beginning of str-buffer. When omitted,
+the entire contents of str-buffer are sent.
+
+The return value is the number of bytes actually sent.
+On failure, nil is returned. Use net-error to retrieve
+error information.
+
+Examples:
+
+:::
+(set 'buf "hello there")
+
+(net-send sock buf)
+;-> 11
+
+(net-send sock buf 5)
+;-> 5
+
+(net-send sock "bye bye")
+;-> 7
+:::
+
+See: [net-receive](#f-net-receive), [net-send-to](#f-net-send-to),
+[net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-send-to"></a>
+## net-send-to
+
+:::
+syntax: (net-send-to str-remotehost int-remoteport str-buffer int-socket)
+:::
+
+Description:
+
+Sends data to a specified remote address using an
+existing network socket.
+
+The socket in int-socket must have been created using
+net-connect or net-listen. The function can be used
+with both TCP and UDP sockets.
+
+When using UDP mode, net-connect or net-listen is used
+only to create and bind the socket. No connection is
+established.
+
+When net-connect is used together with net-send-to,
+only one of the two functions should specify the remote
+address. The other must pass an empty string as the
+address.
+
+On success, the number of bytes sent is returned. On
+failure, nil is returned. Use net-error to retrieve
+error information.
+
+Examples:
+
+:::
+; UDP server
+(set 'srv (net-listen 10001 "" "udp"))
+
+(while (not (net-error))
+  (set 'msg (net-receive-from srv 255))
+  (net-send-to (nth 1 msg) (nth 2 msg)
+               (upper-case (first msg)) srv))
+:::
+
+:::
+; UDP client
+(set 'cli (net-listen 10002 "" "udp"))
+
+(net-send-to "127.0.0.1" 10001 "hello" cli)
+(net-receive cli buf 255)
+:::
+
+In UDP communication, the sender address and port are
+taken from the received packet when replying.
+
+For short blocking UDP transactions, use net-send-udp
+and net-receive-udp.
+
+See: [net-receive-from](#f-net-receive-from), [net-listen](#f-net-listen),
+[net-send-udp](#f-net-send-udp), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-send-udp"></a>
+## net-send-udp
+
+:::
+syntax: (net-send-udp str-remotehost int-remoteport str-buffer [bool])
+:::
+
+Description:
+
+Sends a UDP datagram to a remote host and port.
+
+No prior setup using net-connect or net-listen is
+required. The function sends the datagram and closes
+the socket immediately.
+
+The return value is the number of bytes sent. On
+failure, nil is returned. Use net-error to retrieve
+error information.
+
+UDP does not guarantee delivery. If no receiver is
+waiting, the datagram is lost. For reliable delivery,
+a higher-level protocol must be implemented by the
+application.
+
+The practical maximum payload size is platform-
+dependent. Sizes around 8 KB are generally safe.
+
+Binary data can be sent using str-buffer.
+
+Examples:
+
+:::
+(net-send-udp "example.com" 3333 "Hello")
+;-> 5
+:::
+
+Broadcast mode:
+
+When bool evaluates to true, the socket is put into
+broadcast mode and the datagram is sent to all hosts
+on the target network.
+
+:::
+(net-send-udp "192.168.1.255" 2000 "Hello" true)
+;-> 5
+:::
+
+For non-blocking UDP communication or when maintaining
+a socket for multiple sends, use net-connect or
+net-listen with UDP mode together with net-send-to.
+
+See: [net-receive-udp](#f-net-receive-udp),
+[net-send-to](#f-net-send-to),
+[net-connect](#f-net-connect),
+[net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-service"></a>
+## net-service
+
+:::
+syntax: (net-service str-service str-protocol)
+syntax: (net-service int-port str-protocol)
+:::
+
+Description:
+
+Looks up service names and port numbers using the
+system services database.
+
+In the first syntax, net-service returns the standard
+port number associated with str-service for the given
+protocol.
+
+In the second syntax, net-service returns the service
+name associated with int-port for the given protocol.
+
+str-protocol is typically "tcp" or "udp".
+
+On failure, the function returns nil.
+
+Examples:
+
+:::
+(net-service "ftp" "tcp")
+;-> 21
+
+(net-service "http" "tcp")
+;-> 80
+
+(net-service 22 "tcp")
+;-> "ssh"
+:::
+
+See: [net-error](#f-net-error)
+
+---
+
+
+<a name="f-net-sessions"></a>
+## net-sessions
+
+:::
+syntax: (net-sessions)
+:::
+
+Description:
+
+Returns a list of active network sockets currently
+managed by the runtime.
+
+The list contains both listening sockets and active
+connection sockets created by net-listen, net-connect,
+or net-accept.
+
+This function is useful for inspection, debugging,
+and monitoring of open network resources.
+
+If no sockets are active, an empty list is returned.
+
+Examples:
+
+:::
+(net-sessions)
+;-> (3 4 7)
+:::
+
+See: [net-listen](#f-net-listen), [net-connect](#f-net-connect),
+[net-accept](#f-net-accept), [net-close](#f-net-close)
+
+---

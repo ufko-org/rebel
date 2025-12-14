@@ -5,7 +5,7 @@ css:rebel.css
 
 ---
 
-- Rebel is a general-purpose scripting language written in ANSI C.
+- Rebel is a general-purpose programming language written in ANSI C.
 - Rebel builds with `make` using Clang, GCC, or TCC.
 - Rebel starts without initialization steps or external dependencies.
 - Rebel provides one binary under 350 KB containing 370+ functions and an FFI interface.
@@ -108,7 +108,7 @@ Rebel remembers things
 Rebel loves all C libraries 
 
 ```
-> (import "/usr/lib/libc.so.102.0" "printf")
+> (import "/path/to/libc.so" "printf")
 printf@F3D306ED040
 > (printf "Hello rebels :)\n")
 Hello rebels :)

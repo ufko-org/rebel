@@ -34,7 +34,7 @@
   <h1 id="rebel-programming-language">Rebel Programming Language</h1>
 <hr/>
 <ul>
-<li>Rebel is a general-purpose scripting language written in ANSI C.</li>
+<li>Rebel is a general-purpose programming language written in ANSI C.</li>
 <li>Rebel builds with <code>make</code> using Clang, GCC, or TCC.</li>
 <li>Rebel starts without initialization steps or external dependencies.</li>
 <li>Rebel provides one binary under 350 KB containing 370+ functions and an FFI interface.</li>
@@ -139,7 +139,7 @@ true
 &#62;
 </code></pre>
 <p>Rebel loves all C libraries </p>
-<pre><code>&#62; (import "&#47;usr&#47;lib&#47;libc.so.102.0" "printf")
+<pre><code>&#62; (import "&#47;path&#47;to&#47;libc.so" "printf")
 printf@F3D306ED040
 &#62; (printf "Hello rebels :)\n")
 Hello rebels :)
