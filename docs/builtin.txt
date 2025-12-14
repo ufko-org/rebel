@@ -45,7 +45,7 @@ str-2     second string
 str-pat   pattern string  
 sym       symbol  
 ctx       context  
-func      function / lambda  
+func      function  
 pred      predicate  
 data      raw data  
 path      filesystem path  
@@ -336,7 +336,7 @@ seq      Flatten nested seq.
 ---
 
 fn       (fn (args...) body)
-func     Define function (alt syntax).
+func     Define fn function (alt syntax).
 
 ---
 
@@ -365,8 +365,8 @@ seq      Intersection of sequences.
 
 ---
 
-lambda   (lambda (args...) body)
-func     Create lambda.
+fn       (fn (args...) body)
+func     Create fn.
 
 ---
 
@@ -1315,8 +1315,8 @@ bool          True if exp is an integer.
 
 ---
 
-lambda?       (lambda? exp)
-bool          True if exp is a lambda.
+fn?           (fn? exp)
+bool          True if exp is a fn.
 
 ---
 
@@ -1331,7 +1331,7 @@ bool          True if exp is a list.
 ---
 
 macro?        (macro? exp)
-bool          True if exp is a lambda-macro.
+bool          True if exp is a fn-macro.
 
 ---
 
@@ -2111,7 +2111,7 @@ any             Customize REPL prompt behavior.
 ---
 
 read-expr       (read-expr str)
-any             Read s-expression without evaluation.
+any             Read expression without evaluation.
 
 ---
 
@@ -2378,7 +2378,7 @@ any             Customize REPL prompt behavior.
 ---
 
 read-expr       (read-expr str)
-any             Read s-expression without evaluating.
+any             Read expression without evaluating.
 
 ---
 

@@ -48,7 +48,7 @@
 <ul>
 <li><strong>Core Scripting &#38; Flow Control</strong>
 <ul>
-<li>loops, conditionals, list processing, lambda, functional programming</li>
+<li>loops, conditionals, list processing, functional programming</li>
 </ul></li>
 <li><strong>Strings &#38; Data Manipulation</strong>
 <ul>
@@ -116,7 +116,7 @@ $: .&#47;rebel
 Rebel v.1.0 64-bit on BSD IPv4&#47;6 UTF-8 libffi, options: rebel -h
 
 &#62; (define (sum x) (+ x x))
-(lambda (x) (+ x x))
+(fn (x) (+ x x))
 &#62; (sum 2)
 4
 &#62; (list? sum)
@@ -129,7 +129,7 @@ true
 </code></pre>
 <p>Rebel remembers things</p>
 <pre><code>&#62; (define (gen:gen) (inc 0))
-(lambda () (inc 0))
+(fn () (inc 0))
 &#62; (gen)
 1
 &#62; (gen)

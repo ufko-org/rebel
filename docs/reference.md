@@ -17109,3 +17109,1319 @@ See: [regex](#f-regex), [find](#f-find),
 ---
 
 
+<a name="f-seed"></a>
+## seed
+
+```
+syntax: (seed int-seed)
+syntax: (seed int-seed true [int-pre-N])
+syntax: (seed)
+```
+
+Description:
+
+Initializes the internal random number generator used by
+amb, normal, rand, random, and randomize.
+
+When called with a single argument, seed initializes the
+generator using the standard C library random source.
+All subsequent calls to random-related functions follow
+the sequence defined by this generator.
+
+When the second argument evaluates to true, seed switches
+to an internal deterministic generator that is independent
+of the C library implementation. This generator produces
+reproducible sequences across builds and executions when
+initialized with the same seed value.
+
+The optional int-pre-N parameter specifies how many random
+values are generated internally during initialization.
+This advances the generator state before it is used.
+When omitted, int-pre-N defaults to 50.
+
+Only the lower 32 bits of int-seed are used to initialize
+the generator.
+
+When called without arguments, seed returns the current
+internal seed state as an integer. This value can later be
+used to restore the generator to the same state.
+
+Examples:
+
+```
+(seed 12345)
+;-> 12345
+
+(seed (time-of-day))
+;-> int
+
+; deterministic generator with reproducible sequence
+;------------------------------------------------------------
+(seed 123 true)
+;-> 123
+
+(random)
+;-> 0.2788576787704871
+
+(random)
+;-> 0.7610070955758016
+
+(random)
+;-> 0.2462553424976092
+
+(random)
+;-> 0.8135413573186572
+
+; save current generator state
+(set 'state (seed))
+;-> int
+
+(random)
+;-> 0.1895924546707387
+
+(random)
+;-> 0.4803856511043318
+
+; restore previous generator state
+(seed state true 0)
+;-> int
+
+(random)
+;-> 0.1895924546707387
+
+(random)
+;-> 0.4803856511043318
+```
+
+Notes:
+
+- Reusing the same seed value produces the same sequence
+  of random numbers, which is useful for debugging and
+  testing.
+- Using a time-based seed ensures a different sequence
+  on each program start.
+
+See: [random](#f-random), [rand](#f-rand),
+[normal](#f-normal), [amb](#f-amb)
+
+---
+
+
+<a name="f-self"></a>
+## self
+
+```
+syntax: (self [int-index ... ])
+```
+
+Description:
+
+Accesses the target object of a FOOP method call.
+The object referenced by self is automatically set
+by the : colon operator when invoking a method.
+
+When called without indices, self refers to the
+entire object. One or more int-index arguments may
+be used to access individual object members.
+
+Objects accessed through self are mutable. Any
+modification performed on self or its indexed
+members directly affects the original object.
+
+self is only valid inside a FOOP method. Outside
+of a method call, self is not defined.
+
+Examples:
+
+```
+(new Class 'Circle)
+
+(define (Circle:move dx dy)
+  (inc (self 1) dx)
+  (inc (self 2) dy))
+
+(set 'Circle1 (Circle 1 2 3))
+
+(:move Circle1 10 20)
+
+Circle1
+;-> (Circle 11 22 3)
+
+; objects can be anonymous
+;------------------------------------------------------------
+(set 'circles '((Circle 1 2 3) (Circle 4 5 6)))
+
+(:move (circles 0) 10 20)
+(:move (circles 1) 10 20)
+
+circles
+;-> ((Circle 11 22 3) (Circle 14 25 6))
+```
+
+Notes:
+
+- self is implicitly bound by the : operator.
+- Indexed access using int-index follows standard
+  list indexing rules.
+- Mutating self modifies the original object, not
+  a copy.
+
+See: [:](#f-colon), [new](#f-new), [context](#f-context)
+
+---
+
+
+<a name="f-seek"></a>
+## seek
+
+```
+syntax: (seek int-file [int-position])
+```
+
+Description:
+
+Sets the file position for the open file identified
+by int-file.
+
+When int-position is specified, the file pointer is
+moved to that absolute position counted from the
+beginning of the file. A value of 0 refers to the
+start of the file.
+
+When called without int-position, seek returns the
+current file position.
+
+When int-position is -1, the file pointer is moved
+to the end of the file.
+
+If int-file is 0, seek returns the number of bytes
+written to standard output.
+
+On failure, seek returns nil.
+
+seek may position the file pointer beyond the
+current end of the file. Writing at that position
+extends the file and fills the gap with zeros.
+Such files are sparse files; unused blocks are
+not physically allocated on disk.
+
+Examples:
+
+```
+(set 'file (open "file.dat" "read"))
+;-> int
+
+(seek file 100)
+;-> 100
+
+(seek file)
+;-> 100
+
+(seek file -1)        ; seek to end of file
+;-> int
+
+(set 'big (open "large-file" "read"))
+(seek big 30000000000)
+;-> 30000000000
+```
+
+Notes:
+
+- File positions are absolute offsets from the
+  beginning of the file.
+- seek supports 64-bit file offsets.
+- Seeking past EOF does not allocate disk space
+  until data is written.
+
+See: [open](#f-open), [close](#f-close),
+[read](#f-read), [write](#f-write)
+
+---
+
+
+
+<a name="f-select"></a>
+## select [utf8]
+
+```
+syntax: (select list list-selection)
+syntax: (select list [int-index_i ... ])
+
+syntax: (select string list-selection)
+syntax: (select string [int-index_i ... ])
+```
+
+Description:
+
+Selects one or more elements from a list or one or
+more characters from a string using index values.
+
+When operating on a list, select returns a new list
+containing the elements located at the indices
+specified in list-selection or by the individual
+int-index_i arguments.
+
+When operating on a string, select returns a new
+string composed of the characters located at the
+specified indices.
+
+Indices may be positive or negative. Negative
+indices count from the end, where -1 refers to the
+last element or character.
+
+Selected elements may be repeated and do not need
+to appear in ascending order. Reordering indices
+reorders the result accordingly.
+
+Examples:
+
+```
+; list selection
+;------------------------------------------------------------
+(set 'lst '(a b c d e f g))
+
+(select lst '(0 3 2 5 3))
+;-> (a d c f d)
+
+(select lst '(-2 -1 0))
+;-> (f g a)
+
+(select lst -2 -1 0)
+;-> (f g a)
+
+; string selection (UTF-8 aware)
+;------------------------------------------------------------
+(set 'str "abcdefg")
+
+(select str '(0 3 2 5 3))
+;-> "adcfd"
+
+(select str '(-2 -1 0))
+;-> "fga"
+
+(select str -2 -1 0)
+;-> "fga"
+```
+
+Notes:
+
+- Negative indices are resolved relative to the end
+  of the list or string.
+- Duplicate indices produce duplicate elements in
+  the result.
+- Index order defines result order.
+- When applied to strings, indexing is UTF-8 aware.
+
+See: [slice](#f-slice), [nth](#f-nth),
+[length](#f-length)
+
+---
+
+
+<a name="f-semaphore"></a>
+## semaphore
+
+```
+syntax: (semaphore)
+syntax: (semaphore int-id)
+syntax: (semaphore int-id int-wait)
+syntax: (semaphore int-id int-signal)
+syntax: (semaphore int-id 0)
+```
+
+Description:
+
+Creates and controls a system semaphore used for
+interprocess synchronization.
+
+A semaphore maintains a counter value between zero
+and a system-defined maximum. A value greater than
+zero represents the signaled state. A value of zero
+represents the non-signaled (blocking) state.
+
+Calling semaphore without arguments creates a new
+semaphore and returns its integer identifier. The
+initial semaphore value is zero.
+
+Calling semaphore with int-id only returns the
+current value of the semaphore.
+
+Calling semaphore with int-id and a positive or
+negative integer attempts to adjust the semaphore
+value by that amount:
+
+- A negative value attempts to decrement the
+  semaphore. If this would reduce the value below
+  zero, the calling process blocks until another
+  process increments the semaphore.
+- A positive value increments the semaphore and
+  may unblock one or more waiting processes.
+
+The semaphore value is never allowed to become
+negative. Blocking occurs automatically when this
+would happen.
+
+Calling semaphore with int-id and a final argument
+of 0 releases the semaphore and frees all associated
+system resources. Any blocked processes waiting on
+this semaphore are released.
+
+On failure, semaphore returns nil. Use sys-error
+to retrieve the underlying system error.
+
+Examples:
+
+```
+; create semaphore
+;------------------------------------------------------------
+(set 'sid (semaphore))
+;-> int
+
+(semaphore sid)
+;-> 0
+
+; wait (block until signaled)
+;------------------------------------------------------------
+(semaphore sid -1)
+
+; signal once
+;------------------------------------------------------------
+(semaphore sid 1)
+
+; signal multiple times
+;------------------------------------------------------------
+(semaphore sid 3)
+
+; release semaphore
+;------------------------------------------------------------
+(semaphore sid 0)
+```
+
+Example with a child process:
+
+```
+(define (counter n)
+  (println "counter started")
+  (dotimes (x n)
+    (semaphore sid -1)
+    (println x)))
+
+(set 'sid (semaphore))
+
+(fork (counter 5))
+
+(semaphore sid 1)
+(semaphore sid 3)
+(semaphore sid 1)
+```
+
+Notes:
+
+- Semaphores synchronize independent Unix processes.
+- A blocked semaphore call resumes automatically
+  when sufficient signals are received.
+- The maximum number of semaphores is limited by
+  system-wide kernel settings.
+- semaphores are commonly used together with
+  fork and share.
+
+See: [fork](#f-fork), [share](#f-share),
+[sys-error](#f-sys-error)
+
+---
+
+
+<a name="f-send"></a>
+## send
+
+```
+syntax: (send int-pid exp)
+syntax: (send)
+```
+
+Description:
+
+Sends a message between a parent process and its
+child processes created with spawn.
+
+send implements asynchronous message passing using
+paired send and receive queues. No locks, semaphores,
+or shared memory are required.
+
+Each process owns its own receive queue. send places
+a message into the target process receive queue.
+
+Only processes started with spawn can use send and
+receive. Processes created with fork or process
+must use other IPC mechanisms.
+
+When called with int-pid and exp, send attempts to
+enqueue exp into the receive queue of the target
+process identified by int-pid. The target may be
+either the parent process or one of its spawned
+child processes.
+
+When called without arguments, send returns a list
+of child process IDs whose receive queues can
+currently accept messages. This form is used only
+by the parent process.
+
+If the target receive queue is full, send returns
+nil. The message is not queued.
+
+Messages may contain any valid expression: numbers,
+strings, symbols, or list expressions. Message size
+is not limited.
+
+Examples:
+
+```
+; child sending message to parent
+;------------------------------------------------------------
+(set 'ppid (sys-info -4))
+(send ppid "hello")
+
+; parent receiving message
+;------------------------------------------------------------
+(receive child-pid msg)
+msg
+;-> "hello"
+
+; blocking send and receive
+;------------------------------------------------------------
+(until (send pid msg))
+(until (receive pid msg))
+
+; parent dispatching messages from multiple children
+;------------------------------------------------------------
+(define (child)
+  (set 'ppid (sys-info -4))
+  (while true
+    (until (send ppid (rand 100)))))
+
+(dotimes (i 5)
+  (spawn 'result (child) true))
+
+(for (i 1 3)
+  (dolist (cpid (sync))
+    (until (receive cpid msg))
+    (print "pid:" cpid "->" msg " "))
+  (println))
+```
+
+Notes:
+
+- send and receive work only with spawn.
+- Communication is bidirectional between parent and
+  child processes.
+- Message passing is non-blocking by default.
+- Blocking behavior can be implemented using until.
+- Messages may contain code for evaluation by the
+  receiver using eval.
+- Symbols in received expressions are evaluated in
+  the receiver’s environment.
+
+See: [receive](#f-receive), [spawn](#f-spawn),
+[sync](#f-sync), [eval](#f-eval)
+
+---
+
+
+<a name="f-sequence"></a>
+## sequence
+
+```
+syntax: (sequence num-start num-end [num-step])
+```
+
+Description:
+
+Generates a numeric sequence starting at num-start
+and ending at num-end.
+
+When num-step is omitted, a step size of 1 is used
+and the generated values are integers.
+
+When num-step is specified, it must be a positive
+number. In this case, the generated values are
+floating-point numbers.
+
+The sequence direction is determined automatically.
+If num-start is greater than num-end, the sequence
+counts downward. If num-start is less than num-end,
+the sequence counts upward.
+
+The end value num-end is included if it lies exactly
+on the generated sequence.
+
+Examples:
+
+```
+(sequence 10 5)
+;-> (10 9 8 7 6 5)
+
+(sequence 0 1 0.2)
+;-> (0 0.2 0.4 0.6 0.8 1)
+
+(sequence 2 0 0.3)
+;-> (2 1.7 1.4 1.1 0.8 0.5 0.2)
+```
+
+Notes:
+
+- num-step must always be positive, even when
+  generating a descending sequence.
+- Without num-step, results are integers.
+- With num-step, results are floating-point numbers.
+
+Use [series](#f-series) to generate geometric
+sequences.
+
+See: [series](#f-series), [map](#f-map),
+[range](#f-range)
+
+---
+
+
+<a name="f-series"></a>
+## series
+
+```
+syntax: (series num-start num-factor num-count)
+syntax: (series exp-start func num-count)
+```
+
+Description:
+
+Generates a sequence of values derived from a
+starting value.
+
+In the first syntax, series generates a geometric
+sequence of num-count elements starting at
+num-start. Each subsequent element is multiplied
+by num-factor. The generated values are always
+floating-point numbers.
+
+If num-count is less than 1, an empty list is
+returned.
+
+In the second syntax, series generates a sequence
+by repeatedly applying func to the previous value.
+The first element is exp-start, and each following
+element is the result of calling func with the
+previous element.
+
+The internal index variable $idx is updated for
+each generated element and can be referenced
+inside func.
+
+Examples:
+
+```
+; geometric sequences
+;------------------------------------------------------------
+(series 2 2 5)
+;-> (2 4 8 16 32)
+
+(series 1 1.2 6)
+;-> (1 1.2 1.44 1.728 2.0736 2.48832)
+
+(series 10 0.9 4)
+;-> (10 9 8.1 7.29)
+
+(series 0 0 10)
+;-> (0 0 0 0 0 0 0 0 0 0)
+
+(series 99 1 5)
+;-> (99 99 99 99 99)
+
+; functional series
+;------------------------------------------------------------
+(series 1 (fn (x) (div (add 1 x))) 20)
+;-> (1 0.5 0.6666666 0.6 0.625 0.6153846 0.619047 0.6176470
+;    0.6181818 0.6179775 0.6180555 0.6180257 0.6180371
+;    0.6180327 0.6180344 0.6180338 0.6180340 0.6180339
+;    0.6180339 0.6180339)
+
+(define (oscillate x)
+  (if (< x)
+    (+ (- x) 1)
+    (- (+ x 1))))
+
+(series 1 oscillate 20)
+;-> (1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16 17 -18
+;    19 -20)
+
+; non-numeric data
+;------------------------------------------------------------
+(series "a" (fn (c) (char (inc (char c)))) 5)
+;-> ("a" "b" "c" "d" "e")
+
+; dependency on previous values
+;------------------------------------------------------------
+(let (x 1)
+  (series x (fn (y) (+ x (swap y x))) 10))
+;-> (1 2 3 5 8 13 21 34 55 89)
+```
+
+Notes:
+
+- In the geometric form, values are always floats.
+- In the functional form, any data type may be
+  used as the start value.
+- func is evaluated in the caller environment.
+- The $idx variable reflects the current index.
+
+Use [sequence](#f-sequence) to generate arithmetic
+sequences.
+
+See: [sequence](#f-sequence), [map](#f-map),
+[fold](#f-fold)
+
+---
+
+
+<a name="f-set"></a>
+## set
+
+```
+syntax: (set sym-1 exp-1 [sym-2 exp-2 ... ])
+```
+
+Description:
+
+Evaluates both arguments and assigns the result of
+each exp to the symbol specified by sym.
+
+The assignment is performed by copying the contents
+of the right-hand side into the symbol. The previous
+contents of the symbol are discarded.
+
+The set expression returns the result of the last
+assignment performed.
+
+An error is raised when attempting to modify the
+symbols nil, true, or a context symbol.
+
+set accepts multiple symbol/expression pairs and
+processes them from left to right.
+
+Examples:
+
+```
+; basic assignment
+;------------------------------------------------------------
+(set 'x 123)
+;-> 123
+
+(set 'x 'y)
+;-> y
+
+(set x "hello")
+;-> "hello"
+
+y
+;-> "hello"
+
+(set 'lst '(1 2 3))
+;-> (1 2 3)
+
+; multiple assignments
+;------------------------------------------------------------
+(set 'x 1 'y "hello")
+;-> "hello"
+
+x
+;-> 1
+
+y
+;-> "hello"
+
+; symbol computed by expression
+;------------------------------------------------------------
+(set 'lst '(x y z))
+;-> (x y z)
+
+(set (first lst) 123)
+;-> 123
+
+x
+;-> 123
+
+; expressions may depend on earlier assignments
+;------------------------------------------------------------
+(set 'a 10 'b (+ a a))
+
+a
+;-> 10
+
+b
+;-> 20
+
+; assigning functions
+;------------------------------------------------------------
+(set 'double (fn (x) (+ x x)))
+;-> (fn (x) (+ x x))
+
+; equivalent to define
+(define (double x) (+ x x))
+;-> (fn (x) (+ x x))
+```
+
+Notes:
+
+- set evaluates both the symbol expression and the
+  value expression.
+- Assignments overwrite previous contents.
+- Multiple assignments are evaluated sequentially.
+- To protect a symbol from reassignment, use
+  constant.
+
+See: [define](#f-define), [constant](#f-constant),
+[first](#f-first)
+
+---
+
+
+<a name="f-set-locale"></a>
+## set-locale
+
+```
+syntax: (set-locale [str-locale [int-category]])
+```
+
+Description:
+
+Reports or changes the process locale.
+
+When called without arguments, set-locale returns
+the currently active locale and the decimal point
+character as a list.
+
+When str-locale is specified, the locale is changed.
+An empty string selects the default locale of the
+current system. When int-category is omitted, all
+locale categories are affected (LC_ALL).
+
+When int-category is specified, only that category
+is changed. Category values correspond to those
+defined by the system C library.
+
+On success, set-locale returns a list containing
+the active locale string and the decimal separator.
+On failure, it returns nil.
+
+Examples:
+
+```
+; report current locale
+;------------------------------------------------------------
+(set-locale)
+;-> ("C" ".")
+
+; set system default locale
+;------------------------------------------------------------
+(set-locale "")
+;-> (str-locale str-decimal)
+
+; change numeric formatting only (decimal separator)
+;------------------------------------------------------------
+(set-locale "de_DE.UTF-8" 4)
+;-> ("de_DE.UTF-8" ",")
+```
+
+Locale categories:
+
+```
+LC_ALL      0
+LC_COLLATE  1
+LC_CTYPE    2
+LC_MONETARY 3
+LC_NUMERIC  4
+LC_TIME     5
+```
+
+Notes:
+
+- The default C locale uses a decimal dot.
+- Most non-C locales use a decimal comma.
+- Locale settings affect numeric formatting,
+  collation, and time formatting.
+- Regular expression behavior is not affected
+  by set-locale.
+- Category values are defined by the system
+  locale.h header.
+
+See: [format](#f-format), [sys-info](#f-sys-info)
+
+---
+
+
+<a name="f-set-ref"></a>
+## set-ref
+
+```
+syntax: (set-ref exp-key list exp-replacement [func-compare])
+```
+
+Description:
+
+Searches for exp-key in list and replaces the first
+matching element with exp-replacement.
+
+The search descends recursively into nested lists.
+When a match is found, the element is replaced and
+the modified list is returned.
+
+During replacement, the system variable $it is
+bound to the matched expression and may be used
+inside exp-replacement.
+
+If func-compare is specified, it is used to compare
+exp-key with list elements. Without func-compare,
+default equality comparison is used.
+
+The original list is modified when passed by
+reference.
+
+Examples:
+
+```
+; simple replacement in nested list
+;------------------------------------------------------------
+(set 'data '(fruits (apples 123 44) (oranges 1 5 3)))
+
+(set-ref 'apples data 'Apples)
+;-> (fruits (Apples 123 44) (oranges 1 5 3))
+
+data
+;-> (fruits (Apples 123 44) (oranges 1 5 3))
+
+; passing list by reference via context
+;------------------------------------------------------------
+(set 'db:db '(fruits (apples 123 44) (oranges 1 5 3)))
+
+(define (update ct key value)
+  (set-ref key ct value))
+
+(update db 'apples 'Apples)
+;-> (fruits (Apples 123 44) (oranges 1 5 3))
+
+(update db 'oranges 'Oranges)
+;-> (fruits (Apples 123 44) (Oranges 1 5 3))
+
+db:db
+;-> (fruits (Apples 123 44) (Oranges 1 5 3))
+```
+
+Notes:
+
+- Only the first matching element is replaced.
+- The search is recursive across nested lists.
+- $it contains the matched element during
+  replacement.
+- For replacing all occurrences, use set-ref-all.
+
+See: [set-ref-all](#f-set-ref-all), [replace](#f-replace),
+[ref](#f-ref)
+
+---
+
+
+<a name="f-set-ref-all"></a>
+## set-ref-all
+
+```
+syntax: (set-ref-all exp-key list exp-replacement [func-compare])
+```
+
+Description:
+
+Searches for exp-key in list and replaces all
+matching elements with exp-replacement.
+
+The search descends recursively into nested lists.
+Each matching element is replaced and the modified
+list is returned.
+
+During replacement, the system variable $it is
+bound to the currently matched expression and may
+be used inside exp-replacement.
+
+After completion, the system variable $count
+contains the number of replacements performed.
+
+If func-compare is specified, it is used to compare
+exp-key with list elements. Without func-compare,
+default equality comparison is used.
+
+The original list is modified when passed by
+reference.
+
+Examples:
+
+```
+; replace all matching elements
+;------------------------------------------------------------
+(set 'data
+ '((monday (apples 20 30) (oranges 2 4 9))
+   (tuesday (apples 5) (oranges 32 1))))
+
+(set-ref-all 'apples data "Apples")
+;-> ((monday ("Apples" 20 30) (oranges 2 4 9))
+;    (tuesday ("Apples" 5) (oranges 32 1)))
+
+$count
+;-> 2
+
+; passing list by reference via context
+;------------------------------------------------------------
+(set 'db:db
+ '((monday (apples 20 30) (oranges 2 4 9))
+   (tuesday (apples 5) (oranges 32 1))))
+
+(define (foo ctx)
+  (set-ref-all 'apples ctx "Apples"))
+
+(foo db)
+;-> ((monday ("Apples" 20 30) (oranges 2 4 9))
+;    (tuesday ("Apples" 5) (oranges 32 1)))
+
+db:db
+;-> ((monday ("Apples" 20 30) (oranges 2 4 9))
+;    (tuesday ("Apples" 5) (oranges 32 1)))
+
+; custom comparison using match
+;------------------------------------------------------------
+(set 'data
+ '((monday (apples 20 30) (oranges 2 4 9))
+   (tuesday (apples 5) (oranges 32 1))))
+
+(set-ref-all '(oranges *) data
+  (list (first $it) (apply + (rest $it)))
+  match)
+;-> (... (oranges 15) ... (oranges 33) ...)
+```
+
+Notes:
+
+- All matching elements are replaced.
+- The search is recursive across nested lists.
+- $it contains the currently matched element.
+- $count contains the number of replacements.
+- For replacing only the first match, use set-ref.
+
+See: [set-ref](#f-set-ref), [replace](#f-replace),
+[ref-all](#f-ref-all), [match](#f-match)
+
+---
+
+
+<a name="f-setq-setf"></a>
+## setq, setf
+
+```
+syntax: (setq place-1 exp-1 [place-2 exp-2 ... ])
+syntax: (setf place-1 exp-1 [place-2 exp-2 ... ])
+```
+
+Description:
+
+setq and setf assign values to places.
+
+Both forms are implemented by the same built-in
+function and behave identically. The distinction
+is conventional and used throughout this manual:
+
+- setq is used when assigning to a symbol
+- setf is used when assigning to list, array, or
+  string place references
+
+Assignments overwrite the previous contents of the
+target place. Multiple place/expression pairs may
+be specified and are evaluated from left to right.
+The return value is the result of the last
+assignment.
+
+Examples:
+
+```
+; symbol assignment
+;------------------------------------------------------------
+(setq x 123)
+;-> 123
+
+(setq x 1 y 2 z 3)
+;-> 3
+
+x
+;-> 1
+y
+;-> 2
+z
+;-> 3
+
+; list assignment using implicit indices
+;------------------------------------------------------------
+(setq lst '(a b (c d) e f g))
+
+(setf (lst 1) 'B)
+;-> B
+lst
+;-> (a B (c d) e f g)
+
+(setf (nth 1 lst) 'B)
+;-> B
+
+(setf (lst 2 0) 'C)
+;-> C
+lst
+;-> (a B (C d) e f g)
+
+(setf (lst 2) 'X)
+;-> X
+lst
+;-> (a B X e f g)
+
+; assignment using assoc
+;------------------------------------------------------------
+(setq lst '((a 1) (b 2)))
+
+(setf (assoc 'b lst) '(b 3))
+;-> (b 3)
+lst
+;-> ((a 1) (b 3))
+
+; assignment using lookup
+;------------------------------------------------------------
+(setf (lookup 'b lst) 30)
+;-> 30
+lst
+;-> ((a 1) (b 30))
+
+; nested accessors
+;------------------------------------------------------------
+(setq lst '((a 1) (b 2)))
+
+(push 'b (setf (assoc 'b lst) '(b 4)))
+;-> b
+lst
+;-> ((a 1) (b b 4))
+
+; string modification
+;------------------------------------------------------------
+(set 's "Example")
+
+(setf (s 0) "e")
+;-> "e"
+s
+;-> "example"
+
+(setf (s 3) "XYZ")
+;-> "XYZ"
+s
+;-> "exaXYZle"
+
+; using $it for value-dependent updates
+;------------------------------------------------------------
+(setq lst '((apples 4) (oranges 1)))
+
+(setf (lst 1 1) (+ $it 1))
+;-> 2
+lst
+;-> ((apples 4) (oranges 2))
+
+(set 's "Sample")
+
+(setf (s 0) (lower-case $it))
+;-> "s"
+s
+;-> "sample"
+```
+
+Notes:
+
+- setq and setf are aliases of the same primitive.
+- The use of setq vs. setf is a documentation
+  convention, not a semantic difference.
+- $it refers to the previous value of the place
+  being modified.
+- Multiple assignments are evaluated sequentially.
+
+See: [set](#f-set), [assoc](#f-assoc),
+[lookup](#f-lookup), [nth](#f-nth)
+
+---
+
+
+<a name="f-sgn"></a>
+## sgn
+
+```
+syntax: (sgn num)
+syntax: (sgn num exp-1 [exp-2 [exp-3]])
+```
+
+Description:
+
+Evaluates the sign of num.
+
+In the first syntax, sgn returns an integer value
+according to the sign of num:
+
+- num > 0  →  1
+- num < 0  → -1
+- num = 0  →  0
+
+In the second syntax, sgn returns the result of
+evaluating one of the optional expressions instead
+of the numeric sign values.
+
+The expressions correspond to the following cases:
+
+- exp-1 is evaluated when num < 0
+- exp-2 is evaluated when num = 0
+- exp-3 is evaluated when num > 0
+
+If the expression corresponding to the triggered
+case is omitted, sgn returns nil.
+
+Examples:
+
+```
+; numeric sign
+;------------------------------------------------------------
+(sgn -3.5)
+;-> -1
+
+(sgn 0)
+;-> 0
+
+(sgn 123)
+;-> 1
+
+; conditional expressions
+;------------------------------------------------------------
+(sgn x -1 0 1)
+;-> same behavior as (sgn x)
+
+(sgn x -1 1 1)
+;-> -1 for negative x, 1 otherwise
+
+(sgn x nil true true)
+;-> nil for negative x, true otherwise
+
+(sgn x (abs x) 0)
+;-> (abs x) for x < 0, 0 for x = 0, nil otherwise
+```
+
+Notes:
+
+- Any expression or constant may be used for
+  exp-1, exp-2, and exp-3.
+- Expressions are evaluated only for the case
+  that matches the sign of num.
+- sgn can be used as a compact conditional
+  selector based on numeric sign.
+
+See: [abs](#f-abs), [if](#f-if), [cond](#f-cond)
+
+---
+
+
+<a name="f-share"></a>
+## share
+
+```
+syntax: (share)
+syntax: (share int-address)
+syntax: (share int-address exp-value)
+syntax: (share nil int-address)
+```
+
+Description:
+
+Provides access to shared memory for communication
+between parent and child processes.
+
+When called without arguments, share requests a
+shared memory region from the operating system and
+returns an integer address that can be stored for
+later use.
+
+When called with int-address and exp-value, the
+value of exp-value is written into the shared memory
+region. The value written is also returned.
+
+When called with int-address only, share returns
+the value currently stored in the shared memory.
+If no value has been written yet, nil is returned.
+
+When called with nil and int-address, the shared
+memory region is unmapped and released. Using a
+shared address after unmapping results in undefined
+behavior.
+
+Shared memory can be accessed only between a parent
+process and its child processes.
+
+Examples:
+
+```
+; allocate shared memory
+;------------------------------------------------------------
+(set 'mem (share))
+;-> int-address
+
+; write and read values
+;------------------------------------------------------------
+(share mem 123)
+;-> 123
+
+(share mem)
+;-> 123
+
+(share mem "hello world")
+;-> "hello world"
+
+(share mem)
+;-> "hello world"
+
+(share mem true)
+;-> true
+
+(share mem)
+;-> true
+
+; store and evaluate expressions
+;------------------------------------------------------------
+(share mem '(+ 1 2 3 4))
+;-> (+ 1 2 3 4)
+
+(eval (share mem))
+;-> 10
+
+; unmap shared memory
+;------------------------------------------------------------
+(share nil mem)
+;-> true
+```
+
+Notes:
+
+- Memory can be shared only between parent and
+  child processes.
+- Access to shared memory must be synchronized.
+  Concurrent unsynchronized access can crash the
+  process.
+- Use semaphore to coordinate access between
+  processes.
+- Large objects may be backed internally by
+  temporary files.
+
+See: [semaphore](#f-semaphore), [fork](#f-fork),
+[eval](#f-eval)
+
+---
+
+

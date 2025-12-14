@@ -18,7 +18,7 @@ css:rebel.css
 ### Rebel Fields of Operation
 
 - **Core Scripting & Flow Control**
-  - loops, conditionals, list processing, lambda, functional programming
+  - loops, conditionals, list processing, functional programming
 - **Strings & Data Manipulation**
   - regex, parsing, conversion, unicode, text transformation
 - **Math & Statistics**
@@ -79,7 +79,7 @@ gringo ~ $: rebel
 Rebel v.1.0 64-bit on BSD IPv4/6 UTF-8 libffi, options: rebel -h
 
 > (define (sum x) (+ x x))
-(lambda (x) (+ x x))
+(fn (x) (+ x x))
 > (sum 2)
 4
 > (list? sum)
@@ -95,7 +95,7 @@ Rebel remembers things
 
 ```
 > (define (gen:gen) (inc 0))
-(lambda () (inc 0))
+(fn () (inc 0))
 > (gen)
 1
 > (gen)
