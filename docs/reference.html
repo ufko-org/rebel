@@ -356,7 +356,7 @@ toward zero for bigint comparison rules.</p>
 <li>Lists compare recursively by element order.</li>
 <li>Mixed types use a fixed precedence:
 nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
-&#60; quoted list &#60; list &#60; lambda &#60; lambda-macro.</li>
+&#60; quoted list &#60; list &#60; fn &#60; fn-macro.</li>
 </ul>
 <p>See: <a href="#f-gt">&#62;</a>, <a href="#f-eq">=</a>, <a href="#f-le">&#60;=</a>,
 <a href="#f-ge">&#62;=</a>, <a href="#f-neq">!=</a></p>
@@ -397,7 +397,7 @@ integer comparison.</p>
 <li>List comparison is recursive and length-sensitive.</li>
 <li>Mixed types follow type precedence:
 nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
-&#60; quoted list &#60; list &#60; lambda &#60; lambda-macro.</li>
+&#60; quoted list &#60; list &#60; fn &#60; fn-macro.</li>
 </ul>
 <p>See: <a href="#f-lt">&#60;</a>, <a href="#f-eq">=</a>, <a href="#f-le">&#60;=</a>,
 <a href="#f-ge">&#62;=</a>, <a href="#f-neq">!=</a></p>
@@ -1116,7 +1116,7 @@ syntax: (apply func)
 <p>Description:</p>
 <p>Invokes func using the elements of list as its arguments.
 The function in func may be a primitive, a user-defined
-function, or a lambda expression. Only functions that
+function, or a fn expression. Only functions that
 evaluate all of their arguments may be used; special
 forms that evaluate selectively (such as dotimes or
 case) will fail when used with apply.</p>
@@ -1141,7 +1141,7 @@ one.</p>
 (apply sqrt &#39;(25))
 ; → 5
 
-(apply (lambda (x y) (* x y)) &#39;(3 4))
+(apply (fn (x y) (* x y)) &#39;(3 4))
 ; → 12
 
 ; reduce mode example
@@ -1163,7 +1163,7 @@ one.</p>
 <li>int-reduce applies func repeatedly in left-associative
 order.</li>
 </ul>
-<p>See: <a href="#f-map">map</a>, <a href="#f-lambda">lambda</a></p>
+<p>See: <a href="#f-map">map</a>, <a href="#f-fn">fn</a></p>
 <hr/>
 <p><a name="f-args"></a></p>
 <h2 id="args">args</h2>
@@ -1568,7 +1568,7 @@ returns positive or negative infinity, respectively.</p>
 considered an atom if it evaluates to one of the
 following: nil, true, an integer, a float, a string, a
 symbol, or a primitive. Structures such as lists,
-lambda expressions, lambda-macro expressions, and quoted
+fn expressions, fn-macro expressions, and quoted
 lists are not atoms.</p>
 <p>Examples:</p>
 <pre><code>(atom? &#39;(1 2 3))
@@ -2419,14 +2419,14 @@ which the predicate evaluates to false. Elements for
 which the predicate returns true are removed. The
 behavior is equivalent to using filter with a negated
 predicate. The predicate may be any built-in test,
-user-defined function or lambda expression. The order
+user-defined function or fn expression. The order
 of elements is preserved in the returned list.</p>
 <p>Examples:</p>
 <pre><code>(clean symbol? &#39;(1 2 d 4 f g 5 h))   → (1 2 4 5)
 
 (filter symbol? &#39;(1 2 d 4 f g 5 h))  → (d f g h)
 
-(define (big? x) (&#62; x 5))        → (lambda (x) (&#62; x 5))
+(define (big? x) (&#62; x 5))        → (fn (x) (&#62; x 5))
 
 (clean big? &#39;(1 10 3 6 4 5 11))  → (1 3 4 5)
 
@@ -2499,7 +2499,7 @@ executed by the interpreter. Returning the empty string
 prints a prompt without evaluating any expression.
 Passing nil removes the currently installed handler.</p>
 <p>The handler may be a symbol naming a function or a
-lambda expression. In interactive mode the handler can
+fn expression. In interactive mode the handler can
 rewrite, filter or suppress input lines before they
 reach the evaluator, allowing full customization of
 REPL input behavior. In http mode (enabled with the
@@ -2661,7 +2661,7 @@ expression is optional.</p>
 <p>Symbols created with set, define or define-macro can be
 protected retroactively by using constant on them. Since
 a function definition is internally just an assignment
-of a lambda value to a symbol, protecting a function name
+of a fn value to a symbol, protecting a function name
 behaves the same way as protecting a variable.</p>
 <p>The final value assigned by constant is returned as the
 result of the call.</p>
@@ -3214,10 +3214,10 @@ is invoked. The transformation turns a function f(x,y)
 into a new function g(y) that behaves like f(exp, y).</p>
 <p>This mechanism is useful for building specialized
 predicates, filters, and mapping functions without
-creating explicit lambda expressions.</p>
+creating explicit fn expressions.</p>
 <p>Examples:</p>
 <pre><code>(set &#39;f (curry + 10))
-;-&#62; (lambda ($x) (+ 10 $x))
+;-&#62; (fn ($x) (+ 10 $x))
 
 (f 7)
 ;-&#62; 17
@@ -3233,7 +3233,7 @@ creating explicit lambda expressions.</p>
 (map (curry list &#39;x) (sequence 1 5))
 ;-&#62; ((x 1) (x 2) (x 3) (x 4) (x 5))
 </code></pre>
-<p>See: <a href="#f-lambda">lambda</a>, <a href="#f-apply">apply</a>,
+<p>See: <a href="#f-fn">fn</a>, <a href="#f-apply">apply</a>,
 <a href="#f-match">match</a>, <a href="#f-map">map</a>, <a href="#f-filter">filter</a>,
 <a href="#f-clean">clean</a></p>
 <hr/>
@@ -3570,8 +3570,8 @@ var
 ;-&#62; (x y)
 </code></pre>
 <p>Creating a function with its own namespace:</p>
-<pre><code>(set &#39;temp (lambda (x) (+ x x)))
-;-&#62; (lambda (x) (+ x x))
+<pre><code>(set &#39;temp (fn (x) (+ x x)))
+;-&#62; (fn (x) (+ x x))
 
 (def-new &#39;temp &#39;double:double)
 ;-&#62; double:double
@@ -3580,13 +3580,13 @@ var
 ;-&#62; 20
 
 double:double
-;-&#62; (lambda (double:x) (+ double:x double:x))
+;-&#62; (fn (double:x) (+ double:x double:x))
 </code></pre>
 <p>Building a helper for statically scoped accumulators:</p>
 <pre><code>(define (def-static s body)
   (def-new &#39;body (sym s s)))
 
-(def-static &#39;acc (lambda (x)
+(def-static &#39;acc (fn (x)
   (inc sum x)))
 
 (acc 1)
@@ -4720,7 +4720,7 @@ syntax: (error-event nil)
 <p>Installs a custom error handler. When an error occurs,
 Rebel resets the current evaluation and invokes the
 handler. The handler may be a quoted symbol referring to a
-function or an inline lambda. Inside the handler,
+function or an inline fn. Inside the handler,
 last-error can be used to inspect the error number and
 message.</p>
 <p>Calling (error-event nil) removes the current handler.</p>
@@ -4913,7 +4913,7 @@ starts successfully and nil otherwise.</p>
 <p>Applies func-condition to each element of lst in order and
 returns the first element for which func-condition yields
 true. When no element matches, the result is nil. The
-function-condition must be a function or lambda that
+function-condition must be a function or fn that
 accepts one argument.</p>
 <p>Examples:</p>
 <pre><code>; first string in the list
@@ -7135,7 +7135,7 @@ l ;-&#62; (2 2 3 4.1)
 returns a list of all indices where the predicate
 evaluates to true. Indexing begins at 0. The predicate
 may be any test function: a built-in predicate, a
-user-defined function, or a lambda expression.</p>
+user-defined function, or a fn expression.</p>
 <p>exp-list is evaluated once before iteration. The order
 of indices in the result list matches the order of
 elements in exp-list.</p>
@@ -7144,7 +7144,7 @@ elements in exp-list.</p>
 ;-&#62; (2 4 5 7)
 
 (define (big? x) (&#62; x 5))
-;-&#62; (lambda (x) (&#62; x 5))
+;-&#62; (fn (x) (&#62; x 5))
 
 (index big? &#39;(1 10 3 6 4 5 11))
 ;-&#62; (1 3 6)
@@ -7763,7 +7763,7 @@ discarded.</p>
 <pre><code>(define (sum-sq a b)
   (let ((x (* a a)) (y (* b b)))
     (+ x y)))
-;-&#62; (lambda (a b) ...)
+;-&#62; (fn (a b) ...)
 
 (sum-sq 3 4)
 ;-&#62; 25
@@ -7772,7 +7772,7 @@ discarded.</p>
 (define (sum-sq a b)
   (let (x (* a a) y (* b b))
     (+ x y)))
-;-&#62; (lambda (a b) ...)
+;-&#62; (fn (a b) ...)
 </code></pre>
 <p>Notes:</p>
 <ul>
@@ -7780,13 +7780,13 @@ discarded.</p>
 <li>Variables default to nil only in the parenthesized
 form where the initializer is omitted.</li>
 <li>let expands conceptually into:
-((lambda (sym1 sym2 &#8230;) body) exp-init1 exp-init2 &#8230;)</li>
+((fn (sym1 sym2 &#8230;) body) exp-init1 exp-init2 &#8230;)</li>
 <li>Use letn when each initializer needs to see the
 bindings of previously initialized locals.</li>
 <li>Use local for automatic initialization to nil without
 writing initializer expressions.</li>
 </ul>
-<p>See: <a href="#f-letn">letn</a>, <a href="#f-local">local</a>, <a href="#f-lambda">lambda</a></p>
+<p>See: <a href="#f-letn">letn</a>, <a href="#f-local">local</a>, <a href="#f-fn">fn</a></p>
 <hr/>
 <p><a name="f-letex"></a></p>
 <h2 id="letex">letex</h2>
@@ -7805,7 +7805,7 @@ optional and missing values default to nil. In the flat
 form, parentheses around (sym exp) pairs are omitted.</p>
 <p>letex is useful for generating code where constants or
 parameters must be substituted into an expression or a
-lambda at definition time rather than at runtime. This
+fn at definition time rather than at runtime. This
 is a compile-time–style macro substitution, not dynamic
 binding.</p>
 <p>Examples:</p>
@@ -7818,10 +7818,10 @@ binding.</p>
 ; building a closure
 (define (make-adder n)
   (letex (c n)
-    (lambda (x) (+ x c))))
+    (fn (x) (+ x c))))
 
 (define add3 (make-adder 3))
-;-&#62; (lambda (x) (+ x 3))
+;-&#62; (fn (x) (+ x 3))
 
 (add3 10)
 ;-&#62; 13
@@ -7829,7 +7829,7 @@ binding.</p>
 ; expansion into the same symbol
 (define (make-adder n)
   (letex (n n)
-    (lambda (x) (+ x n))))
+    (fn (x) (+ x n))))
 </code></pre>
 <p>Notes:</p>
 <ul>
@@ -7920,8 +7920,8 @@ arguments themselves were lists.</p>
 </code></pre>
 <p>Description:</p>
 <p>Returns true only when exp evaluates to a list. All
-other types yield nil. Lambda expressions and
-lambda-macro expressions are also implemented as list
+other types yield nil. Fn expressions and
+fn-macro expressions are also implemented as list
 structures and therefore return true under list?.</p>
 <p>Examples:</p>
 <pre><code>(set &#39;var &#39;(1 2 3 4))
@@ -7931,7 +7931,7 @@ structures and therefore return true under list?.</p>
 ;-&#62; true
 
 (define (double x) (+ x x))
-;-&#62; (lambda (x) (+ x x))
+;-&#62; (fn (x) (+ x x))
 
 (list? double)
 ;-&#62; true
@@ -7939,10 +7939,10 @@ structures and therefore return true under list?.</p>
 <p>Notes:</p>
 <ul>
 <li>list? reflects the internal representation: functions
-defined with lambda or define are stored as lists.</li>
+defined with fn or define are stored as lists.</li>
 <li>For arrays, use array? rather than list?.</li>
 </ul>
-<p>See: <a href="#f-arrayp">array?</a>, <a href="#f-lambdap">lambda?</a>, <a href="#f-list">list</a></p>
+<p>See: <a href="#f-arrayp">array?</a>, <a href="#f-fnp">fn?</a>, <a href="#f-list">list</a></p>
 <hr/>
 <p><a name="f-load"></a></p>
 <h2 id="load">load</h2>
