@@ -12645,3 +12645,1105 @@ See: [net-listen](#f-net-listen), [net-connect](#f-net-connect),
 [net-accept](#f-net-accept), [net-close](#f-net-close)
 
 ---
+
+
+<a name="f-new"></a>
+## new
+
+```
+syntax: (new context-source sym-context-target [bool])
+syntax: (new context-source)
+```
+
+Description:
+
+Copies the contents of context-source into a target
+context. When sym-context-target is provided, the
+context referenced by context-source is copied into
+that target context. If the target context does not
+exist, it is created with the same symbol names and
+user-defined functions as in context-source.
+
+If the target context already exists, symbols from
+context-source are merged into it. Existing symbols
+are overwritten only when the optional bool argument
+evaluates to anything other than nil. When bool is
+nil or omitted, existing symbols in the target context
+remain unchanged. This allows controlled mixins of
+context objects.
+
+new returns the target context. The target context
+must not be MAIN.
+
+In the second syntax form, the context referenced by
+context-source is copied into the current context,
+which becomes the implicit target.
+
+During copying, all symbol references that originally
+pointed into the source context are rewritten so they
+point into the target context. As a result, all
+functions and data structures continue to work
+unchanged, but now operate entirely within the
+destination context.
+
+Examples:
+
+```
+(context 'ctx1)
+;-> ctx1
+
+(context MAIN)
+;-> MAIN
+
+(new ctx1 'ctx2)
+;-> ctx2
+
+; force overwrite of existing symbols
+(new ctx1 'ctx3 true)
+;-> ctx3
+```
+
+The first example creates a new context CTX2 with the
+same structure as CTX1. The source context CTX1 is not
+quoted because contexts evaluate to themselves. The
+target context CTX2 must be quoted because it does not
+exist yet.
+
+The second example merges CTX1 into an existing context
+CTX3. Because CTX3 already exists, the quote may be
+omitted. All symbols of the same name in CTX3 are
+overwritten.
+
+Contexts may also be referenced indirectly through
+variables:
+
+```
+(set 'ctx1:x 123)
+(set 'ctx2:y 999)
+
+(set 'src ctx1)
+(set 'dst ctx2)
+
+(new src dst)
+;-> ctx2
+
+ctx2:x
+;-> 123
+
+ctx2:y
+;-> 999
+```
+
+In this example, the context referenced by src (ctx1)
+is merged into the context referenced by dst (ctx2).
+
+Notes:
+
+- new copies entire contexts; use def-new to copy
+  individual symbols.
+- All internal references are rewritten to point to
+  the target context.
+- Existing symbols are overwritten only when the
+  optional bool argument evaluates to non-nil.
+
+See: [def-new](#f-def-new), [context](#f-context)
+
+---
+
+
+<a name="f-nilp"></a>
+## nil?
+
+```
+syntax: (nil? exp)
+```
+
+Description:
+
+Evaluates exp and returns true only if the result is
+strictly nil. For any other value, including the empty
+list (), nil? returns nil.
+
+This predicate distinguishes between the logical value
+nil and all other values that may be considered falsey
+in different contexts.
+
+Examples:
+
+```
+(map nil? '(x nil 1 nil "hi" ()))
+;-> (nil true nil true nil nil)
+
+(nil? nil)
+;-> true
+
+(nil? '())
+;-> nil
+
+; nil? means strictly nil
+(nil? (not '()))
+;-> nil
+```
+
+Notes:
+
+- nil? returns true only for the value nil.
+- The empty list () is not considered nil.
+- nil? is useful when nil has a distinct semantic meaning
+  from an empty list.
+
+Note that nil? tests strictly for nil, while true?
+matches any value that is neither nil nor the empty
+list ().
+
+See: [true?](#f-truep)
+
+---
+
+
+<a name="f-normal"></a>
+## normal
+
+```
+syntax: (normal float-mean float-stdev int-n)
+syntax: (normal float-mean float-stdev)
+```
+
+Description:
+
+Generates normally distributed random floating point
+numbers using the given mean and standard deviation.
+
+In the first form, normal returns a list of length
+int-n containing random values with a mean of
+float-mean and a standard deviation of float-stdev.
+
+In the second form, normal returns a single normally
+distributed floating point number.
+
+The internal pseudo-random number generator can be
+seeded using the seed function.
+
+Examples:
+
+```
+(normal 10 3 10)
+;-> (7 6.563476562 11.93945312 6.153320312 9.98828125
+;-> 7.984375 10.17871094 6.58984375 9.42578125
+;-> 12.11230469)
+
+(normal 1 0.2)
+;-> 0.646875
+```
+
+When no parameters are given, normal assumes a mean of
+0.0 and a standard deviation of 1.0.
+
+Notes:
+
+- normal produces continuously distributed values.
+- Use random or rand for evenly distributed numbers.
+- Use seed to control the pseudo-random sequence.
+
+See: [random](#f-random), [rand](#f-rand),
+[amb](#f-amb), [seed](#f-seed)
+
+---
+
+
+<a name="f-not"></a>
+## not
+
+```
+syntax: (not exp)
+```
+
+Description:
+
+Evaluates exp and returns true if the result is nil
+or the empty list (). For any other value, not
+returns nil.
+
+not is a logical negation operator and treats both
+nil and () as false.
+
+Examples:
+
+```
+(not true)
+;-> nil
+
+(not nil)
+;-> true
+
+(not '())
+;-> true
+
+(not (< 1 10))
+;-> nil
+
+(not (not (< 1 10)))
+;-> true
+```
+
+Notes:
+
+- not returns true for both nil and ().
+- Use nil? to test strictly for nil.
+
+See: [nil?](#f-nilp), [true?](#f-truep)
+
+---
+
+
+<a name="f-now"></a>
+## now
+
+```
+syntax: (now [int-minutes-offset [int-index]])
+```
+
+Description:
+
+Returns information about the current date and time
+as a list of integers.
+
+An optional time-zone offset in minutes can be
+specified in int-minutes-offset. This shifts the
+time forward or backward before it is split into
+individual date-time fields.
+
+When int-index is provided, now returns only the
+corresponding element from the result list.
+
+Examples:
+
+```
+(now)
+;-> (2002 2 27 18 21 30 140000 57 3 -300 0)
+
+(now 0 -2)
+;-> -300
+
+(date-value (now))
+;-> 1765683697
+```
+
+The result list contains the following fields:
+
+```
+index  field
+-----  -------------------------------
+0      year (Gregorian calendar)
+1      month (1–12)
+2      day (1–31)
+3      hour (0–23, UTC)
+4      minute (0–59)
+5      second (0–59)
+6      microsecond (0–999999)
+7      day of year (Jan 1st is 1)
+8      day of week (1–7, Monday = 1)
+9      time zone offset (minutes west of GMT)
+10     daylight savings time type
+```
+
+Notes:
+
+- Hours are reported in UTC and are not adjusted
+  for the local time zone.
+- The resolution of the microseconds field depends
+  on the platform; on some systems the last three
+  digits are always 0.
+- The day-of-week field follows ISO 8601, with
+  Monday as day 1.
+- On some platforms, the daylight savings time
+  value may be 0 even during active DST.
+
+Daylight savings time types:
+
+```
+value  meaning
+-----  -----------------------------------------
+0      not on daylight savings
+1      USA style DST
+2      Australian style DST
+3      Western European DST
+4      Middle European DST
+5      Eastern European DST
+6      Canada DST
+```
+
+See: [date](#f-date), [date-list](#f-date-list),
+[date-parse](#f-date-parse), [date-value](#f-date-value),
+[time](#f-time), [time-of-day](#f-time-of-day)
+
+---
+
+
+<a name="f-nper"></a>
+## nper
+
+```
+syntax: (nper num-interest num-pmt num-pv [num-fv [int-type]])
+```
+
+Description:
+
+Calculates the number of payment periods required to
+repay a loan or investment.
+
+num-interest specifies the interest rate per period,
+num-pmt is the payment made each period, and num-pv
+is the present value. An optional future value can
+be given in num-fv.
+
+When payments are made at the end of each period,
+int-type is 0 or omitted. When payments are made at
+the beginning of each period, int-type is 1.
+
+Examples:
+
+```
+(nper (div 0.07 12) 775.30 -100000)
+;-> 239.9992828
+```
+
+This example calculates the number of monthly payments
+required to repay a loan of 100000 at a yearly interest
+rate of 7 percent, with monthly payments of 775.30.
+
+Notes:
+
+- Interest rate is specified per period.
+- A negative present value represents money borrowed.
+- nper returns a floating point value.
+
+See: [fv](#f-fv), [irr](#f-irr), [npv](#f-npv),
+[pmt](#f-pm)
+
+---
+
+
+<a name="f-npv"></a>
+## npv
+
+```
+syntax: (npv num-interest list-values)
+```
+
+Description:
+
+Calculates the net present value of an investment
+using a fixed interest rate.
+
+num-interest specifies the interest rate per period.
+list-values contains the cash flow values for each
+period. Payments are represented by negative values,
+while income is represented by positive values.
+
+npv returns the total present value of all cash flows
+discounted to the start of the first period.
+
+Examples:
+
+```
+(npv 0.1 '(1000 1000 1000))
+;-> 2486.851991
+
+(npv 0.1 '(-2486.851991 1000 1000 1000))
+;-> -1.434386832e-08
+;-> ~ 0.0
+```
+
+In the example, an initial investment of 2486.85
+allows for an income of 1000 at the end of the first,
+second, and third periods.
+
+Notes:
+
+- Interest rate is specified per period.
+- Negative values represent payments or investments.
+- Positive values represent income.
+
+See: [fv](#f-fv), [irr](#f-irr), [nper](#f-nper),
+[pmt](#f-pmt), [pv](#f-pv)
+
+---
+
+
+<a name="f-nth"></a>
+## nth
+
+```
+syntax: (nth int-index list)
+syntax: (nth int-index array)
+syntax: (nth int-index str)
+
+syntax: (nth list-indices list)
+syntax: (nth list-indices array)
+```
+
+Description:
+
+Returns the element at the position specified by
+int-index from a list, array, or string.
+
+A single index accesses a single level. Multiple
+indices may be used to recursively access elements
+in nested lists or arrays. When multiple indices are
+used, they must be provided as a list in list-indices.
+If more indices are given than nesting levels, the
+extra indices are ignored.
+
+Negative indices count from the end. Out-of-bounds
+indices cause an error.
+
+Examples:
+
+```
+(set 'lst '(a b c))
+(nth 0 lst)
+;-> a
+
+; implicit indexing
+(lst 0)
+;-> a
+
+(set 'names '(adam bela cyril david))
+;-> (adam bela cyril david)
+
+(nth 2 names)
+;-> cyril
+
+(names -1)
+;-> david
+```
+
+Multiple indices:
+
+```
+(set 'people '((adam 30) (bela 42) ((cyril nova) 17)))
+
+(people 1 1)
+;-> 42
+
+(nth '(2 0 1) people)
+;-> nova
+
+; implicit form
+(people 2 0 1)
+;-> nova
+```
+
+Indices may be supplied via a list or vector:
+
+```
+(set 'idx '(2 0 1))
+
+(people idx)
+;-> nova
+
+(nth idx people)
+;-> nova
+```
+
+Negative indices:
+
+```
+(people -2 0)
+;-> bela
+```
+
+Out-of-bounds indices cause an error:
+
+```
+(people 10)
+;-> ERR: list index out of bounds
+
+(people -5)
+;-> ERR: list index out of bounds
+```
+
+Passing lists by reference using a context functor:
+
+```
+(set 'L:L '(a b c d e f g))
+
+(define (second ctx)
+  (nth 1 ctx))
+
+(reverse L)
+;-> (g f e d c b a)
+
+L:L
+;-> (g f e d c b a)
+
+; by reference
+(second L)
+;-> b
+
+; by value
+(second L:L)
+;-> b
+```
+
+Passing by reference is faster and uses less memory
+for large lists and is recommended for lists with
+hundreds of elements or more.
+
+Arrays behave the same way as lists:
+
+```
+(set 'arr (array 2 3 '(a b c d e f)))
+;-> ((a b c) (d e f))
+
+(nth 1 arr)
+;-> (d e f)
+
+(arr 1)
+;-> (d e f)
+
+(nth '(1 0) arr)
+;-> d
+
+(arr 1 0)
+;-> d
+
+(arr '(1 0))
+;-> d
+```
+
+String indexing:
+
+In the string form, nth returns the character at
+int-index as a string.
+
+```
+(nth 0 "Rebel")
+;-> "R"
+
+("Rebel" 0)
+;-> "R"
+
+("Rebel" -1)
+;-> "l"
+```
+
+When UTF-8 support is enabled, nth operates on
+character boundaries rather than byte boundaries.
+To access single bytes in ASCII or binary buffers,
+use slice.
+
+Notes:
+
+- nth supports implicit indexing by placing the
+  container in the functor position.
+- The implicit form is typically faster, while
+  the explicit nth form may be more readable.
+
+See: [setf](#f-setf), [push](#f-push), [pop](#f-pop),
+[slice](#f-slice)
+
+---
+
+
+<a name="f-nullp"></a>
+## null?
+
+```
+syntax: (null? exp)
+```
+
+Description:
+
+Evaluates exp and returns true if the result is
+considered null. The following values are treated
+as null:
+
+- nil
+- the empty list ()
+- the empty string ""
+- NaN (not a number)
+- 0 (zero)
+
+For any other value, null? returns nil.
+
+This predicate is useful when filtering or cleaning
+results where multiple representations of “no value”
+or “invalid value” may occur.
+
+Examples:
+
+```
+(set 'x (sqrt -1))
+;-> -nan
+
+(null? x)
+;-> true
+```
+
+```
+(map null? '(1 0 0.0 2 "hello" "" (a b c) () true))
+;-> (nil true true nil nil true nil true nil)
+```
+
+Using null? with filter:
+
+```
+(filter null? '(1 0 2 0.0 "hello" "" (a b c) () nil true))
+;-> (0 0 "" () nil)
+```
+
+Using null? with clean:
+
+```
+(clean null? '(1 0 2 0.0 "hello" "" (a b c) () nil true))
+;-> (1 2 "hello" (a b c) true)
+```
+
+Notes:
+
+- null? matches multiple “empty” or invalid values.
+- Use nil? to test strictly for nil.
+- Use empty? to test empty lists or strings only.
+- Use zero? to test numeric zero only.
+
+See: [empty?](#f-emptyp), [nil?](#f-nilp), [zero?](#f-zerop)
+
+---
+
+
+<a name="f-numberp"></a>
+## number?
+
+```
+syntax: (number? exp)
+```
+
+Description:
+
+Evaluates exp and returns true if the result is a
+number. This includes integers, floating point
+numbers, and big integers. For any other value,
+number? returns nil.
+
+Examples:
+
+```
+(set 'x 1.23)
+(set 'y 456)
+
+(number? x)
+;-> true
+
+(number? y)
+;-> true
+
+(number? "678")
+;-> nil
+```
+
+Notes:
+
+- number? matches all numeric types, including
+  big integers.
+- Use float? or integer? to test for a specific
+  numeric type.
+
+See: [float?](#f-floatp), [integer?](#f-integerp)
+
+---
+
+
+<a name="f-oddp"></a>
+## odd?
+
+```
+syntax: (odd? int-number)
+```
+
+Description:
+
+Checks whether int-number has odd parity.
+
+If int-number is not evenly divisible by 2, odd?
+returns true; otherwise, it returns nil.
+
+When a floating point number is provided, its
+fractional part is discarded before the parity
+check is performed. Big integers are supported.
+
+Examples:
+
+```
+(odd? 123)
+;-> true
+
+(odd? 8)
+;-> nil
+
+(odd? 8.7)
+;-> nil
+```
+
+Notes:
+
+- odd? operates on integers and big integers.
+- Floating point values are truncated to integers
+  before testing.
+- Use even? to test for even parity.
+
+See: [even?](#f-evenp)
+
+---
+
+
+<a name="f-open"></a>
+## open
+
+```
+syntax: (open str-path-file str-access-mode [str-option])
+```
+
+Description:
+
+Opens a file specified by str-path-file using the
+access mode given in str-access-mode and returns a
+file handle as an integer. The returned handle is
+used for subsequent read and write operations.
+
+On failure, open returns nil.
+
+When the access mode is "write" (or "w"), the file
+is created if it does not exist, or truncated to
+zero length if it already exists.
+
+Access modes:
+
+- "read"   or "r"  : read-only access
+- "write"  or "w"  : write-only access
+- "update" or "u"  : read/write access
+- "append" or "a"  : append read/write access
+
+Examples:
+
+```
+(device (open "file.txt" "write"))
+;-> 5
+
+(print "hello world\n")
+;-> "hello world"
+
+(close (device))
+;-> 5
+```
+
+Reading from the same file:
+
+```
+(set 'f (open "file.txt" "read"))
+
+(seek f 6)
+
+(set 'c (read-char f))
+
+(print c "\n")
+
+(close f)
+```
+
+The first example sets the current output device to
+the file handle returned by open and writes text
+into the file. The second example reads a single
+byte at offset 6 from the same file.
+
+Calling close on (device) automatically resets the
+current device to 0.
+
+Options:
+
+As an optional third argument, "non-block" or "n"
+may be specified together with "read" or "write".
+This enables non-blocking mode, which is useful
+when working with named pipes.
+
+Notes:
+
+- open returns a numeric file handle.
+- The behavior of non-blocking mode depends on the
+  underlying I/O object.
+
+See: [close](#f-close), [read-char](#f-read-char),
+[seek](#f-seek), [print](#f-print), [device](#f-device)
+
+---
+
+
+<a name="f-or"></a>
+## or
+
+```
+syntax: (or exp-1 [exp-2 ... ])
+```
+
+Description:
+
+Evaluates expressions from left to right and returns
+the first result that is neither nil nor the empty
+list ().
+
+If all expressions evaluate to nil or (), or returns
+nil. When called with no arguments, or returns nil.
+
+or performs short-circuit evaluation: once a
+non-nil, non-empty value is found, remaining
+expressions are not evaluated.
+
+Examples:
+
+```
+(set 'x 10)
+
+(or (> x 100) (= x 10))
+;-> true
+
+(or "hello" (> x 100) (= x 10))
+;-> "hello"
+
+(or '())
+;-> ()
+
+(or true)
+;-> true
+
+(or)
+;-> nil
+```
+
+Notes:
+
+- or returns the actual value of the first successful
+  expression, not just true.
+- Both nil and () are treated as false.
+- Evaluation stops at the first successful result.
+
+See: [and](#f-and), [not](#f-not), [nil?](#f-nilp)
+
+---
+
+
+<a name="f-pack"></a>
+## pack
+
+```
+syntax: (pack str-format [exp-1 [exp-2 ... ]])
+syntax: (pack str-format [list])
+
+syntax: (pack struct [exp-1 [exp-2 ... ]])
+syntax: (pack struct [list])
+```
+
+Description:
+
+Packs values into a binary string according to a
+format specification.
+
+When the first argument is a string, str-format
+describes the binary layout. The remaining expressions
+or the values in list are packed sequentially and
+returned as a binary string buffer.
+
+The complementary function unpack is used to extract
+values from such a binary buffer.
+
+pack is typically used when working with binary files,
+binary protocols, or foreign function interfaces.
+
+When the first argument is a struct symbol, pack uses
+the format defined by the struct. In this form, padding
+bytes may be inserted automatically to satisfy data
+alignment rules defined by the structure layout.
+
+If no data expressions or list are provided, the
+specified format or structure is filled with zero
+bytes.
+
+Format specifiers:
+
+```
+code  description
+----  ----------------------------------------------
+c     signed 8-bit integer
+b     unsigned 8-bit integer
+d     signed 16-bit integer
+u     unsigned 16-bit integer
+ld    signed 32-bit integer
+lu    unsigned 32-bit integer
+Ld    signed 64-bit integer
+Lu    unsigned 64-bit integer
+f     32-bit floating point number
+lf    64-bit floating point number
+sn    string of n null-padded ASCII characters
+nn    n null bytes
+>     switch to big-endian byte order
+<     switch to little-endian byte order
+```
+
+Floating point values passed to integer formats are
+converted to integers. Integer values passed to
+floating point formats are converted to floats.
+
+Examples:
+
+```
+(pack "c c c" 65 66 67)
+;-> "ABC"
+
+(unpack "c c c" "ABC")
+;-> (65 66 67)
+
+(pack "c c c" 0 1 2)
+;-> "\000\001\002"
+
+(unpack "c c c" "\000\001\002")
+;-> (0 1 2)
+
+(set 's (pack "c d u" 10 12345 56789))
+(unpack "c d u" s)
+;-> (10 12345 56789)
+
+(set 's (pack "s10 f" "result" 1.23))
+(unpack "s10 f" s)
+;-> ("result\000\000\000\000" 1.230000019)
+
+; Zero-filled formats:
+;----------------------------------------------------------
+(pack "n10")
+;-> "\000\000\000\000\000\000\000\000\000\000"
+
+(set 'lst '("A" "B" "C"))
+(set 'buf (pack "lululu" lst))
+(map get-string (unpack "lululu" buf))
+;-> ("A" "B" "C")
+
+; Byte order control:
+;----------------------------------------------------------
+(pack "d" 1)
+;-> "\001\000"
+
+(pack ">d" 1)
+;-> "\000\001"
+
+(pack ">u <u" 1 1)
+;-> "\000\001\001\000"
+
+(set 'txt "我能吞下玻璃而不伤身体。")
+(set 'lst (unpack (dup "b" (length txt)) txt))
+(pack (dup "b" (length lst)) lst)
+;-> "我能吞下玻璃而不伤身体。"
+```
+
+Notes:
+
+- pack returns a binary string buffer.
+- The format determines size and byte order.
+- pack used with struct may insert padding bytes.
+- Spaces in the format string are ignored.
+
+See: [unpack](#f-unpack), [struct](#f-struct),
+[address](#f-address), [get-int](#f-get-int),
+[get-long](#f-get-long), [get-char](#f-get-char),
+[get-string](#f-get-string)
+
+---
+
+
+<a name="f-parse"></a>
+## parse
+
+```
+syntax: (parse str-data [str-break [regex-option]])
+```
+
+Description:
+
+Splits the string produced by evaluating str-data
+into a list of string tokens.
+
+When str-break is omitted, parse tokenizes the input
+according to the language’s internal parsing rules.
+This mode uses the same fast tokenizer as source
+parsing and is intended for general-purpose token
+splitting.
+
+When str-break is provided, it specifies how the
+input string is split. It may be a literal string
+delimiter or a regular expression pattern. If
+regex-option is given, str-break is treated as a
+regular expression.
+
+When no break specification is given, token sizes
+are limited by the internal tokenizer. When a break
+string or pattern is provided, there is no practical
+limit on token length.
+
+Examples:
+
+```
+; no break string specified
+(parse "hello how are you")
+;-> ("hello" "how" "are" "you")
+
+; implicit tokenization on spaces, punctuation, and numbers
+(parse "weight is 10lbs")
+;-> ("weight" "is" "10" "lbs")
+
+; specifying a break string
+(parse "one:two:three" ":")
+;-> ("one" "two" "three")
+
+(parse "one--two--three" "--")
+;-> ("one" "two" "three")
+
+; regular expression break patterns
+(parse "one-two--three---four" "-+" 0)
+;-> ("one" "two" "three" "four")
+
+(parse "hello regular   expression 1, 2, 3" {,\s*|\s+} 0)
+;-> ("hello" "regular" "expression" "1" "2" "3")
+
+; empty fields around separators are preserved
+(parse "1,2,3," ",")
+;-> ("1" "2" "3" "")
+
+(parse "1,,,4" ",")
+;-> ("1" "" "" "4")
+
+(parse "," ",")
+;-> ("" "")
+
+; empty input always produces an empty list
+(parse "")
+;-> ()
+
+(parse "" " ")
+;-> ()
+```
+
+Notes:
+
+- When str-break is omitted, parse uses a fast
+  internal tokenizer suitable for source-like input.
+- When a break string or pattern is provided, parse
+  splits strictly at the specified delimiters.
+- Empty fields between separators are returned as
+  empty strings.
+- Parsing an empty string always returns ().
+
+See: [regex](#f-regex), [find](#f-find),
+[find-all](#f-find-all), [replace](#f-replace),
+[search](#f-search), [directory](#f-directory)
+
+---
+
+

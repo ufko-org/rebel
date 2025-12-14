@@ -9688,6 +9688,850 @@ and monitoring of open network resources.</p>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-connect">net-connect</a>,
 <a href="#f-net-accept">net-accept</a>, <a href="#f-net-close">net-close</a></p>
 <hr/>
+<p><a name="f-new"></a></p>
+<h2 id="new">new</h2>
+<pre><code>syntax: (new context-source sym-context-target [bool])
+syntax: (new context-source)
+</code></pre>
+<p>Description:</p>
+<p>Copies the contents of context-source into a target
+context. When sym-context-target is provided, the
+context referenced by context-source is copied into
+that target context. If the target context does not
+exist, it is created with the same symbol names and
+user-defined functions as in context-source.</p>
+<p>If the target context already exists, symbols from
+context-source are merged into it. Existing symbols
+are overwritten only when the optional bool argument
+evaluates to anything other than nil. When bool is
+nil or omitted, existing symbols in the target context
+remain unchanged. This allows controlled mixins of
+context objects.</p>
+<p>new returns the target context. The target context
+must not be MAIN.</p>
+<p>In the second syntax form, the context referenced by
+context-source is copied into the current context,
+which becomes the implicit target.</p>
+<p>During copying, all symbol references that originally
+pointed into the source context are rewritten so they
+point into the target context. As a result, all
+functions and data structures continue to work
+unchanged, but now operate entirely within the
+destination context.</p>
+<p>Examples:</p>
+<pre><code>(context &#39;ctx1)
+;-&#62; ctx1
+
+(context MAIN)
+;-&#62; MAIN
+
+(new ctx1 &#39;ctx2)
+;-&#62; ctx2
+
+; force overwrite of existing symbols
+(new ctx1 &#39;ctx3 true)
+;-&#62; ctx3
+</code></pre>
+<p>The first example creates a new context CTX2 with the
+same structure as CTX1. The source context CTX1 is not
+quoted because contexts evaluate to themselves. The
+target context CTX2 must be quoted because it does not
+exist yet.</p>
+<p>The second example merges CTX1 into an existing context
+CTX3. Because CTX3 already exists, the quote may be
+omitted. All symbols of the same name in CTX3 are
+overwritten.</p>
+<p>Contexts may also be referenced indirectly through
+variables:</p>
+<pre><code>(set &#39;ctx1:x 123)
+(set &#39;ctx2:y 999)
+
+(set &#39;src ctx1)
+(set &#39;dst ctx2)
+
+(new src dst)
+;-&#62; ctx2
+
+ctx2:x
+;-&#62; 123
+
+ctx2:y
+;-&#62; 999
+</code></pre>
+<p>In this example, the context referenced by src (ctx1)
+is merged into the context referenced by dst (ctx2).</p>
+<p>Notes:</p>
+<ul>
+<li>new copies entire contexts; use def-new to copy
+individual symbols.</li>
+<li>All internal references are rewritten to point to
+the target context.</li>
+<li>Existing symbols are overwritten only when the
+optional bool argument evaluates to non-nil.</li>
+</ul>
+<p>See: <a href="#f-def-new">def-new</a>, <a href="#f-context">context</a></p>
+<hr/>
+<p><a name="f-nilp"></a></p>
+<h2 id="nil">nil?</h2>
+<pre><code>syntax: (nil? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates exp and returns true only if the result is
+strictly nil. For any other value, including the empty
+list (), nil? returns nil.</p>
+<p>This predicate distinguishes between the logical value
+nil and all other values that may be considered falsey
+in different contexts.</p>
+<p>Examples:</p>
+<pre><code>(map nil? &#39;(x nil 1 nil "hi" ()))
+;-&#62; (nil true nil true nil nil)
+
+(nil? nil)
+;-&#62; true
+
+(nil? &#39;())
+;-&#62; nil
+
+; nil? means strictly nil
+(nil? (not &#39;()))
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>nil? returns true only for the value nil.</li>
+<li>The empty list () is not considered nil.</li>
+<li>nil? is useful when nil has a distinct semantic meaning
+from an empty list.</li>
+</ul>
+<p>Note that nil? tests strictly for nil, while true?
+matches any value that is neither nil nor the empty
+list ().</p>
+<p>See: <a href="#f-truep">true?</a></p>
+<hr/>
+<p><a name="f-normal"></a></p>
+<h2 id="normal">normal</h2>
+<pre><code>syntax: (normal float-mean float-stdev int-n)
+syntax: (normal float-mean float-stdev)
+</code></pre>
+<p>Description:</p>
+<p>Generates normally distributed random floating point
+numbers using the given mean and standard deviation.</p>
+<p>In the first form, normal returns a list of length
+int-n containing random values with a mean of
+float-mean and a standard deviation of float-stdev.</p>
+<p>In the second form, normal returns a single normally
+distributed floating point number.</p>
+<p>The internal pseudo-random number generator can be
+seeded using the seed function.</p>
+<p>Examples:</p>
+<pre><code>(normal 10 3 10)
+;-&#62; (7 6.563476562 11.93945312 6.153320312 9.98828125
+;-&#62; 7.984375 10.17871094 6.58984375 9.42578125
+;-&#62; 12.11230469)
+
+(normal 1 0.2)
+;-&#62; 0.646875
+</code></pre>
+<p>When no parameters are given, normal assumes a mean of
+0.0 and a standard deviation of 1.0.</p>
+<p>Notes:</p>
+<ul>
+<li>normal produces continuously distributed values.</li>
+<li>Use random or rand for evenly distributed numbers.</li>
+<li>Use seed to control the pseudo-random sequence.</li>
+</ul>
+<p>See: <a href="#f-random">random</a>, <a href="#f-rand">rand</a>,
+<a href="#f-amb">amb</a>, <a href="#f-seed">seed</a></p>
+<hr/>
+<p><a name="f-not"></a></p>
+<h2 id="not">not</h2>
+<pre><code>syntax: (not exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates exp and returns true if the result is nil
+or the empty list (). For any other value, not
+returns nil.</p>
+<p>not is a logical negation operator and treats both
+nil and () as false.</p>
+<p>Examples:</p>
+<pre><code>(not true)
+;-&#62; nil
+
+(not nil)
+;-&#62; true
+
+(not &#39;())
+;-&#62; true
+
+(not (&#60; 1 10))
+;-&#62; nil
+
+(not (not (&#60; 1 10)))
+;-&#62; true
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>not returns true for both nil and ().</li>
+<li>Use nil? to test strictly for nil.</li>
+</ul>
+<p>See: <a href="#f-nilp">nil?</a>, <a href="#f-truep">true?</a></p>
+<hr/>
+<p><a name="f-now"></a></p>
+<h2 id="now">now</h2>
+<pre><code>syntax: (now [int-minutes-offset [int-index]])
+</code></pre>
+<p>Description:</p>
+<p>Returns information about the current date and time
+as a list of integers.</p>
+<p>An optional time-zone offset in minutes can be
+specified in int-minutes-offset. This shifts the
+time forward or backward before it is split into
+individual date-time fields.</p>
+<p>When int-index is provided, now returns only the
+corresponding element from the result list.</p>
+<p>Examples:</p>
+<pre><code>(now)
+;-&#62; (2002 2 27 18 21 30 140000 57 3 -300 0)
+
+(now 0 -2)
+;-&#62; -300
+
+(date-value (now))
+;-&#62; 1765683697
+</code></pre>
+<p>The result list contains the following fields:</p>
+<pre><code>index  field
+-----  -------------------------------
+0      year (Gregorian calendar)
+1      month (1–12)
+2      day (1–31)
+3      hour (0–23, UTC)
+4      minute (0–59)
+5      second (0–59)
+6      microsecond (0–999999)
+7      day of year (Jan 1st is 1)
+8      day of week (1–7, Monday = 1)
+9      time zone offset (minutes west of GMT)
+10     daylight savings time type
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Hours are reported in UTC and are not adjusted
+for the local time zone.</li>
+<li>The resolution of the microseconds field depends
+on the platform; on some systems the last three
+digits are always 0.</li>
+<li>The day-of-week field follows ISO 8601, with
+Monday as day 1.</li>
+<li>On some platforms, the daylight savings time
+value may be 0 even during active DST.</li>
+</ul>
+<p>Daylight savings time types:</p>
+<pre><code>value  meaning
+-----  -----------------------------------------
+0      not on daylight savings
+1      USA style DST
+2      Australian style DST
+3      Western European DST
+4      Middle European DST
+5      Eastern European DST
+6      Canada DST
+</code></pre>
+<p>See: <a href="#f-date">date</a>, <a href="#f-date-list">date-list</a>,
+<a href="#f-date-parse">date-parse</a>, <a href="#f-date-value">date-value</a>,
+<a href="#f-time">time</a>, <a href="#f-time-of-day">time-of-day</a></p>
+<hr/>
+<p><a name="f-nper"></a></p>
+<h2 id="nper">nper</h2>
+<pre><code>syntax: (nper num-interest num-pmt num-pv [num-fv [int-type]])
+</code></pre>
+<p>Description:</p>
+<p>Calculates the number of payment periods required to
+repay a loan or investment.</p>
+<p>num-interest specifies the interest rate per period,
+num-pmt is the payment made each period, and num-pv
+is the present value. An optional future value can
+be given in num-fv.</p>
+<p>When payments are made at the end of each period,
+int-type is 0 or omitted. When payments are made at
+the beginning of each period, int-type is 1.</p>
+<p>Examples:</p>
+<pre><code>(nper (div 0.07 12) 775.30 -100000)
+;-&#62; 239.9992828
+</code></pre>
+<p>This example calculates the number of monthly payments
+required to repay a loan of 100000 at a yearly interest
+rate of 7 percent, with monthly payments of 775.30.</p>
+<p>Notes:</p>
+<ul>
+<li>Interest rate is specified per period.</li>
+<li>A negative present value represents money borrowed.</li>
+<li>nper returns a floating point value.</li>
+</ul>
+<p>See: <a href="#f-fv">fv</a>, <a href="#f-irr">irr</a>, <a href="#f-npv">npv</a>,
+<a href="#f-pm">pmt</a></p>
+<hr/>
+<p><a name="f-npv"></a></p>
+<h2 id="npv">npv</h2>
+<pre><code>syntax: (npv num-interest list-values)
+</code></pre>
+<p>Description:</p>
+<p>Calculates the net present value of an investment
+using a fixed interest rate.</p>
+<p>num-interest specifies the interest rate per period.
+list-values contains the cash flow values for each
+period. Payments are represented by negative values,
+while income is represented by positive values.</p>
+<p>npv returns the total present value of all cash flows
+discounted to the start of the first period.</p>
+<p>Examples:</p>
+<pre><code>(npv 0.1 &#39;(1000 1000 1000))
+;-&#62; 2486.851991
+
+(npv 0.1 &#39;(-2486.851991 1000 1000 1000))
+;-&#62; -1.434386832e-08
+;-&#62; ~ 0.0
+</code></pre>
+<p>In the example, an initial investment of 2486.85
+allows for an income of 1000 at the end of the first,
+second, and third periods.</p>
+<p>Notes:</p>
+<ul>
+<li>Interest rate is specified per period.</li>
+<li>Negative values represent payments or investments.</li>
+<li>Positive values represent income.</li>
+</ul>
+<p>See: <a href="#f-fv">fv</a>, <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>,
+<a href="#f-pmt">pmt</a>, <a href="#f-pv">pv</a></p>
+<hr/>
+<p><a name="f-nth"></a></p>
+<h2 id="nth">nth</h2>
+<pre><code>syntax: (nth int-index list)
+syntax: (nth int-index array)
+syntax: (nth int-index str)
+
+syntax: (nth list-indices list)
+syntax: (nth list-indices array)
+</code></pre>
+<p>Description:</p>
+<p>Returns the element at the position specified by
+int-index from a list, array, or string.</p>
+<p>A single index accesses a single level. Multiple
+indices may be used to recursively access elements
+in nested lists or arrays. When multiple indices are
+used, they must be provided as a list in list-indices.
+If more indices are given than nesting levels, the
+extra indices are ignored.</p>
+<p>Negative indices count from the end. Out-of-bounds
+indices cause an error.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;lst &#39;(a b c))
+(nth 0 lst)
+;-&#62; a
+
+; implicit indexing
+(lst 0)
+;-&#62; a
+
+(set &#39;names &#39;(adam bela cyril david))
+;-&#62; (adam bela cyril david)
+
+(nth 2 names)
+;-&#62; cyril
+
+(names -1)
+;-&#62; david
+</code></pre>
+<p>Multiple indices:</p>
+<pre><code>(set &#39;people &#39;((adam 30) (bela 42) ((cyril nova) 17)))
+
+(people 1 1)
+;-&#62; 42
+
+(nth &#39;(2 0 1) people)
+;-&#62; nova
+
+; implicit form
+(people 2 0 1)
+;-&#62; nova
+</code></pre>
+<p>Indices may be supplied via a list or vector:</p>
+<pre><code>(set &#39;idx &#39;(2 0 1))
+
+(people idx)
+;-&#62; nova
+
+(nth idx people)
+;-&#62; nova
+</code></pre>
+<p>Negative indices:</p>
+<pre><code>(people -2 0)
+;-&#62; bela
+</code></pre>
+<p>Out-of-bounds indices cause an error:</p>
+<pre><code>(people 10)
+;-&#62; ERR: list index out of bounds
+
+(people -5)
+;-&#62; ERR: list index out of bounds
+</code></pre>
+<p>Passing lists by reference using a context functor:</p>
+<pre><code>(set &#39;L:L &#39;(a b c d e f g))
+
+(define (second ctx)
+  (nth 1 ctx))
+
+(reverse L)
+;-&#62; (g f e d c b a)
+
+L:L
+;-&#62; (g f e d c b a)
+
+; by reference
+(second L)
+;-&#62; b
+
+; by value
+(second L:L)
+;-&#62; b
+</code></pre>
+<p>Passing by reference is faster and uses less memory
+for large lists and is recommended for lists with
+hundreds of elements or more.</p>
+<p>Arrays behave the same way as lists:</p>
+<pre><code>(set &#39;arr (array 2 3 &#39;(a b c d e f)))
+;-&#62; ((a b c) (d e f))
+
+(nth 1 arr)
+;-&#62; (d e f)
+
+(arr 1)
+;-&#62; (d e f)
+
+(nth &#39;(1 0) arr)
+;-&#62; d
+
+(arr 1 0)
+;-&#62; d
+
+(arr &#39;(1 0))
+;-&#62; d
+</code></pre>
+<p>String indexing:</p>
+<p>In the string form, nth returns the character at
+int-index as a string.</p>
+<pre><code>(nth 0 "Rebel")
+;-&#62; "R"
+
+("Rebel" 0)
+;-&#62; "R"
+
+("Rebel" -1)
+;-&#62; "l"
+</code></pre>
+<p>When UTF-8 support is enabled, nth operates on
+character boundaries rather than byte boundaries.
+To access single bytes in ASCII or binary buffers,
+use slice.</p>
+<p>Notes:</p>
+<ul>
+<li>nth supports implicit indexing by placing the
+container in the functor position.</li>
+<li>The implicit form is typically faster, while
+the explicit nth form may be more readable.</li>
+</ul>
+<p>See: <a href="#f-setf">setf</a>, <a href="#f-push">push</a>, <a href="#f-pop">pop</a>,
+<a href="#f-slice">slice</a></p>
+<hr/>
+<p><a name="f-nullp"></a></p>
+<h2 id="null">null?</h2>
+<pre><code>syntax: (null? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates exp and returns true if the result is
+considered null. The following values are treated
+as null:</p>
+<ul>
+<li>nil</li>
+<li>the empty list ()</li>
+<li>the empty string &#8220;&#8220;</li>
+<li>NaN (not a number)</li>
+<li>0 (zero)</li>
+</ul>
+<p>For any other value, null? returns nil.</p>
+<p>This predicate is useful when filtering or cleaning
+results where multiple representations of “no value”
+or “invalid value” may occur.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;x (sqrt -1))
+;-&#62; -nan
+
+(null? x)
+;-&#62; true
+</code></pre>
+<pre><code>(map null? &#39;(1 0 0.0 2 "hello" "" (a b c) () true))
+;-&#62; (nil true true nil nil true nil true nil)
+</code></pre>
+<p>Using null? with filter:</p>
+<pre><code>(filter null? &#39;(1 0 2 0.0 "hello" "" (a b c) () nil true))
+;-&#62; (0 0 "" () nil)
+</code></pre>
+<p>Using null? with clean:</p>
+<pre><code>(clean null? &#39;(1 0 2 0.0 "hello" "" (a b c) () nil true))
+;-&#62; (1 2 "hello" (a b c) true)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>null? matches multiple “empty” or invalid values.</li>
+<li>Use nil? to test strictly for nil.</li>
+<li>Use empty? to test empty lists or strings only.</li>
+<li>Use zero? to test numeric zero only.</li>
+</ul>
+<p>See: <a href="#f-emptyp">empty?</a>, <a href="#f-nilp">nil?</a>, <a href="#f-zerop">zero?</a></p>
+<hr/>
+<p><a name="f-numberp"></a></p>
+<h2 id="number">number?</h2>
+<pre><code>syntax: (number? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates exp and returns true if the result is a
+number. This includes integers, floating point
+numbers, and big integers. For any other value,
+number? returns nil.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;x 1.23)
+(set &#39;y 456)
+
+(number? x)
+;-&#62; true
+
+(number? y)
+;-&#62; true
+
+(number? "678")
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>number? matches all numeric types, including
+big integers.</li>
+<li>Use float? or integer? to test for a specific
+numeric type.</li>
+</ul>
+<p>See: <a href="#f-floatp">float?</a>, <a href="#f-integerp">integer?</a></p>
+<hr/>
+<p><a name="f-oddp"></a></p>
+<h2 id="odd">odd?</h2>
+<pre><code>syntax: (odd? int-number)
+</code></pre>
+<p>Description:</p>
+<p>Checks whether int-number has odd parity.</p>
+<p>If int-number is not evenly divisible by 2, odd?
+returns true; otherwise, it returns nil.</p>
+<p>When a floating point number is provided, its
+fractional part is discarded before the parity
+check is performed. Big integers are supported.</p>
+<p>Examples:</p>
+<pre><code>(odd? 123)
+;-&#62; true
+
+(odd? 8)
+;-&#62; nil
+
+(odd? 8.7)
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>odd? operates on integers and big integers.</li>
+<li>Floating point values are truncated to integers
+before testing.</li>
+<li>Use even? to test for even parity.</li>
+</ul>
+<p>See: <a href="#f-evenp">even?</a></p>
+<hr/>
+<p><a name="f-open"></a></p>
+<h2 id="open">open</h2>
+<pre><code>syntax: (open str-path-file str-access-mode [str-option])
+</code></pre>
+<p>Description:</p>
+<p>Opens a file specified by str-path-file using the
+access mode given in str-access-mode and returns a
+file handle as an integer. The returned handle is
+used for subsequent read and write operations.</p>
+<p>On failure, open returns nil.</p>
+<p>When the access mode is &#8220;write&#8221; (or &#8220;w&#8221;), the file
+is created if it does not exist, or truncated to
+zero length if it already exists.</p>
+<p>Access modes:</p>
+<ul>
+<li>&#8220;read&#8221;   or &#8220;r&#8221;  : read-only access</li>
+<li>&#8220;write&#8221;  or &#8220;w&#8221;  : write-only access</li>
+<li>&#8220;update&#8221; or &#8220;u&#8221;  : read&#47;write access</li>
+<li>&#8220;append&#8221; or &#8220;a&#8221;  : append read&#47;write access</li>
+</ul>
+<p>Examples:</p>
+<pre><code>(device (open "file.txt" "write"))
+;-&#62; 5
+
+(print "hello world\n")
+;-&#62; "hello world"
+
+(close (device))
+;-&#62; 5
+</code></pre>
+<p>Reading from the same file:</p>
+<pre><code>(set &#39;f (open "file.txt" "read"))
+
+(seek f 6)
+
+(set &#39;c (read-char f))
+
+(print c "\n")
+
+(close f)
+</code></pre>
+<p>The first example sets the current output device to
+the file handle returned by open and writes text
+into the file. The second example reads a single
+byte at offset 6 from the same file.</p>
+<p>Calling close on (device) automatically resets the
+current device to 0.</p>
+<p>Options:</p>
+<p>As an optional third argument, &#8220;non-block&#8221; or &#8220;n&#8221;
+may be specified together with &#8220;read&#8221; or &#8220;write&#8221;.
+This enables non-blocking mode, which is useful
+when working with named pipes.</p>
+<p>Notes:</p>
+<ul>
+<li>open returns a numeric file handle.</li>
+<li>The behavior of non-blocking mode depends on the
+underlying I&#47;O object.</li>
+</ul>
+<p>See: <a href="#f-close">close</a>, <a href="#f-read-char">read-char</a>,
+<a href="#f-seek">seek</a>, <a href="#f-print">print</a>, <a href="#f-device">device</a></p>
+<hr/>
+<p><a name="f-or"></a></p>
+<h2 id="or">or</h2>
+<pre><code>syntax: (or exp-1 [exp-2 ... ])
+</code></pre>
+<p>Description:</p>
+<p>Evaluates expressions from left to right and returns
+the first result that is neither nil nor the empty
+list ().</p>
+<p>If all expressions evaluate to nil or (), or returns
+nil. When called with no arguments, or returns nil.</p>
+<p>or performs short-circuit evaluation: once a
+non-nil, non-empty value is found, remaining
+expressions are not evaluated.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;x 10)
+
+(or (&#62; x 100) (= x 10))
+;-&#62; true
+
+(or "hello" (&#62; x 100) (= x 10))
+;-&#62; "hello"
+
+(or &#39;())
+;-&#62; ()
+
+(or true)
+;-&#62; true
+
+(or)
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>or returns the actual value of the first successful
+expression, not just true.</li>
+<li>Both nil and () are treated as false.</li>
+<li>Evaluation stops at the first successful result.</li>
+</ul>
+<p>See: <a href="#f-and">and</a>, <a href="#f-not">not</a>, <a href="#f-nilp">nil?</a></p>
+<hr/>
+<p><a name="f-pack"></a></p>
+<h2 id="pack">pack</h2>
+<pre><code>syntax: (pack str-format [exp-1 [exp-2 ... ]])
+syntax: (pack str-format [list])
+
+syntax: (pack struct [exp-1 [exp-2 ... ]])
+syntax: (pack struct [list])
+</code></pre>
+<p>Description:</p>
+<p>Packs values into a binary string according to a
+format specification.</p>
+<p>When the first argument is a string, str-format
+describes the binary layout. The remaining expressions
+or the values in list are packed sequentially and
+returned as a binary string buffer.</p>
+<p>The complementary function unpack is used to extract
+values from such a binary buffer.</p>
+<p>pack is typically used when working with binary files,
+binary protocols, or foreign function interfaces.</p>
+<p>When the first argument is a struct symbol, pack uses
+the format defined by the struct. In this form, padding
+bytes may be inserted automatically to satisfy data
+alignment rules defined by the structure layout.</p>
+<p>If no data expressions or list are provided, the
+specified format or structure is filled with zero
+bytes.</p>
+<p>Format specifiers:</p>
+<pre><code>code  description
+----  ----------------------------------------------
+c     signed 8-bit integer
+b     unsigned 8-bit integer
+d     signed 16-bit integer
+u     unsigned 16-bit integer
+ld    signed 32-bit integer
+lu    unsigned 32-bit integer
+Ld    signed 64-bit integer
+Lu    unsigned 64-bit integer
+f     32-bit floating point number
+lf    64-bit floating point number
+sn    string of n null-padded ASCII characters
+nn    n null bytes
+&#62;     switch to big-endian byte order
+&#60;     switch to little-endian byte order
+</code></pre>
+<p>Floating point values passed to integer formats are
+converted to integers. Integer values passed to
+floating point formats are converted to floats.</p>
+<p>Examples:</p>
+<pre><code>(pack "c c c" 65 66 67)
+;-&#62; "ABC"
+
+(unpack "c c c" "ABC")
+;-&#62; (65 66 67)
+
+(pack "c c c" 0 1 2)
+;-&#62; "\000\001\002"
+
+(unpack "c c c" "\000\001\002")
+;-&#62; (0 1 2)
+
+(set &#39;s (pack "c d u" 10 12345 56789))
+(unpack "c d u" s)
+;-&#62; (10 12345 56789)
+
+(set &#39;s (pack "s10 f" "result" 1.23))
+(unpack "s10 f" s)
+;-&#62; ("result\000\000\000\000" 1.230000019)
+
+; Zero-filled formats:
+;----------------------------------------------------------
+(pack "n10")
+;-&#62; "\000\000\000\000\000\000\000\000\000\000"
+
+(set &#39;lst &#39;("A" "B" "C"))
+(set &#39;buf (pack "lululu" lst))
+(map get-string (unpack "lululu" buf))
+;-&#62; ("A" "B" "C")
+
+; Byte order control:
+;----------------------------------------------------------
+(pack "d" 1)
+;-&#62; "\001\000"
+
+(pack "&#62;d" 1)
+;-&#62; "\000\001"
+
+(pack "&#62;u &#60;u" 1 1)
+;-&#62; "\000\001\001\000"
+
+(set &#39;txt "我能吞下玻璃而不伤身体。")
+(set &#39;lst (unpack (dup "b" (length txt)) txt))
+(pack (dup "b" (length lst)) lst)
+;-&#62; "我能吞下玻璃而不伤身体。"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>pack returns a binary string buffer.</li>
+<li>The format determines size and byte order.</li>
+<li>pack used with struct may insert padding bytes.</li>
+<li>Spaces in the format string are ignored.</li>
+</ul>
+<p>See: <a href="#f-unpack">unpack</a>, <a href="#f-struct">struct</a>,
+<a href="#f-address">address</a>, <a href="#f-get-int">get-int</a>,
+<a href="#f-get-long">get-long</a>, <a href="#f-get-char">get-char</a>,
+<a href="#f-get-string">get-string</a></p>
+<hr/>
+<p><a name="f-parse"></a></p>
+<h2 id="parse">parse</h2>
+<pre><code>syntax: (parse str-data [str-break [regex-option]])
+</code></pre>
+<p>Description:</p>
+<p>Splits the string produced by evaluating str-data
+into a list of string tokens.</p>
+<p>When str-break is omitted, parse tokenizes the input
+according to the language’s internal parsing rules.
+This mode uses the same fast tokenizer as source
+parsing and is intended for general-purpose token
+splitting.</p>
+<p>When str-break is provided, it specifies how the
+input string is split. It may be a literal string
+delimiter or a regular expression pattern. If
+regex-option is given, str-break is treated as a
+regular expression.</p>
+<p>When no break specification is given, token sizes
+are limited by the internal tokenizer. When a break
+string or pattern is provided, there is no practical
+limit on token length.</p>
+<p>Examples:</p>
+<pre><code>; no break string specified
+(parse "hello how are you")
+;-&#62; ("hello" "how" "are" "you")
+
+; implicit tokenization on spaces, punctuation, and numbers
+(parse "weight is 10lbs")
+;-&#62; ("weight" "is" "10" "lbs")
+
+; specifying a break string
+(parse "one:two:three" ":")
+;-&#62; ("one" "two" "three")
+
+(parse "one--two--three" "--")
+;-&#62; ("one" "two" "three")
+
+; regular expression break patterns
+(parse "one-two--three---four" "-+" 0)
+;-&#62; ("one" "two" "three" "four")
+
+(parse "hello regular   expression 1, 2, 3" {,\s*|\s+} 0)
+;-&#62; ("hello" "regular" "expression" "1" "2" "3")
+
+; empty fields around separators are preserved
+(parse "1,2,3," ",")
+;-&#62; ("1" "2" "3" "")
+
+(parse "1,,,4" ",")
+;-&#62; ("1" "" "" "4")
+
+(parse "," ",")
+;-&#62; ("" "")
+
+; empty input always produces an empty list
+(parse "")
+;-&#62; ()
+
+(parse "" " ")
+;-&#62; ()
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>When str-break is omitted, parse uses a fast
+internal tokenizer suitable for source-like input.</li>
+<li>When a break string or pattern is provided, parse
+splits strictly at the specified delimiters.</li>
+<li>Empty fields between separators are returned as
+empty strings.</li>
+<li>Parsing an empty string always returns ().</li>
+</ul>
+<p>See: <a href="#f-regex">regex</a>, <a href="#f-find">find</a>,
+<a href="#f-find-all">find-all</a>, <a href="#f-replace">replace</a>,
+<a href="#f-search">search</a>, <a href="#f-directory">directory</a></p>
+<hr/>
 
 </body>
 </html>
