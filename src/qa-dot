@@ -2871,6 +2871,9 @@ true
   (= x 123)
 )
 
+(define (test-mut)
+  (= (mut x 1) 1))
+
 (define (test-setf)
  (and
     (setf l '(a b c d e f g))
