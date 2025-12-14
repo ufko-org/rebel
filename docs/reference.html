@@ -2666,9 +2666,9 @@ behaves the same way as protecting a variable.</p>
 <p>The final value assigned by constant is returned as the
 result of the call.</p>
 <p>Examples:</p>
-<pre><code>(constant &#39;aVar 123)  → 123
-(set &#39;aVar 999)
-ERR: symbol is protected in function set: aVar
+<pre><code>(constant &#39;var 123)  → 123
+(set &#39;var 999)
+ERR: symbol is protected in function set: var
 
 (define (double x) (+ x x))
 
@@ -10531,6 +10531,1099 @@ empty strings.</li>
 <p>See: <a href="#f-regex">regex</a>, <a href="#f-find">find</a>,
 <a href="#f-find-all">find-all</a>, <a href="#f-replace">replace</a>,
 <a href="#f-search">search</a>, <a href="#f-directory">directory</a></p>
+<hr/>
+<p><a name="f-peek"></a></p>
+<h2 id="peek">peek</h2>
+<p>:::
+syntax: (peek int-handle)
+:::</p>
+<p>Description:</p>
+<p>Returns the number of bytes ready to be read from
+the file descriptor specified by int-handle.</p>
+<p>If the file descriptor is invalid, peek returns nil.
+peek does not read any data; it only reports how many
+bytes can be read without blocking.</p>
+<p>The value 0 may be used to check standard input.</p>
+<p>Examples:</p>
+<p>:::
+(peek 0)
+;-&#62; 12
+:::</p>
+<p>This example checks how many bytes are currently
+available on standard input.</p>
+<p>Notes:</p>
+<ul>
+<li>peek operates on file descriptors.</li>
+<li>peek does not consume any input.</li>
+<li>A return value of 0 means no data is available.</li>
+</ul>
+<p>For checking sockets or obtaining additional error
+information, use net-peek.</p>
+<p>See: <a href="#f-net-peek">net-peek</a>, <a href="#f-read">read</a>,
+<a href="#f-read-char">read-char</a></p>
+<hr/>
+<p><a name="f-pipe"></a></p>
+<h2 id="pipe">pipe</h2>
+<p>:::
+syntax: (pipe)
+:::</p>
+<p>Description:</p>
+<p>Creates an inter-process communication pipe and
+returns a list containing two file descriptors:
+the read end and the write end of the pipe.</p>
+<p>The returned handles can be passed to a child
+process created with process or fork to enable
+communication between processes.</p>
+<p>Examples:</p>
+<p>:::
+(pipe)
+;-&#62; (3 4)
+:::</p>
+<p>In this example, descriptor 3 is used for reading
+and descriptor 4 for writing.</p>
+<p>Notes:</p>
+<ul>
+<li>Writing to a pipe does not block.</li>
+<li>Reading from a pipe blocks until data is available.</li>
+<li>read-line blocks until a newline character is read.</li>
+<li>read blocks if fewer bytes than requested are
+available and the write end is still open.</li>
+<li>Multiple pipes may be created as needed.</li>
+</ul>
+<p>Named pipes may also be used. See open for details.</p>
+<p>See: <a href="#f-process">process</a>, <a href="#f-fork">fork</a>,
+<a href="#f-read">read</a>, <a href="#f-read-line">read-line</a>,
+<a href="#f-open">open</a></p>
+<hr/>
+<p><a name="f-pmt"></a></p>
+<h2 id="pmt">pmt</h2>
+<p>:::
+syntax: (pmt num-interest num-periods num-principal
+           [num-future-value [int-type]])
+:::</p>
+<p>Description:</p>
+<p>Calculates the periodic payment required to repay
+a loan or investment with a constant interest rate
+over a fixed number of periods.</p>
+<p>num-interest specifies the interest rate per period.
+num-periods is the total number of payment periods.
+num-principal is the present value of the loan.
+An optional num-future-value specifies the value
+remaining at the end of the periods (typically 0.0).</p>
+<p>When payments are made at the end of each period,
+int-type is 0 or omitted. When payments are made at
+the beginning of each period, int-type is 1.</p>
+<p>The returned value is typically negative, indicating
+an outgoing payment.</p>
+<p>Examples:</p>
+<p>:::
+(pmt (div 0.07 12) 240 100000)
+;-&#62; -775.2989356
+:::</p>
+<p>This example calculates the monthly payment for a
+loan of 100000 at a yearly interest rate of 7 percent,
+paid over 240 monthly periods.</p>
+<p>Notes:</p>
+<ul>
+<li>Interest rate is specified per period.</li>
+<li>A negative result represents a payment.</li>
+<li>pmt returns a floating point value.</li>
+</ul>
+<p>See: <a href="#f-fv">fv</a>, <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>,
+<a href="#f-npv">npv</a>, <a href="#f-pv">pv</a></p>
+<hr/>
+<p><a name="f-pop"></a></p>
+<h2 id="pop">pop</h2>
+<p>:::
+syntax: (pop list [int-index-1 [int-index-2 &#8230; ]])
+syntax: (pop list [list-indexes])
+syntax: (pop str [int-index [int-length]])
+:::</p>
+<p>Description:</p>
+<p>Removes and returns elements from lists or characters
+from strings.</p>
+<p>In the list forms, pop removes an element from the
+list produced by evaluating list. When no index is
+specified, the first element is removed. When one or
+more indices are given, they are used to locate the
+target element, similar to recursive indexing.</p>
+<p>Indices may also be provided as a list in
+list-indexes. This form is convenient when working
+with functions such as ref or ref-all, which return
+lists of indices.</p>
+<p>pop modifies the target list in place and returns
+the removed element.</p>
+<p>In the string form, pop removes characters from the
+string. With no index, the first character is
+removed. With int-index and int-length, a substring
+is removed and returned.</p>
+<p>Examples:</p>
+<p>:::
+(set &#8216;lst &#8216;((f g) a b c &#8220;hello&#8221; d e 10))</p>
+<p>(pop lst)
+;-&#62; (f g)</p>
+<p>(pop lst)
+;-&#62; a</p>
+<p>lst
+;-&#62; (b c &#8220;hello&#8221; d e 10)</p>
+<p>(pop lst 3)
+;-&#62; d</p>
+<p>(pop lst -1)
+;-&#62; 10</p>
+<p>lst
+;-&#62; (b c &#8220;hello&#8221; e)</p>
+<p>(pop lst -1)
+;-&#62; e</p>
+<p>lst
+;-&#62; (b c &#8220;hello&#8221;)</p>
+<p>(pop lst -2)
+;-&#62; c</p>
+<p>lst
+;-&#62; (b &#8220;hello&#8221;)</p>
+<p>; nested indices
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;lst &#8216;(a 2 (x y (p q) z)))</p>
+<p>(pop lst -1 2 0)
+;-&#62; p</p>
+<p>; using indices in a list
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;lst &#8216;(a b (c d () e)))</p>
+<p>(push &#8216;x lst &#8216;(2 2 0))
+;-&#62; (a b (c d (x) e))</p>
+<p>lst
+;-&#62; (a b (c d (x) e))</p>
+<p>(ref &#8216;x lst)
+;-&#62; (2 2 0)</p>
+<p>(pop lst &#8216;(2 2 0))
+;-&#62; x</p>
+<p>; pop on strings (UTF-8 aware)
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;str &#8220;Rebel&#8221;)</p>
+<p>(pop str -2 2)
+;-&#62; &#8220;el&#8221;</p>
+<p>str
+;-&#62; &#8220;Reb&#8221;</p>
+<p>(pop str 1)
+;-&#62; &#8220;e&#8221;</p>
+<p>str
+;-&#62; &#8220;Rb&#8221;</p>
+<p>(set &#8216;str &#8220;x&#8221;)</p>
+<p>(pop str)
+;-&#62; &#8220;x&#8221;</p>
+<p>(pop str)
+;-&#62; &#8220;&#8220;
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>pop modifies the target list or string.</li>
+<li>Negative indices count from the end.</li>
+<li>pop on strings operates on character boundaries
+when UTF-8 support is enabled.</li>
+<li>Popping an empty string returns an empty string.</li>
+</ul>
+<p>See: <a href="#f-push">push</a>, <a href="#f-ref">ref</a>, <a href="#f-ref-all">ref-all</a></p>
+<hr/>
+<p><a name="f-pop-assoc"></a></p>
+<h2 id="pop-assoc">pop-assoc</h2>
+<p>:::
+syntax: (pop-assoc exp-key list-assoc)
+syntax: (pop-assoc list-keys list-assoc)
+:::</p>
+<p>Description:</p>
+<p>Removes and returns an association from an
+association list.</p>
+<p>In the first form, pop-assoc removes the association
+whose key matches exp-key from list-assoc and returns
+the removed association.</p>
+<p>In the second form, list-keys specifies a path of
+keys for accessing nested association lists. The
+association at the specified path is removed and
+returned.</p>
+<p>pop-assoc modifies list-assoc in place.</p>
+<p>Examples:</p>
+<p>:::
+; simple associations
+(set &#8216;lst &#8216;((a 1) (b 2) (c 3)))</p>
+<p>(pop-assoc &#8216;b lst)
+;-&#62; (b 2)</p>
+<p>lst
+;-&#62; ((a 1) (c 3))</p>
+<p>;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+; nested associations
+(set &#8216;lst &#8216;((a (b 1) (c (d 2)))))</p>
+<p>(pop-assoc &#8216;a lst)
+;-&#62; (a (b 1) (c (d 2)))</p>
+<p>lst
+;-&#62; ()</p>
+<p>(set &#8216;lst &#8216;((a (b 1) (c (d 2)))))</p>
+<p>(pop-assoc &#8216;(a b) lst)
+;-&#62; (b 1)</p>
+<p>lst
+;-&#62; ((a (c (d 2))))</p>
+<p>(set &#8216;lst &#8216;((a (b 1) (c (d 2)))))</p>
+<p>(pop-assoc &#8216;(a c) lst)
+;-&#62; (c (d 2))</p>
+<p>lst
+;-&#62; ((a (b 1)))
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>pop-assoc removes exactly one association.</li>
+<li>Nested keys allow direct modification of
+hierarchical association lists.</li>
+<li>list-assoc is modified in place.</li>
+</ul>
+<p>See: <a href="#f-assoc">assoc</a>, <a href="#f-setf">setf</a></p>
+<hr/>
+<p><a name="f-post-url"></a></p>
+<h2 id="post-url">post-url</h2>
+<p>:::
+syntax: (post-url str-url str-content [str-content-type [str-option] [int-timeout [str-header]]])
+:::</p>
+<p>Description:</p>
+<p>Sends an HTTP POST request to the URL specified by
+str-url and returns the response body as a string.</p>
+<p>POST requests are commonly used to submit form data
+or upload content to a server. post-url mimics the
+behavior of a web client sending data to an HTTP
+endpoint, but it may also be used to send arbitrary
+content types, including binary data.</p>
+<p>When an error occurs, post-url returns a string
+starting with the prefix ERR:.</p>
+<p>An optional timeout may be specified in
+int-timeout, given in milliseconds. If no response
+is received before the timeout expires, the string
+ERR: timeout is returned.</p>
+<p>When str-content-type is omitted, the default
+content type is assumed to be:</p>
+<p>:::
+application&#47;x-www-form-urlencoded
+:::</p>
+<p>Examples:</p>
+<p>:::
+; specify content type
+(post-url &#8220;<a href="https://example.com/form.cgi">https:&#47;&#47;example.com&#47;form.cgi</a>&#8221;
+          &#8220;name=johnDoe&#38;city=New%20York&#8221;
+          &#8220;application&#47;x-www-form-urlencoded&#8221;)</p>
+<p>; specify content type and timeout
+(post-url &#8220;<a href="https://example.com/form.cgi">https:&#47;&#47;example.com&#47;form.cgi</a>&#8221;
+          &#8220;name=johnDoe&#38;city=New%20York&#8221;
+          &#8220;application&#47;x-www-form-urlencoded&#8221;
+          nil
+          8000)</p>
+<p>; default content type, no timeout
+(post-url &#8220;<a href="https://example.com/form.rbl">https:&#47;&#47;example.com&#47;form.rbl</a>&#8221;
+          &#8220;name=johnDoe&#38;city=New%20York&#8221;)
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>post-url returns the server response as a string.</li>
+<li>On error, a string starting with ERR: is returned.</li>
+<li>int-timeout is specified in milliseconds.</li>
+<li>Additional options and custom headers may be
+provided using str-option and str-header.</li>
+</ul>
+<p>Options:</p>
+<p>When str-content-type is specified, str-option
+accepts the same options as get-url for handling
+the returned content. When a timeout is specified,
+a custom HTTP header string may also be supplied.</p>
+<p>See: <a href="#f-get-url">get-url</a>, <a href="#f-put-url">put-url</a></p>
+<hr/>
+<p><a name="f-pow"></a></p>
+<h2 id="pow">pow</h2>
+<p>:::
+syntax: (pow num-1 num-2 [num-3 &#8230; ])
+syntax: (pow num-1)
+:::</p>
+<p>Description:</p>
+<p>Raises num-1 to the power of num-2 and any following
+exponents in sequence.</p>
+<p>When more than two numbers are given, the result of
+each exponentiation is used as the base for the next
+one.</p>
+<p>When only num-1 is provided, pow assumes an exponent
+of 2.</p>
+<p>Examples:</p>
+<p>:::
+(pow 100 2)
+;-&#62; 10000</p>
+<p>(pow 100 0.5)
+;-&#62; 10</p>
+<p>(pow 100 0.5 3)
+;-&#62; 1000</p>
+<p>(pow 3)
+;-&#62; 9
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>Exponents are applied from left to right.</li>
+<li>pow returns a numeric result.</li>
+</ul>
+<p>See: <a href="#f-sqrt">sqrt</a>, <a href="#f-exp">exp</a>, <a href="#f-log">log</a></p>
+<hr/>
+<p><a name="f-prefix"></a></p>
+<h2 id="prefix">prefix</h2>
+<p>:::
+syntax: (prefix sym)
+:::</p>
+<p>Description:</p>
+<p>Returns the context part of the symbol sym.</p>
+<p>Examples:</p>
+<p>:::
+(setf s &#8216;ctx:var)
+;-&#62; ctx:var</p>
+<p>(prefix s)
+;-&#62; ctx</p>
+<p>(context? (prefix s))
+;-&#62; true</p>
+<p>(term s)
+;-&#62; &#8220;var&#8221;</p>
+<p>(= s (sym (term s) (prefix s)))
+;-&#62; true</p>
+<p>(context (prefix s))
+;-&#62; ctx
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>prefix extracts the context of a symbol.</li>
+<li>The returned value is a context symbol.</li>
+<li>prefix is commonly used together with term.</li>
+</ul>
+<p>See: <a href="#f-term">term</a>, <a href="#f-sym">sym</a>, <a href="#f-context">context</a></p>
+<hr/>
+<p><a name="f-prefix"></a></p>
+<h2 id="prefix-1">prefix</h2>
+<p>:::
+syntax: (prefix sym)
+:::</p>
+<p>Description:</p>
+<p>Returns the context part of the symbol sym.</p>
+<p>Examples:</p>
+<p>:::
+(setf s &#8216;ctx:var)
+;-&#62; ctx:var</p>
+<p>(prefix s)
+;-&#62; ctx</p>
+<p>(context? (prefix s))
+;-&#62; true</p>
+<p>(term s)
+;-&#62; &#8220;var&#8221;</p>
+<p>(= s (sym (term s) (prefix s)))
+;-&#62; true</p>
+<p>(context (prefix s))
+;-&#62; ctx
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>prefix extracts the context of a symbol.</li>
+<li>The returned value is a context symbol.</li>
+<li>prefix is commonly used together with term.</li>
+</ul>
+<p>See: <a href="#f-term">term</a>, <a href="#f-sym">sym</a>, <a href="#f-context">context</a></p>
+<hr/>
+<p><a name="f-pretty-print"></a></p>
+<h2 id="pretty-print">pretty-print</h2>
+<p>:::
+syntax: (pretty-print [int-length [str-tab [str-fp-format]]])
+:::</p>
+<p>Description:</p>
+<p>Controls the formatting of expressions when printing,
+saving, or displaying source in an interactive
+console.</p>
+<p>The optional parameters specify formatting settings:</p>
+<ul>
+<li>int-length sets the maximum line length.</li>
+<li>str-tab specifies the string used for indentation.</li>
+<li>str-fp-format defines the default format used for
+printing floating point numbers.</li>
+</ul>
+<p>When called without arguments, pretty-print returns
+the current formatting settings. When parameters are
+provided, the settings are updated and the new values
+are returned.</p>
+<p>Examples:</p>
+<p>:::
+(pretty-print)
+;-&#62; (80 &#8220; &#8220; &#8220;%1.15g&#8221;)</p>
+<p>(pretty-print 90 &#8220;\t&#8221;)
+;-&#62; (90 &#8220;\t&#8221; &#8220;%1.15g&#8221;)</p>
+<p>(pretty-print 100)
+;-&#62; (100 &#8220;\t&#8221; &#8220;%1.15g&#8221;)</p>
+<p>(sin 1)
+;-&#62; 0.841470984807897</p>
+<p>(pretty-print 80 &#8220; &#8220; &#8220;%1.3f&#8221;)</p>
+<p>(sin 1)
+;-&#62; 0.841</p>
+<p>(set &#8216;x 0.0)
+x
+;-&#62; 0.000
+:::</p>
+<p>The default settings use a maximum line length of 80,
+a single space for indentation, and a high-precision
+floating point format.</p>
+<p>Changing the floating point format is useful when
+printing values without fractional parts that should
+remain distinguishable as floating point numbers.</p>
+<p>All output operations that rely on automatic
+formatting are affected by the current pretty-print
+settings.</p>
+<p>Notes:</p>
+<ul>
+<li>pretty-print cannot be used to suppress line
+breaking entirely.</li>
+<li>To output an expression without any formatting,
+convert it to a raw string first.</li>
+</ul>
+<p>Examples without formatting:</p>
+<p>:::
+(print (string my-expression))
+:::</p>
+<p>See: <a href="#f-string">string</a>, <a href="#f-print">print</a></p>
+<hr/>
+<p><a name="f-primitivep"></a></p>
+<h2 id="primitive">primitive?</h2>
+<p>:::
+syntax: (primitive? exp)
+:::</p>
+<p>Description:</p>
+<p>Evaluates exp and returns true if the result is a
+primitive symbol. Otherwise, primitive? returns nil.</p>
+<p>Primitive symbols include all built-in functions
+and functions created using import.</p>
+<p>Examples:</p>
+<p>:::
+(set &#8216;var define)</p>
+<p>(primitive? var)
+;-&#62; true
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>primitive? matches built-in functions.</li>
+<li>Functions created with import are also primitives.</li>
+<li>User-defined functions are not primitives.</li>
+</ul>
+<p>See: <a href="#f-import">import</a>, <a href="#f-define">define</a></p>
+<hr/>
+<p><a name="f-print"></a></p>
+<h2 id="print">print</h2>
+<p>:::
+syntax: (print exp-1 [exp-2 &#8230; ])
+:::</p>
+<p>Description:</p>
+<p>Evaluates each expression and prints the resulting
+values to the current I&#47;O device. By default, output
+is sent to the console.</p>
+<p>The current output device may be changed using the
+device function.</p>
+<p>When printing list expressions, elements are
+indented according to the nesting level of their
+opening parentheses.</p>
+<p>Strings may contain escape sequences introduced by
+the backslash character.</p>
+<p>Escape sequences:</p>
+<p>:::
+code   description</p>
+<hr/>
+<p>\n     line feed (ASCII 10)
+\r     carriage return (ASCII 13)
+\t     tab character (ASCII 9)
+\nnn   decimal ASCII code (000–255)
+\xnn   hexadecimal ASCII code (00–FF)
+:::</p>
+<p>Examples:</p>
+<p>:::
+(print (set &#8216;res (+ 1 2 3)))
+(print &#8220;the result is &#8220; res &#8220;\n&#8221;)</p>
+<p>&#8220;\065\066\067&#8221;
+;-&#62; &#8220;ABC&#8221;
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>print does not append a line feed automatically.</li>
+<li>Use println to terminate output with a line feed.</li>
+<li>Output is written to the current device.</li>
+</ul>
+<p>See: <a href="#f-println">println</a>, <a href="#f-device">device</a>,
+<a href="#f-string">string</a></p>
+<hr/>
+<p><a name="f-println"></a></p>
+<h2 id="println">println</h2>
+<p>:::
+syntax: (println exp-1 [exp-2 &#8230; ])
+:::</p>
+<p>Description:</p>
+<p>Evaluates each expression and prints the resulting
+values to the current I&#47;O device. By default, output
+is sent to the console.</p>
+<p>println works like print, but automatically appends
+a line-feed character at the end of the output.</p>
+<p>The current output device may be changed using the
+device function.</p>
+<p>Examples:</p>
+<p>:::
+(println &#8220;hello world&#8221;)
+;-&#62; &#8220;hello world\n&#8221;</p>
+<p>(println &#8220;the result is &#8220; (+ 1 2 3))
+;-&#62; &#8220;the result is 6\n&#8221;
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>println always appends a line feed.</li>
+<li>Use print when no trailing line feed is desired.</li>
+<li>Output is written to the current device.</li>
+</ul>
+<p>See: <a href="#f-print">print</a>, <a href="#f-write-line">write-line</a>,
+<a href="#f-device">device</a></p>
+<hr/>
+<p><a name="f-prob-chi2"></a></p>
+<h2 id="prob-chi2">prob-chi2</h2>
+<p>:::
+syntax: (prob-chi2 num-chi2 int-df)
+:::</p>
+<p>Description:</p>
+<p>Returns the probability that an observed Chi-square
+statistic num-chi2 is equal to or greater than the
+given value under the null hypothesis, using
+int-df degrees of freedom.</p>
+<p>prob-chi2 is derived from the incomplete Gamma
+function gammai.</p>
+<p>Examples:</p>
+<p>:::
+(prob-chi2 10 6)
+;-&#62; 0.1246520195
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>The returned value is a probability in the range
+0.0 to 1.0.</li>
+<li>Larger Chi-square values yield smaller
+probabilities for the same degrees of freedom.</li>
+</ul>
+<p>See: <a href="#f-crit-chi2">crit-chi2</a>, <a href="#f-gammai">gammai</a></p>
+<hr/>
+<p><a name="f-prob-f"></a></p>
+<h2 id="prob-f">prob-f</h2>
+<p>:::
+syntax: (prob-f num-f int-df1 int-df2)
+:::</p>
+<p>Description:</p>
+<p>Returns the probability that an observed F statistic
+num-f is equal to or greater than the given value
+under the null hypothesis.</p>
+<p>int-df1 and int-df2 specify the numerator and
+denominator degrees of freedom.</p>
+<p>Examples:</p>
+<p>:::
+(prob-f 2.75 10 12)
+;-&#62; 0.0501990804
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>The returned value is a probability in the range
+0.0 to 1.0.</li>
+<li>Larger F values yield smaller probabilities for
+the same degrees of freedom.</li>
+</ul>
+<p>See: <a href="#f-crit-f">crit-f</a></p>
+<hr/>
+<p><a name="f-prob-t"></a></p>
+<h2 id="prob-t">prob-t</h2>
+<p>:::
+syntax: (prob-t num-t int-df)
+:::</p>
+<p>Description:</p>
+<p>Returns the probability that an observed Student’s
+t statistic num-t is equal to or greater than the
+given value under the null hypothesis, using
+int-df degrees of freedom.</p>
+<p>Examples:</p>
+<p>:::
+(prob-t 1.76 14)
+;-&#62; 0.05011454551
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>The returned value is a probability in the range
+0.0 to 1.0.</li>
+<li>Larger absolute t values yield smaller
+probabilities for the same degrees of freedom.</li>
+</ul>
+<p>See: <a href="#f-crit-t">crit-t</a></p>
+<hr/>
+<p><a name="f-prob-z"></a></p>
+<h2 id="prob-z">prob-z</h2>
+<p>:::
+syntax: (prob-z num-z)
+:::</p>
+<p>Description:</p>
+<p>Returns the probability that a normally distributed
+random variable with mean 0.0 and standard deviation
+1.0 does not exceed the observed value num-z.</p>
+<p>This corresponds to the cumulative distribution
+function (CDF) of the standard normal distribution.</p>
+<p>Examples:</p>
+<p>:::
+(prob-z 0.0)
+;-&#62; 0.5
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>The returned value is a probability in the range
+0.0 to 1.0.</li>
+<li>Larger positive z values yield probabilities
+closer to 1.0, while negative values yield
+probabilities closer to 0.0.</li>
+</ul>
+<p>See: <a href="#f-crit-z">crit-z</a></p>
+<hr/>
+<p><a name="f-process"></a></p>
+<h2 id="process">process</h2>
+<p>:::
+syntax: (process str-command)
+syntax: (process str-command int-pipe-in int-pipe-out)
+syntax: (process str-command int-pipe-in int-pipe-out int-pipe-error)
+:::</p>
+<p>Description:</p>
+<p>Starts a new process executing the command specified
+by str-command and returns its process identifier.</p>
+<p>If the process cannot be created, process returns
+nil.</p>
+<p>The new process inherits the execution environment
+of the parent process.</p>
+<p>Command arguments are parsed from str-command using
+spaces. Arguments containing spaces must be quoted
+explicitly in the command string.</p>
+<p>The returned process identifier may be used with
+destroy to terminate the process if it does not
+exit on its own.</p>
+<p>Standard input, output, and error streams of the
+child process may be redirected using pipe handles.</p>
+<p>Examples:</p>
+<p>:::
+(process &#8220;&#47;usr&#47;bin&#47;true&#8221;)
+;-&#62; 12345
+:::</p>
+<p>Redirecting standard input and output using pipes:</p>
+<p>:::
+(map set &#8216;(in out) (pipe))
+(map set &#8216;(cin cout) (pipe))</p>
+<p>(process &#8220;&#47;usr&#47;bin&#47;bc&#8221; cin out)
+;-&#62; 7916</p>
+<p>(write-line cout &#8220;3 + 4&#8221;)
+(read-line in)
+;-&#62; &#8220;7&#8221;</p>
+<p>(destroy 7916)
+:::</p>
+<p>Using an additional pipe for standard error:</p>
+<p>:::
+(map set &#8216;(in out) (pipe))
+(map set &#8216;(cin cout) (pipe))
+(map set &#8216;(errin errout) (pipe))</p>
+<p>(process &#8220;&#47;usr&#47;bin&#47;bc&#8221; cin out errout)</p>
+<p>(write-line cout &#8220;invalid&#8221;)
+:::</p>
+<p>Waiting for output or error data:</p>
+<p>:::
+(while (and (= (peek in) 0)
+            (= (peek errin) 0))
+  (sleep 10))</p>
+<p>(if (&#62; (peek errin) 0)
+  (println (read-line errin)))</p>
+<p>(if (&#62; (peek in) 0)
+  (println (read-line in)))
+:::</p>
+<p>If a stream is not required, specify 0 for the
+corresponding pipe handle:</p>
+<p>:::
+(process &#8220;app&#8221; 0 appout)
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>process starts the command asynchronously.</li>
+<li>Standard streams may be redirected independently.</li>
+<li>peek may be used to poll pipe handles.</li>
+<li>Not all programs support full interactive I&#47;O
+redirection.</li>
+</ul>
+<p>See: <a href="#f-pipe">pipe</a>, <a href="#f-peek">peek</a>,
+<a href="#f-destroy">destroy</a>, <a href="#f-write">write</a>,
+<a href="#f-write-line">write-line</a>, <a href="#f-read">read</a>,
+<a href="#f-read-line">read-line</a></p>
+<hr/>
+<p><a name="f-prompt-event"></a></p>
+<h2 id="prompt-event">prompt-event</h2>
+<p>:::
+syntax: (prompt-event sym-event-handler | func-event-handler)
+syntax: (prompt-event nil)
+:::</p>
+<p>Description:</p>
+<p>Customizes the interactive prompt shown by the
+interpreter.</p>
+<p>The argument may be the symbol of a user-defined
+function or an anonymous function. This function
+is called each time the prompt is displayed.</p>
+<p>To restore the default prompt, call prompt-event
+with nil.</p>
+<p>The current context is passed as the single
+argument to the prompt handler function.</p>
+<p>The handler must return a string of at most
+63 characters. If no string is returned, the
+prompt remains unchanged.</p>
+<p>Examples:</p>
+<p>:::
+(prompt-event (fn (ctx)
+  (string ctx &#8220;:&#8221; (real-path) &#8220;$ &#8220;)))
+:::</p>
+<p>After this call, the prompt shows the current
+context, a colon, the current directory, and
+a dollar sign.</p>
+<p>Notes:</p>
+<ul>
+<li>The prompt handler is evaluated before each
+interactive input.</li>
+<li>The return value must be a string with a
+maximum length of 63 characters.</li>
+<li>Returning a non-string leaves the prompt
+unchanged.</li>
+<li>Use (prompt-event nil) to reset the prompt.</li>
+</ul>
+<p>prompt-event can be combined with command-event
+to build customized interactive shells or command
+interpreters.</p>
+<p>See: <a href="#f-command-event">command-event</a>,
+<a href="#f-real-path">real-path</a></p>
+<hr/>
+<p><a name="f-protectedp"></a></p>
+<h2 id="protected">protected?</h2>
+<p>:::
+syntax: (protected? sym)
+:::</p>
+<p>Description:</p>
+<p>Checks whether the symbol sym is protected.</p>
+<p>Protected symbols include all built-in functions,
+context symbols, and symbols made constant using
+the constant function.</p>
+<p>If sym is protected, protected? returns true;
+otherwise, it returns nil.</p>
+<p>Examples:</p>
+<p>:::
+(protected? &#8216;println)
+;-&#62; true</p>
+<p>(constant &#8216;var 123)</p>
+<p>(protected? &#8216;var)
+;-&#62; true
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>Protected symbols cannot be redefined or modified.</li>
+<li>Use constant to explicitly protect a symbol.</li>
+</ul>
+<p>See: <a href="#f-constant">constant</a></p>
+<hr/>
+<p><a name="f-push"></a></p>
+<h2 id="push">push</h2>
+<p>:::
+syntax: (push exp list [int-index-1 [int-index-2 &#8230; ]])
+syntax: (push exp list [list-indexes])</p>
+<p>syntax: (push str-1 str-2 [int-index])
+:::</p>
+<p>Description:</p>
+<p>Inserts the value of exp into a list or string.</p>
+<p>In the list forms, push inserts exp into the list
+referenced by list. When no index is given, the
+value is inserted at index 0. When one or more
+indices are provided, they are used to access a
+nested list structure.</p>
+<p>Indices may also be supplied as a list in
+list-indexes. Improper indices are ignored.</p>
+<p>push modifies the target list in place and returns
+a reference to the modified list.</p>
+<p>If list evaluates to nil, it is initialized to an
+empty list before insertion.</p>
+<p>Repeatedly inserting at index -1 is optimized and
+can be used to efficiently append elements.</p>
+<p>In the string form, push inserts characters into
+the string. Indices refer to character positions,
+not byte positions. UTF-8 characters are handled
+as single characters.</p>
+<p>Examples:</p>
+<p>:::
+; inserting at the front
+(set &#8216;lst &#8216;(b c))
+(push &#8216;a lst)
+;-&#62; (a b c)</p>
+<p>lst
+;-&#62; (a b c)</p>
+<p>; insert at index
+(push &#8220;hello&#8221; lst 2)
+;-&#62; (a b &#8220;hello&#8221; c)</p>
+<p>; optimized appending at the end
+(push &#8216;z lst -1)
+;-&#62; (a b &#8220;hello&#8221; c z)</p>
+<p>; inserting lists into lists
+(push &#8216;(f g) lst)
+;-&#62; ((f g) a b &#8220;hello&#8221; c z)</p>
+<p>; inserting at a negative index
+(push &#8216;x lst -3)
+;-&#62; ((f g) a b &#8220;hello&#8221; x c z)</p>
+<p>; using multiple indices
+(push &#8216;h lst 0 -1)
+;-&#62; ((f g h) a b &#8220;hello&#8221; x c z)</p>
+<p>; using indices in a list
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;lst &#8216;(a b (c d () e)))</p>
+<p>(push &#8216;x lst &#8216;(2 2 0))
+;-&#62; (a b (c d (x) e))</p>
+<p>(ref &#8216;x lst)
+;-&#62; (2 2 0)</p>
+<p>(pop lst &#8216;(2 2 0))
+;-&#62; x</p>
+<p>; place reference
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;lst &#8216;((a 1) (b 2) (c 3) (d)))</p>
+<p>(push 4 (assoc &#8216;d lst) -1)
+;-&#62; (d 4)</p>
+<p>lst
+;-&#62; ((a 1) (b 2) (c 3) (d 4))</p>
+<p>; push on uninitialized symbol
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(var)
+;-&#62; nil</p>
+<p>(push 999 var)
+;-&#62; (999)</p>
+<p>var
+;-&#62; (999)</p>
+<p>; using push and pop as a queue
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;q &#8216;(a b c d e))</p>
+<p>(pop (push &#8216;f q -1))
+;-&#62; a</p>
+<p>(pop (push &#8216;g q -1))
+;-&#62; b</p>
+<p>q
+;-&#62; (c d e f g)</p>
+<p>; push on strings (UTF-8 aware)
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;str &#8220;abcdefg&#8221;)</p>
+<p>(push &#8220;hijk&#8221; str -1)
+;-&#62; &#8220;abcdefghijk&#8221;</p>
+<p>str
+;-&#62; &#8220;abcdefghijk&#8221;</p>
+<p>(push &#8220;123&#8221; str)
+;-&#62; &#8220;123abcdefghijk&#8221;</p>
+<p>(push &#8220;4&#8221; str 3)
+;-&#62; &#8220;1234abcdefghijk&#8221;</p>
+<p>(set &#8216;str &#8220;\u03b1\u03b2\u03b3&#8221;)
+;-&#62; &#8220;αβγ&#8221;</p>
+<p>(push &#8220;<em>&#8220; str 1)
+;-&#62; &#8220;α</em>βγ&#8221;</p>
+<p>; push on a string reference
+;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
+(set &#8216;lst &#8216;(&#8220;abc&#8221; &#8220;xyz&#8221;))</p>
+<p>(push &#8220;x&#8221; (lst 0))
+;-&#62; &#8220;xabc&#8221;</p>
+<p>lst
+;-&#62; (&#8220;xabc&#8221; &#8220;xyz&#8221;)
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>push modifies the target list or string.</li>
+<li>Negative indices count from the end.</li>
+<li>Repeated appends using index -1 are optimized.</li>
+<li>push returns a reference to the modified value.</li>
+</ul>
+<p>See: <a href="#f-pop">pop</a>, <a href="#f-ref">ref</a>, <a href="#f-ref-all">ref-all</a></p>
+<hr/>
+<p><a name="f-put-url"></a></p>
+<h2 id="put-url">put-url</h2>
+<p>:::
+syntax: (put-url str-url str-content [str-option] [int-timeout [str-header]])
+:::</p>
+<p>Description:</p>
+<p>Sends an HTTP PUT request to the URL specified by
+str-url, transferring the content in str-content
+to the target resource.</p>
+<p>HTTP PUT is typically used to upload or replace
+the contents of a resource on a server. The server
+must be configured to accept PUT requests.</p>
+<p>If str-url starts with file:&#47;&#47;, the content is
+written to the local file system.</p>
+<p>On success, put-url returns the response body
+returned by the server. On error, it returns a
+string starting with ERR:.</p>
+<p>An optional timeout may be specified in
+int-timeout, given in milliseconds. If no response
+is received before the timeout expires, the string
+ERR: timeout is returned.</p>
+<p>Examples:</p>
+<p>:::
+; upload text to a remote resource
+(put-url &#8220;<a href="https://example.com/data.txt">https:&#47;&#47;example.com&#47;data.txt</a>&#8221; &#8220;Hello world&#8221;)</p>
+<p>; upload text with timeout
+(put-url &#8220;<a href="https://example.com/data.txt">https:&#47;&#47;example.com&#47;data.txt</a>&#8221; &#8220;Hello world&#8221; nil 2000)</p>
+<p>; upload file contents
+(put-url &#8220;<a href="https://example.com/page.html">https:&#47;&#47;example.com&#47;page.html</a>&#8221;
+         (read-file &#8220;page.html&#8221;))</p>
+<p>; write to local file system
+(put-url &#8220;file:&#47;&#47;&#47;home&#47;user&#47;file.txt&#8221; &#8220;Hello world&#8221;)
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>The server must explicitly allow HTTP PUT.</li>
+<li>put-url replaces the target resource content.</li>
+<li>int-timeout is specified in milliseconds.</li>
+<li>On error, a string starting with ERR: is returned.</li>
+</ul>
+<p>Options:</p>
+<p>The optional str-option accepts the same options
+as get-url for handling returned content. When a
+timeout is specified, a custom HTTP header string
+may also be supplied.</p>
+<p>See: <a href="#f-get-url">get-url</a>, <a href="#f-post-url">post-url</a></p>
+<hr/>
+<p><a name="f-pv"></a></p>
+<h2 id="pv">pv</h2>
+<p>:::
+syntax: (pv num-int num-nper num-pmt [num-fv [int-type]])
+:::</p>
+<p>Description:</p>
+<p>Calculates the present value of a loan or investment
+with a constant interest rate and constant payments.</p>
+<p>num-int specifies the interest rate per period.
+num-nper is the total number of payment periods.
+num-pmt is the payment made each period.</p>
+<p>The optional num-fv specifies the future value at
+the end of all periods and defaults to 0.0.</p>
+<p>When payments are made at the end of each period,
+int-type is 0 or omitted. When payments are made at
+the beginning of each period, int-type is 1.</p>
+<p>The returned value is typically negative, indicating
+an initial outgoing amount.</p>
+<p>Examples:</p>
+<p>:::
+(pv (div 0.07 12) 240 775.30)
+;-&#62; -100000.1373
+:::</p>
+<p>This example computes the present value of a loan
+paid off over 240 periods with constant payments
+of 775.30 at a yearly interest rate of 7 percent.</p>
+<p>Notes:</p>
+<ul>
+<li>Interest rate is specified per period.</li>
+<li>A negative result represents an initial payment.</li>
+<li>pv returns a floating point value.</li>
+</ul>
+<p>See: <a href="#f-fv">fv</a>, <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>,
+<a href="#f-npv">npv</a>, <a href="#f-pmt">pmt</a></p>
+<hr/>
+<p><a name="f-quote"></a></p>
+<h2 id="quote">quote</h2>
+<p>:::
+syntax: (quote exp)
+:::</p>
+<p>Description:</p>
+<p>Returns exp without evaluating it.</p>
+<p>The same effect can be achieved by prepending a
+single quote character &#8216; to exp.</p>
+<p>The function quote is resolved at runtime, while
+the prefixed &#8216; form is translated during code
+reading into a quoted expression.</p>
+<p>Examples:</p>
+<p>:::
+(quote x)
+;-&#62; x</p>
+<p>(quote 123)
+;-&#62; 123</p>
+<p>(quote (a b c))
+;-&#62; (a b c)</p>
+<p>(= (quote x) &#8216;x)
+;-&#62; true
+:::</p>
+<p>Notes:</p>
+<ul>
+<li>quote prevents evaluation of its argument.</li>
+<li>The &#8216; shorthand produces the same result.</li>
+<li>The &#8216; form is handled during code translation,
+while quote is a runtime function.</li>
+</ul>
+<p>See: <a href="#f-eval">eval</a>, <a href="#f-list">list</a></p>
+<hr/>
+<p><a name="f-rand"></a></p>
+<h2 id="rand">rand</h2>
+<p>:::
+syntax: (rand int-range [int-N])
+:::</p>
+<p>Description:</p>
+<p>Generates random integer numbers using the internal
+pseudo-random number generator.</p>
+<p>rand returns a random integer in the range from
+0 (zero) to int-range minus 1.</p>
+<p>When int-range is 0 (zero), the random number
+generator is initialized using the current time
+value.</p>
+<p>When the optional int-N parameter is specified,
+rand returns a list of int-N random integers.</p>
+<p>Examples:</p>
+<p>:::
+(dotimes (x 100)
+  (print (rand 2)))
+;-&#62; 11100000110100111100111101&#8230;</p>
+<p>(rand 3 100)
+;-&#62; (2 0 1 1 2 0 &#8230;)
+:::</p>
+<p>The first example prints a stream of equally
+distributed 0 and 1 values. The second example
+returns a list of 100 integers in the range
+0 to 2.</p>
+<p>Notes:</p>
+<ul>
+<li>rand generates integer values only.</li>
+<li>Use random or normal for floating point
+random numbers.</li>
+<li>Use seed to explicitly set the random seed.</li>
+</ul>
+<p>See: <a href="#f-random">random</a>, <a href="#f-normal">normal</a>,
+<a href="#f-seed">seed</a></p>
+<hr/>
+<p><a name="f-random"></a></p>
+<h2 id="random">random</h2>
+<p>:::
+syntax: (random float-offset float-scale int-n)
+syntax: (random float-offset float-scale)
+:::</p>
+<p>Description:</p>
+<p>Generates evenly distributed floating point random
+numbers using the internal pseudo-random number
+generator.</p>
+<p>In the first form, random returns a list of int-n
+floating point numbers. Each value is scaled by
+float-scale and shifted by float-offset.</p>
+<p>In the second form, random returns a single floating
+point value scaled and shifted in the same way.</p>
+<p>The sequence produced by random can be made
+reproducible by initializing the generator with
+seed.</p>
+<p>Examples:</p>
+<p>:::
+(random 0 1 10)
+;-&#62; (0.10898973 0.69823783 0.56434872 0.041507289 0.16516733
+;    0.81540917 0.68553784 0.76471068 0.82314585 0.95924564)</p>
+<p>(random 10 5)
+;-&#62; 11.0971
+:::</p>
+<p>When no parameters are given, random assumes a
+default offset of 0.0 and a scale of 1.0.</p>
+<p>Notes:</p>
+<ul>
+<li>random generates floating point values.</li>
+<li>Values are evenly distributed.</li>
+<li>Use seed to control reproducibility.</li>
+<li>For normally distributed values, use normal.</li>
+<li>For integer random values, use rand.</li>
+</ul>
+<p>See: <a href="#f-rand">rand</a>, <a href="#f-normal">normal</a>,
+<a href="#f-seed">seed</a></p>
 <hr/>
 
 </body>
