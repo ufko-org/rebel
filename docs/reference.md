@@ -18425,3 +18425,1109 @@ See: [semaphore](#f-semaphore), [fork](#f-fork),
 ---
 
 
+<a name="f-signal"></a>
+## signal
+
+```
+syntax: (signal int-signal sym-event-handler | func-event-handler)
+syntax: (signal int-signal "ignore" | "default" | "reset")
+syntax: (signal int-signal)
+```
+
+Description:
+
+Installs, modifies, or queries a signal handler for
+the signal specified by int-signal.
+
+When a symbol or function expression is supplied,
+it becomes the user-defined handler for the signal.
+The handler argument is not evaluated at setup time.
+
+When one of the string options is supplied, the
+signal handler is set as follows:
+
+- "ignore"   ignores the signal
+- "default"  restores the system default handler
+- "reset"    restores the handler state from
+              interpreter startup
+
+The option strings are case-insensitive and may be
+abbreviated to their first letter.
+
+When called with only int-signal, signal returns
+the currently installed handler symbol or nil if
+no handler is defined.
+
+Examples:
+
+```
+; define and install a handler
+;------------------------------------------------------------
+(constant 'SIGINT 2)
+
+(define (ctrlC-handler)
+  (println "ctrl-C has been pressed"))
+
+(signal SIGINT 'ctrlC-handler)
+
+; pressing ctrl-C now invokes the handler
+;------------------------------------------------------------
+ctrl-C has been pressed
+
+; reset handler to startup state
+;------------------------------------------------------------
+(signal SIGINT "reset")
+```
+
+Handler as inline function:
+
+```
+(signal SIGINT
+  (fn (s)
+    (println "signal " s " occurred")))
+```
+
+Query current handler:
+
+```
+(signal SIGINT)
+;-> sym | nil
+```
+
+Setting multiple signals to one handler:
+
+```
+(define (signal-handler sig)
+  (println "received signal: " sig))
+
+(for (s 1 8)
+  (signal s 'signal-handler))
+```
+
+Notes:
+
+- Signal numbers and availability are defined by
+  the underlying system headers.
+- Some signals cannot be intercepted and always
+  terminate the process.
+- Signal handlers may be invoked asynchronously,
+  even while another function is executing.
+- The signal number may be passed as a parameter
+  to the handler function.
+
+See: [constant](#f-constant), [destroy](#f-destroy),
+[sleep](#f-sleep)
+
+---
+
+
+<a name="f-silent"></a>
+## silent
+
+```
+syntax: (silent [exp-1 [exp-2 ... ]])
+```
+
+Description:
+
+Evaluates one or more expressions while suppressing
+console output of the return value and the prompt.
+
+silent behaves like begin, but discards any output
+that would normally be printed after evaluation.
+It is typically used when the return value is not
+needed, such as when Rebel is controlled by another
+application.
+
+Silent mode is automatically reset when execution
+returns to the prompt.
+
+When called without arguments, silent enables silent
+mode for the next expression.
+
+Examples:
+
+```
+; suppress output of a single expression
+;------------------------------------------------------------
+(silent (my-func))
+
+; equivalent form
+;------------------------------------------------------------
+(silent)
+(my-func)
+```
+
+Notes:
+
+- silent suppresses only console output, not side
+  effects of evaluated expressions.
+- Silent mode ends automatically when control
+  returns to the prompt.
+- In interactive mode, press [enter] twice after
+  using silent to restore the prompt.
+
+See: [begin](#f-begin), [eval](#f-eval)
+
+---
+
+
+<a name="f-sin"></a>
+## sin
+
+```
+syntax: (sin num-radians)
+```
+
+Description:
+
+Calculates the sine of num-radians and returns the
+result as a floating-point number.
+
+The argument is interpreted as an angle measured
+in radians.
+
+Examples:
+
+```
+(sin 1)
+;-> 0.8414709838
+
+(set 'pi (mul 2 (acos 0)))
+;-> 3.141592654
+
+(sin (div pi 2))
+;-> 1
+```
+
+Notes:
+
+- The argument is specified in radians, not degrees.
+- The return value is a floating-point number.
+
+See: [cos](#f-cos), [tan](#f-tan), [acos](#f-acos)
+
+---
+
+
+<a name="f-sinh"></a>
+## sinh
+
+```
+syntax: (sinh num-radians)
+```
+
+Description:
+
+Calculates the hyperbolic sine of num-radians and
+returns the result as a floating-point number.
+
+The hyperbolic sine is defined as:
+
+  (exp x - exp (-x)) / 2
+
+Large values of num-radians may cause the result to
+overflow to inf.
+
+Examples:
+
+```
+(sinh 1)
+;-> 1.175201194
+
+(sinh 10)
+;-> 11013.23287
+
+(sinh 1000)
+;-> inf
+
+(sub (tanh 1) (div (sinh 1) (cosh 1)))
+;-> 0
+```
+
+Notes:
+
+- The argument is specified in radians.
+- The return value is a floating-point number.
+- Very large arguments may overflow.
+
+See: [cosh](#f-cosh), [tanh](#f-tanh),
+[exp](#f-exp)
+
+---
+
+
+<a name="f-slice"></a>
+## slice
+
+```
+syntax: (slice list int-index [int-length])
+syntax: (slice array int-index [int-length])
+syntax: (slice str int-index [int-length])
+```
+
+Description:
+
+Extracts a portion of a list, array, or string and
+returns it as a new value. The original object is
+left unchanged.
+
+For lists and arrays, slice copies elements starting
+at int-index. When int-length is specified, that
+number of elements is copied.
+
+If int-length is negative, it is treated as an
+offset counted from the end, and elements are copied
+up to (but not including) that offset.
+
+If int-length is omitted, all elements from
+int-index to the end are copied.
+
+For strings, slice extracts a substring starting at
+int-index with length int-length. When int-length
+is omitted, everything to the end of the string is
+copied.
+
+slice operates on byte boundaries, not character
+boundaries.
+
+Examples:
+
+```
+; list slicing
+;------------------------------------------------------------
+(slice '(a b c d e f) 3 2)
+;-> (d e)
+
+(slice '(a b c d e f) 2 -2)
+;-> (c d)
+
+(slice '(a b c d e f) 2)
+;-> (c d e f)
+
+(slice '(a b c d e f) -4 3)
+;-> (c d e)
+
+; array slicing
+;------------------------------------------------------------
+(set 'arr (array 3 2 (sequence 1 6)))
+;-> ((1 2) (3 4) (5 6))
+
+(slice arr 1 2)
+;-> ((3 4) (5 6))
+
+; string slicing (byte-based)
+;------------------------------------------------------------
+(slice "Hello World" 6 2)
+;-> "Wo"
+
+(slice "Hello World" 0 5)
+;-> "Hello"
+
+(slice "Hello World" 6)
+;-> "World"
+
+(slice "Example" -4 2)
+;-> "pl"
+
+; UTF-8 strings: operate on bytes
+;------------------------------------------------------------
+(join
+  (slice
+    (explode "ΩΨΧΦΥΤΣΣΡΠΟΞΝΜΛΚΙΘΗΖΕΔΓΒΑ")
+    3 5))
+;-> "ΦΥΤΣΣ"
+```
+
+Notes:
+
+- slice always operates on 8-bit byte boundaries.
+- For UTF-8 strings, character-aware slicing
+  requires converting the string to a list first.
+- Negative indices and lengths are supported.
+- slice does not modify the original object.
+
+See: [explode](#f-explode), [join](#f-join),
+[select](#f-select), [nth](#f-nth)
+
+---
+
+
+<a name="f-slice"></a>
+## slice
+
+```
+syntax: (slice list int-index [int-length])
+syntax: (slice array int-index [int-length])
+syntax: (slice str int-index [int-length])
+```
+
+Description:
+
+Extracts a portion of a list, array, or string and
+returns it as a new value. The original object is
+left unchanged.
+
+For lists and arrays, slice copies elements starting
+at int-index. When int-length is specified, that
+number of elements is copied.
+
+If int-length is negative, it is treated as an
+offset counted from the end, and elements are copied
+up to (but not including) that offset.
+
+If int-length is omitted, all elements from
+int-index to the end are copied.
+
+For strings, slice extracts a substring starting at
+int-index with length int-length. When int-length
+is omitted, everything to the end of the string is
+copied.
+
+slice operates on byte boundaries, not character
+boundaries.
+
+Examples:
+
+```
+; list slicing
+;------------------------------------------------------------
+(slice '(a b c d e f) 3 2)
+;-> (d e)
+
+(slice '(a b c d e f) 2 -2)
+;-> (c d)
+
+(slice '(a b c d e f) 2)
+;-> (c d e f)
+
+(slice '(a b c d e f) -4 3)
+;-> (c d e)
+
+; array slicing
+;------------------------------------------------------------
+(set 'A (array 3 2 (sequence 1 6)))
+;-> ((1 2) (3 4) (5 6))
+
+(slice A 1 2)
+;-> ((3 4) (5 6))
+
+; string slicing (byte-based)
+;------------------------------------------------------------
+(slice "Hello World" 6 2)
+;-> "Wo"
+
+(slice "Hello World" 0 5)
+;-> "Hello"
+
+(slice "Hello World" 6)
+;-> "World"
+
+(slice "Example" -4 2)
+;-> "pl"
+
+; UTF-8 strings: operate on bytes
+;------------------------------------------------------------
+(join
+  (slice
+    (explode "ΩΨΧΦΥΤΣΣΡΠΟΞΝΜΛΚΙΘΗΖΕΔΓΒΑ")
+    3 5))
+;-> "ΦΥΤΣΣ"
+```
+
+Notes:
+
+- slice always operates on 8-bit byte boundaries.
+- For UTF-8 strings, character-aware slicing
+  requires converting the string to a list first.
+- Negative indices and lengths are supported.
+- slice does not modify the original object.
+
+See: [explode](#f-explode), [join](#f-join),
+[select](#f-select), [nth](#f-nth)
+
+---
+
+
+<a name="f-sort"></a>
+## sort
+
+```
+syntax: (sort list [func-compare])
+syntax: (sort array [func-compare])
+```
+
+Description:
+
+Sorts the elements of list or array in ascending
+order and returns the sorted object.
+
+The operation is destructive: the original list or
+array is reordered in place.
+
+Elements of any type may be sorted. When elements
+are themselves lists or arrays, comparison is
+performed recursively. When values of different
+types are compared, ordering follows this hierarchy:
+
+Atoms:
+  nil, true, integer/float, string, symbol, primitive
+
+Lists:
+  quoted expression, list, fn, macro
+
+The sorting algorithm is a stable binary merge sort
+with approximately O(n log2 n) performance. Adjacent
+elements that compare equal preserve their order.
+
+An optional comparison operator or function may be
+supplied. When provided, it must be compatible with
+<= or >= semantics to preserve stability.
+
+Examples:
+
+```
+; basic sorting
+;------------------------------------------------------------
+(sort '(v f r t h n m j))
+;-> (f h j m n r t v)
+
+(sort '((3 4) (2 1) (1 10)))
+;-> ((1 10) (2 1) (3 4))
+
+(sort '((3 4) "hi" 2.8 8 b))
+;-> (2.8 8 "hi" b (3 4))
+
+; destructive behavior
+;------------------------------------------------------------
+(set 's '(k a l s))
+(sort s)
+;-> (a k l s)
+
+s
+;-> (a k l s)
+
+; custom order
+;------------------------------------------------------------
+(sort '(v f r t h n m j) >)
+;-> (v t r n m j h f)
+
+(sort s <)
+;-> (a k l s)
+
+(sort s >)
+;-> (s l k a)
+
+s
+;-> (s l k a)
+
+; user-defined comparison
+;------------------------------------------------------------
+(define (comp x y)
+  (>= (last x) (last y)))
+
+(set 'db '((a 3) (g 2) (c 5)))
+
+(sort db comp)
+;-> ((c 5) (a 3) (g 2))
+
+; anonymous comparison function
+;------------------------------------------------------------
+(sort db (fn (x y) (>= (last x) (last y))))
+```
+
+Notes:
+
+- sort modifies the original list or array.
+- The algorithm is stable.
+- Custom comparison functions must implement a
+  consistent ordering.
+
+See: [last](#f-last), [map](#f-map),
+[select](#f-select)
+
+---
+
+
+<a name="f-source"></a>
+## source
+
+```
+syntax: (source)
+syntax: (source sym-1 [sym-2 ... ])
+```
+
+Description:
+
+Serializes symbols, definitions, and contexts into
+a string representation.
+
+source behaves like save, but writes the serialized
+output to a string instead of a file.
+
+When called without arguments, source serializes
+the entire workspace.
+
+When one or more symbols are specified, only those
+symbols are serialized. Context symbols cause all
+symbols contained in that context to be serialized
+as well.
+
+Symbols with a value of nil are not serialized.
+System symbols beginning with the $ character are
+serialized only when explicitly specified.
+
+Symbols not belonging to the current context are
+written with their context prefix.
+
+Examples:
+
+```
+(define (double x)
+  (+ x x))
+
+(source 'double)
+;-> "(define (double x)\n  (+ x x))\n\n"
+```
+
+Notes:
+
+- source returns a string containing valid source
+  code.
+- Formatting (line breaks and indentation) can be
+  controlled using pretty-print.
+- Context contents are serialized recursively.
+
+See: [save](#f-save), [pretty-print](#f-pretty-print),
+[context](#f-context)
+
+---
+
+
+<a name="f-spawn"></a>
+## spawn
+
+```
+syntax: (spawn sym exp [true])
+```
+
+Description:
+
+Starts the evaluation of exp in a new child process
+and returns immediately.
+
+The symbol sym is quoted and will receive the result
+of the evaluation when sync is executed. spawn is
+used to evaluate expressions concurrently in
+separate processes.
+
+spawn always creates a new process. It does not
+limit the number of spawned processes and does not
+take the number of CPU cores into account.
+
+Actual parallel execution is determined entirely by
+the operating system scheduler.
+
+When the optional third argument evaluates to true,
+the spawned process is enabled for communication
+using send and receive.
+
+After successfully starting a child process, spawn
+returns the process ID of the child.
+
+Examples:
+
+```
+; parallel computation
+;------------------------------------------------------------
+(define (primes from to)
+  (local (plist)
+    (for (i from to)
+      (if (= 1 (length (factor i)))
+        (push i plist -1)))
+    plist))
+
+(set 'start (time-of-day))
+
+(spawn 'p1 (primes 1 1000000))
+(spawn 'p2 (primes 1000001 2000000))
+(spawn 'p3 (primes 2000001 3000000))
+(spawn 'p4 (primes 3000001 4000000))
+
+(sync 60000)
+
+(println "time spawn: " (- (time-of-day) start))
+
+; Waiting and polling:
+;------------------------------------------------------------
+; poll every 2 seconds
+(until (sync 2000)
+  (println "."))
+
+; list pending child process IDs
+(until (sync 300)
+  (println (sync)))
+
+; Abort unfinished tasks:
+;------------------------------------------------------------
+(if (not (sync 60000))
+  (begin
+    (println "aborting unfinished: " (sync))
+    (abort))
+  (println "all finished successfully"))
+
+; Recursive spawning:
+;------------------------------------------------------------
+(define (fibo n)
+  (local (f1 f2)
+    (if (< n 2)
+      1
+      (begin
+        (spawn 'f1 (fibo (- n 1)))
+        (spawn 'f2 (fibo (- n 2)))
+        (sync 10000)
+        (+ f1 f2)))))
+
+(fibo 7)
+;-> 21
+```
+
+Notes:
+
+- spawn always creates a new process.
+- The number of processes spawned is not limited by
+  the number of CPU cores.
+- At any moment, only as many processes can run in
+  parallel as there are available CPU cores.
+- Additional processes are scheduled by the
+  operating system and may increase overhead due
+  to context switching.
+- For CPU-bound workloads, spawning significantly
+  more processes than available cores may reduce
+  performance.
+- For workloads involving blocking operations,
+  additional spawned processes may still be useful.
+- Results from spawned processes are collected
+  using sync.
+
+See: [sync](#f-sync), [abort](#f-abort),
+[send](#f-send), [receive](#f-receive),
+[fork](#f-fork)
+
+---
+
+
+<a name="f-sqrt"></a>
+## sqrt
+
+```
+syntax: (sqrt num)
+```
+
+Description:
+
+Calculates the square root of num and returns the
+result as a floating-point number.
+
+Examples:
+
+```
+(sqrt 10)
+;-> 3.16227766
+
+(sqrt 25)
+;-> 5
+```
+
+Notes:
+
+- The return value is a floating-point number.
+
+See: [pow](#f-pow), [exp](#f-exp), [log](#f-log)
+
+---
+
+
+<a name="f-ssq"></a>
+## ssq
+
+```
+syntax: (ssq list-vector | array-vector)
+```
+
+Description:
+
+Calculates the sum of squares of the numeric elements
+in list-vector or array-vector and returns the result.
+
+Examples:
+
+```
+(set 'vector (sequence 1 10))
+(ssq vector)
+;-> 385
+
+(set 'vector (array 10 (sequence 1 10)))
+(ssq vector)
+;-> 385
+```
+
+Notes:
+
+- Elements must be numeric.
+- The input may be either a list or an array.
+
+See: [sequence](#f-sequence), [pow](#f-pow),
+[sum](#f-sum)
+
+---
+
+
+<a name="f-starts-with"></a>
+## starts-with
+
+```
+syntax: (starts-with str str-key [num-option])
+syntax: (starts-with list exp)
+```
+
+Description:
+
+Checks whether a string or list begins with a given
+value.
+
+In the first form, starts-with tests whether the
+string str begins with the key string str-key. The
+function returns true on success or nil otherwise.
+
+When num-option is specified, str-key is treated as
+a regular expression pattern. The value of
+num-option controls regular expression options.
+
+In the second form, starts-with tests whether list
+begins with the element exp. The comparison is done
+on the first element of the list.
+
+Examples:
+
+```
+; string prefix
+;------------------------------------------------------------
+(starts-with "this is useful" "this")
+;-> true
+
+(starts-with "this is useful" "THIS")
+;-> nil
+
+; regular expression matching
+;------------------------------------------------------------
+(starts-with "this is useful" "THIS" 1)
+;-> true
+
+(starts-with "this is useful" "this|that" 0)
+;-> true
+
+; list prefix
+;------------------------------------------------------------
+(starts-with '(1 2 3 4 5) 1)
+;-> true
+
+(starts-with '(a b c d e) 'b)
+;-> nil
+
+(starts-with '((+ 3 4) b c d) '(+ 3 4))
+;-> true
+```
+
+Notes:
+
+- For strings, comparison is case-sensitive unless
+  regular expression options specify otherwise.
+- For lists, only the first element is tested.
+- The function returns true or nil.
+
+See: [ends-with](#f-ends-with), [regex](#f-regex)
+
+---
+
+
+<a name="f-stats"></a>
+## stats
+
+```
+syntax: (stats list-vector)
+```
+
+Description:
+
+Calculates statistical values describing central
+tendency and distribution moments of the numeric
+values in list-vector.
+
+The function returns a list containing the following
+values in this order:
+
+N
+  Number of values
+
+mean
+  Mean of values
+
+avdev
+  Average deviation from the mean
+
+sdev
+  Standard deviation (population estimate)
+
+var
+  Variance (population estimate)
+
+skew
+  Skewness of the distribution
+
+kurt
+  Kurtosis of the distribution
+
+Examples:
+
+```
+(set 'data '(90 100 130 150 180 200 220 300 350 400))
+
+(println
+  (format [text]
+    N        = %5d
+    mean     = %8.2f
+    avdev    = %8.2f
+    sdev     = %8.2f
+    var      = %8.2f
+    skew     = %8.2f
+    kurt     = %8.2f
+[/text]
+  (stats data)))
+```
+
+Output:
+
+```
+N        =    10
+mean     =   212.00
+avdev    =    84.40
+sdev     =   106.12
+var      = 11262.22
+skew     =     0.49
+kurt     =    -1.34
+```
+
+Notes:
+
+- All values are computed as population estimates.
+- Input values must be numeric.
+- The return value is a plain list in fixed order.
+
+See: [ssq](#f-ssq), [mean](#f-mean),
+[format](#f-format)
+
+---
+
+
+<a name="f-string"></a>
+## string
+
+```
+syntax: (string exp-1 [exp-2 ... ])
+```
+
+Description:
+
+Converts the result of evaluating one or more
+expressions into a string.
+
+When multiple expressions are specified, each
+expression is converted to a string and the results
+are concatenated in order.
+
+Examples:
+
+```
+(string 'hello)
+;-> "hello"
+
+(string 1234)
+;-> "1234"
+
+(string '(+ 3 4))
+;-> "(+ 3 4)"
+
+(string (+ 3 4) 8)
+;-> "78"
+
+(string 'hello " " 123)
+;-> "hello 123"
+```
+
+Zero bytes:
+
+If a buffer passed to string contains zero bytes
+(\000), copying stops at the first terminating
+zero.
+
+```
+(set 'buff "ABC\000\000\000")
+;-> "ABC\000\000\000"
+
+(length buff)
+;-> 6
+
+(string buff)
+;-> "ABC"
+
+(length (string buff))
+;-> 3
+```
+
+Notes:
+
+- string stops copying at the first zero byte.
+- For binary-safe concatenation, use append or join.
+- string converts expressions to their textual
+  representation.
+- To convert a function into its source form, use
+  source.
+
+See: [append](#f-append), [join](#f-join),
+[source](#f-source)
+
+---
+
+
+<a name="f-stringp"></a>
+## string?
+
+```
+syntax: (string? exp)
+```
+
+Description:
+
+Evaluates exp and tests whether the result is a
+string.
+
+Returns true if the evaluated expression is a
+string, otherwise nil.
+
+Examples:
+
+```
+(set 'var "hello")
+
+(string? var)
+;-> true
+```
+
+See: [list?](#f-listp), [symbol?](#f-symbolp),
+[number?](#f-numberp)
+
+---
+
+
+<a name="f-struct"></a>
+## struct
+
+```
+syntax: (struct symbol [str-data-type ... ])
+```
+
+Description:
+
+Defines an aggregate data type for use with foreign
+functions imported via libffi.
+
+struct is used together with import, pack, and
+unpack to describe C-compatible structure layouts.
+This enables calling C functions that accept struct
+values or pointers to structs.
+
+The symbol names the structure type. Each
+str-data-type specifies one field in declaration
+order and must match the corresponding C type and
+platform ABI.
+
+struct returns the symbol naming the defined
+structure.
+
+Examples:
+
+```
+; import C functions working with struct tm
+;------------------------------------------------------------
+(import "libc.so" "asctime"   "char*" "void*")
+(import "libc.so" "localtime" "void*" "void*")
+
+; define struct tm (Unix 64-bit layout)
+;------------------------------------------------------------
+(struct 'tm
+  "int"    ; tm_sec
+  "int"    ; tm_min
+  "int"    ; tm_hour
+  "int"    ; tm_mday
+  "int"    ; tm_mon
+  "int"    ; tm_year
+  "int"    ; tm_wday
+  "int"    ; tm_yday
+  "int"    ; tm_isdst
+  "long"   ; tm_gmtoff
+  "char*"  ; tm_zone
+)
+
+; obtain current time
+;------------------------------------------------------------
+(set 'today (date-value))
+
+; localtime returns a pointer to struct tm
+(set 'ptr (localtime (address today)))
+
+; unpack struct fields into a list
+(unpack tm ptr)
+;-> (13 15 7 17 11 111 6 350 0 -28800 "PST")
+
+; format using C library
+(asctime ptr)
+;-> "Sat Dec 17 07:15:13 2011\n"
+
+; equivalent one-liner
+(asctime (localtime (address today)))
+
+; Nested structures:
+;------------------------------------------------------------
+; define a simple pair
+(struct 'pair "char" "char")
+;-> pair
+
+; define a structure containing another struct
+(struct 'comp "pair" "int")
+;-> comp
+
+; pack and unpack nested structures
+(pack comp (pack pair 1 2) 3)
+;-> "\001\002\000\000\003\000\000\000"
+
+(unpack comp "\001\002\000\000\003\000\000\000")
+;-> ((1 2) 3)
+```
+
+Notes:
+
+- struct definitions must match the exact C layout
+  used by the target system and compiler ABI.
+- Field order, size, and alignment are critical.
+- struct definitions may be nested and are unpacked
+  recursively.
+- Pointers to structs are represented as void*.
+- Passing invalid addresses to imported functions
+  or unpack can crash the interpreter.
+- struct requires libffi support.
+
+See: [import](#f-import), [pack](#f-pack),
+[unpack](#f-unpack), [address](#f-address)
+
+---
