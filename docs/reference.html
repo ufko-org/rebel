@@ -156,7 +156,7 @@ evaluating to NaN are treated as zero.</p>
 <li>Overflow and underflow wrap around the integer range.</li>
 </ul>
 <p>See: <a href="#f-plus">plus</a>, <a href="#f-star">star</a>, <a href="#f-slash">slash</a>,
-[%](#f-percent)</p>
+<a href="#f-percent">\%</a></p>
 <hr/>
 <p><a name="f-star"></a></p>
 <h2 id="section-3">*</h2>
@@ -15012,6 +15012,2176 @@ or unpack can crash the interpreter.</li>
 </ul>
 <p>See: <a href="#f-import">import</a>, <a href="#f-pack">pack</a>,
 <a href="#f-unpack">unpack</a>, <a href="#f-address">address</a></p>
+<hr/>
+<p><a name="f-sub"></a></p>
+<h2 id="sub">sub</h2>
+<pre><code>syntax: (sub num-1 [num-2 ... ])
+</code></pre>
+<p>Description:</p>
+<p>Subtracts the values in num-2 and following arguments
+successively from num-1.</p>
+<p>The function performs mixed-type arithmetic and accepts
+integers and floating point numbers as arguments. The
+result is always returned as a floating point number,
+even when all arguments are integers.</p>
+<p>When called with only one argument, sub returns the
+negated value of num-1.</p>
+<p>If any argument involved in the calculation is NaN,
+the result is NaN.</p>
+<p>Examples:</p>
+<pre><code>(sub 10 8 0.25)
+;-&#62; 1.75
+
+(sub 123)
+;-&#62; -123
+</code></pre>
+<p>See: <a href="#f-minus">-</a>, <a href="#f-add">add</a>, <a href="#f-mul">mul</a>, <a href="#f-div">div</a></p>
+<hr/>
+<p><a name="f-swap"></a></p>
+<h2 id="swap">swap</h2>
+<pre><code>syntax: (swap place-1 place-2)
+</code></pre>
+<p>Description:</p>
+<p>Swaps the contents of place-1 and place-2.</p>
+<p>A place can refer to the contents of an unquoted
+symbol or to an addressable location inside a list
+or array. Valid places include references created
+with first, last, nth, implicit indexing, and places
+returned by assoc or lookup.</p>
+<p>swap is a destructive operation. It modifies the
+lists, arrays, or symbols involved directly and does
+not create copies of the exchanged values.</p>
+<p>Any two places may be swapped, whether they belong
+to the same object or to different objects.</p>
+<p>Examples:</p>
+<pre><code>; swapping elements in a list
+;------------------------------------------------------------
+(set &#39;lst &#39;(a b c d e f))
+
+(swap (first lst) (last lst))
+;-&#62; a
+
+lst
+;-&#62; (f b c d e a)
+
+; swapping between two lists
+;------------------------------------------------------------
+(set &#39;lst-b &#39;(x y z))
+
+(swap (lst 0) (lst-b -1))
+;-&#62; f
+
+lst
+;-&#62; (z b c d e a)
+
+lst-b
+;-&#62; (x y f)
+
+; swapping array rows
+;------------------------------------------------------------
+(set &#39;A (array 2 3 (sequence 1 6)))
+
+(swap (A 0) (A 1))
+;-&#62; (1 2 3)
+
+A
+;-&#62; ((4 5 6) (1 2 3))
+
+; swapping symbol values
+;------------------------------------------------------------
+(set &#39;x 1 &#39;y 2)
+
+(swap x y)
+;-&#62; 1
+
+x
+;-&#62; 2
+
+y
+;-&#62; 1
+
+; swapping via assoc and lookup
+;------------------------------------------------------------
+(set &#39;lst &#39;((a 1 2 3) (b 10 20 30)))
+
+(swap (lookup &#39;a lst -1) (lookup &#39;b lst 1))
+
+lst
+;-&#62; ((a 1 2 10) (b 3 20 30))
+
+(swap (assoc &#39;a lst) (assoc &#39;b lst))
+
+lst
+;-&#62; ((b 3 20 30) (a 1 2 10))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>swap operates on places, not on values.</li>
+<li>Both places must be assignable locations.</li>
+<li>The operation is performed in constant time
+relative to the size of the data structures.</li>
+</ul>
+<p>See: <a href="#f-set">set</a>, <a href="#f-setf">setf</a>, <a href="#f-first">first</a>,
+     <a href="#f-last">last</a>, <a href="#f-nth">nth</a>, <a href="#f-assoc">assoc</a>,
+     <a href="#f-lookup">lookup</a></p>
+<hr/>
+<p><a name="f-sym"></a></p>
+<h2 id="sym">sym</h2>
+<pre><code>syntax: (sym string [sym-context [nil-flag]])
+syntax: (sym number [sym-context [nil-flag]])
+syntax: (sym symbol [sym-context [nil-flag]])
+</code></pre>
+<p>Description:</p>
+<p>Translates the first argument into a symbol and returns
+it. The first argument may be a string, number, or
+symbol.</p>
+<p>If sym-context is omitted, the current context is used
+for symbol lookup or creation. When sym-context is
+specified, lookup and creation take place in that
+context. If the context does not exist and sym-context
+is given as a quoted symbol, the context is created.
+If sym-context is unquoted, it is interpreted as an
+existing context or a variable containing a context.</p>
+<p>By default, symbols are created when they do not already
+exist. When the optional third argument nil-flag
+evaluates to nil, symbol creation is suppressed. In
+that case, sym returns nil if the symbol is not found.
+This form can be used to test for the existence of a
+symbol.</p>
+<p>sym can create symbols that are not legal identifiers
+in source code, such as numeric names or names
+containing special characters. This makes sym suitable
+for associative memory access similar to hash tables
+in other languages.</p>
+<p>When the first argument is a symbol, its name is
+extracted and used as the symbol name in the target
+context.</p>
+<p>Examples:</p>
+<pre><code>; basic symbol creation
+;------------------------------------------------------------
+(sym "some")
+;-&#62; some
+
+(set (sym "var1") 345)
+;-&#62; 345
+
+var1
+;-&#62; 345
+
+; specifying contexts
+;------------------------------------------------------------
+(sym "s" &#39;ctx)
+;-&#62; ctx:s
+
+(sym "s" ctx)
+;-&#62; ctx:s
+
+; suppressing symbol creation
+;------------------------------------------------------------
+(sym "var2" ctx nil)
+;-&#62; nil
+
+(sym "var2" ctx)
+;-&#62; var2
+
+(sym "var2" ctx nil)
+;-&#62; var2
+
+; using sym as associative memory
+;------------------------------------------------------------
+(set (sym "alpha" &#39;db) 1.234)
+(set (sym "(" &#39;db) "parenthesis open")
+(set (sym 12 &#39;db) "twelve")
+
+(eval (sym "alpha" &#39;db))
+;-&#62; 1.234
+
+(eval (sym "(" &#39;db))
+;-&#62; "parenthesis open"
+
+(eval (sym 12 &#39;db))
+;-&#62; "twelve"
+
+; deleting a dynamically created symbol
+;------------------------------------------------------------
+(delete (sym "alpha" &#39;db))
+;-&#62; true
+
+; using symbols as name sources
+;------------------------------------------------------------
+(sym &#39;var1 &#39;ctx)
+;-&#62; ctx:var1
+
+; dynamic context population
+;------------------------------------------------------------
+(define-macro (def-context)
+  (dolist (s (rest (args)))
+    (sym s (first (args)))))
+
+(def-context ctx x y z)
+
+(symbols ctx)
+;-&#62; (ctx:x ctx:y ctx:z)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>sym returns the symbol that was found or created.</li>
+<li>Symbols created by sym may not be representable as
+source identifiers.</li>
+<li>When nil-flag is used, sym performs lookup only and
+does not modify the symbol table.</li>
+</ul>
+<p>See: <a href="#f-context">context</a>, <a href="#f-set">set</a>, <a href="#f-setf">setf</a>,
+     <a href="#f-delete">delete</a>, <a href="#f-symbols">symbols</a></p>
+<hr/>
+<p><a name="f-symbolp"></a></p>
+<h2 id="symbol">symbol?</h2>
+<pre><code>syntax: (symbol? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expression exp and returns true if the
+resulting value is a symbol. Otherwise, nil is returned.</p>
+<p>symbol? tests the value produced by evaluation, not
+the syntactic form of the expression.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;x &#39;y)
+;-&#62; y
+
+(symbol? x)
+;-&#62; true
+
+(symbol? 123)
+;-&#62; nil
+
+(symbol? (first &#39;(var x y z)))
+;-&#62; true
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>symbol? evaluates its argument before testing.</li>
+<li>Quoted symbols evaluate to symbols.</li>
+<li>Non-symbol values always return nil.</li>
+</ul>
+<p>See: <a href="#f-symbol">symbol</a>, <a href="#f-context">context</a>,
+     <a href="#f-symbols">symbols</a></p>
+<hr/>
+<p><a name="f-symbols"></a></p>
+<h2 id="symbols">symbols</h2>
+<pre><code>syntax: (symbols [context])
+</code></pre>
+<p>Description:</p>
+<p>Returns a sorted list of all symbols defined in a
+context.</p>
+<p>When called without arguments, symbols returns the
+symbols defined in the current context. When a context
+is specified, symbols defined in that context are
+returned.</p>
+<p>The context may be given as a quoted symbol, an
+unquoted context name, or a variable containing a
+context. Contexts evaluate to themselves, so quoting
+is optional.</p>
+<p>Examples:</p>
+<pre><code>; symbols in the current context
+;------------------------------------------------------------
+(symbols)
+
+; symbols in a specific context
+;------------------------------------------------------------
+(symbols &#39;ctx)
+(symbols ctx)
+
+(set &#39;ct ctx)
+(symbols ct)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The returned list is sorted alphabetically.</li>
+<li>Only symbols directly defined in the specified
+context are returned.</li>
+</ul>
+<p>See: <a href="#f-symbolp">symbol?</a>, <a href="#f-symbol">symbol</a>,
+     <a href="#f-context">context</a></p>
+<hr/>
+<p><a name="f-sync"></a></p>
+<h2 id="sync">sync</h2>
+<pre><code>syntax: (sync int-timeout [func-inlet])
+syntax: (sync)
+</code></pre>
+<p>Description:</p>
+<p>Synchronizes child processes launched with spawn.</p>
+<p>When called with int-timeout specified in milliseconds,
+sync waits for spawned child processes to finish. As
+each child process completes, the evaluation result of
+the spawned subtask is assigned to the symbol specified
+in the corresponding spawn statement.</p>
+<p>The function returns true when all child processes have
+been processed. If the timeout is reached while child
+processes are still pending, sync returns nil.</p>
+<p>If an optional inlet function func-inlet is provided,
+it is called with the child process identifier (PID)
+as its argument whenever a child process finishes.
+func-inlet may be a function symbol or an anonymous
+function.</p>
+<p>When called without arguments, sync returns a list of
+PIDs for child processes whose results have not yet
+been processed.</p>
+<p>Examples:</p>
+<pre><code>; waiting for child processes
+;------------------------------------------------------------
+; wait for 10 seconds and process finished children
+(sync 10000)
+
+; wait for the maximum time
+(sync -1)
+
+; using an inlet function
+;------------------------------------------------------------
+(define (report pid)
+  (println "process: " pid " has returned"))
+
+; wait for up to 10 seconds and report finished children
+(sync 10000 report)
+
+; querying pending child processes
+;------------------------------------------------------------
+(sync)
+;-&#62; (245 246 247 248)
+
+; periodic polling while waiting
+;------------------------------------------------------------
+(until (true? (sync 10 report))
+  (println (time-of-day)))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>sync blocks only when a timeout value is specified.</li>
+<li>Without arguments, sync returns immediately.</li>
+<li>A negative timeout waits indefinitely.</li>
+<li>The inlet function is invoked once per completed
+child process.</li>
+<li>sync operates only on processes created by spawn.</li>
+</ul>
+<p>sync is part of the Cilk API for process
+synchronization and parallel execution.</p>
+<p>See: <a href="#f-spawn">spawn</a>, <a href="#f-until">until</a>,
+     <a href="#f-truep">true?</a></p>
+<hr/>
+<p><a name="f-sys-error"></a></p>
+<h2 id="sys-error">sys-error</h2>
+<pre><code>syntax: (sys-error)
+syntax: (sys-error int-error)
+syntax: (sys-error 0)
+</code></pre>
+<p>Description:</p>
+<p>Reports the last error generated by the underlying
+operating system.</p>
+<p>When called without arguments, sys-error returns a
+list containing the system error number and the
+corresponding error message text. If no system error
+has occurred, nil is returned.</p>
+<p>When int-error is greater than zero, sys-error returns
+the error number and its associated error text without
+changing the current error state.</p>
+<p>Specifying 0 as int-error resets the stored system
+error. After resetting, a subsequent call to
+sys-error returns nil.</p>
+<p>System errors are typically set when functions that
+access system resources return nil. Common causes
+include nonexistent files, insufficient permissions,
+or exhaustion of system resources such as file
+descriptors.</p>
+<p>The exact error numbers and messages depend on the
+platform C library.</p>
+<p>Examples:</p>
+<pre><code>; opening a nonexistent file
+;------------------------------------------------------------
+(open "xyz" "r")
+;-&#62; nil
+
+(sys-error)
+;-&#62; (2 "No such file or directory")
+
+; resetting the system error
+;------------------------------------------------------------
+(sys-error 0)
+;-&#62; (0 "Unknown error: 0")
+
+(sys-error)
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>sys-error reflects the last OS-level error.</li>
+<li>Error values originate from the platform C library.</li>
+<li>The error state persists until explicitly reset.</li>
+</ul>
+<p>See: <a href="#f-last-error">last-error</a>, <a href="#f-net-error">net-error</a></p>
+<hr/>
+<p><a name="f-sys-info"></a></p>
+<h2 id="sys-info">sys-info</h2>
+<pre><code>syntax: (sys-info [int-idx])
+</code></pre>
+<p>Description:</p>
+<p>Returns internal runtime and system information.</p>
+<p>When called without arguments, sys-info returns a list
+of integers describing internal resource usage and
+runtime state.</p>
+<p>When int-idx is specified, only the element at that
+index is returned. Negative indices may be used to
+access elements from the end of the list.</p>
+<p>The returned list contains the following entries:</p>
+<pre><code>offset  description
+0       Number of allocated cells
+1       Maximum number of cells (constant)
+2       Number of symbols
+3       Current evaluation &#47; recursion level
+4       Environment stack level
+5       Maximum call stack depth (constant)
+6       Parent process PID or 0
+7       Current process PID
+8       Version number (integer)
+9       Operating system and feature flags
+</code></pre>
+<p>The operating system value uses the following base
+constants:</p>
+<pre><code>1 = Linux  
+2 = BSD  
+3 = macOS  
+</code></pre>
+<p>Additional feature flags may be ORed into this value:</p>
+<pre><code>+1024  FFI support enabled  
++512   IPv6 support enabled  
++256   64-bit runtime  
++128   UTF-8 support enabled  
++64    Library build  
+</code></pre>
+<p>To preserve compatibility with future extensions, it
+is recommended to access fixed fields using offsets
+0 through 5, and to use negative offsets for entries
+near the end of the list.</p>
+<p>Examples:</p>
+<pre><code>(sys-info)
+;-&#62; (429 268435456 402 1 0 2048 0 19453 10406 1155)
+
+(sys-info 3)
+;-&#62; 1
+
+(sys-info -2)
+;-&#62; 10406
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The maximum number of cells can be adjusted using
+the -m command-line option.</li>
+<li>The maximum call stack depth can be adjusted using
+the -s command-line option.</li>
+<li>The exact contents of the list may grow in future
+versions, but existing offsets remain stable.</li>
+</ul>
+<p>See: <a href="#f-sys-error">sys-error</a>, <a href="#f-last-error">last-error</a></p>
+<hr/>
+<p><a name="f-t-test"></a></p>
+<h2 id="t-test">t-test</h2>
+<pre><code>syntax: (t-test list-vector number-value)
+syntax: (t-test list-vector-A list-vector-B [true])
+syntax: (t-test list-vector-A list-vector-B float-probability)
+</code></pre>
+<p>Description:</p>
+<p>Performs Student’s t-tests for comparing mean values.</p>
+<p>In the first syntax, t-test performs a one-sample
+Student’s t-test comparing the mean of list-vector
+against number-value.</p>
+<p>The result is returned as a list with the following
+elements:</p>
+<pre><code>index  name        description
+-----  ----------  ----------------------------------------
+0      mean        mean of data in vector
+1      value       value to compare
+2      sdev        standard deviation of data
+3      mean-error  standard error of the mean
+4      t           t statistic
+5      df          degrees of freedom
+6      p           two-tailed probability
+</code></pre>
+<p>Examples:</p>
+<pre><code>; one-sample t-test
+;------------------------------------------------------------
+(t-test &#39;(3 5 4 2 5 7 4 3) 2.5)
+;-&#62; (4.125 2.5 1.552 0.549 2.960 7 0.021)
+</code></pre>
+<p>In the second syntax, t-test compares the means of
+two data vectors using a two-sample Student’s t-test.</p>
+<p>When the optional true flag is omitted or nil, the
+samples are treated as independent and may differ
+in length.</p>
+<p>When the flag is true, a paired t-test is performed,
+assuming both vectors contain measurements from the
+same subjects taken under different conditions.</p>
+<p>The returned result list contains:</p>
+<pre><code>index  name    description
+-----  ------  -----------------------------------------
+0      mean-a  mean of group A
+1      mean-b  mean of group B
+2      sdev-a  standard deviation of group A
+3      sdev-b  standard deviation of group B
+4      t       t statistic
+5      df      degrees of freedom
+6      p       two-tailed probability
+</code></pre>
+<p>Examples:</p>
+<pre><code>; two independent samples
+;------------------------------------------------------------
+(set &#39;hours-sleep-8 &#39;(5 7 5 3 5 3 3 9))
+(set &#39;hours-sleep-4 &#39;(8 1 4 6 6 4 1 2))
+
+(t-test hours-sleep-8 hours-sleep-4)
+;-&#62; (5 4 2.138 2.563 0.847 14 0.411)
+
+; two related samples
+;------------------------------------------------------------
+(set &#39;mood-pre &#39;(3 0 6 7 4 3 2 1 4))
+(set &#39;mood-post &#39;(5 1 5 7 10 9 7 11 8))
+
+(t-test mood-pre mood-post true)
+;-&#62; (3.333 7 2.236 3.041 -3.143 8 0.0137)
+</code></pre>
+<p>In the third syntax, Welch’s t-test is used when the
+variances of the two samples differ significantly.</p>
+<p>When float-probability is specified, t-test first
+performs an F-test on the variances. If the probability
+of the F-ratio is below float-probability, Welch’s
+t-test is applied. Specifying 1.0 forces the Welch
+method unconditionally.</p>
+<p>Examples:</p>
+<pre><code>; Welch t-test forced
+;------------------------------------------------------------
+(t-test &#39;(10 4 7 1 1 6 1 8 2 4)
+        &#39;(4 6 9 4 6 8 9 3)
+        1.0)
+;-&#62; (4.4 6.125 3.239 2.357 -1.307 15 0.211)
+
+; standard t-test
+;------------------------------------------------------------
+(t-test &#39;(10 4 7 1 1 6 1 8 2 4)
+        &#39;(4 6 9 4 6 8 9 3))
+;-&#62; (4.4 6.125 3.239 2.357 -1.260 16 0.226)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Smaller float-probability values restrict the use
+of Welch’s t-test to cases with stronger variance
+differences.</li>
+<li>Probability values p express two-tailed significance.</li>
+<li>Results assume normally distributed samples.</li>
+</ul>
+<p>See: <a href="#f-mean">mean</a>, <a href="#f-sdev">sdev</a>, <a href="#f-variance">variance</a></p>
+<hr/>
+<p><a name="f-tan"></a></p>
+<h2 id="tan">tan</h2>
+<pre><code>syntax: (tan num-radians)
+</code></pre>
+<p>Description:</p>
+<p>Calculates the tangent of the angle specified by
+num-radians and returns the result.</p>
+<p>The argument is interpreted as an angle in radians.
+The result is returned as a floating point number.</p>
+<p>Examples:</p>
+<pre><code>(tan 1)
+;-&#62; 1.557407725
+
+(set &#39;pi (mul 2 (asin 1)))
+;-&#62; 3.141592654
+
+(tan (div pi 4))
+;-&#62; 1
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The argument is given in radians, not degrees.</li>
+<li>tan returns a floating point value.</li>
+<li>Results near odd multiples of pi&#47;2 grow rapidly.</li>
+</ul>
+<p>See: <a href="#f-sin">sin</a>, <a href="#f-cos">cos</a>, <a href="#f-atan">atan</a></p>
+<hr/>
+<p><a name="f-tanh"></a></p>
+<h2 id="tanh">tanh</h2>
+<pre><code>syntax: (tanh num-radians)
+</code></pre>
+<p>Description:</p>
+<p>Calculates the hyperbolic tangent of num-radians.</p>
+<p>The hyperbolic tangent is defined as the ratio of
+the hyperbolic sine to the hyperbolic cosine:</p>
+<p>tanh(x) = sinh(x) &#47; cosh(x)</p>
+<p>The argument is interpreted as a real number. The
+result is returned as a floating point value.</p>
+<p>Examples:</p>
+<pre><code>(tanh 1)
+;-&#62; 0.761594156
+
+(tanh 10)
+;-&#62; 0.9999999959
+
+(tanh 1000)
+;-&#62; 1
+
+(= (tanh 1) (div (sinh 1) (cosh 1)))
+;-&#62; true
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>tanh approaches 1 as the absolute value of the
+argument increases.</li>
+<li>The function operates on real numbers.</li>
+<li>Results are returned as floating point values.</li>
+</ul>
+<p>See: <a href="#f-sinh">sinh</a>, <a href="#f-cosh">cosh</a>, <a href="#f-atanh">atanh</a></p>
+<hr/>
+<p><a name="f-term"></a></p>
+<h2 id="term">term</h2>
+<pre><code>syntax: (term symbol)
+</code></pre>
+<p>Description:</p>
+<p>Returns the term part of symbol as a string, without
+the context prefix.</p>
+<p>The term is the symbol name following the context
+separator. The returned value is always a string.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;ctx:var 123)
+(set &#39;sm &#39;ctx:var)
+
+(string sm)
+;-&#62; "ctx:var"
+
+(term sm)
+;-&#62; "var"
+
+; reconstructing the original symbol
+;------------------------------------------------------------
+(set &#39;s &#39;ctx:var)
+
+(= s (sym (term s) (prefix s)))
+;-&#62; true
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>term operates on symbols only.</li>
+<li>The context prefix is not included in the result.</li>
+<li>The return value is a string, not a symbol.</li>
+</ul>
+<p>See: <a href="#f-prefix">prefix</a>, <a href="#f-symbol">symbol</a>,
+     <a href="#f-sym">sym</a></p>
+<hr/>
+<p><a name="f-throw"></a></p>
+<h2 id="throw">throw</h2>
+<pre><code>syntax: (throw exp)
+</code></pre>
+<p>Description:</p>
+<p>Transfers control to the nearest enclosing catch
+expression and supplies exp as the result value.</p>
+<p>throw works together with catch. When throw is
+executed, evaluation stops at that point and the
+corresponding catch returns immediately.</p>
+<p>The value of exp is assigned to the result symbol
+specified in the catch call, or returned directly
+when catch is used without a result symbol.</p>
+<p>throw does not signal an error condition. It is a
+controlled, non-error flow transfer mechanism.</p>
+<p>Examples:</p>
+<pre><code>; basic throw and catch
+;------------------------------------------------------------
+(define (throw-test)
+  (dotimes (x 1000)
+    (if (= x 500) (throw "interrupted"))))
+
+(catch (throw-test) &#39;result)
+;-&#62; true
+
+result
+;-&#62; "interrupted"
+
+; short form returning the thrown value
+;------------------------------------------------------------
+(catch (throw-test))
+;-&#62; "interrupted"
+
+; early exit from an expression block
+;------------------------------------------------------------
+(catch (begin
+  ...
+  (if (foo X) (throw X) Y)
+  ...
+))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>throw exits only the dynamic extent of the
+nearest enclosing catch.</li>
+<li>throw does not raise an error or exception.</li>
+<li>Use throw-error to signal user-defined errors.</li>
+</ul>
+<p>See: <a href="#f-catch">catch</a>, <a href="#f-throw-error">throw-error</a></p>
+<hr/>
+<p><a name="f-throw-error"></a></p>
+<h2 id="throw-error">throw-error</h2>
+<pre><code>syntax: (throw-error exp)
+</code></pre>
+<p>Description:</p>
+<p>Signals a user-defined error exception with the
+message produced by evaluating exp.</p>
+<p>throw-error aborts normal evaluation and raises an
+error condition. The error message is reported as a
+user error and can be handled like any other runtime
+error using error handlers, error-event, or the
+catch form that captures error exceptions.</p>
+<p>Unlike throw, throw-error represents an actual error
+state and is intended for invalid arguments or
+illegal conditions detected by user code.</p>
+<p>Examples:</p>
+<pre><code>; raising a user-defined error
+;------------------------------------------------------------
+(define (func x y)
+  (if (= x 0)
+      (throw-error "first argument cannot be 0"))
+  (+ x y))
+
+(func 1 2)
+;-&#62; 3
+
+(func 0 2)
+;-&#62; ERR: user error : first argument cannot be 0
+;-&#62; called from user-defined function func
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>throw-error raises an error exception.</li>
+<li>Evaluation stops immediately when the error is
+raised.</li>
+<li>The error can be intercepted using error handlers
+or catch forms that handle error exceptions.</li>
+<li>Use throw for controlled, non-error flow transfer.</li>
+</ul>
+<p>See: <a href="#f-throw">throw</a>, <a href="#f-catch">catch</a>,
+     <a href="#f-error-event">error-event</a>, <a href="#f-last-error">last-error</a></p>
+<hr/>
+<p><a name="f-time"></a></p>
+<h2 id="time">time</h2>
+<pre><code>syntax: (time exp [int-count])
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expression exp and returns the time
+spent on evaluation in floating point milliseconds.</p>
+<p>When int-count is specified, exp is evaluated
+int-count times and the total elapsed time is
+returned.</p>
+<p>The precision of the returned value depends on the
+platform. Fractional milliseconds may or may not be
+available.</p>
+<p>Examples:</p>
+<pre><code>(time (myprog x y z))
+;-&#62; 450.340
+
+(time (myprog x y z) 10)
+;-&#62; 4420.021
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The returned value represents elapsed wall-clock
+time.</li>
+<li>When int-count is used, the reported time is the
+sum of all evaluations.</li>
+<li>time evaluates its argument normally.</li>
+</ul>
+<p>See: <a href="#f-date">date</a>, <a href="#f-date-value">date-value</a>,
+     <a href="#f-time-of-day">time-of-day</a>, <a href="#f-now">now</a></p>
+<hr/>
+<p><a name="f-timer"></a></p>
+<h2 id="timer">timer</h2>
+<pre><code>syntax: (timer sym-event-handler | func-event-handler num-seconds [int-option])
+syntax: (timer sym-event-handler | func-event-handler)
+syntax: (timer)
+</code></pre>
+<p>Description:</p>
+<p>Starts or controls a one-shot timer which invokes a
+user-defined event handler after a specified delay.</p>
+<p>When called with an event handler and num-seconds,
+timer schedules the handler to be executed after
+num-seconds seconds have elapsed. The handler may be
+given as a symbol naming a function or as an anonymous
+function.</p>
+<p>The timer is implemented using Unix interval timers
+and delivers one of the signals SIGALRM, SIGVTALRM, or
+SIGPROF depending on the selected mode.</p>
+<p>The optional int-option controls how time is measured:</p>
+<p>0  real (wall-clock) time (default)<br/>
+1  process CPU time<br/>
+2  profiling time (real + CPU)</p>
+<p>Seconds may be specified as floating point values,
+allowing sub-second resolution.</p>
+<p>Specifying num-seconds as 0 disables a running timer
+and prevents it from firing.</p>
+<p>When called with only an event handler, timer returns
+the elapsed time of the currently running timer. This
+can be used to implement time lines or schedules.</p>
+<p>When called without arguments, timer returns the
+symbol of the currently installed event handler.</p>
+<p>Examples:</p>
+<pre><code>; periodic timer using re-arming
+;------------------------------------------------------------
+(define (ticker)
+  (println (date))
+  (timer &#39;ticker 1.0))
+
+(ticker)
+;-&#62; ticker
+
+; timer events:
+; Tue Apr 12 20:44:49 2005
+; Tue Apr 12 20:44:50 2005
+; Tue Apr 12 20:44:51 2005
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The event handler is executed asynchronously.</li>
+<li>A timer handler may re-arm the timer to create
+periodic behavior.</li>
+<li>A timer cannot interrupt a running built-in
+function; it runs between expression evaluations.</li>
+<li>For interrupting blocking I&#47;O, polling patterns
+using net-select are required.</li>
+</ul>
+<p>See: <a href="#f-time">time</a>, <a href="#f-date">date</a>,
+     <a href="#f-net-select">net-select</a></p>
+<hr/>
+<p><a name="f-title-case"></a></p>
+<h2 id="title-case-utf8">title-case [utf8]</h2>
+<pre><code>syntax: (title-case str [bool])
+</code></pre>
+<p>Description:</p>
+<p>Returns a copy of the string in str with its first
+character converted to uppercase.</p>
+<p>When the optional bool argument evaluates to a
+non-nil value, the remainder of the string is
+converted to lowercase. When bool is nil or omitted,
+only the first character is affected.</p>
+<p>The original string is not modified.</p>
+<p>Examples:</p>
+<pre><code>(title-case "hello")
+;-&#62; "Hello"
+
+(title-case "hELLO" true)
+;-&#62; "Hello"
+
+(title-case "hELLO")
+;-&#62; "HELLO"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>title-case operates on UTF-8 encoded strings.</li>
+<li>A new string is always returned.</li>
+</ul>
+<p>See: <a href="#f-lower-case">lower-case</a>,
+     <a href="#f-upper-case">upper-case</a></p>
+<hr/>
+<p><a name="f-trace"></a></p>
+<h2 id="trace">trace</h2>
+<pre><code>syntax: (trace int-device)
+syntax: (trace true)
+syntax: (trace nil)
+syntax: (trace)
+</code></pre>
+<p>Description:</p>
+<p>Controls tracing and interactive debugging of
+expression evaluation.</p>
+<p>When called with int-device, trace writes a continuous
+log of all expression entries and exits to the given
+device. The device is typically a file descriptor
+returned by open. When int-device is 1, output is
+written to standard output.</p>
+<p>When called with a value evaluating to true, trace
+enables interactive debugger mode. In this mode,
+execution stops at each expression entry and exit
+and waits for user input.</p>
+<p>Expressions are highlighted by enclosing them in
+the trace highlight character (default &#8216;#&#8217;). This
+character can be changed using trace-highlight.</p>
+<p>When called with nil, trace disables tracing and
+debugger mode and closes any open trace output.</p>
+<p>When called without arguments, trace returns the
+current tracing or debugging mode.</p>
+<p>Examples:</p>
+<pre><code>; tracing to a file
+;------------------------------------------------------------
+(trace (open "trace.txt"))
+
+(f1 x y)
+(f2 x)
+
+(trace nil)
+
+; interactive debugger
+;------------------------------------------------------------
+(trace true)
+;-&#62; true
+
+(f1 a b c)
+
+(trace nil)
+;-&#62; nil
+
+; setting breakpoints
+;------------------------------------------------------------
+(define (test-func x)
+  (trace true)
+  (+ x 1))
+
+(test-func 10)
+
+; using debug shortcut
+;------------------------------------------------------------
+(debug (f1 a b c))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Trace output records both entry into and exit from
+expressions.</li>
+<li>In debugger mode, execution waits for commands at
+each step.</li>
+<li>Supported debugger commands include stepping,
+continuing, and quitting.</li>
+<li>Arbitrary expressions can be evaluated at the
+debugger prompt to inspect or modify state.</li>
+<li>trace nil disables both tracing and debugging.</li>
+</ul>
+<p>See: <a href="#f-debug">debug</a>, <a href="#f-trace-highlight">trace-highlight</a></p>
+<hr/>
+<p><a name="f-trace-highlight"></a></p>
+<h2 id="trace-highlight">trace-highlight</h2>
+<pre><code>syntax: (trace-highlight str-pre str-post [str-header str-footer])
+</code></pre>
+<p>Description:</p>
+<p>Configures how expressions are highlighted during
+trace and interactive debugging.</p>
+<p>The strings str-pre and str-post define the markers
+used to enclose the currently active expression.
+By default, the number sign &#8216;#&#8217; is used. The marker
+strings may be up to seven characters long.</p>
+<p>When the terminal supports control sequences, the
+highlight strings may contain terminal control codes
+to change color, intensity, or other attributes.</p>
+<p>Optional str-header and str-footer strings control
+the separator and debugger prompt. The header may be
+up to 15 characters long and the footer up to 31
+characters long.</p>
+<p>Examples:</p>
+<pre><code>; replace default markers with &#62;&#62; and &#60;&#60;
+;------------------------------------------------------------
+(trace-highlight "&#62;&#62;" "&#60;&#60;")
+
+; use terminal control sequences for emphasis
+;------------------------------------------------------------
+(trace-highlight "\027[1m" "\027[0m")
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Highlighting applies only when trace or debugger
+mode is active.</li>
+<li>Control sequences depend on terminal capabilities.</li>
+<li>Excessively long marker strings are truncated.</li>
+</ul>
+<p>See: <a href="#f-trace">trace</a>, <a href="#f-debug">debug</a></p>
+<hr/>
+<p><a name="f-transpose"></a></p>
+<h2 id="transpose">transpose</h2>
+<pre><code>syntax: (transpose matrix)
+</code></pre>
+<p>Description:</p>
+<p>Transposes a matrix by reversing its rows and columns.</p>
+<p>The argument matrix may be a nested list or an array.
+The matrix may contain values of any data type.</p>
+<p>Matrix dimensions are determined by the number of rows
+and by the number of elements in the first row. During
+transposition, matrices are made rectangular by
+assuming nil for missing elements, ignoring superfluous
+elements, or expanding non-list rows into repeated
+elements.</p>
+<p>Examples:</p>
+<pre><code>; basic list matrix
+;------------------------------------------------------------
+(set &#39;mtx &#39;((1 2 3) (4 5 6)))
+
+(transpose mtx)
+;-&#62; ((1 4) (2 5) (3 6))
+
+; single-row matrix
+;------------------------------------------------------------
+(transpose (list (sequence 1 5)))
+;-&#62; ((1) (2) (3) (4) (5))
+
+; mixed data types
+;------------------------------------------------------------
+(transpose &#39;((a b) (c d) (e f)))
+;-&#62; ((a c e) (b d f))
+
+; array matrix
+;------------------------------------------------------------
+(set &#39;arr (array 2 3 (sequence 1 6)))
+(set &#39;mtx (transpose arr))
+
+mtx
+;-&#62; ((1 4) (2 5) (3 6))
+
+; uneven rows
+;------------------------------------------------------------
+(set &#39;mtx &#39;((1 2 3) (4 5) (7 8 9)))
+
+(transpose mtx)
+;-&#62; ((1 4 7) (2 5 8) (3 nil 9))
+
+; non-list row expansion
+;------------------------------------------------------------
+(set &#39;mtx &#39;((1 2 3) X (7 8 9)))
+
+(transpose mtx)
+;-&#62; ((1 X 7) (2 X 8) (3 X 9))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The number of columns is defined by the length of
+the first row.</li>
+<li>Missing elements are treated as nil.</li>
+<li>Extra elements in rows beyond the first row length
+are ignored.</li>
+<li>Non-list rows are expanded across all columns.</li>
+<li>The result is always returned as a list matrix.</li>
+</ul>
+<p>See: <a href="#f-det">det</a>, <a href="#f-invert">invert</a>,
+     <a href="#f-mat">mat</a>, <a href="#f-multiply">multiply</a></p>
+<hr/>
+<p><a name="f-trim"></a></p>
+<h2 id="trim-utf8">trim [utf8]</h2>
+<pre><code>syntax: (trim str)
+syntax: (trim str str-char)
+syntax: (trim str str-left-char str-right-char)
+</code></pre>
+<p>Description:</p>
+<p>Removes leading and trailing characters from the
+string str and returns a new string.</p>
+<p>With the first syntax, all leading and trailing
+whitespace characters are removed.</p>
+<p>With the second syntax, characters specified in
+str-char are stripped from both sides. When
+str-char is an empty string, the space character
+is assumed.</p>
+<p>With the third syntax, different characters may be
+trimmed from the left and right sides. Specifying
+an empty string for one side disables trimming on
+that side.</p>
+<p>Examples:</p>
+<pre><code>(trim "   hello \n ")
+;-&#62; "hello"
+
+(trim "   h e l l o   ")
+;-&#62; "h e l l o"
+
+(trim "----hello-----" "-")
+;-&#62; "hello"
+
+(trim "00012340" "0" "")
+;-&#62; "12340"
+
+(trim "1234000" "" "0")
+;-&#62; "1234"
+
+(trim "----hello=====" "-" "=")
+;-&#62; "hello"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>trim operates on UTF-8 encoded strings.</li>
+<li>The original string is not modified.</li>
+<li>For complex pattern-based stripping, use replace.</li>
+<li>When possible, trim is preferred for performance.</li>
+</ul>
+<p>See: <a href="#f-replace">replace</a>,
+     <a href="#f-lower-case">lower-case</a>,
+     <a href="#f-upper-case">upper-case</a></p>
+<hr/>
+<p><a name="f-truep"></a></p>
+<h2 id="true">true?</h2>
+<pre><code>syntax: (true? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expression exp and returns true if the
+result is neither nil nor the empty list (). Otherwise,
+nil is returned.</p>
+<p>true? uses the same truth semantics as if. Both nil
+and the empty list () are considered false.</p>
+<p>Examples:</p>
+<pre><code>(map true? &#39;(x 1 "hi" (a b c) nil ()))
+;-&#62; (true true true true nil nil)
+
+(true? nil)
+;-&#62; nil
+
+(true? &#39;())
+;-&#62; nil
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>true? evaluates its argument before testing.</li>
+<li>Both nil and () are treated as false.</li>
+<li>All other values are treated as true.</li>
+</ul>
+<p>See: <a href="#f-if">if</a>, <a href="#f-not">not</a>, <a href="#f-nilp">nil?</a></p>
+<hr/>
+<p><a name="f-unify"></a></p>
+<h2 id="unify">unify</h2>
+<pre><code>syntax: (unify exp-1 exp-2 [list-env])
+</code></pre>
+<p>Description:</p>
+<p>Evaluates and attempts to unify exp-1 and exp-2.</p>
+<p>Two expressions unify if they are equal, or if one of
+them is an unbound variable which can be consistently
+bound to the other expression. When both expressions
+are lists, unification proceeds recursively by
+comparing corresponding subexpressions.</p>
+<p>Unbound variables are symbols starting with an
+uppercase character. On success, unify returns an
+association list of variable bindings. When no
+variables are bound but the match succeeds, an empty
+list is returned. When unification fails, nil is
+returned.</p>
+<p>The underscore symbol &#8216;_&#8217; matches any atom, list, or
+unbound variable and never binds.</p>
+<p>An optional association list list-env may be supplied
+to pre-bind variables. This is useful when chaining
+multiple unification steps.</p>
+<p>unify implements a unification algorithm with a
+correctly applied occurs check, preventing infinite
+or circular bindings.</p>
+<p>Examples:</p>
+<pre><code>; simple matches
+;------------------------------------------------------------
+(unify &#39;A &#39;A)
+;-&#62; ()
+
+(unify &#39;A 123)
+;-&#62; ((A 123))
+
+(unify &#39;(A B) &#39;(x y))
+;-&#62; ((A x) (B y))
+
+(unify &#39;abc &#39;xyz)
+;-&#62; nil
+
+; aliasing and structure
+;------------------------------------------------------------
+(unify &#39;(A B) &#39;(B abc))
+;-&#62; ((A abc) (B abc))
+
+(unify &#39;(f A) &#39;(f B))
+;-&#62; ((A B))
+
+(unify &#39;(f A) &#39;(g B))
+;-&#62; nil
+
+(unify &#39;(f A) &#39;A)
+;-&#62; nil
+
+; nested structures
+;------------------------------------------------------------
+(unify &#39;(f (g A)) &#39;(f B))
+;-&#62; ((B (g A)))
+
+(unify &#39;(f (g A) A) &#39;(f B xyz))
+;-&#62; ((B (g xyz)) (A xyz))
+
+; wildcard _
+;------------------------------------------------------------
+(unify &#39;(A b _) &#39;(x G z))
+;-&#62; ((A x) (G b))
+
+(unify &#39;(A b c _) &#39;(x G _ z))
+;-&#62; ((A x) (G b))
+
+(unify &#39;(A b _) &#39;(x G (x y z)))
+;-&#62; ((A x) (G b))
+
+; using an environment
+;------------------------------------------------------------
+(unify &#39;(f X) &#39;(f 123))
+;-&#62; ((X 123))
+
+(unify &#39;(A B) &#39;(X A) &#39;((X 123)))
+;-&#62; ((X 123) (A 123) (B 123))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>unify does not assign variables globally.
+It returns logical bindings as a list.</li>
+<li>The occurs check prevents infinite bindings.</li>
+<li>The &#8216;_&#8217; symbol matches but never binds.</li>
+<li>unify is commonly used as a comparison functor
+in search and replacement functions.</li>
+</ul>
+<p>Use unify with expand to substitute bound variables:</p>
+<pre><code>(set &#39;bindings (unify &#39;(f (g A) A) &#39;(f B xyz)))
+;-&#62; ((B (g xyz)) (A xyz))
+
+(expand &#39;(f (g A) A) bindings)
+;-&#62; (f (g xyz) xyz)
+</code></pre>
+<p>Use unify with bind to destructure data:</p>
+<pre><code>(bind (unify &#39;((A B) C) &#39;((one "two") 3)))
+
+A
+;-&#62; one
+
+B
+;-&#62; "two"
+
+C
+;-&#62; 3
+</code></pre>
+<p>See: <a href="#f-match">match</a>, <a href="#f-expand">expand</a>,
+     <a href="#f-bind">bind</a>, <a href="#f-find">find</a>,
+     <a href="#f-ref">ref</a>, <a href="#f-replace">replace</a></p>
+<hr/>
+<p><a name="f-union"></a></p>
+<h2 id="union">union</h2>
+<pre><code>syntax: (union list-1 list-2 [list-3 ... ])
+</code></pre>
+<p>Description:</p>
+<p>Returns a list containing the unique elements found
+in two or more lists.</p>
+<p>Elements are collected from the input lists in order
+of appearance. Each element appears only once in the
+result, even if it occurs multiple times in the input
+lists.</p>
+<p>Examples:</p>
+<pre><code>(union &#39;(1 3 1 4 4 3) &#39;(2 1 5 6 4))
+;-&#62; (1 3 4 2 5 6)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>union preserves the order of first occurrence.</li>
+<li>Duplicate elements are removed.</li>
+<li>Comparison is performed using equal semantics.</li>
+</ul>
+<p>See: <a href="#f-difference">difference</a>, <a href="#f-intersect">intersect</a>,
+     <a href="#f-unique">unique</a></p>
+<hr/>
+<p><a name="f-unique"></a></p>
+<h2 id="unique">unique</h2>
+<pre><code>syntax: (unique list)
+</code></pre>
+<p>Description:</p>
+<p>Returns a list containing the elements of list with
+all duplicate entries removed.</p>
+<p>The order of elements is preserved based on their
+first occurrence in the input list.</p>
+<p>Examples:</p>
+<pre><code>(unique &#39;(2 3 4 4 6 7 8 7))
+;-&#62; (2 3 4 6 7 8)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The input list does not need to be sorted.</li>
+<li>unique performs faster on already sorted lists.</li>
+<li>Element comparison uses equal semantics.</li>
+</ul>
+<p>See: <a href="#f-difference">difference</a>, <a href="#f-intersect">intersect</a>,
+     <a href="#f-union">union</a></p>
+<hr/>
+<p><a name="f-unless"></a></p>
+<h2 id="unless">unless</h2>
+<pre><code>syntax: (unless exp-condition body)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expressions in body only when
+exp-condition evaluates to nil or the empty list ().</p>
+<p>If body is executed, the result of its last
+expression is returned. If body is not executed,
+the return value of exp-condition is returned.</p>
+<p>Because unless has no else branch, multiple
+expressions in body do not need to be grouped
+using begin.</p>
+<p>Examples:</p>
+<pre><code>(unless (starts-with (read-line) "quit")
+  (process (current-line))
+  ...
+  (finish))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>unless uses the same truth semantics as if.</li>
+<li>The empty list () is treated as false.</li>
+<li>unless is the logical inverse of when.</li>
+</ul>
+<p>See: <a href="#f-when">when</a>, <a href="#f-if">if</a></p>
+<hr/>
+<p><a name="f-unpack"></a></p>
+<h2 id="unpack">unpack</h2>
+<pre><code>syntax: (unpack str-format str-addr-packed)
+syntax: (unpack str-format num-addr-packed)
+
+syntax: (unpack struct num-addr-packed)
+syntax: (unpack struct str-addr-packed)
+</code></pre>
+<p>Description:</p>
+<p>Unpacks binary data into values according to a
+specified format or a struct definition.</p>
+<p>When the first argument is a format string,
+unpack decodes the binary data found in
+str-addr-packed or at the memory address
+num-addr-packed. This is the reverse operation
+of pack.</p>
+<p>Using a numeric address allows unpacking data
+returned from imported shared library functions.</p>
+<p>When the first argument is a struct symbol,
+unpack uses the layout defined by the struct.
+In this mode, alignment padding is handled
+automatically according to data types and CPU
+architecture.</p>
+<p>If num-addr-packed does not point to valid memory,
+a bus error or segmentation fault may occur.</p>
+<p>When unpacking structures containing NULL pointers,
+conversion to strings will raise an error. Use
+void* in struct definitions when NULL pointers
+are expected.</p>
+<p>Format specifiers:</p>
+<pre><code>code  description
+----  -------------------------------------------------
+c     signed 8-bit integer
+b     unsigned 8-bit integer
+d     signed 16-bit integer
+u     unsigned 16-bit integer
+ld    signed 32-bit integer
+lu    unsigned 32-bit integer
+Ld    signed 64-bit integer
+Lu    unsigned 64-bit integer
+f     32-bit float
+lf    64-bit double float
+sn    string of n null-padded ASCII characters
+nn    n null bytes
+&#62;     switch to big-endian byte order
+&#60;     switch to little-endian byte order
+</code></pre>
+<p>Examples:</p>
+<pre><code>; basic packing and unpacking
+;------------------------------------------------------------
+(pack "c c c" 65 66 67)
+;-&#62; "ABC"
+
+(unpack "c c c" "ABC")
+;-&#62; (65 66 67)
+
+(set &#39;buf (pack "c d u" 10 12345 56789))
+(unpack "c d u" buf)
+;-&#62; (10 12345 56789)
+
+; strings and floats
+;------------------------------------------------------------
+(set &#39;buf (pack "s10 f" "result" 1.23))
+(unpack "s10 f" buf)
+;-&#62; ("result\000\000\000\000" 1.230000019)
+
+(set &#39;buf (pack "s3 lf" "result" 1.23))
+(unpack "s3 f" buf)
+;-&#62; ("res" 1.23)
+
+; null padding
+;------------------------------------------------------------
+(set &#39;buf (pack "c n7 c" 11 22))
+(unpack "c n7 c" buf)
+;-&#62; (11 22)
+
+; byte order control
+;------------------------------------------------------------
+(set &#39;buf (pack "d" 1))
+(unpack "d" buf)
+;-&#62; (1)
+
+(unpack "&#62;d" buf)
+;-&#62; (256)
+
+; different pack and unpack formats
+;------------------------------------------------------------
+(set &#39;buf (pack "s3" "ABC"))
+(unpack "c c c" buf)
+;-&#62; (65 66 67)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>unpack is a low-level operation.</li>
+<li>Invalid memory addresses may crash the process.</li>
+<li>Byte order switches affect all multi-byte numbers.</li>
+<li>The format string may include spaces for readability.</li>
+<li>If the buffer is smaller than specified, trailing
+format elements may be ignored.</li>
+</ul>
+<p>See: <a href="#f-pack">pack</a>, <a href="#f-struct">struct</a>,
+     <a href="#f-address">address</a>, <a href="#f-get-int">get-int</a>,
+     <a href="#f-get-long">get-long</a>, <a href="#f-get-char">get-char</a>,
+     <a href="#f-get-string">get-string</a></p>
+<hr/>
+<p><a name="f-until"></a></p>
+<h2 id="until">until</h2>
+<pre><code>syntax: (until exp-condition [body])
+</code></pre>
+<p>Description:</p>
+<p>Repeatedly evaluates body while exp-condition
+evaluates to nil or the empty list ().</p>
+<p>Evaluation stops when exp-condition evaluates to
+any value other than nil or (). The return value
+of until is the result of the last expression
+evaluated in body.</p>
+<p>If body is omitted, until repeatedly evaluates
+exp-condition and returns its last value.</p>
+<p>until is functionally equivalent to:</p>
+<p>(while (not exp-condition) &#8230;)</p>
+<p>During execution, until updates the system
+iterator symbol $idx.</p>
+<p>Examples:</p>
+<pre><code>(device (open "somefile.txt" "read"))
+(set &#39;line-count 0)
+
+(until (not (read-line))
+  (inc line-count))
+
+(close (device))
+(print "the file has " line-count " lines\n")
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>until tests the condition before each iteration.</li>
+<li>Both nil and () are treated as false.</li>
+<li>The iterator symbol $idx is updated automatically.</li>
+<li>Use do-until to test the condition after executing
+the body expressions.</li>
+</ul>
+<p>See: <a href="#f-do-until">do-until</a>, <a href="#f-while">while</a>,
+     <a href="#f-not">not</a></p>
+<hr/>
+<p><a name="f-upper-case"></a></p>
+<h2 id="upper-case-utf8">upper-case [utf8]</h2>
+<pre><code>syntax: (upper-case str)
+</code></pre>
+<p>Description:</p>
+<p>Returns a copy of the string in str with all
+characters converted to uppercase.</p>
+<p>International (UTF-8) characters are converted
+correctly. The original string is not modified.</p>
+<p>Examples:</p>
+<pre><code>(upper-case "hello world")
+;-&#62; "HELLO WORLD"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>upper-case operates on UTF-8 encoded strings.</li>
+<li>A new string is always returned.</li>
+</ul>
+<p>See: <a href="#f-lower-case">lower-case</a>,
+     <a href="#f-title-case">title-case</a></p>
+<hr/>
+<p><a name="f-utf8"></a></p>
+<h2 id="utf8">utf8</h2>
+<pre><code>syntax: (utf8 str-unicode)
+</code></pre>
+<p>Description:</p>
+<p>Converts a UCS-4 (4-byte) Unicode-encoded string
+into UTF-8.</p>
+<p>utf8 is the inverse operation of unicode. It is
+only meaningful when UCS-4 encoded strings are in
+use. On systems using UTF-8 natively, this function
+is typically not required.</p>
+<p>When evaluated as a symbol, utf8 can also be used
+to test whether UTF-8 support is available.</p>
+<p>On big-endian architectures, byte order is handled
+accordingly during conversion.</p>
+<p>Examples:</p>
+<pre><code>(unicode "new")
+;-&#62; "n\000\000\000e\000\000\000w\000\000\000\000\000\000\000"
+
+(utf8 (unicode "new"))
+;-&#62; "new"
+
+; testing for UTF-8 support
+;------------------------------------------------------------
+(if utf8
+  (do-utf8-version-of-code)
+  (do-ascii-version-of-code))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>utf8 converts from UCS-4 to UTF-8.</li>
+<li>utf8 and unicode are inverse operations.</li>
+<li>Most systems use UTF-8 natively.</li>
+<li>The function is available only when UTF-8
+support is enabled.</li>
+</ul>
+<p>See: <a href="#f-unicode">unicode</a>,
+     <a href="#f-lower-case">lower-case</a>,
+     <a href="#f-upper-case">upper-case</a></p>
+<hr/>
+<p><a name="f-utf8len"></a></p>
+<h2 id="utf8len">utf8len</h2>
+<pre><code>syntax: (utf8len str)
+</code></pre>
+<p>Description:</p>
+<p>Returns the number of characters in a UTF-8 encoded
+string.</p>
+<p>UTF-8 characters may consist of multiple bytes.
+utf8len counts Unicode characters, not bytes. This
+differs from length, which returns the number of
+bytes in the string.</p>
+<p>This function is available only when UTF-8 support
+is enabled.</p>
+<p>Examples:</p>
+<pre><code>(utf8len "我能吞下玻璃而不伤身体。")
+;-&#62; 12
+
+(length "我能吞下玻璃而不伤身体。")
+;-&#62; 36
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>utf8len counts characters, not bytes.</li>
+<li>length counts raw bytes.</li>
+<li>On UTF-8 systems, utf8len should be used when
+character count matters.</li>
+</ul>
+<p>See: <a href="#f-length">length</a>, <a href="#f-unicode">unicode</a>,
+     <a href="#f-utf8">utf8</a></p>
+<hr/>
+<p><a name="f-uuid"></a></p>
+<h2 id="uuid">uuid</h2>
+<pre><code>syntax: (uuid [str-node])
+</code></pre>
+<p>Description:</p>
+<p>Constructs and returns a UUID (Universally Unique
+Identifier).</p>
+<p>When called without arguments, uuid returns a
+randomly generated type 4 UUID.</p>
+<p>When the optional str-node argument is specified,
+uuid returns a type 1 UUID derived from a timestamp
+and node identifier. The node identifier may be a
+valid MAC address of a network adapter or a randomly
+generated node ID.</p>
+<p>When a random node ID is used, the least significant
+bit of the first node byte should be set to 1 to
+avoid collisions with real MAC addresses.</p>
+<p>UUID generation follows RFC 4122.</p>
+<p>Examples:</p>
+<pre><code>; type 4 UUID (random)
+;------------------------------------------------------------
+(uuid)
+;-&#62; "493AAD61-266F-48A9-B99A-33941BEE3607"
+
+; type 1 UUID using a node ID
+;------------------------------------------------------------
+; node ID for MAC 00:14:51:0a:e0:bc
+(set &#39;id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
+
+(uuid id)
+;-&#62; "0749161C-2EC2-11DB-BBB2-0014510AE0BC"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Each call to uuid returns a new identifier.</li>
+<li>Type 4 UUIDs are randomly generated.</li>
+<li>Type 1 UUIDs are time-based and include a node ID.</li>
+<li>No system-wide shared store is required.</li>
+<li>For distributed systems, type 1 UUIDs should use
+distinct node IDs per node.</li>
+<li>Multiple processes on the same node can safely
+generate UUIDs concurrently.</li>
+</ul>
+<p>See: <a href="#f-pack">pack</a>, <a href="#f-time">time</a></p>
+<hr/>
+<p><a name="f-wait-pid"></a></p>
+<h2 id="wait-pid">wait-pid</h2>
+<pre><code>syntax: (wait-pid int-pid [int-options | nil])
+</code></pre>
+<p>Description:</p>
+<p>Waits for a child process to terminate and returns
+its process identifier and termination status.</p>
+<p>The child process must have been created previously
+using process or fork. When the specified child
+terminates, wait-pid returns a list containing the
+pid and a status value describing the reason for
+termination.</p>
+<p>When int-pid is:</p>
+<ul>
+<li>a positive value: waits for the specified child</li>
+<li>-1: waits for any child process of the caller</li>
+<li>0: waits for children in the same process group</li>
+<li>another negative value: waits for the process
+group specified by the absolute value</li>
+</ul>
+<p>The interpretation of the returned status value is
+platform-specific. Consult the Unix documentation
+for waitpid for details.</p>
+<p>An optional int-options argument may be supplied to
+control behavior. When nil is specified instead of
+int-options, wait-pid operates in non-blocking mode
+and returns immediately. In this case, a pid value
+of 0 indicates that no child process has terminated.</p>
+<p>Examples:</p>
+<pre><code>; wait for a specific child
+;------------------------------------------------------------
+(set &#39;pid (fork (my-process)))
+
+(set &#39;ret (wait-pid pid))
+;-&#62; (8596 0)
+
+(println "process: " pid
+         " has finished with status: "
+         (last ret))
+
+; non-blocking polling for any child
+;------------------------------------------------------------
+(until (not (first (wait-pid -1 nil))))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>wait-pid blocks unless a non-blocking option is
+specified.</li>
+<li>Status values depend on the Unix implementation.</li>
+<li>Use non-blocking mode for event loops or polling.</li>
+<li>Only available on Unix-like systems.</li>
+</ul>
+<p>See: <a href="#f-process">process</a>, <a href="#f-fork">fork</a>,
+     <a href="#f-sync">sync</a>, <a href="#f-exit">exit</a></p>
+<hr/>
+<p><a name="f-when"></a></p>
+<h2 id="when">when</h2>
+<pre><code>syntax: (when exp-condition body)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expressions in body only when
+exp-condition evaluates to a value other than
+nil or the empty list ().</p>
+<p>If body is executed, the result of its last
+expression is returned. If body is not executed,
+nil or () is returned.</p>
+<p>Because when has no else branch, multiple
+expressions in body do not need to be grouped
+using begin.</p>
+<p>Examples:</p>
+<pre><code>(when (read-line)
+  (set &#39;result (analyze (current-line)))
+  (report result)
+  (finish))
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>when uses the same truth semantics as if.</li>
+<li>The empty list () is treated as false.</li>
+<li>when is the logical complement of unless.</li>
+</ul>
+<p>See: <a href="#f-unless">unless</a>, <a href="#f-if">if</a></p>
+<hr/>
+<p><a name="f-while"></a></p>
+<h2 id="while">while</h2>
+<pre><code>syntax: (while exp-condition body)
+</code></pre>
+<p>Description:</p>
+<p>Repeatedly evaluates body while exp-condition
+evaluates to a value other than nil or the empty
+list ().</p>
+<p>Evaluation stops when exp-condition evaluates to
+nil or (). The return value of while is the result
+of the last expression evaluated in body.</p>
+<p>During execution, while updates the system
+iterator symbol $idx.</p>
+<p>Examples:</p>
+<pre><code>(device (open "somefile.txt" "read"))
+(set &#39;line-count 0)
+
+(while (read-line)
+  (inc line-count))
+
+(close (device))
+(print "the file has " line-count " lines\n")
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>while tests the condition before each iteration.</li>
+<li>Both nil and () are treated as false.</li>
+<li>The iterator symbol $idx is updated automatically.</li>
+<li>Use do-while to test the condition after executing
+the body expressions.</li>
+</ul>
+<p>See: <a href="#f-do-while">do-while</a>, <a href="#f-until">until</a>,
+     <a href="#f-not">not</a></p>
+<hr/>
+<p><a name="f-write"></a></p>
+<h2 id="write">write</h2>
+<pre><code>syntax: (write)
+syntax: (write int-file str-buffer [int-size])
+syntax: (write str str-buffer [int-size])
+</code></pre>
+<p>Description:</p>
+<p>Writes data to a file, standard output, or appends
+destructively to a string.</p>
+<p>When called with int-file, write outputs int-size
+bytes from str-buffer to the file descriptor obtained
+from open. If int-size is omitted, all data in
+str-buffer is written. The function returns the
+number of bytes written, or nil on failure.</p>
+<p>When called with a string as the first argument,
+write appends data destructively to that string.</p>
+<p>When called without arguments, write writes the
+contents of the last read-line to standard output
+(STDOUT).</p>
+<p>write is a shorter form of write-buffer. The longer
+name is deprecated and should be avoided in new code.</p>
+<p>Examples:</p>
+<pre><code>; writing to a file
+;------------------------------------------------------------
+(set &#39;handle (open "file.ext" "write"))
+
+(write handle data 100)
+(write handle "a quick message\n")
+
+; destructive string append
+;------------------------------------------------------------
+(set &#39;str "")
+(write str "hello world")
+
+str
+;-&#62; "hello world"
+
+; write last read line to stdout
+;------------------------------------------------------------
+(write)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>write operates on raw bytes.</li>
+<li>When writing to a string, the operation is
+destructive.</li>
+<li>write-buffer is deprecated in favor of write.</li>
+</ul>
+<p>See: <a href="#f-read">read</a>, <a href="#f-open">open</a>,
+     <a href="#f-close">close</a></p>
+<hr/>
+<p><a name="f-write-char"></a></p>
+<h2 id="write-char">write-char</h2>
+<pre><code>syntax: (write-char int-file int-byte1 [int-byte2 ... ])
+</code></pre>
+<p>Description:</p>
+<p>Writes one or more bytes to a file specified by
+the file handle int-file.</p>
+<p>Each int-byte argument specifies an 8-bit byte
+value to be written. The file handle must have
+been obtained from a prior open operation.</p>
+<p>Each call to write-char advances the file pointer
+by one byte per value written. The function returns
+the number of bytes written.</p>
+<p>Examples:</p>
+<pre><code>; slow byte-by-byte file copy
+;------------------------------------------------------------
+(define (slow-file-copy from-file to-file)
+  (set &#39;in-file (open from-file "read"))
+  (set &#39;out-file (open to-file "write"))
+
+  (while (set &#39;chr (read-char in-file))
+    (write-char out-file chr))
+
+  (close in-file)
+  (close out-file)
+  "finished")
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>write-char writes raw 8-bit byte values.</li>
+<li>Writing data byte-by-byte is slow and should be
+avoided for large transfers.</li>
+<li>Use write, print, or copy-file for efficient
+bulk output.</li>
+</ul>
+<p>See: <a href="#f-read-char">read-char</a>, <a href="#f-write">write</a>,
+     <a href="#f-copy-file">copy-file</a>, <a href="#f-open">open</a></p>
+<hr/>
+<p><a name="f-write-file"></a></p>
+<h2 id="write-file">write-file</h2>
+<pre><code>syntax: (write-file str-file-name str-buffer)
+</code></pre>
+<p>Description:</p>
+<p>Writes the contents of str-buffer to a file specified
+by str-file-name in a single operation.</p>
+<p>On success, write-file returns the number of bytes
+written. On failure, nil is returned.</p>
+<p>When operating on local files, error details can be
+retrieved using sys-error. When operating on URLs,
+net-error provides additional error information.</p>
+<p>write-file can also write to URLs. When the filename
+starts with http:&#47;&#47;, the function behaves like
+put-url and supports the same additional parameters.</p>
+<p>Examples:</p>
+<pre><code>; write encrypted file
+;------------------------------------------------------------
+(write-file "file.enc"
+  (encrypt (read-file "&#47;home&#47;user&#47;file") "secret"))
+
+; write to a remote URL
+;------------------------------------------------------------
+(write-file "http:&#47;&#47;example.com&#47;message.txt"
+  "This is a message")
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>write-file writes the entire buffer in one step.</li>
+<li>On failure, nil is returned.</li>
+<li>For local file errors, use sys-error.</li>
+<li>For URL operations, use net-error.</li>
+<li>HTTP writes behave like put-url.</li>
+<li>write-file can be used to transfer files to
+remote newLISP server nodes.</li>
+</ul>
+<p>See: <a href="#f-read-file">read-file</a>,
+     <a href="#f-append-file">append-file</a>,
+     <a href="#f-put-url">put-url</a>,
+     <a href="#f-sys-error">sys-error</a>,
+     <a href="#f-net-error">net-error</a></p>
+<hr/>
+<p><a name="f-write-line"></a></p>
+<h2 id="write-line">write-line</h2>
+<pre><code>syntax: (write-line [int-file [str]])
+syntax: (write-line str-out [str])
+</code></pre>
+<p>Description:</p>
+<p>Writes a line to a device or appends a line to a
+string.</p>
+<p>When int-file is specified, the string in str and
+a line-termination character are written to the
+file handle obtained from open. If str is omitted,
+the contents of the last read-line are written.</p>
+<p>When both arguments are omitted, write-line writes
+the last read-line to standard output (STDOUT) or
+to the device currently set by device.</p>
+<p>When the first argument is a string, write-line
+appends the string and a line terminator
+destructively to that string.</p>
+<p>write-line returns the number of bytes written.</p>
+<p>Examples:</p>
+<pre><code>; write a line to a file
+;------------------------------------------------------------
+(set &#39;out (open "file.txt" "write"))
+(write-line out "hello there")
+(close out)
+
+; write last read line to stdout
+;------------------------------------------------------------
+(set &#39;in (open "init.txt" "read"))
+(while (read-line in)
+  (write-line))
+(close in)
+
+; append lines to a string
+;------------------------------------------------------------
+(set &#39;str "")
+(write-line str "hello")
+(write-line str "world")
+
+str
+;-&#62; "hello\nworld\n"
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>write-line always appends a line terminator.</li>
+<li>When writing to a string, the operation is
+destructive.</li>
+<li>Use write to output data without a line
+terminator.</li>
+</ul>
+<p>See: <a href="#f-write">write</a>, <a href="#f-read-line">read-line</a>,
+     <a href="#f-open">open</a>, <a href="#f-close">close</a></p>
+<hr/>
+<p><a name="f-xfer-event"></a></p>
+<h2 id="xfer-event">xfer-event</h2>
+<pre><code>syntax: (xfer-event sym-event-handler | func-event-handler)
+syntax: (xfer-event nil)
+</code></pre>
+<p>Description:</p>
+<p>Registers a user-defined function to monitor byte
+transfers during HTTP operations.</p>
+<p>The event handler is called whenever a block of data
+is transferred by functions such as get-url,
+post-url, put-url, or by file functions that operate
+on URLs, including load, save, read-file, write-file,
+and append-file.</p>
+<p>For each transferred data block, the handler function
+is called with a single argument specifying the
+number of bytes transferred.</p>
+<p>When xfer-event is called with nil, the transfer
+event handler is reset to its default state.</p>
+<p>Examples:</p>
+<pre><code>; monitor download progress
+;------------------------------------------------------------
+(xfer-event (fn (n)
+  (println "-&#62;" n)))
+
+(length (get-url "http:&#47;&#47;example.com"))
+
+; sample output:
+;-&#62; 73
+;-&#62; 799
+;-&#62; 1452
+;-&#62; 351
+;-&#62; 1093
+;-&#62; 352
+;-&#62; 211
+;-&#62; 885
+;-&#62; 564
+;-&#62; 884
+;-&#62; 561
+;-&#62; 75
+;-&#62; 812
+;-&#62; 638
+;-&#62; 1452
+;-&#62; 801
+;-&#62; 5
+;-&#62; 927
+;-&#62; 11935
+
+; using a named handler
+;------------------------------------------------------------
+(define (report n)
+  (println "-&#62;" n))
+
+(xfer-event &#39;report)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The handler function is called once per data block.</li>
+<li>The argument passed is the size of the transferred
+block in bytes.</li>
+<li>Useful for monitoring progress of long-running
+uploads or downloads.</li>
+<li>HTTP-related functions only.</li>
+</ul>
+<p>See: <a href="#f-get-url">get-url</a>, <a href="#f-post-url">post-url</a>,
+     <a href="#f-put-url">put-url</a>, <a href="#f-read-file">read-file</a>,
+     <a href="#f-write-file">write-file</a></p>
+<hr/>
+<p><a name="f-xml-error"></a></p>
+<h2 id="xml-error">xml-error</h2>
+<pre><code>syntax: (xml-error)
+</code></pre>
+<p>Description:</p>
+<p>Returns error information from the last xml-parse
+operation.</p>
+<p>If an error occurred during parsing, xml-error
+returns a list containing two elements:</p>
+<ul>
+<li>an error message describing the problem</li>
+<li>the scan position in the source XML text,
+starting at index 0</li>
+</ul>
+<p>If no error occurred, xml-error returns nil.</p>
+<p>Examples:</p>
+<pre><code>(xml-parse "&#60;tag1&#62;hello&#60;&#47;tag1&#62;&#60;fin")
+;-&#62; nil
+
+(xml-error)
+;-&#62; ("expected closing tag: &#62;" 18)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>xml-error reports only the most recent
+xml-parse error.</li>
+<li>The scan position refers to the original
+XML input string.</li>
+<li>When xml-parse succeeds, xml-error returns nil.</li>
+</ul>
+<p>See: <a href="#f-xml-parse">xml-parse</a></p>
+<hr/>
+<p><a name="f-xml-parse"></a></p>
+<h2 id="xml-parse">xml-parse</h2>
+<pre><code>syntax: (xml-parse string-xml [int-options [sym-context [func-callback]]])
+</code></pre>
+<p>Description:</p>
+<p>Parses a string containing XML 1.0 compliant,
+well-formed XML and returns a list structure.</p>
+<p>xml-parse does not perform DTD validation. Document
+type declarations and processing instructions are
+skipped. Nodes of type ELEMENT, TEXT, CDATA, and
+COMMENT are parsed.</p>
+<p>If an element has no attributes or child nodes, an
+empty list is returned for that element. Attributes
+are returned as association lists and can be accessed
+using assoc.</p>
+<p>When parsing fails due to malformed XML, xml-parse
+returns nil and xml-error can be used to retrieve
+error information.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;xml
+  "&#60;person name=&#39;John Doe&#39; tel=&#39;555-1212&#39;&#62;nice guy&#60;&#47;person&#62;")
+
+(xml-parse xml)
+;-&#62; (("ELEMENT" "person"
+;     (("name" "John Doe") ("tel" "555-1212"))
+;     (("TEXT" "nice guy"))))
+</code></pre>
+<p>Options:</p>
+<p>The optional int-options argument controls how XML
+input is translated. The following option values
+can be combined by addition:</p>
+<pre><code>value  description
+-----  ---------------------------------------------
+1      suppress whitespace TEXT nodes
+2      suppress empty attribute lists
+4      suppress COMMENT nodes
+8      translate string tags into symbols
+16     add SXML attribute tags (@ ...)
+</code></pre>
+<p>Examples:</p>
+<pre><code>; parse without options
+;------------------------------------------------------------
+(xml-parse (read-file "example.xml"))
+
+; suppress whitespace, empty attributes, and comments
+;------------------------------------------------------------
+(xml-parse (read-file "example.xml") (+ 1 2 4))
+</code></pre>
+<p>Tag Translation:</p>
+<p>When option 8 is specified, XML tags are translated
+from strings into symbols. The optional sym-context
+parameter specifies the target context for symbol
+creation. If omitted, the current context is used.</p>
+<p>If the specified context does not exist, it will be
+created automatically.</p>
+<p>Examples:</p>
+<pre><code>(xml-type-tags nil nil nil nil)
+(xml-parse "&#60;msg&#62;Hello World&#60;&#47;msg&#62;" (+ 1 2 4 8 16) &#39;CTX)
+;-&#62; ((CTX:msg "Hello World"))
+</code></pre>
+<p>SXML Output:</p>
+<p>When xml-type-tags is configured to suppress XML
+type tags and options 1, 2, 4, 8, and 16 are used,
+xml-parse produces SXML-style output.</p>
+<p>Examples:</p>
+<pre><code>(xml-type-tags nil nil nil nil)
+(xml-parse (read-file "example.xml") (+ 1 2 4 8 16))
+;-&#62; ((DATABASE (@ (name "example.xml"))
+;     (FRUIT (NAME "apple") (COLOR "red") (PRICE "0.80"))
+;     (FRUIT (NAME "orange") (COLOR "orange") (PRICE "1.00"))
+;     (FRUIT (NAME "banana") (COLOR "yellow") (PRICE "0.60"))))
+</code></pre>
+<p>Callback Processing:</p>
+<p>When func-callback is specified, xml-parse calls the
+callback function after each tag is closed. The
+callback receives three arguments:</p>
+<ul>
+<li>the generated S-expression</li>
+<li>the start position in the source XML</li>
+<li>the length of the source fragment</li>
+</ul>
+<p>Examples:</p>
+<pre><code>(define (xml-callback s-expr start size)
+  (when (or (= (s-expr 0) &#39;NAME)
+            (= (s-expr 0) &#39;COLOR)
+            (= (s-expr 0) &#39;PRICE))
+    (print "parsed expression:" s-expr)
+    (println ", source:" (start size example-xml))))
+
+(xml-type-tags nil &#39;cdata &#39;!-- nil)
+(xml-parse (read-file "example.xml") (+ 1 2 8) MAIN xml-callback)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>XML tag names are case-sensitive and preserved.</li>
+<li>Namespace separators &#8216;:&#8217; are translated to &#8216;.&#8217;
+when tags are converted to symbols.</li>
+<li>xml-parse blocks until parsing is complete,
+unless a callback function is used.</li>
+</ul>
+<p>See: <a href="#f-xml-error">xml-error</a>,
+     <a href="#f-xml-type-tags">xml-type-tags</a></p>
+<hr/>
+<p><a name="f-xml-type-tags"></a></p>
+<h2 id="xml-type-tags">xml-type-tags</h2>
+<pre><code>syntax: (xml-type-tags [exp-text-tag exp-cdata-tag exp-comment-tag exp-element-tag])
+</code></pre>
+<p>Description:</p>
+<p>Controls suppression or translation of XML type tags
+used by xml-parse.</p>
+<p>The XML type tags affected are:</p>
+<ul>
+<li>&#8220;TEXT&#8221;</li>
+<li>&#8220;CDATA&#8221;</li>
+<li>&#8220;COMMENT&#8221;</li>
+<li>&#8220;ELEMENT&#8221;</li>
+</ul>
+<p>Each parameter specifies how the corresponding tag
+is handled:</p>
+<ul>
+<li>nil        suppresses the tag completely</li>
+<li>a symbol   replaces the tag with that symbol</li>
+<li>a string  replaces the tag with that string</li>
+</ul>
+<p>xml-type-tags modifies only the tag names. It does
+not suppress or alter the associated content. To
+remove whitespace text nodes, empty attribute lists,
+or comments, use option numbers in xml-parse.</p>
+<p>When called without arguments, xml-type-tags returns
+the currently active type tags.</p>
+<p>Examples:</p>
+<pre><code>; show current XML type tags
+;------------------------------------------------------------
+(xml-type-tags)
+;-&#62; ("TEXT" "CDATA" "COMMENT" "ELEMENT")
+
+; suppress TEXT and ELEMENT, rename CDATA and COMMENT
+;------------------------------------------------------------
+(xml-type-tags nil &#39;cdata &#39;!-- nil)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>xml-type-tags affects subsequent xml-parse calls.</li>
+<li>Only the tag labels are modified or suppressed.</li>
+<li>Content handling is controlled by xml-parse options.</li>
+</ul>
+<p>See: <a href="#f-xml-parse">xml-parse</a></p>
+<hr/>
+<p><a name="f-zerop"></a></p>
+<h2 id="zero-bigint">zero? [bigint]</h2>
+<pre><code>syntax: (zero? exp)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates exp and returns true if the result is
+the numeric value 0 (zero). Otherwise, nil is
+returned.</p>
+<p>Both integer and floating-point zero are accepted.
+For all non-numeric data types, zero? returns nil.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;value 1.2)
+(set &#39;var 0)
+
+(zero? value)
+;-&#62; nil
+
+(zero? var)
+;-&#62; true
+
+(map zero? &#39;(0 0.0 3.4 4))
+;-&#62; (true true nil nil)
+
+(map zero? &#39;(nil true 0 0.0 "" ()))
+;-&#62; (nil nil true true nil nil)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>zero? operates only on numeric values.</li>
+<li>Both integer and floating-point zero are treated
+as zero.</li>
+<li>Non-numeric values always return nil.</li>
+</ul>
+<p>See: <a href="#f-numberp">number?</a>, <a href="#f-truep">true?</a>,
+     <a href="#f-nilp">nil?</a></p>
 <hr/>
 
 </body>

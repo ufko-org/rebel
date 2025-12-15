@@ -174,7 +174,7 @@ Notes:
 - Overflow and underflow wrap around the integer range.
 
 See: [plus](#f-plus), [star](#f-star), [slash](#f-slash),
-[%](#f-percent)
+[\%](#f-percent)
 
 ---
 
@@ -19531,3 +19531,2838 @@ See: [import](#f-import), [pack](#f-pack),
 [unpack](#f-unpack), [address](#f-address)
 
 ---
+
+
+<a name="f-sub"></a>
+## sub
+
+```
+syntax: (sub num-1 [num-2 ... ])
+```
+
+Description:
+
+Subtracts the values in num-2 and following arguments
+successively from num-1.
+
+The function performs mixed-type arithmetic and accepts
+integers and floating point numbers as arguments. The
+result is always returned as a floating point number,
+even when all arguments are integers.
+
+When called with only one argument, sub returns the
+negated value of num-1.
+
+If any argument involved in the calculation is NaN,
+the result is NaN.
+
+Examples:
+
+```
+(sub 10 8 0.25)
+;-> 1.75
+
+(sub 123)
+;-> -123
+```
+
+See: [-](#f-minus), [add](#f-add), [mul](#f-mul), [div](#f-div)
+
+---
+
+
+<a name="f-swap"></a>
+## swap
+
+```
+syntax: (swap place-1 place-2)
+```
+
+Description:
+
+Swaps the contents of place-1 and place-2.
+
+A place can refer to the contents of an unquoted
+symbol or to an addressable location inside a list
+or array. Valid places include references created
+with first, last, nth, implicit indexing, and places
+returned by assoc or lookup.
+
+swap is a destructive operation. It modifies the
+lists, arrays, or symbols involved directly and does
+not create copies of the exchanged values.
+
+Any two places may be swapped, whether they belong
+to the same object or to different objects.
+
+Examples:
+
+```
+; swapping elements in a list
+;------------------------------------------------------------
+(set 'lst '(a b c d e f))
+
+(swap (first lst) (last lst))
+;-> a
+
+lst
+;-> (f b c d e a)
+
+; swapping between two lists
+;------------------------------------------------------------
+(set 'lst-b '(x y z))
+
+(swap (lst 0) (lst-b -1))
+;-> f
+
+lst
+;-> (z b c d e a)
+
+lst-b
+;-> (x y f)
+
+; swapping array rows
+;------------------------------------------------------------
+(set 'A (array 2 3 (sequence 1 6)))
+
+(swap (A 0) (A 1))
+;-> (1 2 3)
+
+A
+;-> ((4 5 6) (1 2 3))
+
+; swapping symbol values
+;------------------------------------------------------------
+(set 'x 1 'y 2)
+
+(swap x y)
+;-> 1
+
+x
+;-> 2
+
+y
+;-> 1
+
+; swapping via assoc and lookup
+;------------------------------------------------------------
+(set 'lst '((a 1 2 3) (b 10 20 30)))
+
+(swap (lookup 'a lst -1) (lookup 'b lst 1))
+
+lst
+;-> ((a 1 2 10) (b 3 20 30))
+
+(swap (assoc 'a lst) (assoc 'b lst))
+
+lst
+;-> ((b 3 20 30) (a 1 2 10))
+```
+
+Notes:
+
+- swap operates on places, not on values.
+- Both places must be assignable locations.
+- The operation is performed in constant time
+  relative to the size of the data structures.
+
+See: [set](#f-set), [setf](#f-setf), [first](#f-first),
+     [last](#f-last), [nth](#f-nth), [assoc](#f-assoc),
+     [lookup](#f-lookup)
+
+---
+
+
+<a name="f-sym"></a>
+## sym
+
+```
+syntax: (sym string [sym-context [nil-flag]])
+syntax: (sym number [sym-context [nil-flag]])
+syntax: (sym symbol [sym-context [nil-flag]])
+```
+
+Description:
+
+Translates the first argument into a symbol and returns
+it. The first argument may be a string, number, or
+symbol.
+
+If sym-context is omitted, the current context is used
+for symbol lookup or creation. When sym-context is
+specified, lookup and creation take place in that
+context. If the context does not exist and sym-context
+is given as a quoted symbol, the context is created.
+If sym-context is unquoted, it is interpreted as an
+existing context or a variable containing a context.
+
+By default, symbols are created when they do not already
+exist. When the optional third argument nil-flag
+evaluates to nil, symbol creation is suppressed. In
+that case, sym returns nil if the symbol is not found.
+This form can be used to test for the existence of a
+symbol.
+
+sym can create symbols that are not legal identifiers
+in source code, such as numeric names or names
+containing special characters. This makes sym suitable
+for associative memory access similar to hash tables
+in other languages.
+
+When the first argument is a symbol, its name is
+extracted and used as the symbol name in the target
+context.
+
+Examples:
+
+```
+; basic symbol creation
+;------------------------------------------------------------
+(sym "some")
+;-> some
+
+(set (sym "var1") 345)
+;-> 345
+
+var1
+;-> 345
+
+; specifying contexts
+;------------------------------------------------------------
+(sym "s" 'ctx)
+;-> ctx:s
+
+(sym "s" ctx)
+;-> ctx:s
+
+; suppressing symbol creation
+;------------------------------------------------------------
+(sym "var2" ctx nil)
+;-> nil
+
+(sym "var2" ctx)
+;-> var2
+
+(sym "var2" ctx nil)
+;-> var2
+
+; using sym as associative memory
+;------------------------------------------------------------
+(set (sym "alpha" 'db) 1.234)
+(set (sym "(" 'db) "parenthesis open")
+(set (sym 12 'db) "twelve")
+
+(eval (sym "alpha" 'db))
+;-> 1.234
+
+(eval (sym "(" 'db))
+;-> "parenthesis open"
+
+(eval (sym 12 'db))
+;-> "twelve"
+
+; deleting a dynamically created symbol
+;------------------------------------------------------------
+(delete (sym "alpha" 'db))
+;-> true
+
+; using symbols as name sources
+;------------------------------------------------------------
+(sym 'var1 'ctx)
+;-> ctx:var1
+
+; dynamic context population
+;------------------------------------------------------------
+(define-macro (def-context)
+  (dolist (s (rest (args)))
+    (sym s (first (args)))))
+
+(def-context ctx x y z)
+
+(symbols ctx)
+;-> (ctx:x ctx:y ctx:z)
+```
+
+Notes:
+
+- sym returns the symbol that was found or created.
+- Symbols created by sym may not be representable as
+  source identifiers.
+- When nil-flag is used, sym performs lookup only and
+  does not modify the symbol table.
+
+See: [context](#f-context), [set](#f-set), [setf](#f-setf),
+     [delete](#f-delete), [symbols](#f-symbols)
+
+---
+
+
+<a name="f-symbolp"></a>
+## symbol?
+
+```
+syntax: (symbol? exp)
+```
+
+Description:
+
+Evaluates the expression exp and returns true if the
+resulting value is a symbol. Otherwise, nil is returned.
+
+symbol? tests the value produced by evaluation, not
+the syntactic form of the expression.
+
+Examples:
+
+```
+(set 'x 'y)
+;-> y
+
+(symbol? x)
+;-> true
+
+(symbol? 123)
+;-> nil
+
+(symbol? (first '(var x y z)))
+;-> true
+```
+
+Notes:
+
+- symbol? evaluates its argument before testing.
+- Quoted symbols evaluate to symbols.
+- Non-symbol values always return nil.
+
+See: [symbol](#f-symbol), [context](#f-context),
+     [symbols](#f-symbols)
+
+---
+
+
+<a name="f-symbols"></a>
+## symbols
+
+```
+syntax: (symbols [context])
+```
+
+Description:
+
+Returns a sorted list of all symbols defined in a
+context.
+
+When called without arguments, symbols returns the
+symbols defined in the current context. When a context
+is specified, symbols defined in that context are
+returned.
+
+The context may be given as a quoted symbol, an
+unquoted context name, or a variable containing a
+context. Contexts evaluate to themselves, so quoting
+is optional.
+
+Examples:
+
+```
+; symbols in the current context
+;------------------------------------------------------------
+(symbols)
+
+; symbols in a specific context
+;------------------------------------------------------------
+(symbols 'ctx)
+(symbols ctx)
+
+(set 'ct ctx)
+(symbols ct)
+```
+
+Notes:
+
+- The returned list is sorted alphabetically.
+- Only symbols directly defined in the specified
+  context are returned.
+
+See: [symbol?](#f-symbolp), [symbol](#f-symbol),
+     [context](#f-context)
+
+---
+
+
+<a name="f-sync"></a>
+## sync
+
+```
+syntax: (sync int-timeout [func-inlet])
+syntax: (sync)
+```
+
+Description:
+
+Synchronizes child processes launched with spawn.
+
+When called with int-timeout specified in milliseconds,
+sync waits for spawned child processes to finish. As
+each child process completes, the evaluation result of
+the spawned subtask is assigned to the symbol specified
+in the corresponding spawn statement.
+
+The function returns true when all child processes have
+been processed. If the timeout is reached while child
+processes are still pending, sync returns nil.
+
+If an optional inlet function func-inlet is provided,
+it is called with the child process identifier (PID)
+as its argument whenever a child process finishes.
+func-inlet may be a function symbol or an anonymous
+function.
+
+When called without arguments, sync returns a list of
+PIDs for child processes whose results have not yet
+been processed.
+
+Examples:
+
+```
+; waiting for child processes
+;------------------------------------------------------------
+; wait for 10 seconds and process finished children
+(sync 10000)
+
+; wait for the maximum time
+(sync -1)
+
+; using an inlet function
+;------------------------------------------------------------
+(define (report pid)
+  (println "process: " pid " has returned"))
+
+; wait for up to 10 seconds and report finished children
+(sync 10000 report)
+
+; querying pending child processes
+;------------------------------------------------------------
+(sync)
+;-> (245 246 247 248)
+
+; periodic polling while waiting
+;------------------------------------------------------------
+(until (true? (sync 10 report))
+  (println (time-of-day)))
+```
+
+Notes:
+
+- sync blocks only when a timeout value is specified.
+- Without arguments, sync returns immediately.
+- A negative timeout waits indefinitely.
+- The inlet function is invoked once per completed
+  child process.
+- sync operates only on processes created by spawn.
+
+sync is part of the Cilk API for process
+synchronization and parallel execution.
+
+See: [spawn](#f-spawn), [until](#f-until),
+     [true?](#f-truep)
+
+---
+
+
+<a name="f-sys-error"></a>
+## sys-error
+
+```
+syntax: (sys-error)
+syntax: (sys-error int-error)
+syntax: (sys-error 0)
+```
+
+Description:
+
+Reports the last error generated by the underlying
+operating system.
+
+When called without arguments, sys-error returns a
+list containing the system error number and the
+corresponding error message text. If no system error
+has occurred, nil is returned.
+
+When int-error is greater than zero, sys-error returns
+the error number and its associated error text without
+changing the current error state.
+
+Specifying 0 as int-error resets the stored system
+error. After resetting, a subsequent call to
+sys-error returns nil.
+
+System errors are typically set when functions that
+access system resources return nil. Common causes
+include nonexistent files, insufficient permissions,
+or exhaustion of system resources such as file
+descriptors.
+
+The exact error numbers and messages depend on the
+platform C library.
+
+Examples:
+
+```
+; opening a nonexistent file
+;------------------------------------------------------------
+(open "xyz" "r")
+;-> nil
+
+(sys-error)
+;-> (2 "No such file or directory")
+
+; resetting the system error
+;------------------------------------------------------------
+(sys-error 0)
+;-> (0 "Unknown error: 0")
+
+(sys-error)
+;-> nil
+```
+
+Notes:
+
+- sys-error reflects the last OS-level error.
+- Error values originate from the platform C library.
+- The error state persists until explicitly reset.
+
+See: [last-error](#f-last-error), [net-error](#f-net-error)
+
+---
+
+
+<a name="f-sys-info"></a>
+## sys-info
+
+```
+syntax: (sys-info [int-idx])
+```
+
+Description:
+
+Returns internal runtime and system information.
+
+When called without arguments, sys-info returns a list
+of integers describing internal resource usage and
+runtime state.
+
+When int-idx is specified, only the element at that
+index is returned. Negative indices may be used to
+access elements from the end of the list.
+
+The returned list contains the following entries:
+
+```
+offset  description
+0       Number of allocated cells
+1       Maximum number of cells (constant)
+2       Number of symbols
+3       Current evaluation / recursion level
+4       Environment stack level
+5       Maximum call stack depth (constant)
+6       Parent process PID or 0
+7       Current process PID
+8       Version number (integer)
+9       Operating system and feature flags
+```
+
+The operating system value uses the following base
+constants:
+
+```
+1 = Linux  
+2 = BSD  
+3 = macOS  
+```
+
+Additional feature flags may be ORed into this value:
+
+```
++1024  FFI support enabled  
++512   IPv6 support enabled  
++256   64-bit runtime  
++128   UTF-8 support enabled  
++64    Library build  
+```
+
+To preserve compatibility with future extensions, it
+is recommended to access fixed fields using offsets
+0 through 5, and to use negative offsets for entries
+near the end of the list.
+
+Examples:
+
+```
+(sys-info)
+;-> (429 268435456 402 1 0 2048 0 19453 10406 1155)
+
+(sys-info 3)
+;-> 1
+
+(sys-info -2)
+;-> 10406
+```
+
+Notes:
+
+- The maximum number of cells can be adjusted using
+  the -m command-line option.
+- The maximum call stack depth can be adjusted using
+  the -s command-line option.
+- The exact contents of the list may grow in future
+  versions, but existing offsets remain stable.
+
+See: [sys-error](#f-sys-error), [last-error](#f-last-error)
+
+---
+
+
+<a name="f-t-test"></a>
+## t-test
+
+```
+syntax: (t-test list-vector number-value)
+syntax: (t-test list-vector-A list-vector-B [true])
+syntax: (t-test list-vector-A list-vector-B float-probability)
+```
+
+Description:
+
+Performs Student’s t-tests for comparing mean values.
+
+In the first syntax, t-test performs a one-sample
+Student’s t-test comparing the mean of list-vector
+against number-value.
+
+The result is returned as a list with the following
+elements:
+
+```
+index  name        description
+-----  ----------  ----------------------------------------
+0      mean        mean of data in vector
+1      value       value to compare
+2      sdev        standard deviation of data
+3      mean-error  standard error of the mean
+4      t           t statistic
+5      df          degrees of freedom
+6      p           two-tailed probability
+```
+
+Examples:
+
+```
+; one-sample t-test
+;------------------------------------------------------------
+(t-test '(3 5 4 2 5 7 4 3) 2.5)
+;-> (4.125 2.5 1.552 0.549 2.960 7 0.021)
+```
+
+In the second syntax, t-test compares the means of
+two data vectors using a two-sample Student’s t-test.
+
+When the optional true flag is omitted or nil, the
+samples are treated as independent and may differ
+in length.
+
+When the flag is true, a paired t-test is performed,
+assuming both vectors contain measurements from the
+same subjects taken under different conditions.
+
+The returned result list contains:
+
+```
+index  name    description
+-----  ------  -----------------------------------------
+0      mean-a  mean of group A
+1      mean-b  mean of group B
+2      sdev-a  standard deviation of group A
+3      sdev-b  standard deviation of group B
+4      t       t statistic
+5      df      degrees of freedom
+6      p       two-tailed probability
+```
+
+Examples:
+
+```
+; two independent samples
+;------------------------------------------------------------
+(set 'hours-sleep-8 '(5 7 5 3 5 3 3 9))
+(set 'hours-sleep-4 '(8 1 4 6 6 4 1 2))
+
+(t-test hours-sleep-8 hours-sleep-4)
+;-> (5 4 2.138 2.563 0.847 14 0.411)
+
+; two related samples
+;------------------------------------------------------------
+(set 'mood-pre '(3 0 6 7 4 3 2 1 4))
+(set 'mood-post '(5 1 5 7 10 9 7 11 8))
+
+(t-test mood-pre mood-post true)
+;-> (3.333 7 2.236 3.041 -3.143 8 0.0137)
+```
+
+In the third syntax, Welch’s t-test is used when the
+variances of the two samples differ significantly.
+
+When float-probability is specified, t-test first
+performs an F-test on the variances. If the probability
+of the F-ratio is below float-probability, Welch’s
+t-test is applied. Specifying 1.0 forces the Welch
+method unconditionally.
+
+Examples:
+
+```
+; Welch t-test forced
+;------------------------------------------------------------
+(t-test '(10 4 7 1 1 6 1 8 2 4)
+        '(4 6 9 4 6 8 9 3)
+        1.0)
+;-> (4.4 6.125 3.239 2.357 -1.307 15 0.211)
+
+; standard t-test
+;------------------------------------------------------------
+(t-test '(10 4 7 1 1 6 1 8 2 4)
+        '(4 6 9 4 6 8 9 3))
+;-> (4.4 6.125 3.239 2.357 -1.260 16 0.226)
+```
+
+Notes:
+
+- Smaller float-probability values restrict the use
+  of Welch’s t-test to cases with stronger variance
+  differences.
+- Probability values p express two-tailed significance.
+- Results assume normally distributed samples.
+
+See: [mean](#f-mean), [sdev](#f-sdev), [variance](#f-variance)
+
+---
+
+
+<a name="f-tan"></a>
+## tan
+
+```
+syntax: (tan num-radians)
+```
+
+Description:
+
+Calculates the tangent of the angle specified by
+num-radians and returns the result.
+
+The argument is interpreted as an angle in radians.
+The result is returned as a floating point number.
+
+Examples:
+
+```
+(tan 1)
+;-> 1.557407725
+
+(set 'pi (mul 2 (asin 1)))
+;-> 3.141592654
+
+(tan (div pi 4))
+;-> 1
+```
+
+Notes:
+
+- The argument is given in radians, not degrees.
+- tan returns a floating point value.
+- Results near odd multiples of pi/2 grow rapidly.
+
+See: [sin](#f-sin), [cos](#f-cos), [atan](#f-atan)
+
+---
+
+
+<a name="f-tanh"></a>
+## tanh
+
+```
+syntax: (tanh num-radians)
+```
+
+Description:
+
+Calculates the hyperbolic tangent of num-radians.
+
+The hyperbolic tangent is defined as the ratio of
+the hyperbolic sine to the hyperbolic cosine:
+
+tanh(x) = sinh(x) / cosh(x)
+
+The argument is interpreted as a real number. The
+result is returned as a floating point value.
+
+Examples:
+
+```
+(tanh 1)
+;-> 0.761594156
+
+(tanh 10)
+;-> 0.9999999959
+
+(tanh 1000)
+;-> 1
+
+(= (tanh 1) (div (sinh 1) (cosh 1)))
+;-> true
+```
+
+Notes:
+
+- tanh approaches 1 as the absolute value of the
+  argument increases.
+- The function operates on real numbers.
+- Results are returned as floating point values.
+
+See: [sinh](#f-sinh), [cosh](#f-cosh), [atanh](#f-atanh)
+
+---
+
+
+<a name="f-term"></a>
+## term
+
+```
+syntax: (term symbol)
+```
+
+Description:
+
+Returns the term part of symbol as a string, without
+the context prefix.
+
+The term is the symbol name following the context
+separator. The returned value is always a string.
+
+Examples:
+
+```
+(set 'ctx:var 123)
+(set 'sm 'ctx:var)
+
+(string sm)
+;-> "ctx:var"
+
+(term sm)
+;-> "var"
+
+; reconstructing the original symbol
+;------------------------------------------------------------
+(set 's 'ctx:var)
+
+(= s (sym (term s) (prefix s)))
+;-> true
+```
+
+Notes:
+
+- term operates on symbols only.
+- The context prefix is not included in the result.
+- The return value is a string, not a symbol.
+
+See: [prefix](#f-prefix), [symbol](#f-symbol),
+     [sym](#f-sym)
+
+---
+
+
+<a name="f-throw"></a>
+## throw
+
+```
+syntax: (throw exp)
+```
+
+Description:
+
+Transfers control to the nearest enclosing catch
+expression and supplies exp as the result value.
+
+throw works together with catch. When throw is
+executed, evaluation stops at that point and the
+corresponding catch returns immediately.
+
+The value of exp is assigned to the result symbol
+specified in the catch call, or returned directly
+when catch is used without a result symbol.
+
+throw does not signal an error condition. It is a
+controlled, non-error flow transfer mechanism.
+
+Examples:
+
+```
+; basic throw and catch
+;------------------------------------------------------------
+(define (throw-test)
+  (dotimes (x 1000)
+    (if (= x 500) (throw "interrupted"))))
+
+(catch (throw-test) 'result)
+;-> true
+
+result
+;-> "interrupted"
+
+; short form returning the thrown value
+;------------------------------------------------------------
+(catch (throw-test))
+;-> "interrupted"
+
+; early exit from an expression block
+;------------------------------------------------------------
+(catch (begin
+  ...
+  (if (foo X) (throw X) Y)
+  ...
+))
+```
+
+Notes:
+
+- throw exits only the dynamic extent of the
+  nearest enclosing catch.
+- throw does not raise an error or exception.
+- Use throw-error to signal user-defined errors.
+
+See: [catch](#f-catch), [throw-error](#f-throw-error)
+
+---
+
+
+<a name="f-throw-error"></a>
+## throw-error
+
+```
+syntax: (throw-error exp)
+```
+
+Description:
+
+Signals a user-defined error exception with the
+message produced by evaluating exp.
+
+throw-error aborts normal evaluation and raises an
+error condition. The error message is reported as a
+user error and can be handled like any other runtime
+error using error handlers, error-event, or the
+catch form that captures error exceptions.
+
+Unlike throw, throw-error represents an actual error
+state and is intended for invalid arguments or
+illegal conditions detected by user code.
+
+Examples:
+
+```
+; raising a user-defined error
+;------------------------------------------------------------
+(define (func x y)
+  (if (= x 0)
+      (throw-error "first argument cannot be 0"))
+  (+ x y))
+
+(func 1 2)
+;-> 3
+
+(func 0 2)
+;-> ERR: user error : first argument cannot be 0
+;-> called from user-defined function func
+```
+
+Notes:
+
+- throw-error raises an error exception.
+- Evaluation stops immediately when the error is
+  raised.
+- The error can be intercepted using error handlers
+  or catch forms that handle error exceptions.
+- Use throw for controlled, non-error flow transfer.
+
+See: [throw](#f-throw), [catch](#f-catch),
+     [error-event](#f-error-event), [last-error](#f-last-error)
+
+---
+
+
+<a name="f-time"></a>
+## time
+
+```
+syntax: (time exp [int-count])
+```
+
+Description:
+
+Evaluates the expression exp and returns the time
+spent on evaluation in floating point milliseconds.
+
+When int-count is specified, exp is evaluated
+int-count times and the total elapsed time is
+returned.
+
+The precision of the returned value depends on the
+platform. Fractional milliseconds may or may not be
+available.
+
+Examples:
+
+```
+(time (myprog x y z))
+;-> 450.340
+
+(time (myprog x y z) 10)
+;-> 4420.021
+```
+
+Notes:
+
+- The returned value represents elapsed wall-clock
+  time.
+- When int-count is used, the reported time is the
+  sum of all evaluations.
+- time evaluates its argument normally.
+
+See: [date](#f-date), [date-value](#f-date-value),
+     [time-of-day](#f-time-of-day), [now](#f-now)
+
+---
+
+
+<a name="f-timer"></a>
+## timer
+
+```
+syntax: (timer sym-event-handler | func-event-handler num-seconds [int-option])
+syntax: (timer sym-event-handler | func-event-handler)
+syntax: (timer)
+```
+
+Description:
+
+Starts or controls a one-shot timer which invokes a
+user-defined event handler after a specified delay.
+
+When called with an event handler and num-seconds,
+timer schedules the handler to be executed after
+num-seconds seconds have elapsed. The handler may be
+given as a symbol naming a function or as an anonymous
+function.
+
+The timer is implemented using Unix interval timers
+and delivers one of the signals SIGALRM, SIGVTALRM, or
+SIGPROF depending on the selected mode.
+
+The optional int-option controls how time is measured:
+
+0  real (wall-clock) time (default)  
+1  process CPU time  
+2  profiling time (real + CPU)
+
+Seconds may be specified as floating point values,
+allowing sub-second resolution.
+
+Specifying num-seconds as 0 disables a running timer
+and prevents it from firing.
+
+When called with only an event handler, timer returns
+the elapsed time of the currently running timer. This
+can be used to implement time lines or schedules.
+
+When called without arguments, timer returns the
+symbol of the currently installed event handler.
+
+Examples:
+
+```
+; periodic timer using re-arming
+;------------------------------------------------------------
+(define (ticker)
+  (println (date))
+  (timer 'ticker 1.0))
+
+(ticker)
+;-> ticker
+
+; timer events:
+; Tue Apr 12 20:44:49 2005
+; Tue Apr 12 20:44:50 2005
+; Tue Apr 12 20:44:51 2005
+```
+
+Notes:
+
+- The event handler is executed asynchronously.
+- A timer handler may re-arm the timer to create
+  periodic behavior.
+- A timer cannot interrupt a running built-in
+  function; it runs between expression evaluations.
+- For interrupting blocking I/O, polling patterns
+  using net-select are required.
+
+See: [time](#f-time), [date](#f-date),
+     [net-select](#f-net-select)
+
+---
+
+
+<a name="f-title-case"></a>
+## title-case [utf8]
+
+```
+syntax: (title-case str [bool])
+```
+
+Description:
+
+Returns a copy of the string in str with its first
+character converted to uppercase.
+
+When the optional bool argument evaluates to a
+non-nil value, the remainder of the string is
+converted to lowercase. When bool is nil or omitted,
+only the first character is affected.
+
+The original string is not modified.
+
+Examples:
+
+```
+(title-case "hello")
+;-> "Hello"
+
+(title-case "hELLO" true)
+;-> "Hello"
+
+(title-case "hELLO")
+;-> "HELLO"
+```
+
+Notes:
+
+- title-case operates on UTF-8 encoded strings.
+- A new string is always returned.
+
+See: [lower-case](#f-lower-case),
+     [upper-case](#f-upper-case)
+
+---
+
+
+<a name="f-trace"></a>
+## trace
+
+```
+syntax: (trace int-device)
+syntax: (trace true)
+syntax: (trace nil)
+syntax: (trace)
+```
+
+Description:
+
+Controls tracing and interactive debugging of
+expression evaluation.
+
+When called with int-device, trace writes a continuous
+log of all expression entries and exits to the given
+device. The device is typically a file descriptor
+returned by open. When int-device is 1, output is
+written to standard output.
+
+When called with a value evaluating to true, trace
+enables interactive debugger mode. In this mode,
+execution stops at each expression entry and exit
+and waits for user input.
+
+Expressions are highlighted by enclosing them in
+the trace highlight character (default '#'). This
+character can be changed using trace-highlight.
+
+When called with nil, trace disables tracing and
+debugger mode and closes any open trace output.
+
+When called without arguments, trace returns the
+current tracing or debugging mode.
+
+Examples:
+
+```
+; tracing to a file
+;------------------------------------------------------------
+(trace (open "trace.txt"))
+
+(f1 x y)
+(f2 x)
+
+(trace nil)
+
+; interactive debugger
+;------------------------------------------------------------
+(trace true)
+;-> true
+
+(f1 a b c)
+
+(trace nil)
+;-> nil
+
+; setting breakpoints
+;------------------------------------------------------------
+(define (test-func x)
+  (trace true)
+  (+ x 1))
+
+(test-func 10)
+
+; using debug shortcut
+;------------------------------------------------------------
+(debug (f1 a b c))
+```
+
+Notes:
+
+- Trace output records both entry into and exit from
+  expressions.
+- In debugger mode, execution waits for commands at
+  each step.
+- Supported debugger commands include stepping,
+  continuing, and quitting.
+- Arbitrary expressions can be evaluated at the
+  debugger prompt to inspect or modify state.
+- trace nil disables both tracing and debugging.
+
+See: [debug](#f-debug), [trace-highlight](#f-trace-highlight)
+
+---
+
+
+<a name="f-trace-highlight"></a>
+## trace-highlight
+
+```
+syntax: (trace-highlight str-pre str-post [str-header str-footer])
+```
+
+Description:
+
+Configures how expressions are highlighted during
+trace and interactive debugging.
+
+The strings str-pre and str-post define the markers
+used to enclose the currently active expression.
+By default, the number sign '#' is used. The marker
+strings may be up to seven characters long.
+
+When the terminal supports control sequences, the
+highlight strings may contain terminal control codes
+to change color, intensity, or other attributes.
+
+Optional str-header and str-footer strings control
+the separator and debugger prompt. The header may be
+up to 15 characters long and the footer up to 31
+characters long.
+
+Examples:
+
+```
+; replace default markers with >> and <<
+;------------------------------------------------------------
+(trace-highlight ">>" "<<")
+
+; use terminal control sequences for emphasis
+;------------------------------------------------------------
+(trace-highlight "\027[1m" "\027[0m")
+```
+
+Notes:
+
+- Highlighting applies only when trace or debugger
+  mode is active.
+- Control sequences depend on terminal capabilities.
+- Excessively long marker strings are truncated.
+
+See: [trace](#f-trace), [debug](#f-debug)
+
+---
+
+
+<a name="f-transpose"></a>
+## transpose
+
+```
+syntax: (transpose matrix)
+```
+
+Description:
+
+Transposes a matrix by reversing its rows and columns.
+
+The argument matrix may be a nested list or an array.
+The matrix may contain values of any data type.
+
+Matrix dimensions are determined by the number of rows
+and by the number of elements in the first row. During
+transposition, matrices are made rectangular by
+assuming nil for missing elements, ignoring superfluous
+elements, or expanding non-list rows into repeated
+elements.
+
+Examples:
+
+```
+; basic list matrix
+;------------------------------------------------------------
+(set 'mtx '((1 2 3) (4 5 6)))
+
+(transpose mtx)
+;-> ((1 4) (2 5) (3 6))
+
+; single-row matrix
+;------------------------------------------------------------
+(transpose (list (sequence 1 5)))
+;-> ((1) (2) (3) (4) (5))
+
+; mixed data types
+;------------------------------------------------------------
+(transpose '((a b) (c d) (e f)))
+;-> ((a c e) (b d f))
+
+; array matrix
+;------------------------------------------------------------
+(set 'arr (array 2 3 (sequence 1 6)))
+(set 'mtx (transpose arr))
+
+mtx
+;-> ((1 4) (2 5) (3 6))
+
+; uneven rows
+;------------------------------------------------------------
+(set 'mtx '((1 2 3) (4 5) (7 8 9)))
+
+(transpose mtx)
+;-> ((1 4 7) (2 5 8) (3 nil 9))
+
+; non-list row expansion
+;------------------------------------------------------------
+(set 'mtx '((1 2 3) X (7 8 9)))
+
+(transpose mtx)
+;-> ((1 X 7) (2 X 8) (3 X 9))
+```
+
+Notes:
+
+- The number of columns is defined by the length of
+  the first row.
+- Missing elements are treated as nil.
+- Extra elements in rows beyond the first row length
+  are ignored.
+- Non-list rows are expanded across all columns.
+- The result is always returned as a list matrix.
+
+See: [det](#f-det), [invert](#f-invert),
+     [mat](#f-mat), [multiply](#f-multiply)
+
+---
+
+
+<a name="f-trim"></a>
+## trim [utf8]
+
+```
+syntax: (trim str)
+syntax: (trim str str-char)
+syntax: (trim str str-left-char str-right-char)
+```
+
+Description:
+
+Removes leading and trailing characters from the
+string str and returns a new string.
+
+With the first syntax, all leading and trailing
+whitespace characters are removed.
+
+With the second syntax, characters specified in
+str-char are stripped from both sides. When
+str-char is an empty string, the space character
+is assumed.
+
+With the third syntax, different characters may be
+trimmed from the left and right sides. Specifying
+an empty string for one side disables trimming on
+that side.
+
+Examples:
+
+```
+(trim "   hello \n ")
+;-> "hello"
+
+(trim "   h e l l o   ")
+;-> "h e l l o"
+
+(trim "----hello-----" "-")
+;-> "hello"
+
+(trim "00012340" "0" "")
+;-> "12340"
+
+(trim "1234000" "" "0")
+;-> "1234"
+
+(trim "----hello=====" "-" "=")
+;-> "hello"
+```
+
+Notes:
+
+- trim operates on UTF-8 encoded strings.
+- The original string is not modified.
+- For complex pattern-based stripping, use replace.
+- When possible, trim is preferred for performance.
+
+See: [replace](#f-replace),
+     [lower-case](#f-lower-case),
+     [upper-case](#f-upper-case)
+
+---
+
+
+<a name="f-truep"></a>
+## true?
+
+```
+syntax: (true? exp)
+```
+
+Description:
+
+Evaluates the expression exp and returns true if the
+result is neither nil nor the empty list (). Otherwise,
+nil is returned.
+
+true? uses the same truth semantics as if. Both nil
+and the empty list () are considered false.
+
+Examples:
+
+```
+(map true? '(x 1 "hi" (a b c) nil ()))
+;-> (true true true true nil nil)
+
+(true? nil)
+;-> nil
+
+(true? '())
+;-> nil
+```
+
+Notes:
+
+- true? evaluates its argument before testing.
+- Both nil and () are treated as false.
+- All other values are treated as true.
+
+See: [if](#f-if), [not](#f-not), [nil?](#f-nilp)
+
+---
+
+
+<a name="f-unify"></a>
+## unify
+
+```
+syntax: (unify exp-1 exp-2 [list-env])
+```
+
+Description:
+
+Evaluates and attempts to unify exp-1 and exp-2.
+
+Two expressions unify if they are equal, or if one of
+them is an unbound variable which can be consistently
+bound to the other expression. When both expressions
+are lists, unification proceeds recursively by
+comparing corresponding subexpressions.
+
+Unbound variables are symbols starting with an
+uppercase character. On success, unify returns an
+association list of variable bindings. When no
+variables are bound but the match succeeds, an empty
+list is returned. When unification fails, nil is
+returned.
+
+The underscore symbol '_' matches any atom, list, or
+unbound variable and never binds.
+
+An optional association list list-env may be supplied
+to pre-bind variables. This is useful when chaining
+multiple unification steps.
+
+unify implements a unification algorithm with a
+correctly applied occurs check, preventing infinite
+or circular bindings.
+
+Examples:
+
+```
+; simple matches
+;------------------------------------------------------------
+(unify 'A 'A)
+;-> ()
+
+(unify 'A 123)
+;-> ((A 123))
+
+(unify '(A B) '(x y))
+;-> ((A x) (B y))
+
+(unify 'abc 'xyz)
+;-> nil
+
+; aliasing and structure
+;------------------------------------------------------------
+(unify '(A B) '(B abc))
+;-> ((A abc) (B abc))
+
+(unify '(f A) '(f B))
+;-> ((A B))
+
+(unify '(f A) '(g B))
+;-> nil
+
+(unify '(f A) 'A)
+;-> nil
+
+; nested structures
+;------------------------------------------------------------
+(unify '(f (g A)) '(f B))
+;-> ((B (g A)))
+
+(unify '(f (g A) A) '(f B xyz))
+;-> ((B (g xyz)) (A xyz))
+
+; wildcard _
+;------------------------------------------------------------
+(unify '(A b _) '(x G z))
+;-> ((A x) (G b))
+
+(unify '(A b c _) '(x G _ z))
+;-> ((A x) (G b))
+
+(unify '(A b _) '(x G (x y z)))
+;-> ((A x) (G b))
+
+; using an environment
+;------------------------------------------------------------
+(unify '(f X) '(f 123))
+;-> ((X 123))
+
+(unify '(A B) '(X A) '((X 123)))
+;-> ((X 123) (A 123) (B 123))
+```
+
+Notes:
+
+- unify does not assign variables globally.
+  It returns logical bindings as a list.
+- The occurs check prevents infinite bindings.
+- The '_' symbol matches but never binds.
+- unify is commonly used as a comparison functor
+  in search and replacement functions.
+
+Use unify with expand to substitute bound variables:
+
+```
+(set 'bindings (unify '(f (g A) A) '(f B xyz)))
+;-> ((B (g xyz)) (A xyz))
+
+(expand '(f (g A) A) bindings)
+;-> (f (g xyz) xyz)
+```
+
+Use unify with bind to destructure data:
+
+```
+(bind (unify '((A B) C) '((one "two") 3)))
+
+A
+;-> one
+
+B
+;-> "two"
+
+C
+;-> 3
+```
+
+See: [match](#f-match), [expand](#f-expand),
+     [bind](#f-bind), [find](#f-find),
+     [ref](#f-ref), [replace](#f-replace)
+
+---
+
+
+<a name="f-union"></a>
+## union
+
+```
+syntax: (union list-1 list-2 [list-3 ... ])
+```
+
+Description:
+
+Returns a list containing the unique elements found
+in two or more lists.
+
+Elements are collected from the input lists in order
+of appearance. Each element appears only once in the
+result, even if it occurs multiple times in the input
+lists.
+
+Examples:
+
+```
+(union '(1 3 1 4 4 3) '(2 1 5 6 4))
+;-> (1 3 4 2 5 6)
+```
+
+Notes:
+
+- union preserves the order of first occurrence.
+- Duplicate elements are removed.
+- Comparison is performed using equal semantics.
+
+See: [difference](#f-difference), [intersect](#f-intersect),
+     [unique](#f-unique)
+
+---
+
+
+<a name="f-unique"></a>
+## unique
+
+```
+syntax: (unique list)
+```
+
+Description:
+
+Returns a list containing the elements of list with
+all duplicate entries removed.
+
+The order of elements is preserved based on their
+first occurrence in the input list.
+
+Examples:
+
+```
+(unique '(2 3 4 4 6 7 8 7))
+;-> (2 3 4 6 7 8)
+```
+
+Notes:
+
+- The input list does not need to be sorted.
+- unique performs faster on already sorted lists.
+- Element comparison uses equal semantics.
+
+See: [difference](#f-difference), [intersect](#f-intersect),
+     [union](#f-union)
+
+---
+
+
+<a name="f-unless"></a>
+## unless
+
+```
+syntax: (unless exp-condition body)
+```
+
+Description:
+
+Evaluates the expressions in body only when
+exp-condition evaluates to nil or the empty list ().
+
+If body is executed, the result of its last
+expression is returned. If body is not executed,
+the return value of exp-condition is returned.
+
+Because unless has no else branch, multiple
+expressions in body do not need to be grouped
+using begin.
+
+Examples:
+
+```
+(unless (starts-with (read-line) "quit")
+  (process (current-line))
+  ...
+  (finish))
+```
+
+Notes:
+
+- unless uses the same truth semantics as if.
+- The empty list () is treated as false.
+- unless is the logical inverse of when.
+
+See: [when](#f-when), [if](#f-if)
+
+---
+
+
+<a name="f-unpack"></a>
+## unpack
+
+```
+syntax: (unpack str-format str-addr-packed)
+syntax: (unpack str-format num-addr-packed)
+
+syntax: (unpack struct num-addr-packed)
+syntax: (unpack struct str-addr-packed)
+```
+
+Description:
+
+Unpacks binary data into values according to a
+specified format or a struct definition.
+
+When the first argument is a format string,
+unpack decodes the binary data found in
+str-addr-packed or at the memory address
+num-addr-packed. This is the reverse operation
+of pack.
+
+Using a numeric address allows unpacking data
+returned from imported shared library functions.
+
+When the first argument is a struct symbol,
+unpack uses the layout defined by the struct.
+In this mode, alignment padding is handled
+automatically according to data types and CPU
+architecture.
+
+If num-addr-packed does not point to valid memory,
+a bus error or segmentation fault may occur.
+
+When unpacking structures containing NULL pointers,
+conversion to strings will raise an error. Use
+void* in struct definitions when NULL pointers
+are expected.
+
+Format specifiers:
+
+```
+code  description
+----  -------------------------------------------------
+c     signed 8-bit integer
+b     unsigned 8-bit integer
+d     signed 16-bit integer
+u     unsigned 16-bit integer
+ld    signed 32-bit integer
+lu    unsigned 32-bit integer
+Ld    signed 64-bit integer
+Lu    unsigned 64-bit integer
+f     32-bit float
+lf    64-bit double float
+sn    string of n null-padded ASCII characters
+nn    n null bytes
+>     switch to big-endian byte order
+<     switch to little-endian byte order
+```
+
+Examples:
+
+```
+; basic packing and unpacking
+;------------------------------------------------------------
+(pack "c c c" 65 66 67)
+;-> "ABC"
+
+(unpack "c c c" "ABC")
+;-> (65 66 67)
+
+(set 'buf (pack "c d u" 10 12345 56789))
+(unpack "c d u" buf)
+;-> (10 12345 56789)
+
+; strings and floats
+;------------------------------------------------------------
+(set 'buf (pack "s10 f" "result" 1.23))
+(unpack "s10 f" buf)
+;-> ("result\000\000\000\000" 1.230000019)
+
+(set 'buf (pack "s3 lf" "result" 1.23))
+(unpack "s3 f" buf)
+;-> ("res" 1.23)
+
+; null padding
+;------------------------------------------------------------
+(set 'buf (pack "c n7 c" 11 22))
+(unpack "c n7 c" buf)
+;-> (11 22)
+
+; byte order control
+;------------------------------------------------------------
+(set 'buf (pack "d" 1))
+(unpack "d" buf)
+;-> (1)
+
+(unpack ">d" buf)
+;-> (256)
+
+; different pack and unpack formats
+;------------------------------------------------------------
+(set 'buf (pack "s3" "ABC"))
+(unpack "c c c" buf)
+;-> (65 66 67)
+```
+
+Notes:
+
+- unpack is a low-level operation.
+- Invalid memory addresses may crash the process.
+- Byte order switches affect all multi-byte numbers.
+- The format string may include spaces for readability.
+- If the buffer is smaller than specified, trailing
+  format elements may be ignored.
+
+See: [pack](#f-pack), [struct](#f-struct),
+     [address](#f-address), [get-int](#f-get-int),
+     [get-long](#f-get-long), [get-char](#f-get-char),
+     [get-string](#f-get-string)
+
+---
+
+
+<a name="f-until"></a>
+## until
+
+```
+syntax: (until exp-condition [body])
+```
+
+Description:
+
+Repeatedly evaluates body while exp-condition
+evaluates to nil or the empty list ().
+
+Evaluation stops when exp-condition evaluates to
+any value other than nil or (). The return value
+of until is the result of the last expression
+evaluated in body.
+
+If body is omitted, until repeatedly evaluates
+exp-condition and returns its last value.
+
+until is functionally equivalent to:
+
+(while (not exp-condition) ...)
+
+During execution, until updates the system
+iterator symbol $idx.
+
+Examples:
+
+```
+(device (open "somefile.txt" "read"))
+(set 'line-count 0)
+
+(until (not (read-line))
+  (inc line-count))
+
+(close (device))
+(print "the file has " line-count " lines\n")
+```
+
+Notes:
+
+- until tests the condition before each iteration.
+- Both nil and () are treated as false.
+- The iterator symbol $idx is updated automatically.
+- Use do-until to test the condition after executing
+  the body expressions.
+
+See: [do-until](#f-do-until), [while](#f-while),
+     [not](#f-not)
+
+---
+
+
+<a name="f-upper-case"></a>
+## upper-case [utf8]
+
+```
+syntax: (upper-case str)
+```
+
+Description:
+
+Returns a copy of the string in str with all
+characters converted to uppercase.
+
+International (UTF-8) characters are converted
+correctly. The original string is not modified.
+
+Examples:
+
+```
+(upper-case "hello world")
+;-> "HELLO WORLD"
+```
+
+Notes:
+
+- upper-case operates on UTF-8 encoded strings.
+- A new string is always returned.
+
+See: [lower-case](#f-lower-case),
+     [title-case](#f-title-case)
+
+---
+
+
+<a name="f-utf8"></a>
+## utf8
+
+```
+syntax: (utf8 str-unicode)
+```
+
+Description:
+
+Converts a UCS-4 (4-byte) Unicode-encoded string
+into UTF-8.
+
+utf8 is the inverse operation of unicode. It is
+only meaningful when UCS-4 encoded strings are in
+use. On systems using UTF-8 natively, this function
+is typically not required.
+
+When evaluated as a symbol, utf8 can also be used
+to test whether UTF-8 support is available.
+
+On big-endian architectures, byte order is handled
+accordingly during conversion.
+
+Examples:
+
+```
+(unicode "new")
+;-> "n\000\000\000e\000\000\000w\000\000\000\000\000\000\000"
+
+(utf8 (unicode "new"))
+;-> "new"
+
+; testing for UTF-8 support
+;------------------------------------------------------------
+(if utf8
+  (do-utf8-version-of-code)
+  (do-ascii-version-of-code))
+```
+
+Notes:
+
+- utf8 converts from UCS-4 to UTF-8.
+- utf8 and unicode are inverse operations.
+- Most systems use UTF-8 natively.
+- The function is available only when UTF-8
+  support is enabled.
+
+See: [unicode](#f-unicode),
+     [lower-case](#f-lower-case),
+     [upper-case](#f-upper-case)
+
+---
+
+
+<a name="f-utf8len"></a>
+## utf8len
+
+```
+syntax: (utf8len str)
+```
+
+Description:
+
+Returns the number of characters in a UTF-8 encoded
+string.
+
+UTF-8 characters may consist of multiple bytes.
+utf8len counts Unicode characters, not bytes. This
+differs from length, which returns the number of
+bytes in the string.
+
+This function is available only when UTF-8 support
+is enabled.
+
+Examples:
+
+```
+(utf8len "我能吞下玻璃而不伤身体。")
+;-> 12
+
+(length "我能吞下玻璃而不伤身体。")
+;-> 36
+```
+
+Notes:
+
+- utf8len counts characters, not bytes.
+- length counts raw bytes.
+- On UTF-8 systems, utf8len should be used when
+  character count matters.
+
+See: [length](#f-length), [unicode](#f-unicode),
+     [utf8](#f-utf8)
+
+---
+
+
+<a name="f-uuid"></a>
+## uuid
+
+```
+syntax: (uuid [str-node])
+```
+
+Description:
+
+Constructs and returns a UUID (Universally Unique
+Identifier).
+
+When called without arguments, uuid returns a
+randomly generated type 4 UUID.
+
+When the optional str-node argument is specified,
+uuid returns a type 1 UUID derived from a timestamp
+and node identifier. The node identifier may be a
+valid MAC address of a network adapter or a randomly
+generated node ID.
+
+When a random node ID is used, the least significant
+bit of the first node byte should be set to 1 to
+avoid collisions with real MAC addresses.
+
+UUID generation follows RFC 4122.
+
+Examples:
+
+```
+; type 4 UUID (random)
+;------------------------------------------------------------
+(uuid)
+;-> "493AAD61-266F-48A9-B99A-33941BEE3607"
+
+; type 1 UUID using a node ID
+;------------------------------------------------------------
+; node ID for MAC 00:14:51:0a:e0:bc
+(set 'id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
+
+(uuid id)
+;-> "0749161C-2EC2-11DB-BBB2-0014510AE0BC"
+```
+
+Notes:
+
+- Each call to uuid returns a new identifier.
+- Type 4 UUIDs are randomly generated.
+- Type 1 UUIDs are time-based and include a node ID.
+- No system-wide shared store is required.
+- For distributed systems, type 1 UUIDs should use
+  distinct node IDs per node.
+- Multiple processes on the same node can safely
+  generate UUIDs concurrently.
+
+See: [pack](#f-pack), [time](#f-time)
+
+---
+
+
+<a name="f-wait-pid"></a>
+## wait-pid
+
+```
+syntax: (wait-pid int-pid [int-options | nil])
+```
+
+Description:
+
+Waits for a child process to terminate and returns
+its process identifier and termination status.
+
+The child process must have been created previously
+using process or fork. When the specified child
+terminates, wait-pid returns a list containing the
+pid and a status value describing the reason for
+termination.
+
+When int-pid is:
+
+- a positive value: waits for the specified child
+- -1: waits for any child process of the caller
+- 0: waits for children in the same process group
+- another negative value: waits for the process
+  group specified by the absolute value
+
+The interpretation of the returned status value is
+platform-specific. Consult the Unix documentation
+for waitpid for details.
+
+An optional int-options argument may be supplied to
+control behavior. When nil is specified instead of
+int-options, wait-pid operates in non-blocking mode
+and returns immediately. In this case, a pid value
+of 0 indicates that no child process has terminated.
+
+Examples:
+
+```
+; wait for a specific child
+;------------------------------------------------------------
+(set 'pid (fork (my-process)))
+
+(set 'ret (wait-pid pid))
+;-> (8596 0)
+
+(println "process: " pid
+         " has finished with status: "
+         (last ret))
+
+; non-blocking polling for any child
+;------------------------------------------------------------
+(until (not (first (wait-pid -1 nil))))
+```
+
+Notes:
+
+- wait-pid blocks unless a non-blocking option is
+  specified.
+- Status values depend on the Unix implementation.
+- Use non-blocking mode for event loops or polling.
+- Only available on Unix-like systems.
+
+See: [process](#f-process), [fork](#f-fork),
+     [sync](#f-sync), [exit](#f-exit)
+
+---
+
+
+<a name="f-when"></a>
+## when
+
+```
+syntax: (when exp-condition body)
+```
+
+Description:
+
+Evaluates the expressions in body only when
+exp-condition evaluates to a value other than
+nil or the empty list ().
+
+If body is executed, the result of its last
+expression is returned. If body is not executed,
+nil or () is returned.
+
+Because when has no else branch, multiple
+expressions in body do not need to be grouped
+using begin.
+
+Examples:
+
+```
+(when (read-line)
+  (set 'result (analyze (current-line)))
+  (report result)
+  (finish))
+```
+
+Notes:
+
+- when uses the same truth semantics as if.
+- The empty list () is treated as false.
+- when is the logical complement of unless.
+
+See: [unless](#f-unless), [if](#f-if)
+
+---
+
+
+<a name="f-while"></a>
+## while
+
+```
+syntax: (while exp-condition body)
+```
+
+Description:
+
+Repeatedly evaluates body while exp-condition
+evaluates to a value other than nil or the empty
+list ().
+
+Evaluation stops when exp-condition evaluates to
+nil or (). The return value of while is the result
+of the last expression evaluated in body.
+
+During execution, while updates the system
+iterator symbol $idx.
+
+Examples:
+
+```
+(device (open "somefile.txt" "read"))
+(set 'line-count 0)
+
+(while (read-line)
+  (inc line-count))
+
+(close (device))
+(print "the file has " line-count " lines\n")
+```
+
+Notes:
+
+- while tests the condition before each iteration.
+- Both nil and () are treated as false.
+- The iterator symbol $idx is updated automatically.
+- Use do-while to test the condition after executing
+  the body expressions.
+
+See: [do-while](#f-do-while), [until](#f-until),
+     [not](#f-not)
+
+---
+
+
+<a name="f-write"></a>
+## write
+
+```
+syntax: (write)
+syntax: (write int-file str-buffer [int-size])
+syntax: (write str str-buffer [int-size])
+```
+
+Description:
+
+Writes data to a file, standard output, or appends
+destructively to a string.
+
+When called with int-file, write outputs int-size
+bytes from str-buffer to the file descriptor obtained
+from open. If int-size is omitted, all data in
+str-buffer is written. The function returns the
+number of bytes written, or nil on failure.
+
+When called with a string as the first argument,
+write appends data destructively to that string.
+
+When called without arguments, write writes the
+contents of the last read-line to standard output
+(STDOUT).
+
+write is a shorter form of write-buffer. The longer
+name is deprecated and should be avoided in new code.
+
+Examples:
+
+```
+; writing to a file
+;------------------------------------------------------------
+(set 'handle (open "file.ext" "write"))
+
+(write handle data 100)
+(write handle "a quick message\n")
+
+; destructive string append
+;------------------------------------------------------------
+(set 'str "")
+(write str "hello world")
+
+str
+;-> "hello world"
+
+; write last read line to stdout
+;------------------------------------------------------------
+(write)
+```
+
+Notes:
+
+- write operates on raw bytes.
+- When writing to a string, the operation is
+  destructive.
+- write-buffer is deprecated in favor of write.
+
+See: [read](#f-read), [open](#f-open),
+     [close](#f-close)
+
+---
+
+
+<a name="f-write-char"></a>
+## write-char
+
+```
+syntax: (write-char int-file int-byte1 [int-byte2 ... ])
+```
+
+Description:
+
+Writes one or more bytes to a file specified by
+the file handle int-file.
+
+Each int-byte argument specifies an 8-bit byte
+value to be written. The file handle must have
+been obtained from a prior open operation.
+
+Each call to write-char advances the file pointer
+by one byte per value written. The function returns
+the number of bytes written.
+
+Examples:
+
+```
+; slow byte-by-byte file copy
+;------------------------------------------------------------
+(define (slow-file-copy from-file to-file)
+  (set 'in-file (open from-file "read"))
+  (set 'out-file (open to-file "write"))
+
+  (while (set 'chr (read-char in-file))
+    (write-char out-file chr))
+
+  (close in-file)
+  (close out-file)
+  "finished")
+```
+
+Notes:
+
+- write-char writes raw 8-bit byte values.
+- Writing data byte-by-byte is slow and should be
+  avoided for large transfers.
+- Use write, print, or copy-file for efficient
+  bulk output.
+
+See: [read-char](#f-read-char), [write](#f-write),
+     [copy-file](#f-copy-file), [open](#f-open)
+
+---
+
+
+<a name="f-write-file"></a>
+## write-file
+
+```
+syntax: (write-file str-file-name str-buffer)
+```
+
+Description:
+
+Writes the contents of str-buffer to a file specified
+by str-file-name in a single operation.
+
+On success, write-file returns the number of bytes
+written. On failure, nil is returned.
+
+When operating on local files, error details can be
+retrieved using sys-error. When operating on URLs,
+net-error provides additional error information.
+
+write-file can also write to URLs. When the filename
+starts with http://, the function behaves like
+put-url and supports the same additional parameters.
+
+Examples:
+
+```
+; write encrypted file
+;------------------------------------------------------------
+(write-file "file.enc"
+  (encrypt (read-file "/home/user/file") "secret"))
+
+; write to a remote URL
+;------------------------------------------------------------
+(write-file "http://example.com/message.txt"
+  "This is a message")
+```
+
+Notes:
+
+- write-file writes the entire buffer in one step.
+- On failure, nil is returned.
+- For local file errors, use sys-error.
+- For URL operations, use net-error.
+- HTTP writes behave like put-url.
+- write-file can be used to transfer files to
+  remote newLISP server nodes.
+
+See: [read-file](#f-read-file),
+     [append-file](#f-append-file),
+     [put-url](#f-put-url),
+     [sys-error](#f-sys-error),
+     [net-error](#f-net-error)
+
+---
+
+
+<a name="f-write-line"></a>
+## write-line
+
+```
+syntax: (write-line [int-file [str]])
+syntax: (write-line str-out [str])
+```
+
+Description:
+
+Writes a line to a device or appends a line to a
+string.
+
+When int-file is specified, the string in str and
+a line-termination character are written to the
+file handle obtained from open. If str is omitted,
+the contents of the last read-line are written.
+
+When both arguments are omitted, write-line writes
+the last read-line to standard output (STDOUT) or
+to the device currently set by device.
+
+When the first argument is a string, write-line
+appends the string and a line terminator
+destructively to that string.
+
+write-line returns the number of bytes written.
+
+Examples:
+
+```
+; write a line to a file
+;------------------------------------------------------------
+(set 'out (open "file.txt" "write"))
+(write-line out "hello there")
+(close out)
+
+; write last read line to stdout
+;------------------------------------------------------------
+(set 'in (open "init.txt" "read"))
+(while (read-line in)
+  (write-line))
+(close in)
+
+; append lines to a string
+;------------------------------------------------------------
+(set 'str "")
+(write-line str "hello")
+(write-line str "world")
+
+str
+;-> "hello\nworld\n"
+```
+
+Notes:
+
+- write-line always appends a line terminator.
+- When writing to a string, the operation is
+  destructive.
+- Use write to output data without a line
+  terminator.
+
+See: [write](#f-write), [read-line](#f-read-line),
+     [open](#f-open), [close](#f-close)
+
+---
+
+
+<a name="f-xfer-event"></a>
+## xfer-event
+
+```
+syntax: (xfer-event sym-event-handler | func-event-handler)
+syntax: (xfer-event nil)
+```
+
+Description:
+
+Registers a user-defined function to monitor byte
+transfers during HTTP operations.
+
+The event handler is called whenever a block of data
+is transferred by functions such as get-url,
+post-url, put-url, or by file functions that operate
+on URLs, including load, save, read-file, write-file,
+and append-file.
+
+For each transferred data block, the handler function
+is called with a single argument specifying the
+number of bytes transferred.
+
+When xfer-event is called with nil, the transfer
+event handler is reset to its default state.
+
+Examples:
+
+```
+; monitor download progress
+;------------------------------------------------------------
+(xfer-event (fn (n)
+  (println "->" n)))
+
+(length (get-url "http://example.com"))
+
+; sample output:
+;-> 73
+;-> 799
+;-> 1452
+;-> 351
+;-> 1093
+;-> 352
+;-> 211
+;-> 885
+;-> 564
+;-> 884
+;-> 561
+;-> 75
+;-> 812
+;-> 638
+;-> 1452
+;-> 801
+;-> 5
+;-> 927
+;-> 11935
+
+; using a named handler
+;------------------------------------------------------------
+(define (report n)
+  (println "->" n))
+
+(xfer-event 'report)
+```
+
+Notes:
+
+- The handler function is called once per data block.
+- The argument passed is the size of the transferred
+  block in bytes.
+- Useful for monitoring progress of long-running
+  uploads or downloads.
+- HTTP-related functions only.
+
+See: [get-url](#f-get-url), [post-url](#f-post-url),
+     [put-url](#f-put-url), [read-file](#f-read-file),
+     [write-file](#f-write-file)
+
+---
+
+
+<a name="f-xml-error"></a>
+## xml-error
+
+```
+syntax: (xml-error)
+```
+
+Description:
+
+Returns error information from the last xml-parse
+operation.
+
+If an error occurred during parsing, xml-error
+returns a list containing two elements:
+
+- an error message describing the problem
+- the scan position in the source XML text,
+  starting at index 0
+
+If no error occurred, xml-error returns nil.
+
+Examples:
+
+```
+(xml-parse "<tag1>hello</tag1><fin")
+;-> nil
+
+(xml-error)
+;-> ("expected closing tag: >" 18)
+```
+
+Notes:
+
+- xml-error reports only the most recent
+  xml-parse error.
+- The scan position refers to the original
+  XML input string.
+- When xml-parse succeeds, xml-error returns nil.
+
+See: [xml-parse](#f-xml-parse)
+
+---
+
+
+<a name="f-xml-parse"></a>
+## xml-parse
+
+```
+syntax: (xml-parse string-xml [int-options [sym-context [func-callback]]])
+```
+
+Description:
+
+Parses a string containing XML 1.0 compliant,
+well-formed XML and returns a list structure.
+
+xml-parse does not perform DTD validation. Document
+type declarations and processing instructions are
+skipped. Nodes of type ELEMENT, TEXT, CDATA, and
+COMMENT are parsed.
+
+If an element has no attributes or child nodes, an
+empty list is returned for that element. Attributes
+are returned as association lists and can be accessed
+using assoc.
+
+When parsing fails due to malformed XML, xml-parse
+returns nil and xml-error can be used to retrieve
+error information.
+
+Examples:
+
+```
+(set 'xml
+  "<person name='John Doe' tel='555-1212'>nice guy</person>")
+
+(xml-parse xml)
+;-> (("ELEMENT" "person"
+;     (("name" "John Doe") ("tel" "555-1212"))
+;     (("TEXT" "nice guy"))))
+```
+
+Options:
+
+The optional int-options argument controls how XML
+input is translated. The following option values
+can be combined by addition:
+
+```
+value  description
+-----  ---------------------------------------------
+1      suppress whitespace TEXT nodes
+2      suppress empty attribute lists
+4      suppress COMMENT nodes
+8      translate string tags into symbols
+16     add SXML attribute tags (@ ...)
+```
+
+Examples:
+
+```
+; parse without options
+;------------------------------------------------------------
+(xml-parse (read-file "example.xml"))
+
+; suppress whitespace, empty attributes, and comments
+;------------------------------------------------------------
+(xml-parse (read-file "example.xml") (+ 1 2 4))
+```
+
+Tag Translation:
+
+When option 8 is specified, XML tags are translated
+from strings into symbols. The optional sym-context
+parameter specifies the target context for symbol
+creation. If omitted, the current context is used.
+
+If the specified context does not exist, it will be
+created automatically.
+
+Examples:
+
+```
+(xml-type-tags nil nil nil nil)
+(xml-parse "<msg>Hello World</msg>" (+ 1 2 4 8 16) 'CTX)
+;-> ((CTX:msg "Hello World"))
+```
+
+SXML Output:
+
+When xml-type-tags is configured to suppress XML
+type tags and options 1, 2, 4, 8, and 16 are used,
+xml-parse produces SXML-style output.
+
+Examples:
+
+```
+(xml-type-tags nil nil nil nil)
+(xml-parse (read-file "example.xml") (+ 1 2 4 8 16))
+;-> ((DATABASE (@ (name "example.xml"))
+;     (FRUIT (NAME "apple") (COLOR "red") (PRICE "0.80"))
+;     (FRUIT (NAME "orange") (COLOR "orange") (PRICE "1.00"))
+;     (FRUIT (NAME "banana") (COLOR "yellow") (PRICE "0.60"))))
+```
+
+Callback Processing:
+
+When func-callback is specified, xml-parse calls the
+callback function after each tag is closed. The
+callback receives three arguments:
+
+- the generated S-expression
+- the start position in the source XML
+- the length of the source fragment
+
+Examples:
+
+```
+(define (xml-callback s-expr start size)
+  (when (or (= (s-expr 0) 'NAME)
+            (= (s-expr 0) 'COLOR)
+            (= (s-expr 0) 'PRICE))
+    (print "parsed expression:" s-expr)
+    (println ", source:" (start size example-xml))))
+
+(xml-type-tags nil 'cdata '!-- nil)
+(xml-parse (read-file "example.xml") (+ 1 2 8) MAIN xml-callback)
+```
+
+Notes:
+
+- XML tag names are case-sensitive and preserved.
+- Namespace separators ':' are translated to '.'
+  when tags are converted to symbols.
+- xml-parse blocks until parsing is complete,
+  unless a callback function is used.
+
+See: [xml-error](#f-xml-error),
+     [xml-type-tags](#f-xml-type-tags)
+
+---
+
+
+<a name="f-xml-type-tags"></a>
+## xml-type-tags
+
+```
+syntax: (xml-type-tags [exp-text-tag exp-cdata-tag exp-comment-tag exp-element-tag])
+```
+
+Description:
+
+Controls suppression or translation of XML type tags
+used by xml-parse.
+
+The XML type tags affected are:
+
+- "TEXT"
+- "CDATA"
+- "COMMENT"
+- "ELEMENT"
+
+Each parameter specifies how the corresponding tag
+is handled:
+
+- nil        suppresses the tag completely
+- a symbol   replaces the tag with that symbol
+- a string  replaces the tag with that string
+
+xml-type-tags modifies only the tag names. It does
+not suppress or alter the associated content. To
+remove whitespace text nodes, empty attribute lists,
+or comments, use option numbers in xml-parse.
+
+When called without arguments, xml-type-tags returns
+the currently active type tags.
+
+Examples:
+
+```
+; show current XML type tags
+;------------------------------------------------------------
+(xml-type-tags)
+;-> ("TEXT" "CDATA" "COMMENT" "ELEMENT")
+
+; suppress TEXT and ELEMENT, rename CDATA and COMMENT
+;------------------------------------------------------------
+(xml-type-tags nil 'cdata '!-- nil)
+```
+
+Notes:
+
+- xml-type-tags affects subsequent xml-parse calls.
+- Only the tag labels are modified or suppressed.
+- Content handling is controlled by xml-parse options.
+
+See: [xml-parse](#f-xml-parse)
+
+---
+
+
+<a name="f-zerop"></a>
+## zero? [bigint]
+
+```
+syntax: (zero? exp)
+```
+
+Description:
+
+Evaluates exp and returns true if the result is
+the numeric value 0 (zero). Otherwise, nil is
+returned.
+
+Both integer and floating-point zero are accepted.
+For all non-numeric data types, zero? returns nil.
+
+Examples:
+
+```
+(set 'value 1.2)
+(set 'var 0)
+
+(zero? value)
+;-> nil
+
+(zero? var)
+;-> true
+
+(map zero? '(0 0.0 3.4 4))
+;-> (true true nil nil)
+
+(map zero? '(nil true 0 0.0 "" ()))
+;-> (nil nil true true nil nil)
+```
+
+Notes:
+
+- zero? operates only on numeric values.
+- Both integer and floating-point zero are treated
+  as zero.
+- Non-numeric values always return nil.
+
+See: [number?](#f-numberp), [true?](#f-truep),
+     [nil?](#f-nilp)
+
+---
+
+
