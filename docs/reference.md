@@ -3033,7 +3033,7 @@ See: [throw](#f-throw), [throw-error](#f-throw-error),
 
 ```
 syntax: (ceil number)
-::-
+```
 
 Description:
 
@@ -3895,7 +3895,7 @@ See: [sinh](#f-sinh), [tanh](#f-tanh), [exp](#f-exp), [div](#f-div)
 
 ```
 syntax: (count list-1 list-2)
-::-
+```
 
 Description:
 
@@ -4008,7 +4008,7 @@ See: [dump](#f-dump), [address](#f-address), [pack](#f-pack),
 
 ```
 syntax: (cpymem int-from-address int-to-address int-bytes)
-::-
+```
 
 Description:
 
@@ -4138,7 +4138,7 @@ Examples:
 ```
 (crit-f 0.05 10 12)
 ;-> 2.753386727
-::-
+```
 
 See: [prob-f](#f-prob-f)
 
@@ -6908,7 +6908,7 @@ See: [ifft](#f-ifft)
 
 ```
 syntax: (file-info str-name [int-index [bool-flag]])
-::-
+```
 
 Description:
 
@@ -7189,7 +7189,7 @@ See:
 syntax: (find-all str-regex-pattern str-text [exp [regex-option]])
 syntax: (find-all list-match-pattern lst [exp])
 syntax: (find-all exp-key lst [exp [func-compare]])
-::-
+```
 
 Description:
 
@@ -7277,7 +7277,7 @@ $count
 ;----------------------------------------
 (find-all 'a '(a b a b a b) (list $count $it))
 ;-> ((1 a) (2 a) (3 a))
-::-
+```
 
 Notes:
 
@@ -7303,7 +7303,7 @@ See:
 syntax: (first lst)
 syntax: (first arr)
 syntax: (first str)
-::-
+```
 
 Description:
 
@@ -7363,7 +7363,7 @@ See: [last](#f-last), [rest](#f-rest)
 ```
 syntax: (flat lst)
 syntax: (flat lst int-level)
-::-
+```
 
 Description:
 
@@ -7399,7 +7399,7 @@ Examples:
 ; level 0 = no flattening
 (flat '(a (b (c d))) 0)
 ;-> (a (b (c d)))
-::-
+```
 
 Notes:
 
@@ -7418,7 +7418,7 @@ See: [ref](#f-ref), [ref-all](#f-ref-all), [map](#f-map)
 ```
 syntax: (float exp)
 syntax: (float exp exp-default)
-::-
+```
 
 Description:
 
@@ -7485,7 +7485,7 @@ Examples:
 ;----------------------------------------
 ; (print "enter a float: ")
 ; (set 'num (float (read-line)))
-::-
+```
 
 Notes:
 
@@ -7506,7 +7506,7 @@ See: [int](#f-int), [float?](#f-floatp)
 
 ```
 syntax: (float? exp)
-::-
+```
 
 Description:
 
@@ -7525,7 +7525,7 @@ Examples:
 
 (float? "1.23")
 ;-> nil
-::-
+```
 
 See: [float](#f-float), [int?](#f-intp), [number?](#f-numberp)
 
@@ -7538,7 +7538,7 @@ See: [float](#f-float), [int?](#f-intp), [number?](#f-numberp)
 
 ```
 syntax: (floor number)
-::-
+```
 
 Description:
 
@@ -7553,7 +7553,7 @@ Examples:
 
 (floor 3.4)
 ;-> 3
-::-
+```
 
 See: [ceil](#f-ceil), [int](#f-int)
 
@@ -7565,7 +7565,7 @@ See: [ceil](#f-ceil), [int](#f-int)
 
 ```
 syntax: (flt number)
-::-
+```
 
 Description:
 
@@ -7588,7 +7588,7 @@ Examples:
 ;; verify decode
 (unpack "f" (pack "ld" (flt 1.2345)))
 ;-> (1.234500051)
-::-
+```
 
 Notes:
 
@@ -7814,7 +7814,7 @@ Examples:
     (push n lst -1)))
 lst
 ;-> (5 4 3 2 1)
-::-
+```
 
 Notes:
 
@@ -7835,7 +7835,7 @@ See: [sequence](#f-sequence), [dotimes](#f-dotimes),
 
 ```
 syntax: (for-all func-condition list)
-::-
+```
 
 Description:
 

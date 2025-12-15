@@ -2296,23 +2296,18 @@ result  → "fin"
 <p><a name="f-ceil"></a></p>
 <h2 id="ceil">ceil</h2>
 <pre><code>syntax: (ceil number)
-::-
-
-Description:
-
-Returns the smallest integer value not less than number.
+</code></pre>
+<p>Description:</p>
+<p>Returns the smallest integer value not less than number.
 The result is returned as a floating-point value. When
 number is already an integer value, it is returned
 unchanged. Negative arguments are rounded upward toward
 zero, positive arguments are rounded upward away from
-zero.
-
-Examples:
-
-</code></pre>
-<p>(ceil -1.5)  → -1
+zero.</p>
+<p>Examples:</p>
+<pre><code>(ceil -1.5)  → -1
 (ceil 3.4)   → 4
-```</p>
+</code></pre>
 <p>See: <a href="#f-floor">floor</a></p>
 <hr/>
 <p><a name="f-change-dir"></a></p>
@@ -2942,33 +2937,30 @@ inf.</p>
 <p><a name="f-count"></a></p>
 <h2 id="count">count</h2>
 <pre><code>syntax: (count list-1 list-2)
-::-
-
-Description:
-
-Counts how many times each element from list-1 appears
+</code></pre>
+<p>Description:</p>
+<p>Counts how many times each element from list-1 appears
 inside list-2. The function returns a list of counts in
 the same order as elements in list-1. list-1 should
 contain unique items. If list-1 contains duplicates, only
 the first occurrence receives a count, and all following
-duplicates receive 0.
-
-This function is often used to generate frequency tables.
+duplicates receive 0.</p>
+<p>This function is often used to generate frequency tables.
 Any type of comparable element may be counted, including
-numbers, symbols, and strings.
+numbers, symbols, and strings.</p>
+<p>Examples:</p>
+<pre><code>(count &#39;(1 2 3) &#39;(3 2 1 4 2 3 1 1 2 2))
+;-&#62; (3 4 2)
 
-Examples:
+(count &#39;(z a) &#39;(z d z b a z y a))
+;-&#62; (3 2)
 
-</code></pre>
-<p>(count &#8216;(1 2 3) &#8216;(3 2 1 4 2 3 1 1 2 2))
-;-&#62; (3 4 2)</p>
-<p>(count &#8216;(z a) &#8216;(z d z b a z y a))
-;-&#62; (3 2)</p>
-<p>(set &#8216;lst (explode (read-file &#8220;myFile.txt&#8221;)))
-;-&#62; list of characters</p>
-<p>(set &#8216;letter-counts (count (unique lst) lst))
+(set &#39;lst (explode (read-file "myFile.txt")))
+;-&#62; list of characters
+
+(set &#39;letter-counts (count (unique lst) lst))
 ;-&#62; frequency data
-```</p>
+</code></pre>
 <p>See: <a href="#f-unique">unique</a>, <a href="#f-explode">explode</a>,
 <a href="#f-read-file">read-file</a></p>
 <hr/>
@@ -3030,30 +3022,25 @@ conventions permit it.</p>
 <p><a name="f-cpymem"></a></p>
 <h2 id="cpymem-1">cpymem</h2>
 <pre><code>syntax: (cpymem int-from-address int-to-address int-bytes)
-::-
-
-Description:
-
-Copies raw memory from one address to another. The first
+</code></pre>
+<p>Description:</p>
+<p>Copies raw memory from one address to another. The first
 argument specifies the source address, the second the
 destination, and the third the number of bytes to copy.
 The function operates directly on process memory and can
-alter any Rebel value or internal cell structure.
-
-cpymem is intended only for situations requiring
+alter any Rebel value or internal cell structure.</p>
+<p>cpymem is intended only for situations requiring
 low-level memory manipulation. Incorrect use may corrupt
 data, break internal invariants, or crash the process.
 It is suitable for exchanging binary blocks with C code
 or inspecting memory layouts obtained through dump and
-address.
+address.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;s "0123456789") ;-&#62; "0123456789"
 
-Examples:
-
+(cpymem "xxx" (+ (address s) 5) 3)
+s ;-&#62; "01234xxx89"
 </code></pre>
-<p>(set &#8216;s &#8220;0123456789&#8221;) ;-&#62; &#8220;0123456789&#8221;</p>
-<p>(cpymem &#8220;xxx&#8221; (+ (address s) 5) 3)
-s ;-&#62; &#8220;01234xxx89&#8221;
-```</p>
 <p>Notes:</p>
 <ul>
 <li>Writing into memory that was not allocated by Rebel
@@ -3123,19 +3110,13 @@ two separate degrees of freedom.</p>
 <p>Examples:</p>
 <pre><code>(crit-f 0.05 10 12)
 ;-&#62; 2.753386727
-::-
-
-See: [prob-f](#f-prob-f)
-
----
-
-
-&#60;a name="f-crit-t"&#62;&#60;&#47;a&#62;
-## crit-t
-
 </code></pre>
-<p>syntax: (crit-t num-probability int-df)
-```</p>
+<p>See: <a href="#f-prob-f">prob-f</a></p>
+<hr/>
+<p><a name="f-crit-t"></a></p>
+<h2 id="crit-t">crit-t</h2>
+<pre><code>syntax: (crit-t num-probability int-df)
+</code></pre>
 <p>Description:</p>
 <p>Computes the critical value of the Student t distribution
 for a given confidence probability and degrees of
@@ -5274,26 +5255,20 @@ with (0 0).</li>
 <p><a name="f-file-info"></a></p>
 <h2 id="file-info">file-info</h2>
 <pre><code>syntax: (file-info str-name [int-index [bool-flag]])
-::-
-
-Description:
-
-Returns metadata about the file or directory named in
+</code></pre>
+<p>Description:</p>
+<p>Returns metadata about the file or directory named in
 str-name. The result is a list of eight fields. When
 int-index is supplied, only that field is returned.
-Negative indices work from the end as usual.
-
-When bool-flag is nil (or omitted), information describes
+Negative indices work from the end as usual.</p>
+<p>When bool-flag is nil (or omitted), information describes
 the link itself if str-name is a symbolic link. When
 bool-flag is true, information describes the file that the
-link points to.
-
-Fields:
-
-</code></pre>
-<p>index   meaning</p>
-<hr/>
-<p>0       size in bytes
+link points to.</p>
+<p>Fields:</p>
+<pre><code>index   meaning
+-----   ----------------------------------------
+0       size in bytes
 1       mode (permissions + type)
 2       device mode
 3       user ID  (owner)
@@ -5301,7 +5276,7 @@ Fields:
 5       access time
 6       modification time
 7       status change time
-```</p>
+</code></pre>
 <p>Examples:</p>
 <pre><code>; full metadata list
 (file-info ".bashrc")
@@ -5507,86 +5482,87 @@ capture regex subexpressions.</li>
 <pre><code>syntax: (find-all str-regex-pattern str-text [exp [regex-option]])
 syntax: (find-all list-match-pattern lst [exp])
 syntax: (find-all exp-key lst [exp [func-compare]])
-::-
-
-Description:
-
-Collects all matches found in a string or list. The return
+</code></pre>
+<p>Description:</p>
+<p>Collects all matches found in a string or list. The return
 value is always a list. If no matches are found, the empty
 list () is returned. After each call, the system variable
-$count contains the number of matches.
-
-In the first syntax, str-regex-pattern is a regular
+$count contains the number of matches.</p>
+<p>In the first syntax, str-regex-pattern is a regular
 expression applied to str-text. Each match is collected.
 If exp is given, it is evaluated for every match with $0,
 $1, … bound to the matched substring and its captures.
 regex-option controls regular expression behavior; see
-[regex](#f-regex).
-
-In the second syntax, list-match-pattern is compared
+<a href="#f-regex">regex</a>.</p>
+<p>In the second syntax, list-match-pattern is compared
 against each element of lst using match. If exp is
 supplied, it is evaluated for each match with $it bound to
-the current element.
-
-In the third syntax, exp-key is compared against elements
+the current element.</p>
+<p>In the third syntax, exp-key is compared against elements
 of lst using = (default), func-compare, or match when
 exp-key is a list. If exp is given, it is evaluated for
-each match with $it bound to the element.
-
-Examples:
-
-</code></pre>
-<p>; string search using regex
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all {\d+} &#8220;x12y300z5&#8221;)
-;-&#62; (&#8220;12&#8221; &#8220;300&#8221; &#8220;5&#8221;)
+each match with $it bound to the element.</p>
+<p>Examples:</p>
+<pre><code>; string search using regex
+;----------------------------------------
+(find-all {\d+} "x12y300z5")
+;-&#62; ("12" "300" "5")
 $count
-;-&#62; 3</p>
-<p>; process captures in a custom expression
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all {(n)(um)} &#8220;numNUM&#8221; (append $2 $1) &#8220;i&#8221;)
-;-&#62; (&#8220;umn&#8221; &#8220;UMN&#8221;)</p>
-<p>; use $count in the processing expression
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all &#8220;a&#8221; &#8220;ababa&#8221; (string $count $it))
-;-&#62; (&#8220;1a&#8221; &#8220;2a&#8221; &#8220;3a&#8221;)</p>
-<p>; list pattern search using match
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all &#8216;(? 2) &#8216;((a 1) (b 2) (a 2) (c 4)))
+;-&#62; 3
+
+; process captures in a custom expression
+;----------------------------------------
+(find-all {(n)(um)} "numNUM" (append $2 $1) "i")
+;-&#62; ("umn" "UMN")
+
+; use $count in the processing expression
+;----------------------------------------
+(find-all "a" "ababa" (string $count $it))
+;-&#62; ("1a" "2a" "3a")
+
+; list pattern search using match
+;----------------------------------------
+(find-all &#39;(? 2) &#39;((a 1) (b 2) (a 2) (c 4)))
 ;-&#62; ((b 2) (a 2))
 $count
-;-&#62; 2</p>
-<p>; process matched sublists
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all &#8216;(? 2) &#8216;((a 1) (b 2) (a 2) (c 4)) (first $it))
-;-&#62; (b a)</p>
-<p>; list search using a comparison function
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all 5 &#8216;(2 7 4 5 9 2 4 9 7 4 8) $it &#60;)
+;-&#62; 2
+
+; process matched sublists
+;----------------------------------------
+(find-all &#39;(? 2) &#39;((a 1) (b 2) (a 2) (c 4)) (first $it))
+;-&#62; (b a)
+
+; list search using a comparison function
+;----------------------------------------
+(find-all 5 &#39;(2 7 4 5 9 2 4 9 7 4 8) $it &#60;)
 ;-&#62; (7 9 9 7 8)
 $count
-;-&#62; 5</p>
-<p>; process found elements
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all 5 &#8216;(2 7 4 5 9 2 4 9 7 4 8) (* 3 $it) &#60;)
-;-&#62; (21 27 27 21 24)</p>
-<p>; same example using explicit fn
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all 5 &#8216;(2 7 4 5 9 2 4 9 7 4 8)
+;-&#62; 5
+
+; process found elements
+;----------------------------------------
+(find-all 5 &#39;(2 7 4 5 9 2 4 9 7 4 8) (* 3 $it) &#60;)
+;-&#62; (21 27 27 21 24)
+
+; same example using explicit fn
+;----------------------------------------
+(find-all 5 &#39;(2 7 4 5 9 2 4 9 7 4 8)
           (* 3 $it)
           (fn (x y) (&#60; x y)))
-;-&#62; (21 27 27 21 24)</p>
-<p>; any expression may produce the result
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all 5 &#8216;(2 7 4 5 9 2 4 9 7 4 8)
-          (&#8220;abcdefghijk&#8221; $it)
+;-&#62; (21 27 27 21 24)
+
+; any expression may produce the result
+;----------------------------------------
+(find-all 5 &#39;(2 7 4 5 9 2 4 9 7 4 8)
+          ("abcdefghijk" $it)
           &#60;)
-;-&#62; (&#8220;h&#8221; &#8220;j&#8221; &#8220;j&#8221; &#8220;h&#8221; &#8220;i&#8221;)</p>
-<p>; using $count with list search
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(find-all &#8216;a &#8216;(a b a b a b) (list $count $it))
+;-&#62; ("h" "j" "j" "h" "i")
+
+; using $count with list search
+;----------------------------------------
+(find-all &#39;a &#39;(a b a b a b) (list $count $it))
 ;-&#62; ((1 a) (2 a) (3 a))
-::-</p>
+</code></pre>
 <p>Notes:</p>
 <ul>
 <li>String searches always use regular expressions.</li>
@@ -5606,41 +5582,42 @@ match is used automatically.</li>
 <pre><code>syntax: (first lst)
 syntax: (first arr)
 syntax: (first str)
-::-
-
-Description:
-
-Returns the first element of a list or array, or the first
-character of a string. The argument is not modified. When
-called on an empty list, an error is raised.
-
-On UTF-8 systems, the string form returns the first
-**character**, not the first byte.
-
-Examples:
-
 </code></pre>
-<p>; lists
-(first &#8216;(1 2 3 4 5))
-;-&#62; 1</p>
-<p>(first &#8216;((a b) c d))
-;-&#62; (a b)</p>
-<p>(set &#8216;lst &#8216;(a b c d e))
+<p>Description:</p>
+<p>Returns the first element of a list or array, or the first
+character of a string. The argument is not modified. When
+called on an empty list, an error is raised.</p>
+<p>On UTF-8 systems, the string form returns the first
+<strong>character</strong>, not the first byte.</p>
+<p>Examples:</p>
+<pre><code>; lists
+(first &#39;(1 2 3 4 5))
+;-&#62; 1
+
+(first &#39;((a b) c d))
+;-&#62; (a b)
+
+(set &#39;lst &#39;(a b c d e))
 (first lst)
-;-&#62; a</p>
-<p>; arrays
-(set &#8216;arr (array 3 2 (sequence 1 6)))
-;-&#62; ((1 2) (3 4) (5 6))</p>
-<p>(first arr)
-;-&#62; (1 2)</p>
-<p>; empty list
-; (first &#8216;())  -&#62; error</p>
-<p>; strings (UTF-8 safe)
-(first &#8220;rebel&#8221;)
-;-&#62; &#8220;r&#8221;</p>
-<p>(first (rest &#8220;rebel&#8221;))
-;-&#62; &#8220;e&#8221;
-```</p>
+;-&#62; a
+
+; arrays
+(set &#39;arr (array 3 2 (sequence 1 6)))
+;-&#62; ((1 2) (3 4) (5 6))
+
+(first arr)
+;-&#62; (1 2)
+
+; empty list
+; (first &#39;())  -&#62; error
+
+; strings (UTF-8 safe)
+(first "rebel")
+;-&#62; "r"
+
+(first (rest "rebel"))
+;-&#62; "e"
+</code></pre>
 <p>Notes:</p>
 <ul>
 <li>Works on character boundaries for strings in UTF-8 mode.</li>
@@ -5653,38 +5630,37 @@ Examples:
 <h2 id="flat">flat</h2>
 <pre><code>syntax: (flat lst)
 syntax: (flat lst int-level)
-::-
-
-Description:
-
-Returns a flattened version of lst. By default, all nested
-lists are recursively expanded into a single-level list.
-
-When int-level is supplied, only that many levels are
-flattened. A level of 0 means no flattening at all.
-
-Examples:
-
 </code></pre>
-<p>; full flatten
-(flat &#8216;(a (b (c d))))
-;-&#62; (a b c d)</p>
-<p>; using flat to walk nested structures
+<p>Description:</p>
+<p>Returns a flattened version of lst. By default, all nested
+lists are recursively expanded into a single-level list.</p>
+<p>When int-level is supplied, only that many levels are
+flattened. A level of 0 means no flattening at all.</p>
+<p>Examples:</p>
+<pre><code>; full flatten
+(flat &#39;(a (b (c d))))
+;-&#62; (a b c d)
+
+; using flat to walk nested structures
 (map (fn (x) (ref x lst))
-     (flat &#8216;(a (b (c d)))))
-;-&#62; ((0) (1 0) (1 1 0) (1 1 1))</p>
-<p>; partial flattening by level
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-(flat &#8216;(a b (c d (e f)) (g h (i j))))
-;-&#62; (a b c d e f g h i j)</p>
-<p>(flat &#8216;(a b (c d (e f)) (g h (i j))) 1)
-;-&#62; (a b c d (e f) g h (i j))</p>
-<p>(flat &#8216;(a b (c d (e f)) (g h (i j))) 2)
-;-&#62; (a b c d e f g h i j)</p>
-<p>; level 0 = no flattening
-(flat &#8216;(a (b (c d))) 0)
+     (flat &#39;(a (b (c d)))))
+;-&#62; ((0) (1 0) (1 1 0) (1 1 1))
+
+; partial flattening by level
+;----------------------------------------
+(flat &#39;(a b (c d (e f)) (g h (i j))))
+;-&#62; (a b c d e f g h i j)
+
+(flat &#39;(a b (c d (e f)) (g h (i j))) 1)
+;-&#62; (a b c d (e f) g h (i j))
+
+(flat &#39;(a b (c d (e f)) (g h (i j))) 2)
+;-&#62; (a b c d e f g h i j)
+
+; level 0 = no flattening
+(flat &#39;(a (b (c d))) 0)
 ;-&#62; (a (b (c d)))
-::-</p>
+</code></pre>
 <p>Notes:</p>
 <ul>
 <li>Useful for iterating over arbitrarily nested structures.</li>
@@ -5696,61 +5672,68 @@ Examples:
 <h2 id="float">float</h2>
 <pre><code>syntax: (float exp)
 syntax: (float exp exp-default)
-::-
-
-Description:
-
-Converts exp to a floating-point number. If exp is already a
+</code></pre>
+<p>Description:</p>
+<p>Converts exp to a floating-point number. If exp is already a
 number or a numeric string, the corresponding float is
 returned. If exp cannot be parsed as a float, the result is
 nil unless exp-default is supplied, in which case the value
-of exp-default is returned.
-
-Valid string inputs must begin with a digit, +, −, or .
+of exp-default is returned.</p>
+<p>Valid string inputs must begin with a digit, +, −, or .
 (period). Strings beginning with other characters cannot be
 converted. Extremely large or small exponents produce +inf
-or -inf.
+or -inf.</p>
+<p>Examples:</p>
+<pre><code>; basic parsing
+(float "1.23")
+;-&#62; 1.23
 
-Examples:
+(float " 1.23")
+;-&#62; 1.23
 
+(float ".5")
+;-&#62; 0.5
+
+(float "-1.23")
+;-&#62; -1.23
+
+; invalid forms
+(float "-.5")
+;-&#62; nil
+
+(float "#1.23")
+;-&#62; nil
+
+; default value
+(float "#1.23" 0.0)
+;-&#62; 0.0
+
+; non-numeric expressions
+(float &#39;(a b c))
+;-&#62; nil
+
+(float &#39;(a b c) 0)
+;-&#62; 0
+
+(float nil 0)
+;-&#62; 0
+
+; default value as non-numeric expression
+(float "abc" "not a number")
+;-&#62; "not a number"
+
+; overflow to infinity
+(float "1e500")
+;-&#62; inf
+
+(float "-1e500")
+;-&#62; -inf
+
+; user input conversion
+;----------------------------------------
+; (print "enter a float: ")
+; (set &#39;num (float (read-line)))
 </code></pre>
-<p>; basic parsing
-(float &#8220;1.23&#8221;)
-;-&#62; 1.23</p>
-<p>(float &#8220; 1.23&#8221;)
-;-&#62; 1.23</p>
-<p>(float &#8220;.5&#8221;)
-;-&#62; 0.5</p>
-<p>(float &#8220;-1.23&#8221;)
-;-&#62; -1.23</p>
-<p>; invalid forms
-(float &#8220;-.5&#8221;)
-;-&#62; nil</p>
-<p>(float &#8220;#1.23&#8221;)
-;-&#62; nil</p>
-<p>; default value
-(float &#8220;#1.23&#8221; 0.0)
-;-&#62; 0.0</p>
-<p>; non-numeric expressions
-(float &#8216;(a b c))
-;-&#62; nil</p>
-<p>(float &#8216;(a b c) 0)
-;-&#62; 0</p>
-<p>(float nil 0)
-;-&#62; 0</p>
-<p>; default value as non-numeric expression
-(float &#8220;abc&#8221; &#8220;not a number&#8221;)
-;-&#62; &#8220;not a number&#8221;</p>
-<p>; overflow to infinity
-(float &#8220;1e500&#8221;)
-;-&#62; inf</p>
-<p>(float &#8220;-1e500&#8221;)
-;-&#62; -inf</p>
-<p>; user input conversion
-;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-; (print &#8220;enter a float: &#8220;)
-; (set &#8216;num (float (read-line)))
-::-</p>
 <p>Notes:</p>
 <ul>
 <li>Returns nil when conversion fails unless exp-default is
@@ -5764,71 +5747,60 @@ given.</li>
 <p><a name="f-floatp"></a></p>
 <h2 id="float-1">float?</h2>
 <pre><code>syntax: (float? exp)
-::-
-
-Description:
-
-Returns true if exp evaluates to a floating-point number,
-otherwise returns nil.
-
-Examples:
-
 </code></pre>
-<p>(set &#8216;num 1.23)
+<p>Description:</p>
+<p>Returns true if exp evaluates to a floating-point number,
+otherwise returns nil.</p>
+<p>Examples:</p>
+<pre><code>(set &#39;num 1.23)
 (float? num)
-;-&#62; true</p>
-<p>(float? 123)
-;-&#62; nil</p>
-<p>(float? &#8220;1.23&#8221;)
+;-&#62; true
+
+(float? 123)
 ;-&#62; nil
-::-</p>
+
+(float? "1.23")
+;-&#62; nil
+</code></pre>
 <p>See: <a href="#f-float">float</a>, <a href="#f-intp">int?</a>, <a href="#f-numberp">number?</a></p>
 <hr/>
 <p><a name="f-floor"></a></p>
 <h2 id="floor">floor</h2>
 <pre><code>syntax: (floor number)
-::-
-
-Description:
-
-Returns the greatest integer less than or equal to number.
-The result is always a floating-point value.
-
-Examples:
-
 </code></pre>
-<p>(floor -1.5)
-;-&#62; -2</p>
-<p>(floor 3.4)
+<p>Description:</p>
+<p>Returns the greatest integer less than or equal to number.
+The result is always a floating-point value.</p>
+<p>Examples:</p>
+<pre><code>(floor -1.5)
+;-&#62; -2
+
+(floor 3.4)
 ;-&#62; 3
-::-</p>
+</code></pre>
 <p>See: <a href="#f-ceil">ceil</a>, <a href="#f-int">int</a></p>
 <hr/>
 <p><a name="f-flt"></a></p>
 <h2 id="flt">flt</h2>
 <pre><code>syntax: (flt number)
-::-
-
-Description:
-
-Converts number into a 32-bit IEEE-754 floating value encoded
-inside an integer. This is useful when an external C function
-expects a 32-bit float rather than Rebel’s native 64-bit float.
-
-The returned integer contains the raw 4-byte float bit pattern.
-
-Examples:
-
 </code></pre>
-<p>(flt 1.23)
-;-&#62; 1067282596</p>
-<p>;; same encoding shown manually
-(get-int (pack &#8220;f&#8221; 1.23))
-;-&#62; 1067282596</p>
-<p>;; verify decode
-(unpack &#8220;f&#8221; (pack &#8220;ld&#8221; (flt 1.2345)))
+<p>Description:</p>
+<p>Converts number into a 32-bit IEEE-754 floating value encoded
+inside an integer. This is useful when an external C function
+expects a 32-bit float rather than Rebel’s native 64-bit float.</p>
+<p>The returned integer contains the raw 4-byte float bit pattern.</p>
+<p>Examples:</p>
+<pre><code>(flt 1.23)
+;-&#62; 1067282596
+
+;; same encoding shown manually
+(get-int (pack "f" 1.23))
+;-&#62; 1067282596
+
+;; verify decode
+(unpack "f" (pack "ld" (flt 1.2345)))
 ;-&#62; (1.234500051)
-::-</p>
+</code></pre>
 <p>Notes:</p>
 <ul>
 <li>Use when calling external code that requires 32-bit floats.</li>
@@ -6016,28 +5988,22 @@ value (if any) is restored after the loop completes or exits.</p>
     (push n lst -1)))
 lst
 ;-&#62; (5 4 3 2 1)
-::-
-
-Notes:
-
-- Step size must be positive; decreasing ranges work because
-  sym still moves toward num-to by the given step.
-- exp-break is tested before body, allowing clean early exit.
-- for is suitable for numeric iteration; for iterating lists
-  see dotimes, dolist, or dotree.
-
-See: [sequence](#f-sequence), [dotimes](#f-dotimes),
-[dolist](#f-dolist), [dotree](#f-dotree)
-
----
-
-
-&#60;a name="f-for-all"&#62;&#60;&#47;a&#62;
-## for-all
-
 </code></pre>
-<p>syntax: (for-all func-condition list)
-::-</p>
+<p>Notes:</p>
+<ul>
+<li>Step size must be positive; decreasing ranges work because
+sym still moves toward num-to by the given step.</li>
+<li>exp-break is tested before body, allowing clean early exit.</li>
+<li>for is suitable for numeric iteration; for iterating lists
+see dotimes, dolist, or dotree.</li>
+</ul>
+<p>See: <a href="#f-sequence">sequence</a>, <a href="#f-dotimes">dotimes</a>,
+<a href="#f-dolist">dolist</a>, <a href="#f-dotree">dotree</a></p>
+<hr/>
+<p><a name="f-for-all"></a></p>
+<h2 id="for-all">for-all</h2>
+<pre><code>syntax: (for-all func-condition list)
+</code></pre>
 <p>Description:</p>
 <p>Evaluates func-condition on every element of list. If every
 evaluation yields a non-nil value, for-all returns true.
