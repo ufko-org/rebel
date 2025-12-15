@@ -2872,7 +2872,7 @@ true
 )
 
 (define (test-mut)
-  (= (mut x 1) 1))
+  (true? (mut x 1)))
 
 (define (test-setf)
  (and

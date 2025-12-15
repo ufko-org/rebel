@@ -5367,7 +5367,7 @@ MUT_BEGIN:
         {
             goto MUT_BEGIN;
         }
-        return(cell);
+        return(trueCell);
     }
 
     /* delete contents of original cell */
@@ -5413,7 +5413,7 @@ MUT_BEGIN:
     /* return modified cell */
     symbolCheck = symbolRef;
     pushResultFlag = FALSE;
-    return(cell);
+    return(trueCell);
 }
 
 
