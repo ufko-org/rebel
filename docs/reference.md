@@ -20544,6 +20544,40 @@ See: [date](#f-date), [date-value](#f-date-value),
 ---
 
 
+<a name="f-time-of-day"></a>
+## time-of-day
+
+```
+syntax: (time-of-day)
+```
+
+Description:
+
+Returns the time in milliseconds elapsed since the
+start of the current day.
+
+The value is reset at midnight and increases
+monotonically during the day.
+
+Examples:
+
+```
+(time-of-day)
+;-> 45238765
+```
+
+Notes:
+
+- The returned value represents milliseconds since
+  00:00:00 local time.
+- Useful for measuring elapsed time within a day.
+- The value wraps at midnight.
+
+See: [date](#f-date), [date-value](#f-date-value),
+     [time](#f-time), [now](#f-now)
+
+---
+
 <a name="f-timer"></a>
 ## timer
 

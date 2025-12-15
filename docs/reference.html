@@ -15794,6 +15794,29 @@ sum of all evaluations.</li>
 <p>See: <a href="#f-date">date</a>, <a href="#f-date-value">date-value</a>,
      <a href="#f-time-of-day">time-of-day</a>, <a href="#f-now">now</a></p>
 <hr/>
+<p><a name="f-time-of-day"></a></p>
+<h2 id="time-of-day">time-of-day</h2>
+<pre><code>syntax: (time-of-day)
+</code></pre>
+<p>Description:</p>
+<p>Returns the time in milliseconds elapsed since the
+start of the current day.</p>
+<p>The value is reset at midnight and increases
+monotonically during the day.</p>
+<p>Examples:</p>
+<pre><code>(time-of-day)
+;-&#62; 45238765
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The returned value represents milliseconds since
+00:00:00 local time.</li>
+<li>Useful for measuring elapsed time within a day.</li>
+<li>The value wraps at midnight.</li>
+</ul>
+<p>See: <a href="#f-date">date</a>, <a href="#f-date-value">date-value</a>,
+     <a href="#f-time">time</a>, <a href="#f-now">now</a></p>
+<hr/>
 <p><a name="f-timer"></a></p>
 <h2 id="timer">timer</h2>
 <pre><code>syntax: (timer sym-event-handler | func-event-handler num-seconds [int-option])
