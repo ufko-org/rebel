@@ -24,7 +24,7 @@
 
 ### Rebel Fields of Operation
 
-- **Core Scripting & Flow Control**
+- **Core Programming & Flow Control**
   - loops, conditionals, list processing, anonymous functional programming
 - **Strings & Data Manipulation**
   - regex, parsing, conversion, unicode, text transformation
