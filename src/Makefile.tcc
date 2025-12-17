@@ -38,4 +38,4 @@ clean:
 	rm -f rebel *.orig $(OBJS)
 
 test: rebel
-	./rebel qa-dot
+	cd ../tests ; ../src/rebel -q run.rbl
