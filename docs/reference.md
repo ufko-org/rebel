@@ -1168,6 +1168,7 @@ Notes:
 
 See: [cosh](#f-cosh), [asinh](#f-asinh), [atanh](#f-atanh)
 
+
 ---
 
 
@@ -1176,31 +1177,46 @@ See: [cosh](#f-cosh), [asinh](#f-asinh), [atanh](#f-atanh)
 
 ```
 syntax: (add num-1 [num-2 ...])
+syntax: (add num-1)
 ```
 
 Description:
 
-Returns the floating point sum of all arguments. Each
-value may be an integer or a float, but the result is
-always a floating point number. The calculation follows
-normal floating point rules. If any argument evaluates
-to NaN, the final result is NaN.
+Computes the sum of all arguments.
+
+The function accepts integer and floating point
+operands. If all arguments evaluate to integers, the
+operation is performed using integer arithmetic and
+returns an integer result.
+
+If any argument evaluates to a floating point value,
+the operation is performed using floating point
+arithmetic and returns a floating point result.
+
+If any argument evaluates to NaN, the result is NaN.
 
 Examples:
 
 ```
-(add 2 3.25 9)           ; → 14.25
-(add 1 2 3 4 5)          ; → 15
+(add 2 3.25 9)
+;-> 14.25
+
+(add 1 2 3 4 5)
+;-> 15
+
+(add 5)
+;-> 5
 ```
 
 Notes:
+- When all arguments are integers, the operation uses
+  integer arithmetic.
+- When any argument is a floating point value, the
+  operation uses floating point arithmetic.
+- A floating point result that is mathematically an
+  integer may be printed without a fractional part.
 
-- Always returns a floating point number, even when all
-  inputs are integers.
-- Any NaN produced during evaluation propagates to the
-  result.
-
-See: [sub](#f-sub), [mul](#f-mul), [div](#f-div)
+See: [sub](#f-sub), [mul](#f-mul), [div](#f-div), [mod](#f-mod)
 
 ---
 
@@ -5477,16 +5493,27 @@ syntax: (div num-1)
 Description:
 
 Successively divides num-1 by each following argument.
-Mixed numeric types are allowed, but the result is always
-a floating-point number. Any operation involving NaN
-propagates NaN.
+
+The function accepts integer and floating point
+operands. If all arguments evaluate to integers, the
+operation is performed using integer arithmetic and
+returns an integer result.
+
+If any argument evaluates to a floating point value,
+the operation is performed using floating point
+arithmetic and returns a floating point result.
 
 When called with a single argument, div returns the
 multiplicative inverse of num-1.
 
+If any argument evaluates to NaN, the result is NaN.
+
 Examples:
 
 ```
+(div 12 3)
+;-> 4
+
 (div 10 3)
 ;-> 3.333333333
 
@@ -5498,8 +5525,12 @@ Examples:
 ```
 
 Notes:
-
-- Always returns a floating-point result.
+- When all arguments are integers, the operation uses
+  integer arithmetic.
+- When any argument is a floating point value, the
+  operation uses floating point arithmetic.
+- A floating point result that is mathematically an
+  integer may be printed without a fractional part.
 - Division by zero yields NaN.
 
 See: [mul](#f-mul), [sub](#f-sub), [add](#f-add)
@@ -11127,75 +11158,105 @@ See: [max](#f-max)
 ## mod
 
 ```
-syntax: (mod num-1 num-2 [num-3 ... ])
+syntax: (mod num-1 num-2 [num-3 ...])
 syntax: (mod num-1)
 ```
 
 Description:
 
-Calculates the modular value of the numbers in num-1 and
-num-2. mod computes the remainder from the division of the
-numerator num-i by the denominator num-i + 1.
+Computes the remainder of successive modulo operations.
+The result of each step becomes the input to the next.
 
-The return value is computed as:
+The function accepts integer and floating point
+operands. If all arguments evaluate to integers, the
+operation is performed using integer arithmetic and
+returns an integer result.
 
-numerator - n * denominator
+If any argument evaluates to a floating point value,
+the operation is performed using floating point
+arithmetic and returns a floating point result.
 
-where n is the quotient of the numerator divided by the
-denominator, rounded toward zero to an integer. The result
-has the same sign as the numerator and its magnitude is
-less than the magnitude of the denominator.
-
-When multiple arguments are given, the operation is
-applied successively from left to right.
-
-In the second syntax, 1 is assumed for num-2 and the
-result is the fractional part of num-1.
+If any argument evaluates to NaN, the result is NaN.
 
 Examples:
 
 ```
-(mod 10.5 3.3)
-;-> 0.6
+(mod 10 3)
+;-> 1
 
-(mod -10.5 3.3)
-;-> -0.6
+(mod 10.5 3)
+;-> 1.5
 
-(mod -10.5)
-;-> -0.5
+(mod 20 7 3)
+;-> 2
+
+(mod 9)
+;-> 9
 ```
 
-Use the [%](#f-percent) function when working with
-integers only.
+Notes:
+- When all arguments are integers, the operation uses
+  integer arithmetic.
+- When any argument is a floating point value, the
+  operation uses floating point arithmetic.
+- A floating point result that is mathematically an
+  integer may be printed without a fractional part.
+- Modulo by zero yields NaN.
+
+See: [%](#f-percent), [add](#f-add), [sub](#f-sub),
+[mul](#f-mul), [div](#f-div)
 
 ---
-
 
 <a name="f-mul"></a>
 ## mul
 
 ```
-syntax: (mul num-1 num-2 [num-3 ... ])
+syntax: (mul num-1 num-2 [num-3 ...])
+syntax: (mul num-1)
 ```
 
 Description:
 
-Evaluates all expressions num-1 and any following numbers,
-calculating and returning their product.
+Computes the product of all arguments.
 
-mul performs mixed-type arithmetic but always returns a
-floating-point value. If any argument is NaN, the result
-is also NaN.
+The function accepts integer and floating point
+operands. If all arguments evaluate to integers, the
+operation is performed using integer arithmetic and
+returns an integer result.
+
+If any argument evaluates to a floating point value,
+the operation is performed using floating point
+arithmetic and returns a floating point result.
+
+If any argument evaluates to NaN, the result is NaN.
 
 Examples:
 
 ```
+(mul 2 3 4)
+;-> 24
+
+(mul 2 3 4 1.1)
+;-> 26.4
+
 (mul 1 2 3 4 5 1.1)
 ;-> 132
 
-(mul 0.5 0.5)
-;-> 0.25
+(mul 7)
+;-> 7
 ```
+
+Notes:
+- When all arguments are integers, the operation uses
+  integer arithmetic.
+- When any argument is a floating point value, the
+  operation uses floating point arithmetic.
+- A floating point result that is mathematically an
+  integer may be printed without a fractional part.
+
+See: [add](#f-add), [sub](#f-sub), [div](#f-div)
+
 
 ---
 
@@ -19537,28 +19598,34 @@ See: [import](#f-import), [pack](#f-pack),
 ## sub
 
 ```
-syntax: (sub num-1 [num-2 ... ])
+syntax: (sub num-1 [num-2 ...])
+syntax: (sub num-1)
 ```
 
 Description:
 
-Subtracts the values in num-2 and following arguments
-successively from num-1.
+Subtracts each subsequent argument from num-1.
 
-The function performs mixed-type arithmetic and accepts
-integers and floating point numbers as arguments. The
-result is always returned as a floating point number,
-even when all arguments are integers.
+The function accepts integer and floating point
+operands. If all arguments evaluate to integers, the
+operation is performed using integer arithmetic and
+returns an integer result.
+
+If any argument evaluates to a floating point value,
+the operation is performed using floating point
+arithmetic and returns a floating point result.
 
 When called with only one argument, sub returns the
 negated value of num-1.
 
-If any argument involved in the calculation is NaN,
-the result is NaN.
+If any argument evaluates to NaN, the result is NaN.
 
 Examples:
 
 ```
+(sub 10 3 2)
+;-> 5
+
 (sub 10 8 0.25)
 ;-> 1.75
 
@@ -19566,7 +19633,16 @@ Examples:
 ;-> -123
 ```
 
+Notes:
+- When all arguments are integers, the operation uses
+  integer arithmetic.
+- When any argument is a floating point value, the
+  operation uses floating point arithmetic.
+- A floating point result that is mathematically an
+  integer may be printed without a fractional part.
+
 See: [-](#f-minus), [add](#f-add), [mul](#f-mul), [div](#f-div)
+
 
 ---
 
