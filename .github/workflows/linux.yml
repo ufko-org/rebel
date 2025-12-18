@@ -21,7 +21,7 @@ jobs:
           make -f Makefile.linux clean
           make -f Makefile.linux
           cd ../tests
-          ./mk-tests-fs
+          ./mk-tests-fs.sh
           ../src/rebel -q run.rbl
 
 #      - name: Run -q test
