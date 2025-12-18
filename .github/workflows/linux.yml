@@ -24,13 +24,3 @@ jobs:
           ./mk-tests-fs.sh
           ../src/rebel -q run.rbl
 
-#      - name: Run -q test
-#        run: |
-#          cd examples
-#          echo -e "Running ./rebel -q"
-#          ../src/rebel -q 00-hello.rbl
-#      - name: Run regression tests in tests/ folder
-#        run: | 
-#          cd tests
-#          echo -e "Running ./rebel *.test.rbl:"
-#          ../src/rebel *.test.rbl
