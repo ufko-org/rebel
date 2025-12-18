@@ -886,36 +886,25 @@ expressed in radians.</p>
 <p><a name="f-add"></a></p>
 <h2 id="add">add</h2>
 <pre><code>syntax: (add num-1 [num-2 ...])
-syntax: (add num-1)
 </code></pre>
 <p>Description:</p>
-<p>Computes the sum of all arguments.</p>
-<p>The function accepts integer and floating point
-operands. If all arguments evaluate to integers, the
-operation is performed using integer arithmetic and
-returns an integer result.</p>
-<p>If any argument evaluates to a floating point value,
-the operation is performed using floating point
-arithmetic and returns a floating point result.</p>
-<p>If any argument evaluates to NaN, the result is NaN.</p>
+<p>Returns the floating point sum of all arguments. Each
+value may be an integer or a float, but the result is
+always a floating point number. The calculation follows
+normal floating point rules. If any argument evaluates
+to NaN, the final result is NaN.</p>
 <p>Examples:</p>
-<pre><code>(add 2 3.25 9)
-;-&#62; 14.25
-
-(add 1 2 3 4 5)
-;-&#62; 15
-
-(add 5)
-;-&#62; 5
+<pre><code>(add 2 3.25 9)           ; → 14.25
+(add 1 2 3 4 5)          ; → 15
 </code></pre>
-<p>Notes:
-- When all arguments are integers, the operation uses
-  integer arithmetic.
-- When any argument is a floating point value, the
-  operation uses floating point arithmetic.
-- A floating point result that is mathematically an
-  integer may be printed without a fractional part.</p>
-<p>See: <a href="#f-sub">sub</a>, <a href="#f-mul">mul</a>, <a href="#f-div">div</a>, <a href="#f-mod">mod</a></p>
+<p>Notes:</p>
+<ul>
+<li>Always returns a floating point number, even when all
+inputs are integers.</li>
+<li>Any NaN produced during evaluation propagates to the
+result.</li>
+</ul>
+<p>See: <a href="#f-sub">sub</a>, <a href="#f-mul">mul</a>, <a href="#f-div">div</a></p>
 <hr/>
 <p><a name="f-address"></a></p>
 <h2 id="address">address</h2>
@@ -4152,22 +4141,14 @@ directory.</li>
 syntax: (div num-1)
 </code></pre>
 <p>Description:</p>
-<p>Successively divides num-1 by each following argument.</p>
-<p>The function accepts integer and floating point
-operands. If all arguments evaluate to integers, the
-operation is performed using integer arithmetic and
-returns an integer result.</p>
-<p>If any argument evaluates to a floating point value,
-the operation is performed using floating point
-arithmetic and returns a floating point result.</p>
+<p>Successively divides num-1 by each following argument.
+Mixed numeric types are allowed, but the result is always
+a floating-point number. Any operation involving NaN
+propagates NaN.</p>
 <p>When called with a single argument, div returns the
 multiplicative inverse of num-1.</p>
-<p>If any argument evaluates to NaN, the result is NaN.</p>
 <p>Examples:</p>
-<pre><code>(div 12 3)
-;-&#62; 4
-
-(div 10 3)
+<pre><code>(div 10 3)
 ;-&#62; 3.333333333
 
 (div 120 (sub 9.0 6) 100)
@@ -4176,14 +4157,11 @@ multiplicative inverse of num-1.</p>
 (div 10)
 ;-&#62; 0.1
 </code></pre>
-<p>Notes:
-- When all arguments are integers, the operation uses
-  integer arithmetic.
-- When any argument is a floating point value, the
-  operation uses floating point arithmetic.
-- A floating point result that is mathematically an
-  integer may be printed without a fractional part.
-- Division by zero yields NaN.</p>
+<p>Notes:</p>
+<ul>
+<li>Always returns a floating-point result.</li>
+<li>Division by zero yields NaN.</li>
+</ul>
 <p>See: <a href="#f-mul">mul</a>, <a href="#f-sub">sub</a>, <a href="#f-add">add</a></p>
 <hr/>
 <p><a name="f-dountil"></a></p>
@@ -8631,80 +8609,53 @@ the numeric type required to represent the minimum value.</p>
 <hr/>
 <p><a name="f-mod"></a></p>
 <h2 id="mod">mod</h2>
-<pre><code>syntax: (mod num-1 num-2 [num-3 ...])
+<pre><code>syntax: (mod num-1 num-2 [num-3 ... ])
 syntax: (mod num-1)
 </code></pre>
 <p>Description:</p>
-<p>Computes the remainder of successive modulo operations.
-The result of each step becomes the input to the next.</p>
-<p>The function accepts integer and floating point
-operands. If all arguments evaluate to integers, the
-operation is performed using integer arithmetic and
-returns an integer result.</p>
-<p>If any argument evaluates to a floating point value,
-the operation is performed using floating point
-arithmetic and returns a floating point result.</p>
-<p>If any argument evaluates to NaN, the result is NaN.</p>
+<p>Calculates the modular value of the numbers in num-1 and
+num-2. mod computes the remainder from the division of the
+numerator num-i by the denominator num-i + 1.</p>
+<p>The return value is computed as:</p>
+<p>numerator - n * denominator</p>
+<p>where n is the quotient of the numerator divided by the
+denominator, rounded toward zero to an integer. The result
+has the same sign as the numerator and its magnitude is
+less than the magnitude of the denominator.</p>
+<p>When multiple arguments are given, the operation is
+applied successively from left to right.</p>
+<p>In the second syntax, 1 is assumed for num-2 and the
+result is the fractional part of num-1.</p>
 <p>Examples:</p>
-<pre><code>(mod 10 3)
-;-&#62; 1
+<pre><code>(mod 10.5 3.3)
+;-&#62; 0.6
 
-(mod 10.5 3)
-;-&#62; 1.5
+(mod -10.5 3.3)
+;-&#62; -0.6
 
-(mod 20 7 3)
-;-&#62; 2
-
-(mod 9)
-;-&#62; 9
+(mod -10.5)
+;-&#62; -0.5
 </code></pre>
-<p>Notes:
-- When all arguments are integers, the operation uses
-  integer arithmetic.
-- When any argument is a floating point value, the
-  operation uses floating point arithmetic.
-- A floating point result that is mathematically an
-  integer may be printed without a fractional part.
-- Modulo by zero yields NaN.</p>
-<p>See: [%](#f-percent), <a href="#f-add">add</a>, <a href="#f-sub">sub</a>,
-<a href="#f-mul">mul</a>, <a href="#f-div">div</a></p>
+<p>Use the [%](#f-percent) function when working with
+integers only.</p>
 <hr/>
 <p><a name="f-mul"></a></p>
 <h2 id="mul">mul</h2>
-<pre><code>syntax: (mul num-1 num-2 [num-3 ...])
-syntax: (mul num-1)
+<pre><code>syntax: (mul num-1 num-2 [num-3 ... ])
 </code></pre>
 <p>Description:</p>
-<p>Computes the product of all arguments.</p>
-<p>The function accepts integer and floating point
-operands. If all arguments evaluate to integers, the
-operation is performed using integer arithmetic and
-returns an integer result.</p>
-<p>If any argument evaluates to a floating point value,
-the operation is performed using floating point
-arithmetic and returns a floating point result.</p>
-<p>If any argument evaluates to NaN, the result is NaN.</p>
+<p>Evaluates all expressions num-1 and any following numbers,
+calculating and returning their product.</p>
+<p>mul performs mixed-type arithmetic but always returns a
+floating-point value. If any argument is NaN, the result
+is also NaN.</p>
 <p>Examples:</p>
-<pre><code>(mul 2 3 4)
-;-&#62; 24
-
-(mul 2 3 4 1.1)
-;-&#62; 26.4
-
-(mul 1 2 3 4 5 1.1)
+<pre><code>(mul 1 2 3 4 5 1.1)
 ;-&#62; 132
 
-(mul 7)
-;-&#62; 7
+(mul 0.5 0.5)
+;-&#62; 0.25
 </code></pre>
-<p>Notes:
-- When all arguments are integers, the operation uses
-  integer arithmetic.
-- When any argument is a floating point value, the
-  operation uses floating point arithmetic.
-- A floating point result that is mathematically an
-  integer may be printed without a fractional part.</p>
-<p>See: <a href="#f-add">add</a>, <a href="#f-sub">sub</a>, <a href="#f-div">div</a></p>
 <hr/>
 <p><a name="f-multiply"></a></p>
 <h2 id="multiply">multiply</h2>
@@ -15064,38 +15015,26 @@ or unpack can crash the interpreter.</li>
 <hr/>
 <p><a name="f-sub"></a></p>
 <h2 id="sub">sub</h2>
-<pre><code>syntax: (sub num-1 [num-2 ...])
-syntax: (sub num-1)
+<pre><code>syntax: (sub num-1 [num-2 ... ])
 </code></pre>
 <p>Description:</p>
-<p>Subtracts each subsequent argument from num-1.</p>
-<p>The function accepts integer and floating point
-operands. If all arguments evaluate to integers, the
-operation is performed using integer arithmetic and
-returns an integer result.</p>
-<p>If any argument evaluates to a floating point value,
-the operation is performed using floating point
-arithmetic and returns a floating point result.</p>
+<p>Subtracts the values in num-2 and following arguments
+successively from num-1.</p>
+<p>The function performs mixed-type arithmetic and accepts
+integers and floating point numbers as arguments. The
+result is always returned as a floating point number,
+even when all arguments are integers.</p>
 <p>When called with only one argument, sub returns the
 negated value of num-1.</p>
-<p>If any argument evaluates to NaN, the result is NaN.</p>
+<p>If any argument involved in the calculation is NaN,
+the result is NaN.</p>
 <p>Examples:</p>
-<pre><code>(sub 10 3 2)
-;-&#62; 5
-
-(sub 10 8 0.25)
+<pre><code>(sub 10 8 0.25)
 ;-&#62; 1.75
 
 (sub 123)
 ;-&#62; -123
 </code></pre>
-<p>Notes:
-- When all arguments are integers, the operation uses
-  integer arithmetic.
-- When any argument is a floating point value, the
-  operation uses floating point arithmetic.
-- A floating point result that is mathematically an
-  integer may be printed without a fractional part.</p>
 <p>See: <a href="#f-minus">-</a>, <a href="#f-add">add</a>, <a href="#f-mul">mul</a>, <a href="#f-div">div</a></p>
 <hr/>
 <p><a name="f-swap"></a></p>
