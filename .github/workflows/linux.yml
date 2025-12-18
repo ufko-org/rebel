@@ -20,7 +20,8 @@ jobs:
           cd src
           make -f Makefile.linux clean
           make -f Makefile.linux
-          ./rebel qa-dot
+          cd tests
+          ../src/rebel -q run.rbl
 
 #      - name: Run -q test
 #        run: |
