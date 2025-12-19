@@ -134,12 +134,18 @@ PRIMITIVE primitive[] =
     {"--",          p_decrementI,0x400},
 
     /* --------- bit ops --------------- */
-    {"<<",          p_shiftLeft,0},
-    {">>",          p_shiftRight,   0},
-    {"&",           p_bitAnd,   0},
-    {"|",           p_bitOr,    0},
-    {"^",           p_bitXor,   0},
-    {"~",           p_bitNot,   0},
+    {"<<",           p_shiftLeft,0},
+    {"shl",          p_shiftLeft,0},
+    {">>",           p_shiftRight,   0},
+    {"shr",          p_shiftRight,   0},
+    {"&",            p_bitAnd,   0},
+    {"band",         p_bitAnd,   0},
+    {"|",            p_bitOr,    0},
+    {"bor",          p_bitOr,    0},
+    {"^",            p_bitXor,   0},
+    {"bxor",         p_bitXor,   0},
+    {"~",            p_bitNot,   0},
+    {"bnot",         p_bitNot,   0},
 
     /* --------- math and float ------- */
     {"inc",         p_incrementF,0x400},
