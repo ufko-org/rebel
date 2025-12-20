@@ -84,7 +84,7 @@ Rebel v.1.0 64-bit on BSD IPv4/6 UTF-8 libffi, options: rebel -h
 4
 > (list? sum)
 true
-> (setf (nth 1 sum) '(- x x))
+> (set (nth 1 sum) '(- x x))
 (- x x)
 > (sum 2) ; surprise :D
 0
