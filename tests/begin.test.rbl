@@ -7,7 +7,7 @@
 ; ------------------------------------------------------------
 (test "1: begin sets and increments"
   (begin
-    (set 'x 0)
+    (set x 0)
     (inc x)
     (inc x)
     (= x 2))

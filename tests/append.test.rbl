@@ -64,7 +64,7 @@
 )
 
 (test "11: append default functor repeated"
-    (begin (set 'C:C '(a b c))
+    (begin (set C:C '(a b c))
     (append C C C))
   '(a b c a b c a b c)
 )

@@ -23,10 +23,10 @@
 ; ---------------------------------------------------------------------
 (context 'test)
 (define-macro (test:test name expr want (re 0))
-  (setf expr (eval expr))
-  (setf want (eval want))
-  (if (= test:pass nil) (setq test:pass 0))
-  (if (= test:fail nil) (setq test:fail 0))
+  (set expr (eval expr))
+  (set want (eval want))
+  (if (= test:pass nil) (set test:pass 0))
+  (if (= test:fail nil) (set test:fail 0))
   (++ test:cases)
 
   (if (= re 0)

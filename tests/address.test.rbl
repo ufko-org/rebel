@@ -7,7 +7,7 @@
 ; ------------------------------------------------------------
 (test "1: address of local string variable"
   (local (s)
-    (set 's "foo")
+    (set s "foo")
     (= (address s) (last (dump s)))
   )
   true

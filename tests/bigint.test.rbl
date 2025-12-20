@@ -18,7 +18,7 @@
 
 (test "3: bigint of local integer"
   (local (n)
-    (set 'n 567890)
+    (set n 567890)
     (bigint n)
   )
   567890L

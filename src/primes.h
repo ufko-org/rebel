@@ -68,9 +68,12 @@ PRIMITIVE primitive[] =
     {"expand",      p_expand,   0},
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
-    {"set",         p_set,      0x400},
-    {"setf",        p_setf,     0x400},
-    {"setq",        p_setf,     0x400},
+    /* set and def retires set '/setf/setq */
+    {"set",         p_setf,      0x400}, 
+    {"def",         p_setf,      0x400},
+    /* {"set",         p_set,      0x400}, */
+    /* {"setf",        p_setf,     0x400}, */
+    /* {"setq",        p_setf,     0x400}, */
     {"let",         p_let,      0x402},
     {"local",       p_local,    2},
     {"letn",        p_letn,     0x002},

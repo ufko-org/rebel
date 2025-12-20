@@ -22,7 +22,7 @@
 
 (test "4: sum of first 5 float increments"
   (local (l)
-    (set 'l '(0.1 0.2 0.3 0.4 0.5))
+    (set l '(0.1 0.2 0.3 0.4 0.5))
     (apply add l)
   )
   1.5
@@ -35,7 +35,7 @@
 
 (test "6: sum of first 100 floats"
   (local (l)
-    (set 'l '())
+    (set l '())
     (dotimes (x 100)
       (push (float x) l))  ; convert integers to float
     (apply add l)

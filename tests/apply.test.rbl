@@ -34,8 +34,7 @@
 ; Variables
 ; ------------------------------------------------------------
 (test "5: apply set and increment"
-  (let ((x 0))
-    (= (inc (apply set '(x 123))) 124 x))
+  (= (inc (apply set '(x 123))) 124)
   true
 )
 

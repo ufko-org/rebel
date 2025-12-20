@@ -38,7 +38,7 @@
 
 ; String indexing
 ; ------------------------------------------------------------
-(set 'D:D "ABCDEFG")
+(set D:D "ABCDEFG")
 
 (test "6: char D 0"
   (= (char D 0) 65)

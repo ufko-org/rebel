@@ -39,9 +39,9 @@
 ; ------------------------------------------------------------
 (test "6: bayes-query reset Lex:* vars"
   (begin
-    (set 'Lex:F '(0 0))
-    (set 'Lex:B '(0 0))
-    (set 'Lex:total '(0 0))
+    (set Lex:F '(0 0))
+    (set Lex:B '(0 0))
+    (set Lex:total '(0 0))
     true)
   true
 )

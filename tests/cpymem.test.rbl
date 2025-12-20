@@ -7,8 +7,8 @@
 ; ------------------------------------------------------------
 (test "1: cpymem copies 5 bytes from string to string"
   (begin
-    (set 'from "12345")
-    (set 'to   "     ")
+    (set from "12345")
+    (set to   "     ")
     (cpymem (address from) (address to) 5)
     (= from to)
   )
@@ -19,8 +19,8 @@
 ; ------------------------------------------------------------
 (test "2: cpymem copies first 3 bytes only"
   (begin
-    (set 'from "abcde")
-    (set 'to   "xxxxx")
+    (set from "abcde")
+    (set to   "xxxxx")
     (cpymem (address from) (address to) 3)
     (= to "abcxx")
   )
@@ -31,7 +31,7 @@
 ; ------------------------------------------------------------
 (test "3: cpymem with same string leaves it unchanged"
   (begin
-    (set 's "hello")
+    (set s "hello")
     (cpymem (address s) (address s) 5)
     (= s "hello")
   )

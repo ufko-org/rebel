@@ -6,7 +6,7 @@
 ; Basic symbol copy
 ; ------------------------------------------------------------
 (test "1: set C:var with C:x C:y"
-  (set 'C:var '(C:x C:y))
+  (set C:var '(C:x C:y))
   '(C:x C:y)
 )
 
@@ -49,7 +49,7 @@
 ; Fn moved into a new context
 ; ------------------------------------------------------------
 (test "6: set tmp fn"
-  (set 'tmp (fn (x) (+ x x)))
+  (set tmp (fn (x) (+ x x)))
   '(fn (x) (+ x x))
 )
 
