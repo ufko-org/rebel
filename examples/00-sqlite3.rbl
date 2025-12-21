@@ -16,11 +16,11 @@
 (sql3:sql "insert into persons (name, age) values (?, ?);" '("Charlie" 40))
 
 ;; query all rows
-(set 'result (sql3:sql "select * from persons;"))
+(set result (sql3:sql "select * from persons;"))
 (println "All persons:" result)
 
 ;; query with condition
-(set 'result (sql3:sql "select name, age from persons where age > ?;" '(30)))
+(set result (sql3:sql "select name, age from persons where age > ?;" '(30)))
 (println "Persons older than 30:" result)
 
 ;; get column names
