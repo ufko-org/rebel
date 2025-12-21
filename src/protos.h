@@ -421,6 +421,7 @@ CELL *p_sequence(CELL *params);
 CELL *p_series(CELL *params);
 CELL *p_set(CELL *params);
 CELL *p_setLocale(CELL *params);
+CELL *p_setdef(CELL *params);
 CELL *p_setf(CELL *params);
 CELL *p_setq(CELL *params);
 CELL *p_setRef(CELL *params);

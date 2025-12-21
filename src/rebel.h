@@ -381,7 +381,8 @@ This is for 64bit large file support (LFS),
 #define ERR_BIGINT_NOT_ALLOWED 74
 #define ERR_CANNOT_CONVERT 75
 #define ERR_CANNOT_CONVERT_NULL 76
-#define MAX_ERROR_NUMBER 76
+#define ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF 77
+#define MAX_ERROR_NUMBER 77
 #define UNKNOWN_ERROR "Unknown error"
 
 /* network error handling */
