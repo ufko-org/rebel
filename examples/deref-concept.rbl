@@ -13,13 +13,13 @@
 #include <stdio.h>                       ; (constant 'deref eval)  ; aliasing eval as deref
 
 int main() {
-    int a = 2, b = 7;                    (setq a 2 b 7)
-    int *pa = &a, *pb = &b;              (setq pa 'a pb 'b)
-    int tmp;                             (setq tmp 0)
+    int a = 2, b = 7;                    (set a 2 b 7)
+    int *pa = &a, *pb = &b;              (set pa 'a pb 'b)
+    int tmp;                             (set tmp 0)
 
-    tmp = *pa;                           (setq tmp (deref pa))
-    *pa = *pb;                           (setq (deref pa) (deref pb))
-    *pb = tmp;                           (setq (deref pb) tmp)
+    tmp = *pa;                           (set tmp (deref pa))
+    *pa = *pb;                           (set (deref pa) (deref pb))
+    *pb = tmp;                           (set (deref pb) tmp)
 
     printf("a=%d b=%d\n", a, b);         (println "a=" a " b=" b) ; -> a=7 b=2
     return 0;                            (exit)
@@ -31,13 +31,13 @@ int main() {
 #include <stdio.h>                       ; (constant '* eval)  ; aliasing eval as "*"
 
 int main() {
-    int a = 2, b = 7;                    (setq a 2 b 7)
-    int *pa = &a, *pb = &b;              (setq pa 'a pb 'b)
-    int tmp;                             (setq tmp 0)
+    int a = 2, b = 7;                    (set a 2 b 7)
+    int *pa = &a, *pb = &b;              (set pa 'a pb 'b)
+    int tmp;                             (set tmp 0)
 
-    tmp = *pa;                           (setq tmp (* pa))
-    *pa = *pb;                           (setq (* pa) (* pb))
-    *pb = tmp;                           (setq (* pb) tmp)
+    tmp = *pa;                           (set tmp (* pa))
+    *pa = *pb;                           (set (* pa) (* pb))
+    *pb = tmp;                           (set (* pb) tmp)
 
     printf("a=%d b=%d\n", a, b);         (println "a=" a " b=" b) ; -> a=7 b=2
     return 0;                            (exit)

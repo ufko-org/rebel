@@ -8,7 +8,7 @@
 ;-> 10
 
 ; multiply elements of a list
-(set 'lst '(3 4 5))
+(set lst '(3 4 5))
 ;-> (3 4 5)
 
 (apply * lst)

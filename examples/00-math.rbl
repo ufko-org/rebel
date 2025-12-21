@@ -34,7 +34,7 @@
 (define (fact2 n)
   (let (acc 1L)
     (for (x 1L n)
-      (setq acc (* acc x))
+      (set acc (* acc x))
     )
   )
 )
