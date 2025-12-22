@@ -92,7 +92,7 @@ PRIMITIVE primitive[] =
     {"expand",      p_expand,   0},
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
-    {"set",         p_setdef,      0x400}, /* rebel origin: retires set '/setq/setf */ 
+    {"set",         p_setdef,   0x400}, /* rebel origin: retires set '/setq/setf */ 
     /* retired from language:
     {"set",         p_set,      0x400},
     {"setf",        p_setf,     0x400},
