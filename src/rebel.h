@@ -301,7 +301,6 @@ This is for 64bit large file support (LFS),
 #define TRACE_CILK 0x8000
 
 /* error handling */
-/* #define ERR_NOT_ENOUGH_MEMORY 1 */
 #define ERR_OUT_OF_MEMORY 1 /* ufko */
 #define ERR_OUT_OF_ENV_STACK 2
 #define ERR_OUT_OF_CALL_STACK 3
@@ -375,7 +374,6 @@ This is for 64bit large file support (LFS),
 #define ERR_FFI_PREP_FAILED 71
 #define ERR_FFI_INVALID_TYPE 72
 #define ERR_FFI_STRUCT_EXPECTED 73
-#define ERR_BIGINT_NOT_ALLOWED 74
 #define ERR_CANNOT_CONVERT 75
 #define ERR_CANNOT_CONVERT_NULL 76
 #define ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF 77

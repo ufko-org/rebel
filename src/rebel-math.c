@@ -312,8 +312,6 @@ CELL *arithmetikOp(CELL *params, int op)
                 case OP_DIVIDE:
                 case OP_MODULO:
                     break;
-                default:
-                    return(errorProc(ERR_BIGINT_NOT_ALLOWED));
             }
             return(cell);
         }
@@ -361,8 +359,6 @@ NEXT_FIRST_BIGINT:
             case OP_MODULO:
                 num = divModBigint(numx, sizex, numy, sizey, TRUE, &n);
                 break;
-            default:
-                return(errorProc(ERR_BIGINT_NOT_ALLOWED));
         }
 
         if(freePtr)
