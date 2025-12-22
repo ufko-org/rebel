@@ -1,4 +1,4 @@
-/* primes.h - table of primitives for Rebel
+/*  primes.h - table of primitives for Rebel
 
     Copyright (C) 2015 Lutz Mueller
     Copyright (C) 2025 Ufko (ufko.org)
@@ -16,6 +16,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    ---------------------------------------------------------------------
+    NOTE:
+    This table defines the active Rebel language interface.
+     
+    Names may change or disappear over time.
+    For backward compatibility, users can define their own aliases
+    or migrate to the current names listed here.
+
+    All original primitives are either still available as working
+    alternatives or commented out when retired. Commented entries
+    remain in this file as historical reference.
+     
+    ---------------------------------------------------------------------
+    Any new primitive, if added, is marked with a
+    "rebel origin" comment next to it, indicating
+    a new C implementation with new semantics.
+    ---------------------------------------------------------------------
+
+    primes.h is the authoritative source.
 */
 
 #ifndef PRIMES_H
@@ -71,7 +90,7 @@ PRIMITIVE primitive[] =
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
     /* set retires set '/setf/setq */
-    {"set",         p_setdef,      0x400}, 
+    {"set",         p_setdef,      0x400}, /* rebel origin */ 
     /* {"set",         p_set,      0x400}, */
     /* {"setf",        p_setf,     0x400}, */
     /* {"setq",        p_setf,     0x400}, */
