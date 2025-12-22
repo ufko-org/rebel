@@ -807,12 +807,10 @@ CELL *p_format(CELL *params)
             {
                 floatNum = (INT)cell->contents;
             }
-            #ifdef BIGINT
             else if(cell->type == CELL_BIGINT)
             {
                 floatNum = bigintCellToFloat(cell);
             }
-            #endif
             else
             {
                 goto FORMAT_DATA_ERROR;
@@ -1222,13 +1220,11 @@ CELL *p_integer(CELL *params)
     }
     else if(isNumber(cell->type))
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             num = bigintToInt64(cell);
         }
         else
-        #endif
             getInteger64Ext(cell, &num, FALSE);
         return(stuffInteger(num));
     }
@@ -1305,13 +1301,11 @@ CELL *p_float(CELL *params)
     }
     else if(isNumber(cell->type))
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             value = bigintCellToFloat(cell);
         }
         else
-        #endif
             getFloat(cell, &value);
         return(stuffFloat(value));
     }

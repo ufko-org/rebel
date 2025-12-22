@@ -28,7 +28,6 @@
    Undefining DEBUGGER does not affected simple tracing with (trace <device-no>)
 */
 
-#define BIGINT
 #define KMEANS
 #define DEBUGGER
 #define XML_SUPPORT
@@ -239,9 +238,7 @@ This is for 64bit large file support (LFS),
     #define CELL_INT64 (2 | EVAL_SELF_TYPE_MASK | NUMBER_TYPE_MASK | INT64_MASK)
 #endif
 
-#ifdef BIGINT
     #define CELL_BIGINT (2 | EVAL_SELF_TYPE_MASK | NUMBER_TYPE_MASK | BIGINT_MASK)
-#endif
 
 #define CELL_FLOAT (3 | EVAL_SELF_TYPE_MASK | NUMBER_TYPE_MASK)
 #define CELL_STRING (4 | EVAL_SELF_TYPE_MASK)

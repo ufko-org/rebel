@@ -352,10 +352,7 @@ PRIMITIVE primitive[] =
     {"reader-event",    p_readerEvent, 0},
     {"last-error",  p_lastError, 0},
     {"history",     p_history, 0},
-
-    #ifndef NO_SIGNAL
     {"signal",      p_signal,   0},
-    #endif
     {"sys-info",    p_systemInfo,   0},
     {"sys-error",   p_systemError,  0},
     {"!",           p_system,   0},
@@ -397,10 +394,8 @@ PRIMITIVE primitive[] =
     {"NaN?",        p_isnan,    0},
     {"inf?",        p_isinf,    0},
     {"integer?",    p_isInteger,    0},
-    #ifdef BIGINT
     {"bigint?", p_isBigInteger, 0},
     {"bigint",      p_bigInt,   0},
-    #endif
     {"float?",      p_isFloat,  0},
     {"number?",     p_isNumber, 0},
     {"string?",     p_isString, 0},

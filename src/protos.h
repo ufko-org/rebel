@@ -674,7 +674,6 @@ size_t appendCellString(CELL *cell, char *buffer, size_t size);
 UINT *copyArray(CELL *params);
 UINT64 timediff64_us(struct timeval end, struct timeval start);
 
-#ifdef BIGINT
     int *getBigintSizeDirect(CELL *params, int * * numPtr, int *len);
     int *mulBigint(int *x, int nx, int *y, int ny, int *p, int *n);
     int *divModBigint(int *x, int nx, int *y, int ny, int rmndr, int *n);
@@ -691,7 +690,6 @@ UINT64 timediff64_us(struct timeval end, struct timeval start);
     int *intToBigint(INT64 num, int *len);
     int *floatToBigint(double fnum, int *len);
     int lengthBigint(int *num, int len);
-#endif
 
 #ifdef SUPPORT_UTF8
     int utf8_1st_len(char *utf8str);

@@ -1819,9 +1819,7 @@ void updateCell(CELL *cell, CELL *val)
             }
         }
         else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-            #ifdef BIGINT
                 || cell->type == CELL_BIGINT
-            #endif
                )
         {
             freeMemory( (void *)cell->contents);

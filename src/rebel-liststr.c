@@ -147,20 +147,14 @@ CELL *p_length(CELL *params)
 {
     size_t length;
     SYMBOL *symbol;
-    #ifdef BIGINT
     int *bigintPtr;
     int *result;
     int len;
-    #else
-    INT64 number;
-    double fnum;
-    #endif
 
     params = evaluateExpression(params);
     length = 0;
     switch(params->type)
     {
-            #ifdef BIGINT
         case CELL_LONG:
         case CELL_FLOAT:
         case CELL_BIGINT:
@@ -171,38 +165,6 @@ CELL *p_length(CELL *params)
                 free(result);
             }
             break;
-            #else /* not BIGINT */
-        case CELL_LONG:
-            getInteger64Ext(params, &number, FALSE);
-            if(number == 0)
-            {
-                length = 1;
-            }
-            else
-            {
-                if(number < 0)
-                {
-                    number = - number;
-                }
-                length = log(number) / log(10) + 1.5;
-            }
-            break;
-        case CELL_FLOAT:
-            getFloat(params, &fnum);
-            if(fnum == 0.0)
-            {
-                length = 1;
-            }
-            else
-            {
-                if(fnum < 0.0)
-                {
-                    fnum = - fnum;
-                }
-                length = log(fnum) / log(10) + 1.5;
-            }
-            break;
-            #endif /* not BIGINT */
         case CELL_STRING:
             length = params->aux - 1;
             break;

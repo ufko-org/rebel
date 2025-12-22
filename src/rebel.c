@@ -2040,7 +2040,6 @@ CELL *stuffIntegerList(int argc, ...)
     return(list);
 }
 
-#ifdef BIGINT
 CELL *stuffBigint(char *token)
 {
     int len;
@@ -2052,7 +2051,6 @@ CELL *stuffBigint(char *token)
 
     return(cell);
 }
-#endif
 
 /* only safe for text content */
 CELL *stuffString(char *string)
@@ -2258,13 +2256,11 @@ CELL *copyCell(CELL *cell)
         newCell->contents = (UINT)allocMemory(len + 1);
         memcpy((char *)newCell->contents, (char *)cell->contents, len + 1);
     }
-    #ifdef BIGINT
     else if(cell->type == CELL_BIGINT)
     {
         newCell->contents = (UINT)allocMemory((UINT)cell->aux *sizeof(int));
         memcpy((void *)newCell->contents, (void *)cell->contents, (UINT)cell->aux *sizeof(int));
     }
-    #endif
 
     return(newCell);
 }
@@ -2315,9 +2311,7 @@ void deleteList(CELL *cell)
         }
 
         else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-            #ifdef BIGINT
                 || cell->type == CELL_BIGINT
-            #endif
                )
         {
             freeMemory( (void *)cell->contents);
@@ -2569,9 +2563,7 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
 {
     SYMBOL *sPtr;
     SYMBOL *sp;
-    #ifdef BIGINT
     char *ptr;
-    #endif
 
     if(cell == debugPrintCell)
     {
@@ -2591,13 +2583,11 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
         case CELL_LONG:
             varPrintf(device,"%"PRIdPTR, cell->contents);
             break;
-            #ifdef BIGINT
         case CELL_BIGINT:
             ptr = bigintToDigits((int *)cell->contents, cell->aux - 1, 48, NULL);
             varPrintf(device, "%sL", ptr);
             free(ptr);
             break;
-            #endif
         case CELL_FLOAT:
             varPrintf(device, prettyPrintFloat,*(double *)&cell->contents);
             break;
@@ -3611,24 +3601,20 @@ GETNEXT:
         case TKN_DECIMAL:
             errnoSave = errno;
             errno = 0;
-            #ifdef BIGINT
             if(*(token + tklen - 1) == 'L')
             {
                 newCell = stuffBigint(token);
                 break;
             }
-            #endif
 
             number = strtoll(token, NULL, 0);
 
-            #ifdef BIGINT
             if(errno == ERANGE)
             {
                 newCell = stuffBigint(token);
                 errno = errnoSave;
                 break;
             }
-            #endif
 
             newCell = stuffInteger(number);
             errno = errnoSave;
@@ -4214,9 +4200,7 @@ int getFlag(CELL *params)
 CELL *getInteger(CELL *params, UINT *number)
 {
     CELL *cell;
-    #ifdef BIGINT
     INT64 longNum;
-    #endif
 
     cell = evaluateExpression(params);
 
@@ -4245,14 +4229,12 @@ CELL *getInteger(CELL *params, UINT *number)
     }
     else
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             longNum = bigintToInt64(cell);
             *number = longNum;
         }
         else
-        #endif
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4300,13 +4282,11 @@ CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
     }
     else
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             *number = bigintToInt64(cell);
         }
         else
-        #endif
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4319,9 +4299,7 @@ CELL *getInteger64Ext(CELL *params, INT64 *number, int evalFlag)
 CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
 {
     CELL *cell;
-    #ifdef BIGINT
     INT64 longNum;
-    #endif
 
     if(evalFlag)
     {
@@ -4357,7 +4335,6 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
     }
     else /* if BIGNUM type throw ERR_NUMBER_OUT_OF_RANGE */
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             longNum = bigintToInt64(cell);
@@ -4365,7 +4342,6 @@ CELL *getIntegerExt(CELL *params, UINT *number, int evalFlag)
         }
         else
 
-        #endif /* BIGINT */
         {
             *number = 0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -4392,13 +4368,11 @@ CELL *getFloat(CELL *params, double *floatNumber)
     }
     else
     {
-        #ifdef BIGINT
         if(cell->type == CELL_BIGINT)
         {
             *floatNumber = bigintCellToFloat(cell);
         }
         else
-        #endif
         {
             *floatNumber = 0.0;
             return(errorProcArgs(ERR_NUMBER_EXPECTED, params));
@@ -5405,9 +5379,7 @@ SETDEF_BEGIN:
         }
     }
     else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-        #ifdef BIGINT
             || cell->type == CELL_BIGINT
-        #endif
            )
     {
         freeMemory( (void *)cell->contents);
@@ -5500,9 +5472,7 @@ SETF_BEGIN:
         }
     }
     else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-        #ifdef BIGINT
             || cell->type == CELL_BIGINT
-        #endif
            )
     {
         freeMemory( (void *)cell->contents);
@@ -7420,9 +7390,7 @@ CELL *isEmptyFunc(CELL *cell)
 
 CELL *isZero(CELL *cell)
 {
-    #ifdef BIGINT
     int *numPtr;
-    #endif
 
     switch(cell->type)
     {
@@ -7438,7 +7406,6 @@ CELL *isZero(CELL *cell)
                 return(trueCell);
             }
             break;
-            #ifdef BIGINT
         case CELL_BIGINT:
             numPtr = (int *)(UINT)cell->contents;
             if(cell->aux == 2 && numPtr[1] == 0)
@@ -7446,7 +7413,6 @@ CELL *isZero(CELL *cell)
                 return(trueCell);
             }
             break;
-            #endif
         default:
             break;
     }
@@ -7505,12 +7471,10 @@ CELL *p_isInteger(CELL *params)
     return(nilCell);
 }
 
-#ifdef BIGINT
 CELL *p_isBigInteger(CELL *params)
 {
     return(isType(params, CELL_BIGINT));
 }
-#endif
 
 CELL *p_isFloat(CELL *params)
 {

@@ -61,10 +61,8 @@
 #define OP_ISNAN 35
 #define OP_ISINF 36
 
-#ifdef BIGINT
     #define BIGINT_BASE 1000000000 /* 9 zeros */
     #define BIGINT_BASE2 1000000000000000000LL /* 18 zeros */
-#endif
 
 extern uint32_t my_random();
 void my_srandom(uint32_t seed);
@@ -89,12 +87,9 @@ CELL *p_abs(CELL *params)
     CELL *cell;
     INT64 intValue;
     double floatValue;
-    #ifdef BIGINT
     int *numPtr;
-    #endif
 
     cell = evaluateExpression(params);
-    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         cell = copyCell(cell);
@@ -106,7 +101,6 @@ CELL *p_abs(CELL *params)
         return(cell);
     }
     else
-    #endif
         if(cell->type == CELL_FLOAT)
         {
             floatValue = getDirectFloat(cell);
@@ -131,13 +125,11 @@ CELL *incDecI(CELL *params, int type)
     CELL *cell;
     INT64 adjust = 1;
     INT64 lValue = 0;
-    #ifdef BIGINT
     int *lvaluePtr;
     int *adjustPtr;
     int *resultPtr;
     int *freePtr = NULL;
     int lvlen, adjlen, reslen;
-    #endif
 
     cell = evaluateExpression(params);
 
@@ -158,7 +150,6 @@ CELL *incDecI(CELL *params, int type)
 
 
     if(!isNil(cell))
-    #ifdef BIGINT
     {
         if(cell->type == CELL_BIGINT)
         {
@@ -196,9 +187,6 @@ CELL *incDecI(CELL *params, int type)
         }
         getInteger64Ext(cell, &lValue, FALSE);
     }
-    #else
-        getInteger64Ext(cell, &lValue, FALSE);
-    #endif
 
 
     if(cell == nilCell) /* v. 10.7.1 */
@@ -285,7 +273,6 @@ CELL *arithmetikOp(CELL *params, int op)
 {
     INT64 number;
     INT64 result;
-    #ifdef BIGINT
     int sizex = 0;
     int sizey = 0;
     int n;
@@ -294,7 +281,6 @@ CELL *arithmetikOp(CELL *params, int op)
     int *numy;
     int *freePtr = NULL;
     CELL *next;
-    #endif
     CELL *cell;
 
     if(params == nilCell)
@@ -311,7 +297,6 @@ CELL *arithmetikOp(CELL *params, int op)
 
     cell = evaluateExpression(params);
     params = params->next;
-    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         if(params == nilCell)
@@ -396,7 +381,6 @@ NEXT_FIRST_BIGINT:
         }
         return(cell);
     }
-    #endif
 
     getInteger64Ext(cell, &result, FALSE);
     if(params == nilCell)
@@ -681,7 +665,6 @@ int compareInts(CELL *left, CELL *right)
     INT64 leftnum;
     INT64 rightnum;
 
-    #ifdef BIGINT
     int *leftnumPtr;
     int leftlen;
     int *rightnumPtr;
@@ -698,7 +681,6 @@ int compareInts(CELL *left, CELL *right)
         freeMemory(rightnumPtr);
         return(cmp);
     }
-    #endif
 
     leftnum = (UINT)left->contents;
     #ifdef CELL_BIGINT
@@ -736,12 +718,10 @@ double getDirectFloat(CELL *param)
         floatNum = (INT)param->contents;
     }
 
-    #ifdef BIGINT
     else if(param->type == CELL_BIGINT)
     {
         floatNum = bigintCellToFloat(param);
     }
-    #endif
 
 
     return(floatNum);
@@ -1483,12 +1463,10 @@ int compareCells(CELL *left, CELL *right)
             return(compareArrays((CELL *)left, (CELL *)right));
         case CELL_FLOAT:
             return(compareFloats(left, right));
-            #ifdef BIGINT
         case CELL_BIGINT:
             comp = cmpBigint((int *)(UINT)left->contents,
                              left->aux - 1, (int *)(UINT)right->contents, right->aux - 1);
             return(comp);
-            #endif
         case CELL_LONG:
         default:
             if((INT)left->contents > (INT)right->contents)
@@ -2631,16 +2609,13 @@ CELL *p_gcd(CELL *params)
 {
     INT64 m, n, r;
     CELL *cell;
-    #ifdef BIGINT
     CELL *x;
     CELL *y;
     UINT *resultIdxSave = resultStackIdx;
-    #endif
 
     cell = evaluateExpression(params);
     params = params->next;
 
-    #ifdef BIGINT
     if(cell->type == CELL_BIGINT)
     {
         x = copyCell(cell);
@@ -2659,7 +2634,6 @@ NEXT_BIG_GCD:
         *(int *)cell->contents = 1; /* abs */
         return(cell);
     }
-    #endif
 
     cell = getInteger64Ext(cell, &m, FALSE);
     while(params != nilCell)
@@ -4147,13 +4121,11 @@ CELL *isOddEven(CELL *params, int type)
 
     params = evaluateExpression(params);
 
-    #ifdef BIGINT
     if(params->type == CELL_BIGINT)
     {
         num = *((int *)params->contents + params->aux - 1);
     }
     else
-    #endif
         getInteger64Ext(params, &num, FALSE);
 
     if(type == BOOL_EVEN)
@@ -4480,7 +4452,6 @@ CELL *p_corr(CELL *params)
     BSDNT https://github.com/wbhart/bsdnt
 */
 
-#ifdef BIGINT
 
 /* translate either INT64 or double float to big int */
 
@@ -5300,5 +5271,4 @@ int lengthBigint(int *num, int len)
 
     return(9 * (len - 1) + 9 - cnt);
 }
-#endif
 /* eof */
