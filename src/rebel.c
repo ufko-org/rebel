@@ -3383,7 +3383,8 @@ void printErrorMessage(UINT errorNumber, CELL *expr, int deleteFlag)
         }
         else
         {
-            varPrintf(OUT_CONSOLE, "\n%.1024s\n", errorStream.buffer);
+            /* ufko: varPrintf(OUT_CONSOLE, "\n%.1024s\n", errorStream.buffer); */
+            varPrintf(OUT_CONSOLE, "%.1024s\n", errorStream.buffer);
             if(logTraffic == LOG_MORE)
             {
                 writeLog(errorStream.buffer, TRUE);

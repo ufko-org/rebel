@@ -63,14 +63,15 @@ PRIMITIVE primitive[] =
     {"clean",       p_clean,    0},
     {"index",       p_index,    0},
     {"define",      p_define,   0x402},
-    {"define-macro",    p_defineMacro,  0x402},
+    {"def",         p_define,   0x402},
+    {"define-macro",p_defineMacro,  0x402},
+    {"mac",         p_defineMacro,  0x402},
     {"macro",       p_macro,    2},
     {"expand",      p_expand,   0},
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
-    /* set and def retires set '/setf/setq */
+    /* set retires set '/setf/setq */
     {"set",         p_setdef,      0x400}, 
-    {"def",         p_setdef,      0x400},
     /* {"set",         p_set,      0x400}, */
     /* {"setf",        p_setf,     0x400}, */
     /* {"setq",        p_setf,     0x400}, */
@@ -284,7 +285,9 @@ PRIMITIVE primitive[] =
     /* -------------- I/O ------------------ */
     {"pretty-print",    p_prettyPrint,  0},
     {"print",       p_print,    0},
+    {"pr",          p_print,    0},
     {"println",     p_println,  0},
+    {"prn",         p_println,  0},
     {"read-line",   p_readLine, 0},
     {"write-line",  p_writeLine,    0},
     {"current-line",p_currentLine,0},
