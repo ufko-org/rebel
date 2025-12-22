@@ -2516,6 +2516,8 @@ void varPrintf(UINT device, char *format, ...)
     switch(device)
     {
         case OUT_NULL:
+            freeMemory(buffer);
+            va_end(argptr);
             return;
 
         case OUT_DEVICE:
