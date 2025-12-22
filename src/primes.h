@@ -27,6 +27,9 @@
     All original primitives are either still available as working
     alternatives or commented out when retired. Commented entries
     remain in this file as historical reference.
+
+    Alternatives always appear grouped together and can be
+    identified by sharing the same underlying C function.
      
     ---------------------------------------------------------------------
     Any new primitive, if added, is marked with a
