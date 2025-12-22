@@ -393,6 +393,9 @@ void loadStartup(char *name)
     char *envPtr;
     int len;
 
+    /* ufko: ensure initFile is a valid empty string if no env var is set */
+    initFile[0] = 0;
+    
     /* normal Rebel start up */
     if(strncmp(linkOffset + 4, "@@@@", 4) == 0)
     {
