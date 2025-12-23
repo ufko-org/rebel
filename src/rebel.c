@@ -191,7 +191,7 @@ CELL *objCell;
 
 extern PRIMITIVE primitive[];
 
-/* debugger in nl-debug.c */
+/* debugger in rebel-debug.c */
 extern char debugPreStr[];
 extern char debugPostStr[];
 extern CELL *debugPrintCell;
