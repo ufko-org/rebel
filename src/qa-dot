@@ -2383,6 +2383,13 @@ true
   (and (= "hello" (read-file "testprint"))
      (delete-file "testprint")))
 
+(define (test-pr) 
+  (device (open "testprint" "w"))
+  (print "hello")
+  (close (device))
+  (and (= "hello" (read-file "testprint"))
+     (delete-file "testprint")))
+
 (define (test-println ) 
   (device (open "testprintln" "w"))
   (print "hello")
@@ -2390,7 +2397,15 @@ true
   (and 
      (= "hello" (slice (read-file "testprintln") 0 5))
      (delete-file "testprintln")))
-
+  
+(define (test-prn ) 
+  (device (open "testprintln" "w"))
+  (print "hello")
+  (close (device))
+  (and 
+     (= "hello" (slice (read-file "testprintln") 0 5))
+     (delete-file "testprintln")))
+  
 (define (test-prob-f)
   (and
     (< (abs (sub (prob-f 6.59 3 4) 0.05)) 0.001)
