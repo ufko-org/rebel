@@ -64,6 +64,7 @@ PRIMITIVE primitive[] =
     {"case",        p_case,     2},
     {"cond",        p_condition,1},
     {"begin",       p_evalBlock,1},
+    {"do",          p_evalBlock,1},
     {"and",         p_and,      0},
     {"if",          p_if,       2},
     {"if-not",      p_ifNot,    2},
