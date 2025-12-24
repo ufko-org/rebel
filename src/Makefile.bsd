@@ -32,7 +32,7 @@ rebel: $(OBJS)
 .c.o:
 	$(CC) $(CFLAGS) $<
 
-$(OBJS): primes.h protos.h Makefile
+$(OBJS): primes.h protos.h Makefile.bsd
 
 clean:
 	rm -f rebel *.orig $(OBJS)
