@@ -7917,7 +7917,7 @@ x
 
 ; communication using a Unix pipe
 ;------------------------------------------------------------
-(map set '(read-end write-end) (pipe))
+(map with '(read-end write-end) (pipe))
 
 (define (counter n out)
   (while (> n 0)
@@ -10967,7 +10967,7 @@ Examples:
 
 ; binding matched values
 ;------------------------------------------------------------
-(map set '(x y)
+(map with '(x y)
      (match '(a (? c) d *) '(a (b c) d e f)))
 
 x
@@ -14690,8 +14690,8 @@ Examples:
 Redirecting standard input and output using pipes:
 
 ```
-(map set '(in out) (pipe))
-(map set '(cin cout) (pipe))
+(map with '(in out) (pipe))
+(map with '(cin cout) (pipe))
 
 (process "/usr/bin/bc" cin out)
 ;-> 7916
@@ -14706,9 +14706,9 @@ Redirecting standard input and output using pipes:
 Using an additional pipe for standard error:
 
 ```
-(map set '(in out) (pipe))
-(map set '(cin cout) (pipe))
-(map set '(errin errout) (pipe))
+(map with '(in out) (pipe))
+(map with '(cin cout) (pipe))
+(map with '(errin errout) (pipe))
 
 (process "/usr/bin/bc" cin out errout)
 

@@ -6068,7 +6068,7 @@ x
 
 ; communication using a Unix pipe
 ;------------------------------------------------------------
-(map set &#39;(read-end write-end) (pipe))
+(map with &#39;(read-end write-end) (pipe))
 
 (define (counter n out)
   (while (&#62; n 0)
@@ -8494,7 +8494,7 @@ only the wildcard captures.</p>
 
 ; binding matched values
 ;------------------------------------------------------------
-(map set &#39;(x y)
+(map with &#39;(x y)
      (match &#39;(a (? c) d *) &#39;(a (b c) d e f)))
 
 x
@@ -11192,8 +11192,8 @@ child process may be redirected using pipe handles.</p>
 ;-&#62; 12345
 </code></pre>
 <p>Redirecting standard input and output using pipes:</p>
-<pre><code>(map set &#39;(in out) (pipe))
-(map set &#39;(cin cout) (pipe))
+<pre><code>(map with &#39;(in out) (pipe))
+(map with &#39;(cin cout) (pipe))
 
 (process "&#47;usr&#47;bin&#47;bc" cin out)
 ;-&#62; 7916
@@ -11205,9 +11205,9 @@ child process may be redirected using pipe handles.</p>
 (destroy 7916)
 </code></pre>
 <p>Using an additional pipe for standard error:</p>
-<pre><code>(map set &#39;(in out) (pipe))
-(map set &#39;(cin cout) (pipe))
-(map set &#39;(errin errout) (pipe))
+<pre><code>(map with &#39;(in out) (pipe))
+(map with &#39;(cin cout) (pipe))
+(map with &#39;(errin errout) (pipe))
 
 (process "&#47;usr&#47;bin&#47;bc" cin out errout)
 
