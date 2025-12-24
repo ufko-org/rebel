@@ -33,7 +33,7 @@
      
     ---------------------------------------------------------------------
     Any new primitive, if added, is marked with a
-    "rebel origin" comment next to it, indicating
+    :rebel comment next to it, indicating
     a new C implementation with new semantics.
     ---------------------------------------------------------------------
 
@@ -92,7 +92,8 @@ PRIMITIVE primitive[] =
     {"expand",      p_expand,   0},
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
-    {"set",         p_setdef,   0x400}, /* rebel origin: retires set '/setq/setf */ 
+    {"set",         p_setdef,   0x400}, /* :rebel, retires set '/setq/setf */ 
+    {"with",        p_with,     0x400}, /* :rebel
     /* retired from language:
     {"set",         p_set,      0x400},
     {"setf",        p_setf,     0x400},
