@@ -83,7 +83,7 @@ not known in advance.
 Examples:
 
 ```
-(set 'txt "http://example.org:80")
+(set txt "http://example.org:80")
 (find "http://(.*):(.*)" txt 0)  ; → 0
 
 $0     ; → "http://example.org:80"
@@ -321,14 +321,14 @@ numbers. Arguments evaluating to NaN are treated as 0.
 Examples:
 
 ```
-(set 'n 1)
+(set n 1)
 (++ n)                 ; → 2
 
-(set 'n 3.8)
+(set n 3.8)
 (++ n)                 ; → 4
 (++ n 1.3)             ; → 5
 
-(set 'lst '(1 2 3))
+(set lst '(1 2 3))
 (++ (lst 1) 2)         ; → 4
 lst                    ; → (1 4 3)
 ```
@@ -375,14 +375,14 @@ are treated as 0.
 Examples:
 
 ```
-(set 'n 1)
+(set n 1)
 (-- n)                 ; → 0
 
-(set 'n 3.8)
+(set n 3.8)
 (-- n)                 ; → 2
 (-- n 1.3)             ; → 1
 
-(set 'lst '(1 2 3))
+(set lst '(1 2 3))
 (-- (lst 1) 2)         ; → 0
 lst                    ; → (1 0 3)
 ```
@@ -996,8 +996,8 @@ Examples:
   (inc (self 1) dx)
   (inc (self 2) dy))
 
-(set 'r '(Rectangle 5 5 10 20))    ; x y width height
-(set 'c '(Circle 1 2 10))          ; x y radius
+(set r '(Rectangle 5 5 10 20))    ; x y width height
+(set c '(Circle 1 2 10))          ; x y radius
 
 (:area r)                          ; → 200
 (:area c)                          ; → 314.1592654
@@ -1236,10 +1236,10 @@ after evaluation, making their addresses invalid.
 Examples:
 
 ```
-(set 's "\001\002\003\004")
+(set s "\001\002\003\004")
 (get-char (+ (address s) 3))        ; → 4
 
-(set 'x 12345)
+(set x 12345)
 
 ; big-endian architectures
 (get-long (address x))              ; → 12345
@@ -1249,7 +1249,7 @@ Examples:
 (get-int (address x))               ; → 12345
 
 ; architecture-independent: integers are 64-bit
-(set 'x 1234567890)
+(set x 1234567890)
 (get-long (address x))              ; → 1234567890
 ```
 
@@ -1329,7 +1329,7 @@ non-nil and not ().
 Examples:
 
 ```
-(set 'x 10)                         ; → 10
+(set x 10)                         ; → 10
 (and (< x 100) (> x 2))             ; → true
 (and (< x 100) (> x 2) "passed")    ; → "passed"
 (and '())                           ; → ()
@@ -1384,13 +1384,13 @@ Examples:
 (append '(1 2 3) '(4 5 6) '(a b))
 ; → (1 2 3 4 5 6 a b)
 
-(set 'lst '("hello" "world"))
+(set lst '("hello" "world"))
 (append lst '("here" "I am"))
 ; → ("hello" "world" "here" "I am")
 
-(set 'A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ; → ((1 2) (3 4) (5 6))
-(set 'B (array 2 2 (sequence 7 10)))
+(set B (array 2 2 (sequence 7 10)))
 ; → ((7 8) (9 10))
 
 (append A B)
@@ -1399,7 +1399,7 @@ Examples:
 (append B B B)
 ; → ((7 8) (9 10) (7 8) (9 10) (7 8) (9 10))
 
-(set 'more " how are you")
+(set more " how are you")
 (append "Hello " "world," more)
 ; → "Hello world, how are you"
 ```
@@ -1505,7 +1505,7 @@ Examples:
 (apply + '(1 2 3 4))
 ; → 10
 
-(set 'lst '(3 4 5))
+(set lst '(3 4 5))
 (apply * lst)
 ; → 60
 
@@ -1650,7 +1650,7 @@ Examples:
 (array 10 '(1 2))
 ; → (1 2 1 2 1 2 1 2 1 2)
 
-(set 'a (array 3 4 (sequence 1 12)))
+(set a (array 3 4 (sequence 1 12)))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
 (setf (a 2 3) 99)
@@ -1685,8 +1685,8 @@ a
 (array-list a)
 ; → ((1 2 3 4) (a b c d) (1 2 3 99))
 
-(set 'lst '((1 2) (3 4)))
-(set 'arr (array 2 2 (flat lst)))
+(set lst '((1 2) (3 4)))
+(set arr (array 2 2 (flat lst)))
 ; → ((1 2) (3 4))
 
 (array? a)
@@ -1696,7 +1696,7 @@ a
 ; → nil
 
 ; serialization example
-(set 'a (array 3 4 (sequence 1 12)))
+(set a (array 3 4 (sequence 1 12)))
 (save "array.rbl" 'a)
 ;; saved file includes array expression
 ```
@@ -1733,10 +1733,10 @@ lists. The original array is left unchanged.
 Examples:
 
 ```
-(set 'a (array 3 4 (sequence 1 12)))
+(set a (array 3 4 (sequence 1 12)))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
-(set 'lst (array-list a))
+(set lst (array-list a))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
 (list (array? a) (list? lst))
@@ -1771,7 +1771,7 @@ arrays, even when their shape resembles one.
 Examples:
 
 ```
-(set 'M (array 3 4 (sequence 1 4)))
+(set M (array 3 4 (sequence 1 4)))
 ; → ((1 2 3 4) (1 2 3 4) (1 2 3 4))
 
 (array? M)
@@ -1890,7 +1890,7 @@ Examples:
 (assoc 1 '((3 4) (1 2)))
 ; → (1 2)
 
-(set 'db '((kiwi 12) (mango 77 5) (plum 9)))
+(set db '((kiwi 12) (mango 77 5) (plum 9)))
 (assoc 'mango db)
 ; → (mango 77 5)
 
@@ -1903,7 +1903,7 @@ db
 ; → ((kiwi 12) (mango 77 5) (plum 10))
 
 ; nested association lists
-(set 'records '(
+(set records '(
   (u001 (name "Nora")
         (address (country "Japan") (city "Kyoto")))
   (u002 (name "Liam")
@@ -1917,7 +1917,7 @@ db
 ; → (city "Kyoto")
 
 ; using a context as the association list
-(set 'people:people '(
+(set people:people '(
   (u001 (name "Nora")
         (address (country "Japan") (city "Kyoto")))
   (u002 (name "Liam")
@@ -2225,21 +2225,21 @@ Examples:
 Token frequencies:
 
 ```
-(set 'Sample:A '(
+(set Sample:A '(
   (sunny  1)
   (day    1)
   (bright 1)
   (sky    1)
 ))
 
-(set 'Sample:B '(
+(set Sample:B '(
   (storm  1)
   (rain   1)
   (dark   1)
   (clouds 1)
 ))
 
-(set 'Sample:total '(
+(set Sample:total '(
   (A-total 4)
   (B-total 4)
 ))
@@ -2267,9 +2267,9 @@ Tokens similar to category B:
 **2. Chain Bayesian mode**
 
 ```
-(set 'C:pos '(8 18))
-(set 'C:neg '(2 72))
-(set 'C:total '(10 90))
+(set C:pos '(8 18))
+(set C:neg '(2 72))
+(set C:total '(10 90))
 ```
 
 ```
@@ -2283,9 +2283,9 @@ Tokens similar to category B:
 **3. Using direct probabilities**
 
 ```
-(set 'P:pos '(0.8 0.2))
-(set 'P:neg '(0.2 0.8))
-(set 'P:total '(0.1 0.9))
+(set P:pos '(0.8 0.2))
+(set P:neg '(0.2 0.8))
+(set P:total '(0.1 0.9))
 ```
 
 ```
@@ -2449,9 +2449,9 @@ directly, the model may be created manually without
 training:
 
 ```
-(set 'Data:tested-positive '(8 18))
-(set 'Data:tested-negative '(2 72))
-(set 'Data:total '(10 90))
+(set Data:tested-positive '(8 18))
+(set Data:tested-negative '(2 72))
+(set Data:total '(10 90))
 ```
 
 Such data sets can still be evaluated using bayes-query.
@@ -2644,7 +2644,7 @@ Examples:
 (bigint 1.234567890e30)
 ; → 1234567889999999957361000000000L
 
-(set 'n 567890)
+(set n 567890)
 (bigint n)
 ; → 567890L
 
@@ -2695,7 +2695,7 @@ produces association lists suitable for destructuring.
 Examples:
 
 ```
-(set 'lst '((a (+ 3 4)) (b "hello")))
+(set lst '((a (+ 3 4)) (b "hello")))
 (bind lst)
 ; → "hello"
 
@@ -2717,8 +2717,8 @@ Y  ; → a
 
 
 ; destructuring example
-(set 'structure '((one "two") 3 (four (x y z))))
-(set 'pattern   '((A B)       C (D E)))
+(set structure '((one "two") 3 (four (x y z))))
+(set pattern   '((A B)       C (D E)))
 
 (bind (unify pattern structure))
 
@@ -2891,7 +2891,7 @@ Examples:
   ;; will print this string.
   "hello world")
 
-(set 'p0 (callback 0 'hello))
+(set p0 (callback 0 'hello))
 ;; p0 now contains a C-callable pointer. Any C
 ;; function which receives p0 and calls it will
 ;; execute (hello).
@@ -2900,7 +2900,7 @@ Examples:
 (define (sum a b)
   (+ a b))
 
-(set 'ps (callback 'sum "int" "int" "int"))
+(set ps (callback 'sum "int" "int" "int"))
 ;; ps is a dynamically created libffi closure
 ;; which accepts two integers and returns an
 ;; integer result.
@@ -3165,14 +3165,14 @@ removed. The original list remains unchanged.
 Examples:
 
 ```
-(set 'str "Rebelion")  → "Rebelion"
+(set str "Rebelion")  → "Rebelion"
 
 (chop str)    → "Rebelio"
 (chop str 2)  → "Rebeli"
 
 str  → "Rebelion"
 
-(set 'lst '(a b (c d) e))
+(set lst '(a b (c d) e))
 
 (chop lst)    → (a b (c d))
 (chop lst 2)  → (a b)
@@ -3280,11 +3280,11 @@ returned.
 Examples:
 
 ```
-(set 'x 0)
+(set x 0)
 (collect (if (<= (inc x) 10) x))
 → (1 2 3 4 5 6 7 8 9 10)
 
-(set 'x 0)
+(set x 0)
 (collect (if (<= (inc x) 10) x) 6)
 → (1 2 3 4 5 6)
 ```
@@ -3362,9 +3362,9 @@ Examples (http mode):
   (fn (s)
     (let (request s)
       (when (find "?" s)
-        (set 'request (first (parse s "?")))
+        (set request (first (parse s "?")))
         (when (ends-with request ".ext")
-          (set 'request "GET /forbidden.html")) )
+          (set request "GET /forbidden.html")) )
       request)))
 
 ;; Running:
@@ -3526,7 +3526,7 @@ Examples:
 
 ```
 (constant 'var 123)  → 123
-(set 'var 999)
+(set var 999)
 ERR: symbol is protected in function set: var
 
 (define (double x) (+ x x))
@@ -3600,7 +3600,7 @@ Examples:
 (context 'GRAPH)
 
 (define (draw x y) (+ x y))
-(set 'value 123)
+(set value 123)
 
 (symbols) → (draw value)
 
@@ -3609,29 +3609,29 @@ Examples:
 
 GRAPH:value        → 123
 (GRAPH:draw 2 3)   → 5
-(set 'GRAPH:value 999)
+(set GRAPH:value 999)
 GRAPH:value        → 999
 
 ;; implicit context creation
-(set 'person:age 0)
-(set 'person:address "")
+(set person:age 0)
+(set person:address "")
 person:age         → 0
 
 ;; copy a context
 (new person 'JohnDoe) → JohnDoe
-(set 'JohnDoe:age 99)
+(set JohnDoe:age 99)
 JohnDoe:age            → 99
 
 ;; refer to a context through a variable
-(set 'human JohnDoe)
+(set human JohnDoe)
 human:age              → 99
-(set 'human:address "1 Main Street")
+(set human:address "1 Main Street")
 JohnDoe:address        → "1 Main Street"
 
 ;; switching using an evaluated context
 (context 'ctxA)
 (context MAIN)
-(set 'old ctxA)
+(set old ctxA)
 (context 'ctxB)
 (context MAIN:old)  → ctxA
 
@@ -3684,12 +3684,12 @@ Examples:
 ;; test for context value
 (context? MAIN)        → true
 
-(set 'x 123)
+(set x 123)
 (context? x)           → nil
 
 ;; implicit context creation and referencing
-(set 'data:msg "hello")
-(set 'ctx data)
+(set data:msg "hello")
+(set ctx data)
 (context? ctx)         → true
 
 ;; test for symbol existence inside a context
@@ -3739,16 +3739,16 @@ the original memory block.
 Examples:
 
 ```
-(set 'lst '(a b c d e f)) ;-> (a b c d e f)
+(set lst '(a b c d e f)) ;-> (a b c d e f)
 
 (replace 'c (copy lst)) ;-> (a b d e f)
 lst ;-> (a b c d e f)
 
-(set 'str "rebel-lang") ;-> "rebel-lang"
+(set str "rebel-lang") ;-> "rebel-lang"
 (rotate (copy str)) ;-> "grebel-lan"
 str ;-> "rebel-lang"
 
-(set 'x "hello world") ;-> "hello world"
+(set x "hello world") ;-> "hello world"
 (copy x) ;-> "hello world"
 
 (copy (first (dump x)) true) ;-> "hello world"
@@ -3816,10 +3816,10 @@ p       two-tailed probability for t
 Examples:
 
 ```
-(set 'study-time '(90 100 130 150 180 200 220 300 350 400))
+(set study-time '(90 100 130 150 180 200 220 300 350 400))
 ;-> (90 100 130 150 180 200 220 300 350 400)
 
-(set 'test-errors '(25 28 20 20 15 12 13 10 8 6))
+(set test-errors '(25 28 20 20 15 12 13 10 8 6))
 ;-> (25 28 20 20 15 12 13 10 8 6)
 
 (corr study-time test-errors)
@@ -3850,7 +3850,7 @@ Examples:
 ```
 (cos 1) ;-> 0.5403023059
 
-(set 'pi (mul 2 (acos 0))) ;-> 3.141592654
+(set pi (mul 2 (acos 0))) ;-> 3.141592654
 (cos pi) ;-> -1
 ```
 
@@ -3919,10 +3919,10 @@ Examples:
 (count '(z a) '(z d z b a z y a))
 ;-> (3 2)
 
-(set 'lst (explode (read-file "myFile.txt")))
+(set lst (explode (read-file "myFile.txt")))
 ;-> list of characters
 
-(set 'letter-counts (count (unique lst) lst))
+(set letter-counts (count (unique lst) lst))
 ;-> frequency data
 ```
 
@@ -3957,7 +3957,7 @@ inspecting internal cell layouts at a byte level.
 Examples:
 
 ```
-(set 's "0123456789") ;-> "0123456789"
+(set s "0123456789") ;-> "0123456789"
 
 (cpymem "xxx" (+ (address s) 5) 3)
 s ;-> "01234xxx89"
@@ -3972,7 +3972,7 @@ conventions permit it.
 
 ```
 ; 32-bit x86 add-two-integers machine code
-(set 'foo-code
+(set foo-code
   (append
     (pack "bbbbbbbbbb"
       0x55 0x8B 0xEC 0x8B 0x45 0x08 0x03 0x45 0x0C 0x5D)
@@ -3989,7 +3989,7 @@ conventions permit it.
         (+ (first (dump foo)) 12) 4)
 
 ; copy symbol name address
-(set 'sym-name (first (unpack "lu" (+ (address 'foo) 8))))
+(set sym-name (first (unpack "lu" (+ (address 'foo) 8))))
 (cpymem (pack "ld" sym-name)
         (+ (first (dump foo)) 8) 4)
 
@@ -4028,7 +4028,7 @@ address.
 Examples:
 
 ```
-(set 's "0123456789") ;-> "0123456789"
+(set s "0123456789") ;-> "0123456789"
 
 (cpymem "xxx" (+ (address s) 5) 3)
 s ;-> "01234xxx89"
@@ -4228,7 +4228,7 @@ Examples:
 ```
 #!/usr/bin/env rebel
 
-(set 'inFile (open (main-args 2) "read"))
+(set inFile (open (main-args 2) "read"))
 
 (while (read-line inFile)
   (if (starts-with (current-line) ";;")
@@ -4275,7 +4275,7 @@ creating explicit fn expressions.
 Examples:
 
 ```
-(set 'f (curry + 10))
+(set f (curry + 10))
 ;-> (fn ($x) (+ 10 $x))
 
 (f 7)
@@ -4620,7 +4620,7 @@ element, that element is updated in place.
 Examples:
 
 ```
-(set 'x 10)
+(set x 10)
 ;-> 10
 
 (dec x)
@@ -4638,11 +4638,11 @@ z
 (dec z)
 ;-> -1
 
-(set 'z nil)
+(set z nil)
 (dec z 0.01)
 ;-> -0.01
 
-(set 'l '(1 2 3 4))
+(set l '(1 2 3 4))
 ;-> (1 2 3 4)
 
 (dec (l 3) 0.1)
@@ -4702,7 +4702,7 @@ each copy to its own namespace.
 Examples:
 
 ```
-(set 'ctx1:var '(ctx1:x ctx1:y))
+(set ctx1:var '(ctx1:x ctx1:y))
 ;-> (ctx1:x ctx1:y)
 
 (def-new 'ctx1:var 'ctx2:myvar)
@@ -4724,7 +4724,7 @@ var
 Creating a function with its own namespace:
 
 ```
-(set 'temp (fn (x) (+ x x)))
+(set temp (fn (x) (+ x x)))
 ;-> (fn (x) (+ x x))
 
 (def-new 'temp 'double:double)
@@ -4797,7 +4797,7 @@ Examples:
 (setf (default ctx) 456)
 ;-> 456
 
-(set 'c ctx)
+(set c ctx)
 ;-> ctx
 
 (default c)
@@ -5015,7 +5015,7 @@ deletion, or nil if deletion was refused.
 Examples:
 
 ```
-(set 'lst '(a b xvar c d))
+(set lst '(a b xvar c d))
 ;-> (a b xvar c d)
 
 (delete 'xvar)
@@ -5024,7 +5024,7 @@ Examples:
 lst
 ;-> (a b nil c d)
 
-(set 'lst '(a b xvar c d))
+(set lst '(a b xvar c d))
 ;-> (a b xvar c d)
 
 (delete 'xvar true)
@@ -5037,10 +5037,10 @@ lst
 Deleting an entire context:
 
 ```
-(set 'ctx1:x 123)
+(set ctx1:x 123)
 ;-> 123
 
-(set 'ctx1:y "hello")
+(set ctx1:y "hello")
 ;-> "hello"
 
 (delete 'ctx1)
@@ -5191,14 +5191,14 @@ Examples:
 
 ```
 ; start an external command
-(set 'pid (process "/usr/bin/bc" in out))
+(set pid (process "/usr/bin/bc" in out))
 ;-> <pid>
 
 (destroy pid)
 ;-> true
 
 ; kill a forked background worker
-(set 'pid (fork (dotimes (i 1000)
+(set pid (fork (dotimes (i 1000)
                  (println i)
                  (sleep 10))))
 ;-> <pid>
@@ -5244,7 +5244,7 @@ detection.
 Examples:
 
 ```
-(set 'A '((-1 1 1)
+(set A '((-1 1 1)
           (1 4 -5)
           (1 -2 0)))
 ;-> ((-1 1 1) (1 4 -5) (1 -2 0))
@@ -5530,11 +5530,11 @@ $idx is updated.
 Examples:
 
 ```
-(set 'x 1)
+(set x 1)
 (do-until (> x 0) (inc x))
 ;-> 2
 
-(set 'x 1)
+(set x 1)
 (until (> x 0) (inc x))
 ;-> 1
 ```
@@ -5573,11 +5573,11 @@ updated.
 Examples:
 
 ```
-(set 'x 10)
+(set x 10)
 (do-while (< x 10) (inc x))
 ;-> 11
 
-(set 'x 10)
+(set x 10)
 (while (< x 10) (inc x))
 ;-> 10
 ```
@@ -5675,7 +5675,7 @@ current index (starting at 0).
 Examples:
 
 ```
-(set 'x 123)
+(set x 123)
 
 (dolist (i '(a b c d e f g))
   (print i))
@@ -5746,7 +5746,7 @@ Examples:
 
 ```
 ; ASCII
-(set 'str "abcdefg")
+(set str "abcdefg")
 (dostring (c str)
   (println c " " (char c)))
 ;-> prints:
@@ -5759,7 +5759,7 @@ Examples:
 ;   103 g
 
 ; UTF-8
-(set 'txt "我能吞下玻璃而不伤身体。")
+(set txt "我能吞下玻璃而不伤身体。")
 (dostring (c txt)
   (println c " " (char c)))
 ;-> prints codepoint and character for each element
@@ -5953,7 +5953,7 @@ elements; otherwise returns nil.
 Examples:
 
 ```
-(set 'lst '())
+(set lst '())
 (empty? lst)
 ;-> true
 
@@ -6004,7 +6004,7 @@ Examples:
 
 ```
 ; encrypt
-(set 'msg (encrypt "A secret message" "my secret key"))
+(set msg (encrypt "A secret message" "my secret key"))
 ;-> ",YS\022\006\017\023\017TM\014\022\n\012\030E"
 
 ; decrypt by applying the same pad
@@ -6271,7 +6271,7 @@ Examples:
 
 ```
 ; basic evaluation
-(set 'expr '(+ 3 4))
+(set expr '(+ 3 4))
 expr
 ;-> (+ 3 4)
 
@@ -6285,7 +6285,7 @@ expr
 ;-> x
 
 ; evaluation uses current environment
-(set 'x 3 'y 4)
+(set x 3 'y 4)
 (eval '(+ x y))
 ;-> 7
 
@@ -6302,7 +6302,7 @@ expr
 (define (change-list aList)
   (push 999 (eval aList)))
 
-(set 'data '(1 2 3 4 5))
+(set data '(1 2 3 4 5))
 
 (change-list 'data)
 ;-> (999 1 2 3 4 5)
@@ -6343,15 +6343,15 @@ Examples:
 (eval-string "(+ 3 4)")
 ;-> 7
 
-(set 'x 10)
-(set 'y 20)
+(set x 10)
+(set y 20)
 (eval-string "(+ x y)")
 ;-> 30
 
 ; evaluate in a different context
 (context 'C)
-(set 'C:x 2)
-(set 'C:y 3)
+(set C:x 2)
+(set C:y 3)
 
 (eval-string "(+ x y)" 'C)
 ;-> 5
@@ -6441,7 +6441,7 @@ Examples:
 ;-> ("rebel.c" "math.c" "string.c")
 
 ; send standard input to a Unix program that reads stdin
-(set 'str "line1\nline2\n")
+(set str "line1\nline2\n")
 (exec "wc -l" str)
 ;-> true
 ```
@@ -6576,8 +6576,8 @@ Examples:
 ```
 ; first syntax: expand bound variables
 ; ------------------------------------
-(set 'x 2 'a '(d e))
-(set 'val 'a)
+(set x 2 'a '(d e))
+(set val 'a)
 
 (expand val 'a)
 ;-> (d e)
@@ -6592,8 +6592,8 @@ Examples:
 (define (raise-to power)
   (expand (fn (base) (pow base power)) 'power))
 
-(set 'square (raise-to 2))
-(set 'cube   (raise-to 3))
+(set square (raise-to 2))
+(set cube   (raise-to 3))
 
 (square 5)
 ;-> 25
@@ -6613,7 +6613,7 @@ Examples:
 
 ; third syntax: uppercase-variable expansion
 ; ------------------------------------------
-(set 'A 1 'Bvar 2 'C nil 'd 5)
+(set A 1 'Bvar 2 'C nil 'd 5)
 
 (expand '(A (Bvar) C d))
 ;-> (1 (2) C d)
@@ -6622,7 +6622,7 @@ Examples:
 (define (raise-to Power)
   (expand (fn (base) (pow base Power))))
 
-(set 'cube (raise-to 3))
+(set cube (raise-to 3))
 (cube 4)
 ;-> 64
 ```
@@ -6690,7 +6690,7 @@ Examples:
 ;-> ("reb")
 
 ; binary handling on UTF-8 builds requires unpack
-(set 'bytes "\001\002\003\004")
+(set bytes "\001\002\003\004")
 (unpack (dup "c" (length bytes)) bytes)
 ;-> (1 2 3 4)
 
@@ -6753,7 +6753,7 @@ Examples:
 
 ```
 ; extending lists
-(set 'lst '(a b))
+(set lst '(a b))
 (extend lst '(c d))
 ;-> (a b c d)
 
@@ -6764,7 +6764,7 @@ lst
 ;-> (a b c d e f g)
 
 ; extending strings
-(set 'str "ab")
+(set str "ab")
 (extend str "cd")
 ;-> "abcd"
 
@@ -6775,7 +6775,7 @@ str
 ;-> "abcdefg"
 
 ; extending nested elements in place
-(set 'lst '(a b "CD" (e f)))
+(set lst '(a b "CD" (e f)))
 
 (extend (lst 2) "E")
 lst
@@ -7044,7 +7044,7 @@ Examples:
 ;-> (10 6 11)
 
 ; using a comparison functor
-(set 'lst '((a 10 2 7) (b 5) (a 8 3) (c 8) (a 9)))
+(set lst '((a 10 2 7) (b 5) (a 8 3) (c 8) (a 9)))
 
 (filter (curry match '(a *)) lst)
 ;-> ((a 10 2 7) (a 8 3) (a 9))
@@ -7324,12 +7324,12 @@ Examples:
 (first '((a b) c d))
 ;-> (a b)
 
-(set 'lst '(a b c d e))
+(set lst '(a b c d e))
 (first lst)
 ;-> a
 
 ; arrays
-(set 'arr (array 3 2 (sequence 1 6)))
+(set arr (array 3 2 (sequence 1 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (first arr)
@@ -7484,7 +7484,7 @@ Examples:
 ; user input conversion
 ;----------------------------------------
 ; (print "enter a float: ")
-; (set 'num (float (read-line)))
+; (set num (float (read-line)))
 ```
 
 Notes:
@@ -7516,7 +7516,7 @@ otherwise returns nil.
 Examples:
 
 ```
-(set 'num 1.23)
+(set num 1.23)
 (float? num)
 ;-> true
 
@@ -7630,29 +7630,29 @@ Examples:
 
 ```
 ; basic anonymous function
-(set 'f (fn (x) (+ x 1)))
+(set f (fn (x) (+ x 1)))
 (f 10)
 ;-> 11
 
 ; multiple parameters
-(set 'add3 (fn (a b c) (+ a b c)))
+(set add3 (fn (a b c) (+ a b c)))
 (add3 1 2 3)
 ;-> 6
 
 ; default parameters
-(set 'scale (fn (x (f 2)) (* x f)))
+(set scale (fn (x (f 2)) (* x f)))
 (scale 10)
 ;-> 20
 (scale 10 5)
 ;-> 50
 
 ; variable arity using $args
-(set 'sum-all (fn () (apply + $args)))
+(set sum-all (fn () (apply + $args)))
 (sum-all 1 2 3 4 5)
 ;-> 15
 
 ; same using (args)
-(set 'sum2 (fn () (apply + (args))))
+(set sum2 (fn () (apply + (args))))
 (sum2 1 2 3 4 5)
 ;-> 15
 ```
@@ -7696,7 +7696,7 @@ Examples:
 ```
 ; 1) simple macro: (inc2 x) → (+ x 2)
 
-(set 'inc2
+(set inc2
   (fn-macro (x)
     (+ (eval x) 2)))
 
@@ -7707,7 +7707,7 @@ Examples:
 ; 2) custom conditional form
 ;    (if-zero x a b) → (if (= x 0) a b)
 
-(set 'if-zero
+(set if-zero
   (fn-macro (x a b)
     (if (= (eval x) 0)
         (eval a)
@@ -7723,7 +7723,7 @@ Examples:
 ; 3) macro that defines a new function
 ;    (make-fn name (p1) body) → (define (name p1) body)
 
-(set 'make-fn
+(set make-fn
   (fn-macro (name params body)
     (define (name params) (eval body))))
 
@@ -7735,7 +7735,7 @@ Examples:
 ; 4) macro with a default argument
 ;    (add2 x) → (+ x 2)
 
-(set 'add2
+(set add2
   (fn-macro ((x 0))
     (+ (eval x) 2)))
 
@@ -7896,7 +7896,7 @@ Examples:
 ```
 ; basic fork: parent and child diverge
 ;------------------------------------------------------------
-(set 'x 0)
+(set x 0)
 
 (fork
   (while (< x 5)
@@ -7929,8 +7929,8 @@ x
     (while (setq line (read-line in))
       (println "count " line))))
 
-(set 'child-observer (fork (observer read-end)))
-(set 'child-counter  (fork (counter 5 write-end)))
+(set child-observer (fork (observer read-end)))
+(set child-counter  (fork (counter 5 write-end)))
 
 (wait-pid child-observer)
 (wait-pid child-counter)
@@ -7939,7 +7939,7 @@ x
 ; destroying a long-running child
 ;------------------------------------------------------------
 (define (demo)
-  (set 'pid
+  (set pid
        (fork
          (dotimes (i 1000)
            (println i)
@@ -8073,7 +8073,7 @@ More examples:
 Using a list as the data source:
 
 ```
-(set 'lst '("hello" 123))
+(set lst '("hello" 123))
 (format "%15s %d" lst)
 ;-> "          hello 123"
 ```
@@ -8571,7 +8571,7 @@ make_bytes(void)
 
 ; Step 4: Reading from a Rebel buffer
 ;-----------------------------------------------------------
-(set 'buff "ABC\000\000\000DEF")
+(set buff "ABC\000\000\000DEF")
 ;-> "ABC\000\000\000DEF"
 
 (get-string buff)
@@ -8588,7 +8588,7 @@ make_bytes(void)
 
 ; Step 6: Using a string limit
 ;-----------------------------------------------------------
-(set 'buff2 "ABC\000\000EFG\000DQW")
+(set buff2 "ABC\000\000EFG\000DQW")
 
 (get-string buff2 4 "FG")
 ;-> "ABC\000"
@@ -8601,8 +8601,8 @@ make_bytes(void)
 
 ; Step 7: UTF-32 buffer with explicit terminator limit
 ;-----------------------------------------------------------
-(set 'utf32 (unicode "我能吞下玻璃而不伤身体。"))
-(set 'addr (address utf32))
+(set utf32 (unicode "我能吞下玻璃而不伤身体。"))
+(set addr (address utf32))
 
 (get-string utf32 80 "\000\000\000\000")
 ;-> a raw UTF-32 byte sequence up to the terminator
@@ -8777,14 +8777,14 @@ Examples:
 
 ; marking a symbol as global
 ;-----------------------------------------------------------
-(set 'val 123)
+(set val 123)
 (global 'val)
 (global? 'val)
 ;-> true
 
 ; exporting and protecting a symbol
 ;-----------------------------------------------------------
-(set 'step 10)
+(set step 10)
 (constant (global 'step))
 (global? 'step)
 ;-> true
@@ -8889,11 +8889,11 @@ Examples:
 ```
 ; basic conditional evaluation
 ;-----------------------------------------------------------
-(set 'x 50)
+(set x 50)
 (if (< x 100) "small" "big")
 ;-> "small"
 
-(set 'x 1000)
+(set x 1000)
 (if (< x 100) "small" "big")
 ;-> "big"
 
@@ -8913,7 +8913,7 @@ Examples:
 
 ; using the anaphoric variable $it
 ;-----------------------------------------------------------
-(set 'lst '(A B C))
+(set lst '(A B C))
 (if lst (println (last $it)))
 ;-> C
 
@@ -9100,8 +9100,8 @@ Examples:
 ;-----------------------------------------------------------
 (import "/usr/lib/libc.so" "strcpy" "char*" "char*" "char*")
 
-(set 'src "hello world")
-(set 'dst (dup "\000" (length src)))
+(set src "hello world")
+(set dst (dup "\000" (length src)))
 
 (strcpy dst src)
 ;-> "hello world"
@@ -9120,7 +9120,7 @@ Examples:
 ;-----------------------------------------------------------
 (import "/usr/lib/libc.so" "strcpy" "void*" "char*" "char*")
 
-(set 'buf (dup "\000" 32))
+(set buf (dup "\000" 32))
 (strcpy buf "test")
 ;-> an address number
 
@@ -9160,7 +9160,7 @@ incremented result is returned but not stored.
 Examples:
 
 ```
-(set 'x 0) ;-> 0
+(set x 0) ;-> 0
 (inc x) ;-> 1
 x ;-> 1
 
@@ -9171,10 +9171,10 @@ x ;-> 1.25
 z ;-> nil
 (inc z) ;-> 1
 
-(set 'z nil)
+(set z nil)
 (inc z 0.01) ;-> 0.01
 
-(set 'l '(1 2 3 4))
+(set l '(1 2 3 4))
 (inc (l 3) 0.1) ;-> 4.1
 (inc (first l)) ;-> 2
 l ;-> (2 2 3 4.1)
@@ -9338,7 +9338,7 @@ Examples:
 ;-> ERR: user error : not a number
 
 (print "Enter a num:")
-(set 'num (int (read-line)))
+(set num (int (read-line)))
 
 (int (bits 12345) 0 2) ;-> 12345
 ```
@@ -9375,7 +9375,7 @@ integers unless explicitly converted.
 Examples:
 
 ```
-(set 'num 123) ;-> 123
+(set num 123) ;-> 123
 (integer? num) ;-> true
 
 (integer? 3.0) ;-> nil
@@ -9467,7 +9467,7 @@ return nil.
 Examples:
 
 ```
-(set 'm1 '((-1 1 1) (1 4 -5) (1 -2 0)))
+(set m1 '((-1 1 1) (1 4 -5) (1 -2 0)))
 (invert m1)
 ;-> ((10 2 9) (5 1 4) (6 1 5))
 
@@ -9620,7 +9620,7 @@ string.
 Examples:
 
 ```
-(set 'lst '("this" "is" "a" "sentence"))
+(set lst '("this" "is" "a" "sentence"))
 (join lst " ")
 ;-> "this is a sentence"
 
@@ -9759,7 +9759,7 @@ Examples:
 (last '(a b (c d)))
 ;-> (c d)
 
-(set 'A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (last A)
@@ -9925,13 +9925,13 @@ Examples:
 (length '())
 ;-> 0
 
-(set 'lst '(q w e r t y))
+(set lst '(q w e r t y))
 ;-> (q w e r t y)
 (length lst)
 ;-> 6
 
 ; array length (rows)
-(set 'arr (array 2 4 '(0)))
+(set arr (array 2 4 '(0)))
 ;-> ((1 2) (3 4) (5 6) (7 8))   ; example filler changed by array rules
 (length arr)
 ;-> 2
@@ -10131,7 +10131,7 @@ forms wrapped inside each other in left-to-right order.
 Examples:
 
 ```
-(set 'x 10)
+(set x 10)
 
 (let ((x 1) (y (+ x 1)))
   (list x y))
@@ -10219,7 +10219,7 @@ structures and therefore return true under list?.
 Examples:
 
 ```
-(set 'var '(1 2 3 4))
+(set var '(1 2 3 4))
 ;-> (1 2 3 4)
 
 (list? var)
@@ -10331,7 +10331,7 @@ Examples:
 ;-> (nil nil nil)
 
 ; localizing a variable that already has a value
-(set 'x 42)
+(set x 42)
 ;-> 42
 
 (local (x)
@@ -10426,7 +10426,7 @@ indexed from the end of the association.
 Examples:
 
 ```
-(set 'params '(
+(set params '(
   (name "Alice")
   (age 35)
   (role "admin")
@@ -10443,7 +10443,7 @@ Examples:
 ;-> 40
 
 ; table of records
-(set 'records '(
+(set records '(
   ("Alice" 35 "admin" 12.34)
   ("Bob"   50 "user"  99.5)
 ))
@@ -10499,7 +10499,7 @@ Examples:
 (lower-case "HELLO WORLD")
 ;-> "hello world"
 
-(set 'str "ABC")
+(set str "ABC")
 ;-> "ABC"
 
 (lower-case str)
@@ -10566,7 +10566,7 @@ Examples:
     (set A B)
     (set B A)))
 
-(set 'x 3 'y 9)
+(set x 3 'y 9)
 (swap x y)
 (list x y)
 ;-> (9 3)
@@ -10842,8 +10842,8 @@ Examples:
 ```
 ; matrix-to-matrix operations
 ;------------------------------------------------------------
-(set 'A '((1 2 3) (4 5 6)))
-(set 'B A)
+(set A '((1 2 3) (4 5 6)))
+(set B A)
 
 (mat + A B)
 ;-> ((2 4 6) (8 10 12))
@@ -10859,7 +10859,7 @@ Examples:
 
 ; operator supplied as a variable
 ;------------------------------------------------------------
-(set 'op +)
+(set op +)
 (mat op A B)
 ;-> ((2 4 6) (8 10 12))
 
@@ -11059,7 +11059,7 @@ is found, nil is returned.
 Examples:
 
 ```
-(set 'lst '(a b c d e f g h))
+(set lst '(a b c d e f g h))
 ;-> (a b c d e f g h)
 
 (member 'd lst)
@@ -11231,13 +11231,13 @@ or an array.
 Examples:
 
 ```
-(set 'A '((1 2 3) (4 5 6)))
-(set 'B '((1 2) (1 2) (1 2)))
+(set A '((1 2 3) (4 5 6)))
+(set B '((1 2) (1 2) (1 2)))
 
 (multiply A B)
 ;-> ((6 12) (15 30))
 
-(set 'v '(10 20 30))
+(set v '(10 20 30))
 (multiply A (transpose (list v)))
 ;-> ((140) (320))
 ```
@@ -11278,7 +11278,7 @@ Examples:
 
 ```
 ; floating-point operations on NaN yield NaN
-(set 'x (sqrt -1))
+(set x (sqrt -1))
 ;-> -nan
 
 (NaN? x)
@@ -11307,7 +11307,7 @@ Examples:
 (= x x)
 ;-> nil
 
-(set 'infinity (mul 1.0e200 1.0e200))
+(set infinity (mul 1.0e200 1.0e200))
 ;-> inf
 
 (NaN? (sub infinity infinity))
@@ -11337,7 +11337,7 @@ to receive and send data on the accepted connection.
 Examples:
 
 ```
-(set 'sock (net-listen 1234))
+(set sock (net-listen 1234))
 ;-> <socket>
 
 (net-accept sock)
@@ -11424,7 +11424,7 @@ Examples:
 
 ```
 ; TCP
-(set 'sock (net-connect "example.org" 80))
+(set sock (net-connect "example.org" 80))
 ;-> <socket>
 
 ; timeout
@@ -11787,13 +11787,13 @@ the default interface is used.
 Examples:
 
 ```
-(set 'port 7306)
-(set 'listen (net-listen port))
+(set port 7306)
+(set listen (net-listen port))
 
 (unless listen
   (exit))
 
-(set 'conn (net-accept listen))
+(set conn (net-accept listen))
 (if conn
     (while (net-receive conn buff 1024 "\n")
       (print buff)
@@ -11981,7 +11981,7 @@ Examples:
 ```
 ; UDP packet with zeroed checksums (recalculated internally)
 
-(set 'pkt (pack (dup "b" 39) '(
+(set pkt (pack (dup "b" 39) '(
   0x45 0x00 0x00 0x27 0x4b 0x8f 0x00 0x00 0x40 0x11 0x00 0x00
   192 168 1 95
   192 168 1 92
@@ -12026,7 +12026,7 @@ I/O loops.
 Examples:
 
 ```
-(set 'sock (net-connect "example.com" 7306))
+(set sock (net-connect "example.com" 7306))
 
 (while (= (net-peek sock) 0)
   (do-something-else))
@@ -12240,7 +12240,7 @@ with net-select or net-peek for non-blocking operation.
 Examples:
 
 ```
-(set 'sock (net-listen 1001 "" "udp"))
+(set sock (net-listen 1001 "" "udp"))
 ;-> <socket>
 
 (while (not (net-select sock "r" 100000))
@@ -12318,7 +12318,7 @@ Examples:
 (net-send-udp "example.com" 2222 (pack "c c c c" 0 1 2 3))
 ;-> 4
 
-(set 'buf (first (net-receive-udp 2222 10)))
+(set buf (first (net-receive-udp 2222 10)))
 (unpack "c c c c" buf)
 ;-> (0 1 2 3)
 ```
@@ -12373,13 +12373,13 @@ run.
 Examples:
 
 ```
-(set 'listen (net-listen 7306))
+(set listen (net-listen 7306))
 
 ; wait for incoming connection
 (while (not (net-select listen "r" 1000000))
   (if (net-error) (print (net-error))))
 
-(set 'conn (net-accept listen))
+(set conn (net-accept listen))
 (net-send conn "hello")
 
 ; wait for incoming data
@@ -12392,7 +12392,7 @@ Examples:
 Multiple sockets:
 
 ```
-(set 'listen-list '(1001 1002))
+(set listen-list '(1001 1002))
 
 (while (not (net-error))
   (dolist (s (net-select listen-list "r" 1000000))
@@ -12433,7 +12433,7 @@ error information.
 Examples:
 
 ```
-(set 'buf "hello there")
+(set buf "hello there")
 
 (net-send sock buf)
 ;-> 11
@@ -12484,17 +12484,17 @@ Examples:
 
 ```
 ; UDP server
-(set 'srv (net-listen 10001 "" "udp"))
+(set srv (net-listen 10001 "" "udp"))
 
 (while (not (net-error))
-  (set 'msg (net-receive-from srv 255))
+  (set msg (net-receive-from srv 255))
   (net-send-to (nth 1 msg) (nth 2 msg)
                (upper-case (first msg)) srv))
 ```
 
 ```
 ; UDP client
-(set 'cli (net-listen 10002 "" "udp"))
+(set cli (net-listen 10002 "" "udp"))
 
 (net-send-to "127.0.0.1" 10001 "hello" cli)
 (net-receive cli buf 255)
@@ -12718,11 +12718,11 @@ Contexts may also be referenced indirectly through
 variables:
 
 ```
-(set 'ctx1:x 123)
-(set 'ctx2:y 999)
+(set ctx1:x 123)
+(set ctx2:y 999)
 
-(set 'src ctx1)
-(set 'dst ctx2)
+(set src ctx1)
+(set dst ctx2)
 
 (new src dst)
 ;-> ctx2
@@ -13101,7 +13101,7 @@ indices cause an error.
 Examples:
 
 ```
-(set 'lst '(a b c))
+(set lst '(a b c))
 (nth 0 lst)
 ;-> a
 
@@ -13109,7 +13109,7 @@ Examples:
 (lst 0)
 ;-> a
 
-(set 'names '(adam bela cyril david))
+(set names '(adam bela cyril david))
 ;-> (adam bela cyril david)
 
 (nth 2 names)
@@ -13122,7 +13122,7 @@ Examples:
 Multiple indices:
 
 ```
-(set 'people '((adam 30) (bela 42) ((cyril nova) 17)))
+(set people '((adam 30) (bela 42) ((cyril nova) 17)))
 
 (people 1 1)
 ;-> 42
@@ -13138,7 +13138,7 @@ Multiple indices:
 Indices may be supplied via a list or vector:
 
 ```
-(set 'idx '(2 0 1))
+(set idx '(2 0 1))
 
 (people idx)
 ;-> nova
@@ -13167,7 +13167,7 @@ Out-of-bounds indices cause an error:
 Passing lists by reference using a context functor:
 
 ```
-(set 'L:L '(a b c d e f g))
+(set L:L '(a b c d e f g))
 
 (define (second ctx)
   (nth 1 ctx))
@@ -13194,7 +13194,7 @@ hundreds of elements or more.
 Arrays behave the same way as lists:
 
 ```
-(set 'arr (array 2 3 '(a b c d e f)))
+(set arr (array 2 3 '(a b c d e f)))
 ;-> ((a b c) (d e f))
 
 (nth 1 arr)
@@ -13275,7 +13275,7 @@ or “invalid value” may occur.
 Examples:
 
 ```
-(set 'x (sqrt -1))
+(set x (sqrt -1))
 ;-> -nan
 
 (null? x)
@@ -13330,8 +13330,8 @@ number? returns nil.
 Examples:
 
 ```
-(set 'x 1.23)
-(set 'y 456)
+(set x 1.23)
+(set y 456)
 
 (number? x)
 ;-> true
@@ -13441,11 +13441,11 @@ Examples:
 Reading from the same file:
 
 ```
-(set 'f (open "file.txt" "read"))
+(set f (open "file.txt" "read"))
 
 (seek f 6)
 
-(set 'c (read-char f))
+(set c (read-char f))
 
 (print c "\n")
 
@@ -13502,7 +13502,7 @@ expressions are not evaluated.
 Examples:
 
 ```
-(set 'x 10)
+(set x 10)
 
 (or (> x 100) (= x 10))
 ;-> true
@@ -13608,11 +13608,11 @@ Examples:
 (unpack "c c c" "\000\001\002")
 ;-> (0 1 2)
 
-(set 's (pack "c d u" 10 12345 56789))
+(set s (pack "c d u" 10 12345 56789))
 (unpack "c d u" s)
 ;-> (10 12345 56789)
 
-(set 's (pack "s10 f" "result" 1.23))
+(set s (pack "s10 f" "result" 1.23))
 (unpack "s10 f" s)
 ;-> ("result\000\000\000\000" 1.230000019)
 
@@ -13621,8 +13621,8 @@ Examples:
 (pack "n10")
 ;-> "\000\000\000\000\000\000\000\000\000\000"
 
-(set 'lst '("A" "B" "C"))
-(set 'buf (pack "lululu" lst))
+(set lst '("A" "B" "C"))
+(set buf (pack "lululu" lst))
 (map get-string (unpack "lululu" buf))
 ;-> ("A" "B" "C")
 
@@ -13637,8 +13637,8 @@ Examples:
 (pack ">u <u" 1 1)
 ;-> "\000\001\001\000"
 
-(set 'txt "我能吞下玻璃而不伤身体。")
-(set 'lst (unpack (dup "b" (length txt)) txt))
+(set txt "我能吞下玻璃而不伤身体。")
+(set lst (unpack (dup "b" (length txt)) txt))
 (pack (dup "b" (length lst)) lst)
 ;-> "我能吞下玻璃而不伤身体。"
 ```
@@ -13921,7 +13921,7 @@ is removed and returned.
 Examples:
 
 ```
-(set 'lst '((f g) a b c "hello" d e 10))
+(set lst '((f g) a b c "hello" d e 10))
 
 (pop lst)
 ;-> (f g)
@@ -13955,14 +13955,14 @@ lst
 
 ; nested indices
 ;----------------------------------------------------------
-(set 'lst '(a 2 (x y (p q) z)))
+(set lst '(a 2 (x y (p q) z)))
 
 (pop lst -1 2 0)
 ;-> p
 
 ; using indices in a list
 ;----------------------------------------------------------
-(set 'lst '(a b (c d () e)))
+(set lst '(a b (c d () e)))
 
 (push 'x lst '(2 2 0))
 ;-> (a b (c d (x) e))
@@ -13978,7 +13978,7 @@ lst
 
 ; pop on strings (UTF-8 aware)
 ;----------------------------------------------------------
-(set 'str "Rebel")
+(set str "Rebel")
 
 (pop str -2 2)
 ;-> "el"
@@ -13992,7 +13992,7 @@ str
 str
 ;-> "Rb"
 
-(set 'str "x")
+(set str "x")
 
 (pop str)
 ;-> "x"
@@ -14042,7 +14042,7 @@ Examples:
 
 ```
 ; simple associations
-(set 'lst '((a 1) (b 2) (c 3)))
+(set lst '((a 1) (b 2) (c 3)))
 
 (pop-assoc 'b lst)
 ;-> (b 2)
@@ -14052,7 +14052,7 @@ lst
 
 ;----------------------------------------------------------
 ; nested associations
-(set 'lst '((a (b 1) (c (d 2)))))
+(set lst '((a (b 1) (c (d 2)))))
 
 (pop-assoc 'a lst)
 ;-> (a (b 1) (c (d 2)))
@@ -14060,7 +14060,7 @@ lst
 lst
 ;-> ()
 
-(set 'lst '((a (b 1) (c (d 2)))))
+(set lst '((a (b 1) (c (d 2)))))
 
 (pop-assoc '(a b) lst)
 ;-> (b 1)
@@ -14068,7 +14068,7 @@ lst
 lst
 ;-> ((a (c (d 2))))
 
-(set 'lst '((a (b 1) (c (d 2)))))
+(set lst '((a (b 1) (c (d 2)))))
 
 (pop-assoc '(a c) lst)
 ;-> (c (d 2))
@@ -14341,7 +14341,7 @@ Examples:
 (sin 1)
 ;-> 0.841
 
-(set 'x 0.0)
+(set x 0.0)
 x
 ;-> 0.000
 ```
@@ -14394,7 +14394,7 @@ and functions created using import.
 Examples:
 
 ```
-(set 'var define)
+(set var define)
 
 (primitive? var)
 ;-> true
@@ -14449,7 +14449,7 @@ code   description
 Examples:
 
 ```
-(print (set 'res (+ 1 2 3)))
+(print (set res (+ 1 2 3)))
 (print "the result is " res "\n")
 
 "\065\066\067"
@@ -14891,7 +14891,7 @@ Examples:
 
 ```
 ; inserting at the front
-(set 'lst '(b c))
+(set lst '(b c))
 (push 'a lst)
 ;-> (a b c)
 
@@ -14920,7 +14920,7 @@ lst
 
 ; using indices in a list
 ;----------------------------------------------------------
-(set 'lst '(a b (c d () e)))
+(set lst '(a b (c d () e)))
 
 (push 'x lst '(2 2 0))
 ;-> (a b (c d (x) e))
@@ -14933,7 +14933,7 @@ lst
 
 ; place reference
 ;----------------------------------------------------------
-(set 'lst '((a 1) (b 2) (c 3) (d)))
+(set lst '((a 1) (b 2) (c 3) (d)))
 
 (push 4 (assoc 'd lst) -1)
 ;-> (d 4)
@@ -14954,7 +14954,7 @@ var
 
 ; using push and pop as a queue
 ;----------------------------------------------------------
-(set 'q '(a b c d e))
+(set q '(a b c d e))
 
 (pop (push 'f q -1))
 ;-> a
@@ -14967,7 +14967,7 @@ q
 
 ; push on strings (UTF-8 aware)
 ;----------------------------------------------------------
-(set 'str "abcdefg")
+(set str "abcdefg")
 
 (push "hijk" str -1)
 ;-> "abcdefghijk"
@@ -14981,7 +14981,7 @@ str
 (push "4" str 3)
 ;-> "1234abcdefghijk"
 
-(set 'str "\u03b1\u03b2\u03b3")
+(set str "\u03b1\u03b2\u03b3")
 ;-> "αβγ"
 
 (push "*" str 1)
@@ -14989,7 +14989,7 @@ str
 
 ; push on a string reference
 ;----------------------------------------------------------
-(set 'lst '("abc" "xyz"))
+(set lst '("abc" "xyz"))
 
 (push "x" (lst 0))
 ;-> "xabc"
@@ -15375,7 +15375,7 @@ bytes read are still placed into sym-buffer.
 Examples:
 
 ```
-(set 'handle (open "file.txt" "read"))
+(set handle (open "file.txt" "read"))
 
 (read handle buf 200)
 ;-> 200
@@ -15430,9 +15430,9 @@ Examples:
 
 ```
 (define (copy-bytes from-file to-file)
-  (set 'in-file (open from-file "read"))
-  (set 'out-file (open to-file "write"))
-  (while (set 'chr (read-char in-file))
+  (set in-file (open from-file "read"))
+  (set out-file (open to-file "write"))
+  (while (set chr (read-char in-file))
     (write-char out-file chr))
   (close in-file)
   (close out-file)
@@ -15489,7 +15489,7 @@ the resulting expression.
 Examples:
 
 ```
-(set 'code "; a statement
+(set code "; a statement
 (define (double x) (+ x x))")
 
 (read-expr code)
@@ -15608,7 +15608,7 @@ Examples:
 (read-key true)
 ;-> 0     ; when no key has been pressed
 
-(while (!= (set 'c (read-key)) 1)
+(while (!= (set c (read-key)) 1)
   (println c))
 ```
 
@@ -15666,11 +15666,11 @@ Examples:
 
 ```
 (print "Enter a num:")
-(set 'num (int (read-line)))
+(set num (int (read-line)))
 ```
 
 ```
-(set 'in-file (open "file.txt" "read"))
+(set in-file (open "file.txt" "read"))
 (while (read-line in-file)
   (write-line))
 (close in-file)
@@ -15719,8 +15719,8 @@ displayable UTF-8 character string using char.
 Examples:
 
 ```
-(set 'in-file (open "utf8.txt" "read"))
-(while (set 'chr (read-utf8 in-file))
+(set in-file (open "utf8.txt" "read"))
+(while (set chr (read-utf8 in-file))
   (print (char chr)))
 (close in-file)
 ```
@@ -15949,7 +15949,7 @@ to index into the original list.
 Examples:
 
 ```
-(set 'lst '(a b (c d (x) e)))
+(set lst '(a b (c d (x) e)))
 
 (ref 'x lst)
 ;-> (2 2 0)
@@ -15957,11 +15957,11 @@ Examples:
 (ref '(x) lst)
 ;-> (2 2)
 
-(set 'p '(c d (x) e))
+(set p '(c d (x) e))
 (ref p lst)
 ;-> (2)
 
-(set 'v (ref '(x) lst))
+(set v (ref '(x) lst))
 (lst v)
 ;-> (x)
 
@@ -15972,7 +15972,7 @@ Examples:
 Using comparison functions:
 
 ```
-(set 'lst '(a b (c d (e) f)))
+(set lst '(a b (c d (e) f)))
 
 (ref 'e lst)
 ;-> (2 2 0)
@@ -16000,12 +16000,12 @@ Using an anonymous comparison function:
 Using match and unify as comparison functions:
 
 ```
-(set 'lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
+(set lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
 
 (ref '(a ?) lst match)
 ;-> (1)
 
-(set 'lst '(((a b) (c d)) ((e e) (f g))))
+(set lst '(((a b) (c d)) ((e e) (f g))))
 
 (ref '(X X) lst unify)
 ;-> (1 0)
@@ -16020,7 +16020,7 @@ Using match and unify as comparison functions:
 Passing the list by reference using a context:
 
 ```
-(set 'ctx:ctx '(a b (c d) e f))
+(set ctx:ctx '(a b (c d) e f))
 
 (ref 'd ctx)
 ;-> (2 1)
@@ -16071,7 +16071,7 @@ Examples:
 ```
 ; basic usage
 ;----------------------------------------------------------
-(set 'lst '(a b c (d a f (a h a)) (k a (m n a) (x))))
+(set lst '(a b c (d a f (a h a)) (k a (m n a) (x))))
 
 (ref-all 'a lst)
 ;-> ((0) (3 1) (3 3 0) (3 3 2) (4 1) (4 2 2))
@@ -16087,7 +16087,7 @@ $count
 
 ; comparison functions
 ;----------------------------------------------------------
-(set 'lst '(a b c (d f (h l a)) (k a (m n) (x))))
+(set lst '(a b c (d f (h l a)) (k a (m n) (x))))
 
 (ref-all 'c lst)
 ;-> ((2))
@@ -16122,14 +16122,14 @@ $count
 (define (is-it-or-d x y)
   (or (= x y) (= y 'd)))
 
-(set 'lst '(a b (c d (e) f)))
+(set lst '(a b (c d (e) f)))
 
 (ref-all 'e lst is-it-or-d)
 ;-> ((2 1) (2 2 0))
 
 ; using match and unify
 ;----------------------------------------------------------
-(set 'lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
+(set lst '((l 3) (a 12) (k 5) (a 10) (z 22)))
 
 (ref-all '(a ?) lst match)
 ;-> ((1) (3))
@@ -16137,7 +16137,7 @@ $count
 (ref-all '(a ?) lst match true)
 ;-> ((a 12) (a 10))
 
-(set 'lst '(((a b) (c d)) ((e e) (f g)) ((z) (z))))
+(set lst '(((a b) (c d)) ((e e) (f g)) ((z) (z))))
 
 (ref-all '(X X) lst unify)
 ;-> ((1 0) (2))
@@ -16145,7 +16145,7 @@ $count
 (ref-all '(X X) lst unify true)
 ;-> ((e e) ((z) (z)))
 
-(set 'lst '(((x y z) g) ((a b) (c d)) ((e e) (f g))))
+(set lst '(((x y z) g) ((a b) (c d)) ((e e) (f g))))
 
 (ref-all '(X g) lst unify)
 ;-> ((0) (2 1))
@@ -16336,8 +16336,8 @@ Examples:
 
 ; faster with pre-compilation
 ;----------------------------------------------------------
-(set 'p1 (regex-comp pattern-str1))
-(set 'p2 (regex-comp pattern-str2 512))
+(set p1 (regex-comp pattern-str1))
+(set p2 (regex-comp pattern-str2 512))
 
 (dolist (line page)
   (replace p1 line repl1 0x10000)
@@ -16481,7 +16481,7 @@ Examples:
 ```
 ; list replacement
 ;----------------------------------------------------------
-(set 'lst '(a b c d e a b c d))
+(set lst '(a b c d e a b c d))
 
 (replace 'b lst 'B)
 ;-> (a B c d e a B c d)
@@ -16494,7 +16494,7 @@ $count
 
 ; list replacement with comparison function
 ;----------------------------------------------------------
-(set 'lst '(1 4 22 5 6 89 2 3 24))
+(set lst '(1 4 22 5 6 89 2 3 24))
 
 (replace 10 lst 10 <)
 ;-> (1 4 10 5 6 10 2 3 10)
@@ -16512,14 +16512,14 @@ $count
 
 ; using match and unify on lists
 ;----------------------------------------------------------
-(set 'lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+(set lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
 
 (replace '(mary *) lst
          (list 'mary (apply + (rest $it)))
          match)
 ;-> ((john 5 6 4) (mary 14) (bob 4 2 7 9) (jane 3))
 
-(set 'lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+(set lst '((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
 
 (replace '(*) lst
          (list ($it 0) (apply + (rest $it)))
@@ -16534,7 +16534,7 @@ $count
 
 ; list removal
 ;----------------------------------------------------------
-(set 'lst '(a b a a c d a f g))
+(set lst '(a b a a c d a f g))
 
 (replace 'a lst)
 ;-> (b c d f g)
@@ -16547,7 +16547,7 @@ $count
 
 ; string replacement without regex
 ;----------------------------------------------------------
-(set 'str "this isa sentence")
+(set str "this isa sentence")
 
 (replace "isa" str "is a")
 ;-> "this is a sentence"
@@ -16557,12 +16557,12 @@ $count
 
 ; regular expression replacement
 ;----------------------------------------------------------
-(set 'str "ZZZZZxZZZZyy")
+(set str "ZZZZZxZZZZyy")
 
 (replace "x|y" str "PP" 0)
 ;-> "ZZZZZPPZZZZPPPP"
 
-(set 'str "---axb---ayb---")
+(set str "---axb---ayb---")
 
 (replace "(a)(.)(b)" str (append $3 $2 $1) 0)
 ;-> "---bxa---bya---"
@@ -16575,7 +16575,7 @@ $count
 
 ; dynamic regex replacement
 ;----------------------------------------------------------
-(set 'str "xxx%41xxx%42")
+(set str "xxx%41xxx%42")
 
 (replace "%([0-9A-F][0-9A-F])" str
          (char (int (append "0x" $1)))
@@ -16709,7 +16709,7 @@ Examples:
 (rest '((a b) c d))
 ;-> (c d)
 
-(set 'lst '(a b c d e))
+(set lst '(a b c d e))
 
 (rest lst)
 ;-> (b c d e)
@@ -16728,7 +16728,7 @@ Examples:
 
 ; array usage
 ;----------------------------------------------------------
-(set 'A (array 2 3 (sequence 1 6)))
+(set A (array 2 3 (sequence 1 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (rest A)
@@ -16786,7 +16786,7 @@ Examples:
 ```
 ; reverse a list
 ;----------------------------------------------------------
-(set 'lst '(a b c d e f))
+(set lst '(a b c d e f))
 
 (reverse lst)
 ;-> (f e d c b a)
@@ -16796,7 +16796,7 @@ lst
 
 ; reverse an array
 ;----------------------------------------------------------
-(set 'arr (array 3 2 '(1 2 3 4 5 6)))
+(set arr (array 3 2 '(1 2 3 4 5 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (reverse arr)
@@ -16807,7 +16807,7 @@ arr
 
 ; reverse a byte string
 ;----------------------------------------------------------
-(set 'str "Rebel")
+(set str "Rebel")
 
 (reverse str)
 ;-> "lebeR"
@@ -16859,7 +16859,7 @@ Examples:
 ```
 ; list rotation
 ;----------------------------------------------------------
-(set 'lst '(1 2 3 4 5 6 7 8 9))
+(set lst '(1 2 3 4 5 6 7 8 9))
 
 (rotate lst)
 ;-> (9 1 2 3 4 5 6 7 8)
@@ -16875,7 +16875,7 @@ lst
 
 ; string rotation (byte-based)
 ;----------------------------------------------------------
-(set 'str "Rebel")
+(set str "Rebel")
 
 (rotate str)
 ;-> "lRebe"
@@ -17077,7 +17077,7 @@ Examples:
 ```
 ; plain string search
 ;----------------------------------------------------------
-(set 'file (open "file.txt" "read"))
+(set file (open "file.txt" "read"))
 
 (search file "define")
 (print (read-line file) "\n")
@@ -17086,7 +17086,7 @@ Examples:
 
 ; regular expression search
 ;----------------------------------------------------------
-(set 'file (open "program.c" "read"))
+(set file (open "program.c" "read"))
 
 (while (search file "#define (.*)" true 0)
   (println $1))
@@ -17173,7 +17173,7 @@ Examples:
 ;-> 0.8135413573186572
 
 ; save current generator state
-(set 'state (seed))
+(set state (seed))
 ;-> int
 
 (random)
@@ -17240,7 +17240,7 @@ Examples:
   (inc (self 1) dx)
   (inc (self 2) dy))
 
-(set 'Circle1 (Circle 1 2 3))
+(set Circle1 (Circle 1 2 3))
 
 (:move Circle1 10 20)
 
@@ -17249,7 +17249,7 @@ Circle1
 
 ; objects can be anonymous
 ;------------------------------------------------------------
-(set 'circles '((Circle 1 2 3) (Circle 4 5 6)))
+(set circles '((Circle 1 2 3) (Circle 4 5 6)))
 
 (:move (circles 0) 10 20)
 (:move (circles 1) 10 20)
@@ -17308,7 +17308,7 @@ not physically allocated on disk.
 Examples:
 
 ```
-(set 'file (open "file.dat" "read"))
+(set file (open "file.dat" "read"))
 ;-> int
 
 (seek file 100)
@@ -17320,7 +17320,7 @@ Examples:
 (seek file -1)        ; seek to end of file
 ;-> int
 
-(set 'big (open "large-file" "read"))
+(set big (open "large-file" "read"))
 (seek big 30000000000)
 ;-> 30000000000
 ```
@@ -17378,7 +17378,7 @@ Examples:
 ```
 ; list selection
 ;------------------------------------------------------------
-(set 'lst '(a b c d e f g))
+(set lst '(a b c d e f g))
 
 (select lst '(0 3 2 5 3))
 ;-> (a d c f d)
@@ -17391,7 +17391,7 @@ Examples:
 
 ; string selection (UTF-8 aware)
 ;------------------------------------------------------------
-(set 'str "abcdefg")
+(set str "abcdefg")
 
 (select str '(0 3 2 5 3))
 ;-> "adcfd"
@@ -17474,7 +17474,7 @@ Examples:
 ```
 ; create semaphore
 ;------------------------------------------------------------
-(set 'sid (semaphore))
+(set sid (semaphore))
 ;-> int
 
 (semaphore sid)
@@ -17506,7 +17506,7 @@ Example with a child process:
     (semaphore sid -1)
     (println x)))
 
-(set 'sid (semaphore))
+(set sid (semaphore))
 
 (fork (counter 5))
 
@@ -17578,7 +17578,7 @@ Examples:
 ```
 ; child sending message to parent
 ;------------------------------------------------------------
-(set 'ppid (sys-info -4))
+(set ppid (sys-info -4))
 (send ppid "hello")
 
 ; parent receiving message
@@ -17595,7 +17595,7 @@ msg
 ; parent dispatching messages from multiple children
 ;------------------------------------------------------------
 (define (child)
-  (set 'ppid (sys-info -4))
+  (set ppid (sys-info -4))
   (while true
     (until (send ppid (rand 100)))))
 
@@ -17811,10 +17811,10 @@ Examples:
 ```
 ; basic assignment
 ;------------------------------------------------------------
-(set 'x 123)
+(set x 123)
 ;-> 123
 
-(set 'x 'y)
+(set x 'y)
 ;-> y
 
 (set x "hello")
@@ -17823,12 +17823,12 @@ Examples:
 y
 ;-> "hello"
 
-(set 'lst '(1 2 3))
+(set lst '(1 2 3))
 ;-> (1 2 3)
 
 ; multiple assignments
 ;------------------------------------------------------------
-(set 'x 1 'y "hello")
+(set x 1 'y "hello")
 ;-> "hello"
 
 x
@@ -17839,7 +17839,7 @@ y
 
 ; symbol computed by expression
 ;------------------------------------------------------------
-(set 'lst '(x y z))
+(set lst '(x y z))
 ;-> (x y z)
 
 (set (first lst) 123)
@@ -17850,7 +17850,7 @@ x
 
 ; expressions may depend on earlier assignments
 ;------------------------------------------------------------
-(set 'a 10 'b (+ a a))
+(set a 10 'b (+ a a))
 
 a
 ;-> 10
@@ -17860,7 +17860,7 @@ b
 
 ; assigning functions
 ;------------------------------------------------------------
-(set 'double (fn (x) (+ x x)))
+(set double (fn (x) (+ x x)))
 ;-> (fn (x) (+ x x))
 
 ; equivalent to define
@@ -17989,7 +17989,7 @@ Examples:
 ```
 ; simple replacement in nested list
 ;------------------------------------------------------------
-(set 'data '(fruits (apples 123 44) (oranges 1 5 3)))
+(set data '(fruits (apples 123 44) (oranges 1 5 3)))
 
 (set-ref 'apples data 'Apples)
 ;-> (fruits (Apples 123 44) (oranges 1 5 3))
@@ -17999,7 +17999,7 @@ data
 
 ; passing list by reference via context
 ;------------------------------------------------------------
-(set 'db:db '(fruits (apples 123 44) (oranges 1 5 3)))
+(set db:db '(fruits (apples 123 44) (oranges 1 5 3)))
 
 (define (update ct key value)
   (set-ref key ct value))
@@ -18063,7 +18063,7 @@ Examples:
 ```
 ; replace all matching elements
 ;------------------------------------------------------------
-(set 'data
+(set data
  '((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -18076,7 +18076,7 @@ $count
 
 ; passing list by reference via context
 ;------------------------------------------------------------
-(set 'db:db
+(set db:db
  '((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -18093,7 +18093,7 @@ db:db
 
 ; custom comparison using match
 ;------------------------------------------------------------
-(set 'data
+(set data
  '((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -18210,7 +18210,7 @@ lst
 
 ; string modification
 ;------------------------------------------------------------
-(set 's "Example")
+(set s "Example")
 
 (setf (s 0) "e")
 ;-> "e"
@@ -18231,7 +18231,7 @@ s
 lst
 ;-> ((apples 4) (oranges 2))
 
-(set 's "Sample")
+(set s "Sample")
 
 (setf (s 0) (lower-case $it))
 ;-> "s"
@@ -18370,7 +18370,7 @@ Examples:
 ```
 ; allocate shared memory
 ;------------------------------------------------------------
-(set 'mem (share))
+(set mem (share))
 ;-> int-address
 
 ; write and read values
@@ -18593,7 +18593,7 @@ Examples:
 (sin 1)
 ;-> 0.8414709838
 
-(set 'pi (mul 2 (acos 0)))
+(set pi (mul 2 (acos 0)))
 ;-> 3.141592654
 
 (sin (div pi 2))
@@ -18710,7 +18710,7 @@ Examples:
 
 ; array slicing
 ;------------------------------------------------------------
-(set 'arr (array 3 2 (sequence 1 6)))
+(set arr (array 3 2 (sequence 1 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (slice arr 1 2)
@@ -18806,7 +18806,7 @@ Examples:
 
 ; array slicing
 ;------------------------------------------------------------
-(set 'A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ;-> ((1 2) (3 4) (5 6))
 
 (slice A 1 2)
@@ -18900,7 +18900,7 @@ Examples:
 
 ; destructive behavior
 ;------------------------------------------------------------
-(set 's '(k a l s))
+(set s '(k a l s))
 (sort s)
 ;-> (a k l s)
 
@@ -18926,7 +18926,7 @@ s
 (define (comp x y)
   (>= (last x) (last y)))
 
-(set 'db '((a 3) (g 2) (c 5)))
+(set db '((a 3) (g 2) (c 5)))
 
 (sort db comp)
 ;-> ((c 5) (a 3) (g 2))
@@ -19047,7 +19047,7 @@ Examples:
         (push i plist -1)))
     plist))
 
-(set 'start (time-of-day))
+(set start (time-of-day))
 
 (spawn 'p1 (primes 1 1000000))
 (spawn 'p2 (primes 1000001 2000000))
@@ -19163,11 +19163,11 @@ in list-vector or array-vector and returns the result.
 Examples:
 
 ```
-(set 'vector (sequence 1 10))
+(set vector (sequence 1 10))
 (ssq vector)
 ;-> 385
 
-(set 'vector (array 10 (sequence 1 10)))
+(set vector (array 10 (sequence 1 10)))
 (ssq vector)
 ;-> 385
 ```
@@ -19291,7 +19291,7 @@ kurt
 Examples:
 
 ```
-(set 'data '(90 100 130 150 180 200 220 300 350 400))
+(set data '(90 100 130 150 180 200 220 300 350 400))
 
 (println
   (format [text]
@@ -19372,7 +19372,7 @@ If a buffer passed to string contains zero bytes
 zero.
 
 ```
-(set 'buff "ABC\000\000\000")
+(set buff "ABC\000\000\000")
 ;-> "ABC\000\000\000"
 
 (length buff)
@@ -19418,7 +19418,7 @@ string, otherwise nil.
 Examples:
 
 ```
-(set 'var "hello")
+(set var "hello")
 
 (string? var)
 ;-> true
@@ -19481,10 +19481,10 @@ Examples:
 
 ; obtain current time
 ;------------------------------------------------------------
-(set 'today (date-value))
+(set today (date-value))
 
 ; localtime returns a pointer to struct tm
-(set 'ptr (localtime (address today)))
+(set ptr (localtime (address today)))
 
 ; unpack struct fields into a list
 (unpack tm ptr)
@@ -19600,7 +19600,7 @@ Examples:
 ```
 ; swapping elements in a list
 ;------------------------------------------------------------
-(set 'lst '(a b c d e f))
+(set lst '(a b c d e f))
 
 (swap (first lst) (last lst))
 ;-> a
@@ -19610,7 +19610,7 @@ lst
 
 ; swapping between two lists
 ;------------------------------------------------------------
-(set 'lst-b '(x y z))
+(set lst-b '(x y z))
 
 (swap (lst 0) (lst-b -1))
 ;-> f
@@ -19623,7 +19623,7 @@ lst-b
 
 ; swapping array rows
 ;------------------------------------------------------------
-(set 'A (array 2 3 (sequence 1 6)))
+(set A (array 2 3 (sequence 1 6)))
 
 (swap (A 0) (A 1))
 ;-> (1 2 3)
@@ -19633,7 +19633,7 @@ A
 
 ; swapping symbol values
 ;------------------------------------------------------------
-(set 'x 1 'y 2)
+(set x 1 'y 2)
 
 (swap x y)
 ;-> 1
@@ -19646,7 +19646,7 @@ y
 
 ; swapping via assoc and lookup
 ;------------------------------------------------------------
-(set 'lst '((a 1 2 3) (b 10 20 30)))
+(set lst '((a 1 2 3) (b 10 20 30)))
 
 (swap (lookup 'a lst -1) (lookup 'b lst 1))
 
@@ -19815,7 +19815,7 @@ the syntactic form of the expression.
 Examples:
 
 ```
-(set 'x 'y)
+(set x 'y)
 ;-> y
 
 (symbol? x)
@@ -19874,7 +19874,7 @@ Examples:
 (symbols 'ctx)
 (symbols ctx)
 
-(set 'ct ctx)
+(set ct ctx)
 (symbols ct)
 ```
 
@@ -20194,16 +20194,16 @@ Examples:
 ```
 ; two independent samples
 ;------------------------------------------------------------
-(set 'hours-sleep-8 '(5 7 5 3 5 3 3 9))
-(set 'hours-sleep-4 '(8 1 4 6 6 4 1 2))
+(set hours-sleep-8 '(5 7 5 3 5 3 3 9))
+(set hours-sleep-4 '(8 1 4 6 6 4 1 2))
 
 (t-test hours-sleep-8 hours-sleep-4)
 ;-> (5 4 2.138 2.563 0.847 14 0.411)
 
 ; two related samples
 ;------------------------------------------------------------
-(set 'mood-pre '(3 0 6 7 4 3 2 1 4))
-(set 'mood-post '(5 1 5 7 10 9 7 11 8))
+(set mood-pre '(3 0 6 7 4 3 2 1 4))
+(set mood-post '(5 1 5 7 10 9 7 11 8))
 
 (t-test mood-pre mood-post true)
 ;-> (3.333 7 2.236 3.041 -3.143 8 0.0137)
@@ -20269,7 +20269,7 @@ Examples:
 (tan 1)
 ;-> 1.557407725
 
-(set 'pi (mul 2 (asin 1)))
+(set pi (mul 2 (asin 1)))
 ;-> 3.141592654
 
 (tan (div pi 4))
@@ -20352,8 +20352,8 @@ separator. The returned value is always a string.
 Examples:
 
 ```
-(set 'ctx:var 123)
-(set 'sm 'ctx:var)
+(set ctx:var 123)
+(set sm 'ctx:var)
 
 (string sm)
 ;-> "ctx:var"
@@ -20363,7 +20363,7 @@ Examples:
 
 ; reconstructing the original symbol
 ;------------------------------------------------------------
-(set 's 'ctx:var)
+(set s 'ctx:var)
 
 (= s (sym (term s) (prefix s)))
 ;-> true
@@ -20862,7 +20862,7 @@ Examples:
 ```
 ; basic list matrix
 ;------------------------------------------------------------
-(set 'mtx '((1 2 3) (4 5 6)))
+(set mtx '((1 2 3) (4 5 6)))
 
 (transpose mtx)
 ;-> ((1 4) (2 5) (3 6))
@@ -20879,22 +20879,22 @@ Examples:
 
 ; array matrix
 ;------------------------------------------------------------
-(set 'arr (array 2 3 (sequence 1 6)))
-(set 'mtx (transpose arr))
+(set arr (array 2 3 (sequence 1 6)))
+(set mtx (transpose arr))
 
 mtx
 ;-> ((1 4) (2 5) (3 6))
 
 ; uneven rows
 ;------------------------------------------------------------
-(set 'mtx '((1 2 3) (4 5) (7 8 9)))
+(set mtx '((1 2 3) (4 5) (7 8 9)))
 
 (transpose mtx)
 ;-> ((1 4 7) (2 5 8) (3 nil 9))
 
 ; non-list row expansion
 ;------------------------------------------------------------
-(set 'mtx '((1 2 3) X (7 8 9)))
+(set mtx '((1 2 3) X (7 8 9)))
 
 (transpose mtx)
 ;-> ((1 X 7) (2 X 8) (3 X 9))
@@ -21125,7 +21125,7 @@ Notes:
 Use unify with expand to substitute bound variables:
 
 ```
-(set 'bindings (unify '(f (g A) A) '(f B xyz)))
+(set bindings (unify '(f (g A) A) '(f B xyz)))
 ;-> ((B (g xyz)) (A xyz))
 
 (expand '(f (g A) A) bindings)
@@ -21335,29 +21335,29 @@ Examples:
 (unpack "c c c" "ABC")
 ;-> (65 66 67)
 
-(set 'buf (pack "c d u" 10 12345 56789))
+(set buf (pack "c d u" 10 12345 56789))
 (unpack "c d u" buf)
 ;-> (10 12345 56789)
 
 ; strings and floats
 ;------------------------------------------------------------
-(set 'buf (pack "s10 f" "result" 1.23))
+(set buf (pack "s10 f" "result" 1.23))
 (unpack "s10 f" buf)
 ;-> ("result\000\000\000\000" 1.230000019)
 
-(set 'buf (pack "s3 lf" "result" 1.23))
+(set buf (pack "s3 lf" "result" 1.23))
 (unpack "s3 f" buf)
 ;-> ("res" 1.23)
 
 ; null padding
 ;------------------------------------------------------------
-(set 'buf (pack "c n7 c" 11 22))
+(set buf (pack "c n7 c" 11 22))
 (unpack "c n7 c" buf)
 ;-> (11 22)
 
 ; byte order control
 ;------------------------------------------------------------
-(set 'buf (pack "d" 1))
+(set buf (pack "d" 1))
 (unpack "d" buf)
 ;-> (1)
 
@@ -21366,7 +21366,7 @@ Examples:
 
 ; different pack and unpack formats
 ;------------------------------------------------------------
-(set 'buf (pack "s3" "ABC"))
+(set buf (pack "s3" "ABC"))
 (unpack "c c c" buf)
 ;-> (65 66 67)
 ```
@@ -21419,7 +21419,7 @@ Examples:
 
 ```
 (device (open "somefile.txt" "read"))
-(set 'line-count 0)
+(set line-count 0)
 
 (until (not (read-line))
   (inc line-count))
@@ -21610,7 +21610,7 @@ Examples:
 ; type 1 UUID using a node ID
 ;------------------------------------------------------------
 ; node ID for MAC 00:14:51:0a:e0:bc
-(set 'id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
+(set id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
 
 (uuid id)
 ;-> "0749161C-2EC2-11DB-BBB2-0014510AE0BC"
@@ -21673,9 +21673,9 @@ Examples:
 ```
 ; wait for a specific child
 ;------------------------------------------------------------
-(set 'pid (fork (my-process)))
+(set pid (fork (my-process)))
 
-(set 'ret (wait-pid pid))
+(set ret (wait-pid pid))
 ;-> (8596 0)
 
 (println "process: " pid
@@ -21726,7 +21726,7 @@ Examples:
 
 ```
 (when (read-line)
-  (set 'result (analyze (current-line)))
+  (set result (analyze (current-line)))
   (report result)
   (finish))
 ```
@@ -21766,7 +21766,7 @@ Examples:
 
 ```
 (device (open "somefile.txt" "read"))
-(set 'line-count 0)
+(set line-count 0)
 
 (while (read-line)
   (inc line-count))
@@ -21824,14 +21824,14 @@ Examples:
 ```
 ; writing to a file
 ;------------------------------------------------------------
-(set 'handle (open "file.ext" "write"))
+(set handle (open "file.ext" "write"))
 
 (write handle data 100)
 (write handle "a quick message\n")
 
 ; destructive string append
 ;------------------------------------------------------------
-(set 'str "")
+(set str "")
 (write str "hello world")
 
 str
@@ -21881,10 +21881,10 @@ Examples:
 ; slow byte-by-byte file copy
 ;------------------------------------------------------------
 (define (slow-file-copy from-file to-file)
-  (set 'in-file (open from-file "read"))
-  (set 'out-file (open to-file "write"))
+  (set in-file (open from-file "read"))
+  (set out-file (open to-file "write"))
 
-  (while (set 'chr (read-char in-file))
+  (while (set chr (read-char in-file))
     (write-char out-file chr))
 
   (close in-file)
@@ -21995,20 +21995,20 @@ Examples:
 ```
 ; write a line to a file
 ;------------------------------------------------------------
-(set 'out (open "file.txt" "write"))
+(set out (open "file.txt" "write"))
 (write-line out "hello there")
 (close out)
 
 ; write last read line to stdout
 ;------------------------------------------------------------
-(set 'in (open "init.txt" "read"))
+(set in (open "init.txt" "read"))
 (while (read-line in)
   (write-line))
 (close in)
 
 ; append lines to a string
 ;------------------------------------------------------------
-(set 'str "")
+(set str "")
 (write-line str "hello")
 (write-line str "world")
 
@@ -22184,7 +22184,7 @@ error information.
 Examples:
 
 ```
-(set 'xml
+(set xml
   "<person name='John Doe' tel='555-1212'>nice guy</person>")
 
 (xml-parse xml)
@@ -22371,8 +22371,8 @@ For all non-numeric data types, zero? returns nil.
 Examples:
 
 ```
-(set 'value 1.2)
-(set 'var 0)
+(set value 1.2)
+(set var 0)
 
 (zero? value)
 ;-> nil

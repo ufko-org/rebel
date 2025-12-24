@@ -87,7 +87,7 @@ through numeric indexing with this function. Using ($
 int-idx) enables programmatic access when the index is
 not known in advance.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;txt "http:&#47;&#47;example.org:80")
+<pre><code>(set txt "http:&#47;&#47;example.org:80")
 (find "http:&#47;&#47;(.*):(.*)" txt 0)  ; → 0
 
 $0     ; → "http:&#47;&#47;example.org:80"
@@ -257,14 +257,14 @@ numbers. Values smaller than
 -9,223,372,036,854,775,808 wrap around to positive
 numbers. Arguments evaluating to NaN are treated as 0.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;n 1)
+<pre><code>(set n 1)
 (++ n)                 ; → 2
 
-(set &#39;n 3.8)
+(set n 3.8)
 (++ n)                 ; → 4
 (++ n 1.3)             ; → 5
 
-(set &#39;lst &#39;(1 2 3))
+(set lst &#39;(1 2 3))
 (++ (lst 1) 2)         ; → 4
 lst                    ; → (1 4 3)
 </code></pre>
@@ -298,14 +298,14 @@ numbers. Values below -9,223,372,036,854,775,808 wrap
 around to positive numbers. Arguments evaluating to NaN
 are treated as 0.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;n 1)
+<pre><code>(set n 1)
 (-- n)                 ; → 0
 
-(set &#39;n 3.8)
+(set n 3.8)
 (-- n)                 ; → 2
 (-- n 1.3)             ; → 1
 
-(set &#39;lst &#39;(1 2 3))
+(set lst &#39;(1 2 3))
 (-- (lst 1) 2)         ; → 0
 lst                    ; → (1 0 3)
 </code></pre>
@@ -758,8 +758,8 @@ access or modify elements of the target object.</p>
   (inc (self 1) dx)
   (inc (self 2) dy))
 
-(set &#39;r &#39;(Rectangle 5 5 10 20))    ; x y width height
-(set &#39;c &#39;(Circle 1 2 10))          ; x y radius
+(set r &#39;(Rectangle 5 5 10 20))    ; x y width height
+(set c &#39;(Circle 1 2 10))          ; x y radius
 
 (:area r)                          ; → 200
 (:area c)                          ; → 314.1592654
@@ -928,10 +928,10 @@ variables, not to temporary values produced by
 expressions. Temporary objects may be relocated or freed
 after evaluation, making their addresses invalid.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;s "\001\002\003\004")
+<pre><code>(set s "\001\002\003\004")
 (get-char (+ (address s) 3))        ; → 4
 
-(set &#39;x 12345)
+(set x 12345)
 
 ; big-endian architectures
 (get-long (address x))              ; → 12345
@@ -941,7 +941,7 @@ after evaluation, making their addresses invalid.</p>
 (get-int (address x))               ; → 12345
 
 ; architecture-independent: integers are 64-bit
-(set &#39;x 1234567890)
+(set x 1234567890)
 (get-long (address x))              ; → 1234567890
 </code></pre>
 <p>Notes:</p>
@@ -997,7 +997,7 @@ no arguments, the result is true.</p>
 continues only as long as all intermediate results are
 non-nil and not ().</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 10)                         ; → 10
+<pre><code>(set x 10)                         ; → 10
 (and (&#60; x 100) (&#62; x 2))             ; → true
 (and (&#60; x 100) (&#62; x 2) "passed")    ; → "passed"
 (and &#39;())                           ; → ()
@@ -1039,13 +1039,13 @@ or push.</p>
 <pre><code>(append &#39;(1 2 3) &#39;(4 5 6) &#39;(a b))
 ; → (1 2 3 4 5 6 a b)
 
-(set &#39;lst &#39;("hello" "world"))
+(set lst &#39;("hello" "world"))
 (append lst &#39;("here" "I am"))
 ; → ("hello" "world" "here" "I am")
 
-(set &#39;A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ; → ((1 2) (3 4) (5 6))
-(set &#39;B (array 2 2 (sequence 7 10)))
+(set B (array 2 2 (sequence 7 10)))
 ; → ((7 8) (9 10))
 
 (append A B)
@@ -1054,7 +1054,7 @@ or push.</p>
 (append B B B)
 ; → ((7 8) (9 10) (7 8) (9 10) (7 8) (9 10))
 
-(set &#39;more " how are you")
+(set more " how are you")
 (append "Hello " "world," more)
 ; → "Hello world, how are you"
 </code></pre>
@@ -1134,7 +1134,7 @@ one.</p>
 <pre><code>(apply + &#39;(1 2 3 4))
 ; → 10
 
-(set &#39;lst &#39;(3 4 5))
+(set lst &#39;(3 4 5))
 (apply * lst)
 ; → 60
 
@@ -1253,7 +1253,7 @@ structure by writing the necessary array expression.</p>
 (array 10 &#39;(1 2))
 ; → (1 2 1 2 1 2 1 2 1 2)
 
-(set &#39;a (array 3 4 (sequence 1 12)))
+(set a (array 3 4 (sequence 1 12)))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
 (setf (a 2 3) 99)
@@ -1288,8 +1288,8 @@ a
 (array-list a)
 ; → ((1 2 3 4) (a b c d) (1 2 3 99))
 
-(set &#39;lst &#39;((1 2) (3 4)))
-(set &#39;arr (array 2 2 (flat lst)))
+(set lst &#39;((1 2) (3 4)))
+(set arr (array 2 2 (flat lst)))
 ; → ((1 2) (3 4))
 
 (array? a)
@@ -1299,7 +1299,7 @@ a
 ; → nil
 
 ; serialization example
-(set &#39;a (array 3 4 (sequence 1 12)))
+(set a (array 3 4 (sequence 1 12)))
 (save "array.rbl" &#39;a)
 ;; saved file includes array expression
 </code></pre>
@@ -1325,10 +1325,10 @@ is recursive: every row of a multidimensional array is
 turned into a list, and nested arrays become nested
 lists. The original array is left unchanged.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;a (array 3 4 (sequence 1 12)))
+<pre><code>(set a (array 3 4 (sequence 1 12)))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
-(set &#39;lst (array-list a))
+(set lst (array-list a))
 ; → ((1 2 3 4) (5 6 7 8) (9 10 11 12))
 
 (list (array? a) (list? lst))
@@ -1352,7 +1352,7 @@ when the expression is an array object and nil otherwise.
 Nested or converted list structures do not qualify as
 arrays, even when their shape resembles one.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;M (array 3 4 (sequence 1 4)))
+<pre><code>(set M (array 3 4 (sequence 1 4)))
 ; → ((1 2 3 4) (1 2 3 4) (1 2 3 4))
 
 (array? M)
@@ -1435,7 +1435,7 @@ lists in place.</p>
 <pre><code>(assoc 1 &#39;((3 4) (1 2)))
 ; → (1 2)
 
-(set &#39;db &#39;((kiwi 12) (mango 77 5) (plum 9)))
+(set db &#39;((kiwi 12) (mango 77 5) (plum 9)))
 (assoc &#39;mango db)
 ; → (mango 77 5)
 
@@ -1448,7 +1448,7 @@ db
 ; → ((kiwi 12) (mango 77 5) (plum 10))
 
 ; nested association lists
-(set &#39;records &#39;(
+(set records &#39;(
   (u001 (name "Nora")
         (address (country "Japan") (city "Kyoto")))
   (u002 (name "Liam")
@@ -1462,7 +1462,7 @@ db
 ; → (city "Kyoto")
 
 ; using a context as the association list
-(set &#39;people:people &#39;(
+(set people:people &#39;(
   (u001 (name "Nora")
         (address (country "Japan") (city "Kyoto")))
   (u002 (name "Liam")
@@ -1687,21 +1687,21 @@ categories may prevent the list from summing to 1.0.</p>
 <li>Category B text: storm rain dark clouds</li>
 </ul>
 <p>Token frequencies:</p>
-<pre><code>(set &#39;Sample:A &#39;(
+<pre><code>(set Sample:A &#39;(
   (sunny  1)
   (day    1)
   (bright 1)
   (sky    1)
 ))
 
-(set &#39;Sample:B &#39;(
+(set Sample:B &#39;(
   (storm  1)
   (rain   1)
   (dark   1)
   (clouds 1)
 ))
 
-(set &#39;Sample:total &#39;(
+(set Sample:total &#39;(
   (A-total 4)
   (B-total 4)
 ))
@@ -1720,9 +1720,9 @@ categories may prevent the list from summing to 1.0.</p>
 ; higher value indicates the more likely category
 </code></pre>
 <p><strong>2. Chain Bayesian mode</strong></p>
-<pre><code>(set &#39;C:pos &#39;(8 18))
-(set &#39;C:neg &#39;(2 72))
-(set &#39;C:total &#39;(10 90))
+<pre><code>(set C:pos &#39;(8 18))
+(set C:neg &#39;(2 72))
+(set C:total &#39;(10 90))
 </code></pre>
 <pre><code>(bayes-query &#39;(test-positive) C true)
 ;-&#62; (0.3076923077 0.6923076923)
@@ -1731,9 +1731,9 @@ categories may prevent the list from summing to 1.0.</p>
 ;-&#62; (0.64 0.36)
 </code></pre>
 <p><strong>3. Using direct probabilities</strong></p>
-<pre><code>(set &#39;P:pos &#39;(0.8 0.2))
-(set &#39;P:neg &#39;(0.2 0.8))
-(set &#39;P:total &#39;(0.1 0.9))
+<pre><code>(set P:pos &#39;(0.8 0.2))
+(set P:neg &#39;(0.2 0.8))
+(set P:total &#39;(0.1 0.9))
 </code></pre>
 <pre><code>(bayes-query &#39;(test-positive) P true true)
 ;-&#62; (0.3076923077 0.6923076923)
@@ -1855,9 +1855,9 @@ Nums:total   ;-&#62; (4 3 3)
 <p>When the data set is small and token counts are known
 directly, the model may be created manually without
 training:</p>
-<pre><code>(set &#39;Data:tested-positive &#39;(8 18))
-(set &#39;Data:tested-negative &#39;(2 72))
-(set &#39;Data:total &#39;(10 90))
+<pre><code>(set Data:tested-positive &#39;(8 18))
+(set Data:tested-negative &#39;(2 72))
+(set Data:total &#39;(10 90))
 </code></pre>
 <p>Such data sets can still be evaluated using bayes-query.</p>
 <p><strong>Multi-stage training</strong></p>
@@ -1991,7 +1991,7 @@ an <code>L</code> suffix when printed.</p>
 (bigint 1.234567890e30)
 ; → 1234567889999999957361000000000L
 
-(set &#39;n 567890)
+(set n 567890)
 (bigint n)
 ; → 567890L
 
@@ -2029,7 +2029,7 @@ association in the list.</p>
 <p>bind is commonly used together with unify, which
 produces association lists suitable for destructuring.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;((a (+ 3 4)) (b "hello")))
+<pre><code>(set lst &#39;((a (+ 3 4)) (b "hello")))
 (bind lst)
 ; → "hello"
 
@@ -2051,8 +2051,8 @@ Y  ; → a
 
 
 ; destructuring example
-(set &#39;structure &#39;((one "two") 3 (four (x y z))))
-(set &#39;pattern   &#39;((A B)       C (D E)))
+(set structure &#39;((one "two") 3 (four (x y z))))
+(set pattern   &#39;((A B)       C (D E)))
 
 (bind (unify pattern structure))
 
@@ -2184,7 +2184,7 @@ a large number of callback functions must be created.</p>
   ;; will print this string.
   "hello world")
 
-(set &#39;p0 (callback 0 &#39;hello))
+(set p0 (callback 0 &#39;hello))
 ;; p0 now contains a C-callable pointer. Any C
 ;; function which receives p0 and calls it will
 ;; execute (hello).
@@ -2193,7 +2193,7 @@ a large number of callback functions must be created.</p>
 (define (sum a b)
   (+ a b))
 
-(set &#39;ps (callback &#39;sum "int" "int" "int"))
+(set ps (callback &#39;sum "int" "int" "int"))
 ;; ps is a dynamically created libffi closure
 ;; which accepts two integers and returns an
 ;; integer result.
@@ -2387,14 +2387,14 @@ shallow copy of the list with int-elements removed from
 the end. If int-elements is omitted, one element is
 removed. The original list remains unchanged.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;str "Rebelion")  → "Rebelion"
+<pre><code>(set str "Rebelion")  → "Rebelion"
 
 (chop str)    → "Rebelio"
 (chop str 2)  → "Rebeli"
 
 str  → "Rebelion"
 
-(set &#39;lst &#39;(a b (c d) e))
+(set lst &#39;(a b (c d) e))
 
 (chop lst)    → (a b (c d))
 (chop lst 2)  → (a b)
@@ -2469,11 +2469,11 @@ to the result list in the order produced. If the first
 evaluation of exp yields nil, an empty list is
 returned.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 0)
+<pre><code>(set x 0)
 (collect (if (&#60;= (inc x) 10) x))
 → (1 2 3 4 5 6 7 8 9 10)
 
-(set &#39;x 0)
+(set x 0)
 (collect (if (&#60;= (inc x) 10) x) 6)
 → (1 2 3 4 5 6)
 </code></pre>
@@ -2536,9 +2536,9 @@ original input line unchanged.</p>
   (fn (s)
     (let (request s)
       (when (find "?" s)
-        (set &#39;request (first (parse s "?")))
+        (set request (first (parse s "?")))
         (when (ends-with request ".ext")
-          (set &#39;request "GET &#47;forbidden.html")) )
+          (set request "GET &#47;forbidden.html")) )
       request)))
 
 ;; Running:
@@ -2662,7 +2662,7 @@ behaves the same way as protecting a variable.</p>
 result of the call.</p>
 <p>Examples:</p>
 <pre><code>(constant &#39;var 123)  → 123
-(set &#39;var 999)
+(set var 999)
 ERR: symbol is protected in function set: var
 
 (define (double x) (+ x x))
@@ -2722,7 +2722,7 @@ a general hash mechanism.</p>
 (context &#39;GRAPH)
 
 (define (draw x y) (+ x y))
-(set &#39;value 123)
+(set value 123)
 
 (symbols) → (draw value)
 
@@ -2731,29 +2731,29 @@ a general hash mechanism.</p>
 
 GRAPH:value        → 123
 (GRAPH:draw 2 3)   → 5
-(set &#39;GRAPH:value 999)
+(set GRAPH:value 999)
 GRAPH:value        → 999
 
 ;; implicit context creation
-(set &#39;person:age 0)
-(set &#39;person:address "")
+(set person:age 0)
+(set person:address "")
 person:age         → 0
 
 ;; copy a context
 (new person &#39;JohnDoe) → JohnDoe
-(set &#39;JohnDoe:age 99)
+(set JohnDoe:age 99)
 JohnDoe:age            → 99
 
 ;; refer to a context through a variable
-(set &#39;human JohnDoe)
+(set human JohnDoe)
 human:age              → 99
-(set &#39;human:address "1 Main Street")
+(set human:address "1 Main Street")
 JohnDoe:address        → "1 Main Street"
 
 ;; switching using an evaluated context
 (context &#39;ctxA)
 (context MAIN)
-(set &#39;old ctxA)
+(set old ctxA)
 (context &#39;ctxB)
 (context MAIN:old)  → ctxA
 
@@ -2794,11 +2794,11 @@ present and nil when it is absent.</p>
 <p>Examples:</p>
 <p>;; test for context value
 (context? MAIN)        → true</p>
-<p>(set &#8216;x 123)
+<p>(set x 123)
 (context? x)           → nil</p>
 <p>;; implicit context creation and referencing
-(set &#8216;data:msg &#8220;hello&#8221;)
-(set &#8216;ctx data)
+(set data:msg &#8220;hello&#8221;)
+(set ctx data)
 (context? ctx)         → true</p>
 <p>;; test for symbol existence inside a context
 (context? data &#8220;msg&#8221;)  → true
@@ -2834,16 +2834,16 @@ native memory and expose only an address. The duplicate
 behaves as a normal Rebel value and does not reference
 the original memory block.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;(a b c d e f)) ;-&#62; (a b c d e f)
+<pre><code>(set lst &#39;(a b c d e f)) ;-&#62; (a b c d e f)
 
 (replace &#39;c (copy lst)) ;-&#62; (a b d e f)
 lst ;-&#62; (a b c d e f)
 
-(set &#39;str "rebel-lang") ;-&#62; "rebel-lang"
+(set str "rebel-lang") ;-&#62; "rebel-lang"
 (rotate (copy str)) ;-&#62; "grebel-lan"
 str ;-&#62; "rebel-lang"
 
-(set &#39;x "hello world") ;-&#62; "hello world"
+(set x "hello world") ;-&#62; "hello world"
 (copy x) ;-&#62; "hello world"
 
 (copy (first (dump x)) true) ;-&#62; "hello world"
@@ -2886,10 +2886,10 @@ df      degrees of freedom
 p       two-tailed probability for t
 </code></pre>
 <p>Examples:</p>
-<pre><code>(set &#39;study-time &#39;(90 100 130 150 180 200 220 300 350 400))
+<pre><code>(set study-time &#39;(90 100 130 150 180 200 220 300 350 400))
 ;-&#62; (90 100 130 150 180 200 220 300 350 400)
 
-(set &#39;test-errors &#39;(25 28 20 20 15 12 13 10 8 6))
+(set test-errors &#39;(25 28 20 20 15 12 13 10 8 6))
 ;-&#62; (25 28 20 20 15 12 13 10 8 6)
 
 (corr study-time test-errors)
@@ -2909,7 +2909,7 @@ and produces a value in the range -1 to 1.</p>
 <p>Examples:</p>
 <pre><code>(cos 1) ;-&#62; 0.5403023059
 
-(set &#39;pi (mul 2 (acos 0))) ;-&#62; 3.141592654
+(set pi (mul 2 (acos 0))) ;-&#62; 3.141592654
 (cos pi) ;-&#62; -1
 </code></pre>
 <p>See: <a href="#f-sin">sin</a>, <a href="#f-tan">tan</a>, <a href="#f-acos">acos</a>, <a href="#f-mul">mul</a></p>
@@ -2955,10 +2955,10 @@ numbers, symbols, and strings.</p>
 (count &#39;(z a) &#39;(z d z b a z y a))
 ;-&#62; (3 2)
 
-(set &#39;lst (explode (read-file "myFile.txt")))
+(set lst (explode (read-file "myFile.txt")))
 ;-&#62; list of characters
 
-(set &#39;letter-counts (count (unique lst) lst))
+(set letter-counts (count (unique lst) lst))
 ;-&#62; frequency data
 </code></pre>
 <p>See: <a href="#f-unique">unique</a>, <a href="#f-explode">explode</a>,
@@ -2981,7 +2981,7 @@ process. It is primarily useful when interacting with C
 code that exposes raw memory, or when constructing or
 inspecting internal cell layouts at a byte level.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;s "0123456789") ;-&#62; "0123456789"
+<pre><code>(set s "0123456789") ;-&#62; "0123456789"
 
 (cpymem "xxx" (+ (address s) 5) 3)
 s ;-&#62; "01234xxx89"
@@ -2992,7 +2992,7 @@ bytes to a function cell and run native code. This works
 only on platforms where executable memory and calling
 conventions permit it.</p>
 <pre><code>; 32-bit x86 add-two-integers machine code
-(set &#39;foo-code
+(set foo-code
   (append
     (pack "bbbbbbbbbb"
       0x55 0x8B 0xEC 0x8B 0x45 0x08 0x03 0x45 0x0C 0x5D)
@@ -3009,7 +3009,7 @@ conventions permit it.</p>
         (+ (first (dump foo)) 12) 4)
 
 ; copy symbol name address
-(set &#39;sym-name (first (unpack "lu" (+ (address &#39;foo) 8))))
+(set sym-name (first (unpack "lu" (+ (address &#39;foo) 8))))
 (cpymem (pack "ld" sym-name)
         (+ (first (dump foo)) 8) 4)
 
@@ -3036,7 +3036,7 @@ It is suitable for exchanging binary blocks with C code
 or inspecting memory layouts obtained through dump and
 address.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;s "0123456789") ;-&#62; "0123456789"
+<pre><code>(set s "0123456789") ;-&#62; "0123456789"
 
 (cpymem "xxx" (+ (address s) 5) 3)
 s ;-&#62; "01234xxx89"
@@ -3166,7 +3166,7 @@ process input line by line.</p>
 <p>Examples:</p>
 <pre><code>#!&#47;usr&#47;bin&#47;env rebel
 
-(set &#39;inFile (open (main-args 2) "read"))
+(set inFile (open (main-args 2) "read"))
 
 (while (read-line inFile)
   (if (starts-with (current-line) ";;")
@@ -3197,7 +3197,7 @@ into a new function g(y) that behaves like f(exp, y).</p>
 predicates, filters, and mapping functions without
 creating explicit fn expressions.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;f (curry + 10))
+<pre><code>(set f (curry + 10))
 ;-&#62; (fn ($x) (+ 10 $x))
 
 (f 7)
@@ -3463,7 +3463,7 @@ list, or any writable location yielding a number.</p>
 the decrement. When place references a writable structure
 element, that element is updated in place.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 10)
+<pre><code>(set x 10)
 ;-&#62; 10
 
 (dec x)
@@ -3481,11 +3481,11 @@ z
 (dec z)
 ;-&#62; -1
 
-(set &#39;z nil)
+(set z nil)
 (dec z 0.01)
 ;-&#62; -0.01
 
-(set &#39;l &#39;(1 2 3 4))
+(set l &#39;(1 2 3 4))
 ;-&#62; (1 2 3 4)
 
 (dec (l 3) 0.1)
@@ -3532,7 +3532,7 @@ data structures, or context members, and enables creation
 of isolated, statically scoped functions by assigning
 each copy to its own namespace.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;ctx1:var &#39;(ctx1:x ctx1:y))
+<pre><code>(set ctx1:var &#39;(ctx1:x ctx1:y))
 ;-&#62; (ctx1:x ctx1:y)
 
 (def-new &#39;ctx1:var &#39;ctx2:myvar)
@@ -3551,7 +3551,7 @@ var
 ;-&#62; (x y)
 </code></pre>
 <p>Creating a function with its own namespace:</p>
-<pre><code>(set &#39;temp (fn (x) (+ x x)))
+<pre><code>(set temp (fn (x) (+ x x)))
 ;-&#62; (fn (x) (+ x x))
 
 (def-new &#39;temp &#39;double:double)
@@ -3610,7 +3610,7 @@ that value.</p>
 (setf (default ctx) 456)
 ;-&#62; 456
 
-(set &#39;c ctx)
+(set c ctx)
 ;-&#62; ctx
 
 (default c)
@@ -3788,7 +3788,7 @@ program state.</p>
 cannot be deleted. delete returns true on successful
 deletion, or nil if deletion was refused.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;(a b xvar c d))
+<pre><code>(set lst &#39;(a b xvar c d))
 ;-&#62; (a b xvar c d)
 
 (delete &#39;xvar)
@@ -3797,7 +3797,7 @@ deletion, or nil if deletion was refused.</p>
 lst
 ;-&#62; (a b nil c d)
 
-(set &#39;lst &#39;(a b xvar c d))
+(set lst &#39;(a b xvar c d))
 ;-&#62; (a b xvar c d)
 
 (delete &#39;xvar true)
@@ -3807,10 +3807,10 @@ lst
 ;-&#62; (a b xvar c d)
 </code></pre>
 <p>Deleting an entire context:</p>
-<pre><code>(set &#39;ctx1:x 123)
+<pre><code>(set ctx1:x 123)
 ;-&#62; 123
 
-(set &#39;ctx1:y "hello")
+(set ctx1:y "hello")
 ;-&#62; "hello"
 
 (delete &#39;ctx1)
@@ -3924,14 +3924,14 @@ permissions.</p>
   of processes and should be used with extreme care.</p>
 <p>Examples:</p>
 <pre><code>; start an external command
-(set &#39;pid (process "&#47;usr&#47;bin&#47;bc" in out))
+(set pid (process "&#47;usr&#47;bin&#47;bc" in out))
 ;-&#62; &#60;pid&#62;
 
 (destroy pid)
 ;-&#62; true
 
 ; kill a forked background worker
-(set &#39;pid (fork (dotimes (i 1000)
+(set pid (fork (dotimes (i 1000)
                  (println i)
                  (sleep 10))))
 ;-&#62; &#60;pid&#62;
@@ -3965,7 +3965,7 @@ treated as exact zeros; very small values allow controlled
 fallback behavior and prevent premature singularity
 detection.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;A &#39;((-1 1 1)
+<pre><code>(set A &#39;((-1 1 1)
           (1 4 -5)
           (1 -2 0)))
 ;-&#62; ((-1 1 1) (1 4 -5) (1 -2 0))
@@ -4179,11 +4179,11 @@ body is empty, the final value of exp-condition is
 returned. During iteration, the system iterator symbol
 $idx is updated.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 1)
+<pre><code>(set x 1)
 (do-until (&#62; x 0) (inc x))
 ;-&#62; 2
 
-(set &#39;x 1)
+(set x 1)
 (until (&#62; x 0) (inc x))
 ;-&#62; 1
 </code></pre>
@@ -4210,11 +4210,11 @@ body, do-while always performs at least one iteration.</p>
 During iteration, the system iterator symbol $idx is
 updated.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 10)
+<pre><code>(set x 10)
 (do-while (&#60; x 10) (inc x))
 ;-&#62; 11
 
-(set &#39;x 10)
+(set x 10)
 (while (&#60; x 10) (inc x))
 ;-&#62; 10
 </code></pre>
@@ -4287,7 +4287,7 @@ value.</p>
 <p>During iteration, the system variable $idx contains the
 current index (starting at 0).</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 123)
+<pre><code>(set x 123)
 
 (dolist (i &#39;(a b c d e f g))
   (print i))
@@ -4345,7 +4345,7 @@ execution, the system iterator $idx contains the current
 character index.</p>
 <p>Examples:</p>
 <pre><code>; ASCII
-(set &#39;str "abcdefg")
+(set str "abcdefg")
 (dostring (c str)
   (println c " " (char c)))
 ;-&#62; prints:
@@ -4358,7 +4358,7 @@ character index.</p>
 ;   103 g
 
 ; UTF-8
-(set &#39;txt "我能吞下玻璃而不伤身体。")
+(set txt "我能吞下玻璃而不伤身体。")
 (dostring (c txt)
   (println c " " (char c)))
 ;-&#62; prints codepoint and character for each element
@@ -4501,7 +4501,7 @@ syntax: (empty? str)
 empty string. Returns true when the argument contains no
 elements; otherwise returns nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;())
+<pre><code>(set lst &#39;())
 (empty? lst)
 ;-&#62; true
 
@@ -4539,7 +4539,7 @@ secure.</p>
 decrypted) data.</p>
 <p>Examples:</p>
 <pre><code>; encrypt
-(set &#39;msg (encrypt "A secret message" "my secret key"))
+(set msg (encrypt "A secret message" "my secret key"))
 ;-&#62; ",YS\022\006\017\023\017TM\014\022\n\012\030E"
 
 ; decrypt by applying the same pad
@@ -4744,7 +4744,7 @@ Evaluation respects local scopes created by let and other
 binding forms.</p>
 <p>Examples:</p>
 <pre><code>; basic evaluation
-(set &#39;expr &#39;(+ 3 4))
+(set expr &#39;(+ 3 4))
 expr
 ;-&#62; (+ 3 4)
 
@@ -4758,7 +4758,7 @@ expr
 ;-&#62; x
 
 ; evaluation uses current environment
-(set &#39;x 3 &#39;y 4)
+(set x 3 &#39;y 4)
 (eval &#39;(+ x y))
 ;-&#62; 7
 
@@ -4775,7 +4775,7 @@ expr
 (define (change-list aList)
   (push 999 (eval aList)))
 
-(set &#39;data &#39;(1 2 3 4 5))
+(set data &#39;(1 2 3 4 5))
 
 (change-list &#39;data)
 ;-&#62; (999 1 2 3 4 5)
@@ -4805,15 +4805,15 @@ position inside str-source.</p>
 (eval-string "(+ 3 4)")
 ;-&#62; 7
 
-(set &#39;x 10)
-(set &#39;y 20)
+(set x 10)
+(set y 20)
 (eval-string "(+ x y)")
 ;-&#62; 30
 
 ; evaluate in a different context
 (context &#39;C)
-(set &#39;C:x 2)
-(set &#39;C:y 3)
+(set C:x 2)
+(set C:y 3)
 
 (eval-string "(+ x y)" &#39;C)
 ;-&#62; 5
@@ -4880,7 +4880,7 @@ starts successfully and nil otherwise.</p>
 ;-&#62; ("rebel.c" "math.c" "string.c")
 
 ; send standard input to a Unix program that reads stdin
-(set &#39;str "line1\nline2\n")
+(set str "line1\nline2\n")
 (exec "wc -l" str)
 ;-&#62; true
 </code></pre>
@@ -4979,8 +4979,8 @@ programming expansion of uppercase variables.</p>
 <p>Examples:</p>
 <pre><code>; first syntax: expand bound variables
 ; ------------------------------------
-(set &#39;x 2 &#39;a &#39;(d e))
-(set &#39;val &#39;a)
+(set x 2 &#39;a &#39;(d e))
+(set val &#39;a)
 
 (expand val &#39;a)
 ;-&#62; (d e)
@@ -4995,8 +4995,8 @@ programming expansion of uppercase variables.</p>
 (define (raise-to power)
   (expand (fn (base) (pow base power)) &#39;power))
 
-(set &#39;square (raise-to 2))
-(set &#39;cube   (raise-to 3))
+(set square (raise-to 2))
+(set cube   (raise-to 3))
 
 (square 5)
 ;-&#62; 25
@@ -5016,7 +5016,7 @@ programming expansion of uppercase variables.</p>
 
 ; third syntax: uppercase-variable expansion
 ; ------------------------------------------
-(set &#39;A 1 &#39;Bvar 2 &#39;C nil &#39;d 5)
+(set A 1 &#39;Bvar 2 &#39;C nil &#39;d 5)
 
 (expand &#39;(A (Bvar) C d))
 ;-&#62; (1 (2) C d)
@@ -5025,7 +5025,7 @@ programming expansion of uppercase variables.</p>
 (define (raise-to Power)
   (expand (fn (base) (pow base Power))))
 
-(set &#39;cube (raise-to 3))
+(set cube (raise-to 3))
 (cube 4)
 ;-&#62; 64
 </code></pre>
@@ -5079,7 +5079,7 @@ int-chunk.</p>
 ;-&#62; ("reb")
 
 ; binary handling on UTF-8 builds requires unpack
-(set &#39;bytes "\001\002\003\004")
+(set bytes "\001\002\003\004")
 (unpack (dup "c" (length bytes)) bytes)
 ;-&#62; (1 2 3 4)
 
@@ -5129,7 +5129,7 @@ When used on strings, every string-2 is concatenated to
 string-1. String inputs may contain binary zero bytes.</p>
 <p>Examples:</p>
 <pre><code>; extending lists
-(set &#39;lst &#39;(a b))
+(set lst &#39;(a b))
 (extend lst &#39;(c d))
 ;-&#62; (a b c d)
 
@@ -5140,7 +5140,7 @@ lst
 ;-&#62; (a b c d e f g)
 
 ; extending strings
-(set &#39;str "ab")
+(set str "ab")
 (extend str "cd")
 ;-&#62; "abcd"
 
@@ -5151,7 +5151,7 @@ str
 ;-&#62; "abcdefg"
 
 ; extending nested elements in place
-(set &#39;lst &#39;(a b "CD" (e f)))
+(set lst &#39;(a b "CD" (e f)))
 
 (extend (lst 2) "E")
 lst
@@ -5358,7 +5358,7 @@ condition; clean removes them.</p>
 ;-&#62; (10 6 11)
 
 ; using a comparison functor
-(set &#39;lst &#39;((a 10 2 7) (b 5) (a 8 3) (c 8) (a 9)))
+(set lst &#39;((a 10 2 7) (b 5) (a 8 3) (c 8) (a 9)))
 
 (filter (curry match &#39;(a *)) lst)
 ;-&#62; ((a 10 2 7) (a 8 3) (a 9))
@@ -5597,12 +5597,12 @@ called on an empty list, an error is raised.</p>
 (first &#39;((a b) c d))
 ;-&#62; (a b)
 
-(set &#39;lst &#39;(a b c d e))
+(set lst &#39;(a b c d e))
 (first lst)
 ;-&#62; a
 
 ; arrays
-(set &#39;arr (array 3 2 (sequence 1 6)))
+(set arr (array 3 2 (sequence 1 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (first arr)
@@ -5732,7 +5732,7 @@ or -inf.</p>
 ; user input conversion
 ;----------------------------------------
 ; (print "enter a float: ")
-; (set &#39;num (float (read-line)))
+; (set num (float (read-line)))
 </code></pre>
 <p>Notes:</p>
 <ul>
@@ -5752,7 +5752,7 @@ given.</li>
 <p>Returns true if exp evaluates to a floating-point number,
 otherwise returns nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;num 1.23)
+<pre><code>(set num 1.23)
 (float? num)
 ;-&#62; true
 
@@ -5829,29 +5829,29 @@ default expression is evaluated and used.</p>
 <p>The function returns the value of the last body expression.</p>
 <p>Examples:</p>
 <pre><code>; basic anonymous function
-(set &#39;f (fn (x) (+ x 1)))
+(set f (fn (x) (+ x 1)))
 (f 10)
 ;-&#62; 11
 
 ; multiple parameters
-(set &#39;add3 (fn (a b c) (+ a b c)))
+(set add3 (fn (a b c) (+ a b c)))
 (add3 1 2 3)
 ;-&#62; 6
 
 ; default parameters
-(set &#39;scale (fn (x (f 2)) (* x f)))
+(set scale (fn (x (f 2)) (* x f)))
 (scale 10)
 ;-&#62; 20
 (scale 10 5)
 ;-&#62; 50
 
 ; variable arity using $args
-(set &#39;sum-all (fn () (apply + $args)))
+(set sum-all (fn () (apply + $args)))
 (sum-all 1 2 3 4 5)
 ;-&#62; 15
 
 ; same using (args)
-(set &#39;sum2 (fn () (apply + (args))))
+(set sum2 (fn () (apply + (args))))
 (sum2 1 2 3 4 5)
 ;-&#62; 15
 </code></pre>
@@ -5883,7 +5883,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 <p>Examples:</p>
 <pre><code>; 1) simple macro: (inc2 x) → (+ x 2)
 
-(set &#39;inc2
+(set inc2
   (fn-macro (x)
     (+ (eval x) 2)))
 
@@ -5894,7 +5894,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 ; 2) custom conditional form
 ;    (if-zero x a b) → (if (= x 0) a b)
 
-(set &#39;if-zero
+(set if-zero
   (fn-macro (x a b)
     (if (= (eval x) 0)
         (eval a)
@@ -5910,7 +5910,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 ; 3) macro that defines a new function
 ;    (make-fn name (p1) body) → (define (name p1) body)
 
-(set &#39;make-fn
+(set make-fn
   (fn-macro (name params body)
     (define (name params) (eval body))))
 
@@ -5922,7 +5922,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 ; 4) macro with a default argument
 ;    (add2 x) → (+ x 2)
 
-(set &#39;add2
+(set add2
   (fn-macro ((x 0))
     (+ (eval x) 2)))
 
@@ -6047,7 +6047,7 @@ returns nil.</p>
 <p>Examples:</p>
 <pre><code>; basic fork: parent and child diverge
 ;------------------------------------------------------------
-(set &#39;x 0)
+(set x 0)
 
 (fork
   (while (&#60; x 5)
@@ -6080,8 +6080,8 @@ x
     (while (setq line (read-line in))
       (println "count " line))))
 
-(set &#39;child-observer (fork (observer read-end)))
-(set &#39;child-counter  (fork (counter 5 write-end)))
+(set child-observer (fork (observer read-end)))
+(set child-counter  (fork (counter 5 write-end)))
 
 (wait-pid child-observer)
 (wait-pid child-counter)
@@ -6090,7 +6090,7 @@ x
 ; destroying a long-running child
 ;------------------------------------------------------------
 (define (demo)
-  (set &#39;pid
+  (set pid
        (fork
          (dotimes (i 1000)
            (println i)
@@ -6196,7 +6196,7 @@ llX    hexadecimal uppercase (long long)
 ;-&#62; "   12345"
 </code></pre>
 <p>Using a list as the data source:</p>
-<pre><code>(set &#39;lst &#39;("hello" 123))
+<pre><code>(set lst &#39;("hello" 123))
 (format "%15s %d" lst)
 ;-&#62; "          hello 123"
 </code></pre>
@@ -6581,7 +6581,7 @@ make_bytes(void)
 
 ; Step 4: Reading from a Rebel buffer
 ;-----------------------------------------------------------
-(set &#39;buff "ABC\000\000\000DEF")
+(set buff "ABC\000\000\000DEF")
 ;-&#62; "ABC\000\000\000DEF"
 
 (get-string buff)
@@ -6598,7 +6598,7 @@ make_bytes(void)
 
 ; Step 6: Using a string limit
 ;-----------------------------------------------------------
-(set &#39;buff2 "ABC\000\000EFG\000DQW")
+(set buff2 "ABC\000\000EFG\000DQW")
 
 (get-string buff2 4 "FG")
 ;-&#62; "ABC\000"
@@ -6611,8 +6611,8 @@ make_bytes(void)
 
 ; Step 7: UTF-32 buffer with explicit terminator limit
 ;-----------------------------------------------------------
-(set &#39;utf32 (unicode "我能吞下玻璃而不伤身体。"))
-(set &#39;addr (address utf32))
+(set utf32 (unicode "我能吞下玻璃而不伤身体。"))
+(set addr (address utf32))
 
 (get-string utf32 80 "\000\000\000\000")
 ;-&#62; a raw UTF-32 byte sequence up to the terminator
@@ -6748,14 +6748,14 @@ global. Returns true or nil.</p>
 
 ; marking a symbol as global
 ;-----------------------------------------------------------
-(set &#39;val 123)
+(set val 123)
 (global &#39;val)
 (global? &#39;val)
 ;-&#62; true
 
 ; exporting and protecting a symbol
 ;-----------------------------------------------------------
-(set &#39;step 10)
+(set step 10)
 (constant (global &#39;step))
 (global? &#39;step)
 ;-&#62; true
@@ -6835,11 +6835,11 @@ parentheses around each pair.</p>
 <p>Examples:</p>
 <pre><code>; basic conditional evaluation
 ;-----------------------------------------------------------
-(set &#39;x 50)
+(set x 50)
 (if (&#60; x 100) "small" "big")
 ;-&#62; "small"
 
-(set &#39;x 1000)
+(set x 1000)
 (if (&#60; x 100) "small" "big")
 ;-&#62; "big"
 
@@ -6859,7 +6859,7 @@ parentheses around each pair.</p>
 
 ; using the anaphoric variable $it
 ;-----------------------------------------------------------
-(set &#39;lst &#39;(A B C))
+(set lst &#39;(A B C))
 (if lst (println (last $it)))
 ;-&#62; C
 
@@ -7014,8 +7014,8 @@ No alternative calling conventions exist on Unix.</li>
 ;-----------------------------------------------------------
 (import "&#47;usr&#47;lib&#47;libc.so" "strcpy" "char*" "char*" "char*")
 
-(set &#39;src "hello world")
-(set &#39;dst (dup "\000" (length src)))
+(set src "hello world")
+(set dst (dup "\000" (length src)))
 
 (strcpy dst src)
 ;-&#62; "hello world"
@@ -7034,7 +7034,7 @@ No alternative calling conventions exist on Unix.</li>
 ;-----------------------------------------------------------
 (import "&#47;usr&#47;lib&#47;libc.so" "strcpy" "void*" "char*" "char*")
 
-(set &#39;buf (dup "\000" 32))
+(set buf (dup "\000" 32))
 (strcpy buf "test")
 ;-&#62; an address number
 
@@ -7062,7 +7062,7 @@ location, that location is updated in place. When place
 is a computed expression with no writable target, the
 incremented result is returned but not stored.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 0) ;-&#62; 0
+<pre><code>(set x 0) ;-&#62; 0
 (inc x) ;-&#62; 1
 x ;-&#62; 1
 
@@ -7073,10 +7073,10 @@ x ;-&#62; 1.25
 z ;-&#62; nil
 (inc z) ;-&#62; 1
 
-(set &#39;z nil)
+(set z nil)
 (inc z 0.01) ;-&#62; 0.01
 
-(set &#39;l &#39;(1 2 3 4))
+(set l &#39;(1 2 3 4))
 (inc (l 3) 0.1) ;-&#62; 4.1
 (inc (first l)) ;-&#62; 2
 l ;-&#62; (2 2 3 4.1)
@@ -7204,7 +7204,7 @@ to the nearest limit. NaN values convert to 0.</p>
 ;-&#62; ERR: user error : not a number
 
 (print "Enter a num:")
-(set &#39;num (int (read-line)))
+(set num (int (read-line)))
 
 (int (bits 12345) 0 2) ;-&#62; 12345
 </code></pre>
@@ -7230,7 +7230,7 @@ and nil, yield nil. Floating-point values that happen to
 print without a fractional part are not considered
 integers unless explicitly converted.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;num 123) ;-&#62; 123
+<pre><code>(set num 123) ;-&#62; 123
 (integer? num) ;-&#62; true
 
 (integer? 3.0) ;-&#62; nil
@@ -7296,7 +7296,7 @@ the magnitude of float-pivot.</p>
 <p>Without float-pivot, singular matrices cause invert to
 return nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;m1 &#39;((-1 1 1) (1 4 -5) (1 -2 0)))
+<pre><code>(set m1 &#39;((-1 1 1) (1 4 -5) (1 -2 0)))
 (invert m1)
 ;-&#62; ((10 2 9) (5 1 4) (6 1 5))
 
@@ -7413,7 +7413,7 @@ element.</p>
 before concatenation. An empty list produces an empty
 string.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;("this" "is" "a" "sentence"))
+<pre><code>(set lst &#39;("this" "is" "a" "sentence"))
 (join lst " ")
 ;-&#62; "this is a sentence"
 
@@ -7528,7 +7528,7 @@ boundaries.</p>
 (last &#39;(a b (c d)))
 ;-&#62; (c d)
 
-(set &#39;A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (last A)
@@ -7657,13 +7657,13 @@ Float digit counts ignore any fractional part.</p>
 (length &#39;())
 ;-&#62; 0
 
-(set &#39;lst &#39;(q w e r t y))
+(set lst &#39;(q w e r t y))
 ;-&#62; (q w e r t y)
 (length lst)
 ;-&#62; 6
 
 ; array length (rows)
-(set &#39;arr (array 2 4 &#39;(0)))
+(set arr (array 2 4 &#39;(0)))
 ;-&#62; ((1 2) (3 4) (5 6) (7 8))   ; example filler changed by array rules
 (length arr)
 ;-&#62; 2
@@ -7824,7 +7824,7 @@ default to nil. In the flat form, parentheses around
 <p>The semantics are equivalent to writing several let
 forms wrapped inside each other in left-to-right order.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 10)
+<pre><code>(set x 10)
 
 (let ((x 1) (y (+ x 1)))
   (list x y))
@@ -7890,7 +7890,7 @@ other types yield nil. Fn expressions and
 fn-macro expressions are also implemented as list
 structures and therefore return true under list?.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;var &#39;(1 2 3 4))
+<pre><code>(set var &#39;(1 2 3 4))
 ;-&#62; (1 2 3 4)
 
 (list? var)
@@ -7976,7 +7976,7 @@ bindings are restored.</p>
 ;-&#62; (nil nil nil)
 
 ; localizing a variable that already has a value
-(set &#39;x 42)
+(set x 42)
 ;-&#62; 42
 
 (local (x)
@@ -8046,7 +8046,7 @@ when provided, otherwise nil.</p>
 <p>int-index may be negative, in which case elements are
 indexed from the end of the association.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;params &#39;(
+<pre><code>(set params &#39;(
   (name "Alice")
   (age 35)
   (role "admin")
@@ -8063,7 +8063,7 @@ indexed from the end of the association.</p>
 ;-&#62; 40
 
 ; table of records
-(set &#39;records &#39;(
+(set records &#39;(
   ("Alice" 35 "admin" 12.34)
   ("Bob"   50 "user"  99.5)
 ))
@@ -8108,7 +8108,7 @@ than raw bytes.</p>
 <pre><code>(lower-case "HELLO WORLD")
 ;-&#62; "hello world"
 
-(set &#39;str "ABC")
+(set str "ABC")
 ;-&#62; "ABC"
 
 (lower-case str)
@@ -8162,7 +8162,7 @@ existing macro, use <em>constant</em>.</p>
     (set A B)
     (set B A)))
 
-(set &#39;x 3 &#39;y 9)
+(set x 3 &#39;y 9)
 (swap x y)
 (list x y)
 ;-&#62; (9 3)
@@ -8382,8 +8382,8 @@ arrays.</p>
 <p>Examples:</p>
 <pre><code>; matrix-to-matrix operations
 ;------------------------------------------------------------
-(set &#39;A &#39;((1 2 3) (4 5 6)))
-(set &#39;B A)
+(set A &#39;((1 2 3) (4 5 6)))
+(set B A)
 
 (mat + A B)
 ;-&#62; ((2 4 6) (8 10 12))
@@ -8399,7 +8399,7 @@ arrays.</p>
 
 ; operator supplied as a variable
 ;------------------------------------------------------------
-(set &#39;op +)
+(set op +)
 (mat op A B)
 ;-&#62; ((2 4 6) (8 10 12))
 
@@ -8559,7 +8559,7 @@ str-key in the string str. If found, the substring of str
 starting at the match position is returned. If no match
 is found, nil is returned.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;(a b c d e f g h))
+<pre><code>(set lst &#39;(a b c d e f g h))
 ;-&#62; (a b c d e f g h)
 
 (member &#39;d lst)
@@ -8677,13 +8677,13 @@ matrices, 0.0 is assumed.</p>
 <p>A matrix may be represented as either a nested list
 or an array.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;A &#39;((1 2 3) (4 5 6)))
-(set &#39;B &#39;((1 2) (1 2) (1 2)))
+<pre><code>(set A &#39;((1 2 3) (4 5 6)))
+(set B &#39;((1 2) (1 2) (1 2)))
 
 (multiply A B)
 ;-&#62; ((6 12) (15 30))
 
-(set &#39;v &#39;(10 20 30))
+(set v &#39;(10 20 30))
 (multiply A (transpose (list v)))
 ;-&#62; ((140) (320))
 </code></pre>
@@ -8709,7 +8709,7 @@ NaN return NaN. All comparisons with NaN return nil.
 Integer arithmetic treats NaN as the value 0.</p>
 <p>Examples:</p>
 <pre><code>; floating-point operations on NaN yield NaN
-(set &#39;x (sqrt -1))
+(set x (sqrt -1))
 ;-&#62; -nan
 
 (NaN? x)
@@ -8738,7 +8738,7 @@ Integer arithmetic treats NaN as the value 0.</p>
 (= x x)
 ;-&#62; nil
 
-(set &#39;infinity (mul 1.0e200 1.0e200))
+(set infinity (mul 1.0e200 1.0e200))
 ;-&#62; inf
 
 (NaN? (sub infinity infinity))
@@ -8756,7 +8756,7 @@ previously put into listening mode.</p>
 <p>Returns a newly created socket handle that can be used
 to receive and send data on the accepted connection.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;sock (net-listen 1234))
+<pre><code>(set sock (net-listen 1234))
 ;-&#62; &#60;socket&#62;
 
 (net-accept sock)
@@ -8814,7 +8814,7 @@ specified by str-file-path. On success, returns a socket
 handle. On failure, returns nil.</p>
 <p>Examples:</p>
 <pre><code>; TCP
-(set &#39;sock (net-connect "example.org" 80))
+(set sock (net-connect "example.org" 80))
 ;-&#62; &#60;socket&#62;
 
 ; timeout
@@ -9079,13 +9079,13 @@ privileges.</p>
 to that local interface address or name. If omitted,
 the default interface is used.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;port 7306)
-(set &#39;listen (net-listen port))
+<pre><code>(set port 7306)
+(set listen (net-listen port))
 
 (unless listen
   (exit))
 
-(set &#39;conn (net-accept listen))
+(set conn (net-accept listen))
 (if conn
     (while (net-receive conn buff 1024 "\n")
       (print buff)
@@ -9206,7 +9206,7 @@ automatically. Existing checksums are left unchanged.</p>
 <p>Examples:</p>
 <pre><code>; UDP packet with zeroed checksums (recalculated internally)
 
-(set &#39;pkt (pack (dup "b" 39) &#39;(
+(set pkt (pack (dup "b" 39) &#39;(
   0x45 0x00 0x00 0x27 0x4b 0x8f 0x00 0x00 0x40 0x11 0x00 0x00
   192 168 1 95
   192 168 1 92
@@ -9236,7 +9236,7 @@ occurs or the connection is closed, nil is returned.</p>
 <p>This function can be used to implement non-blocking
 I&#47;O loops.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;sock (net-connect "example.com" 7306))
+<pre><code>(set sock (net-connect "example.com" 7306))
 
 (while (= (net-peek sock) 0)
   (do-something-else))
@@ -9374,7 +9374,7 @@ error information.</p>
 <p>net-receive-from may be used in blocking mode or combined
 with net-select or net-peek for non-blocking operation.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;sock (net-listen 1001 "" "udp"))
+<pre><code>(set sock (net-listen 1001 "" "udp"))
 ;-&#62; &#60;socket&#62;
 
 (while (not (net-select sock "r" 100000))
@@ -9433,7 +9433,7 @@ using str-addr-if, a timeout must also be specified.</p>
 (net-send-udp "example.com" 2222 (pack "c c c c" 0 1 2 3))
 ;-&#62; 4
 
-(set &#39;buf (first (net-receive-udp 2222 10)))
+(set buf (first (net-receive-udp 2222 10)))
 (unpack "c c c c" buf)
 ;-&#62; (0 1 2 3)
 </code></pre>
@@ -9471,13 +9471,13 @@ becomes ready before timeout, an empty list is returned.</p>
 operations while allowing other parts of the program to
 run.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;listen (net-listen 7306))
+<pre><code>(set listen (net-listen 7306))
 
 ; wait for incoming connection
 (while (not (net-select listen "r" 1000000))
   (if (net-error) (print (net-error))))
 
-(set &#39;conn (net-accept listen))
+(set conn (net-accept listen))
 (net-send conn "hello")
 
 ; wait for incoming data
@@ -9487,7 +9487,7 @@ run.</p>
 (net-receive conn buf 1024)
 </code></pre>
 <p>Multiple sockets:</p>
-<pre><code>(set &#39;listen-list &#39;(1001 1002))
+<pre><code>(set listen-list &#39;(1001 1002))
 
 (while (not (net-error))
   (dolist (s (net-select listen-list "r" 1000000))
@@ -9513,7 +9513,7 @@ the entire contents of str-buffer are sent.</p>
 On failure, nil is returned. Use net-error to retrieve
 error information.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;buf "hello there")
+<pre><code>(set buf "hello there")
 
 (net-send sock buf)
 ;-&#62; 11
@@ -9549,15 +9549,15 @@ failure, nil is returned. Use net-error to retrieve
 error information.</p>
 <p>Examples:</p>
 <pre><code>; UDP server
-(set &#39;srv (net-listen 10001 "" "udp"))
+(set srv (net-listen 10001 "" "udp"))
 
 (while (not (net-error))
-  (set &#39;msg (net-receive-from srv 255))
+  (set msg (net-receive-from srv 255))
   (net-send-to (nth 1 msg) (nth 2 msg)
                (upper-case (first msg)) srv))
 </code></pre>
 <pre><code>; UDP client
-(set &#39;cli (net-listen 10002 "" "udp"))
+(set cli (net-listen 10002 "" "udp"))
 
 (net-send-to "127.0.0.1" 10001 "hello" cli)
 (net-receive cli buf 255)
@@ -9709,11 +9709,11 @@ omitted. All symbols of the same name in CTX3 are
 overwritten.</p>
 <p>Contexts may also be referenced indirectly through
 variables:</p>
-<pre><code>(set &#39;ctx1:x 123)
-(set &#39;ctx2:y 999)
+<pre><code>(set ctx1:x 123)
+(set ctx2:y 999)
 
-(set &#39;src ctx1)
-(set &#39;dst ctx2)
+(set src ctx1)
+(set dst ctx2)
 
 (new src dst)
 ;-&#62; ctx2
@@ -9991,7 +9991,7 @@ extra indices are ignored.</p>
 <p>Negative indices count from the end. Out-of-bounds
 indices cause an error.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;(a b c))
+<pre><code>(set lst &#39;(a b c))
 (nth 0 lst)
 ;-&#62; a
 
@@ -9999,7 +9999,7 @@ indices cause an error.</p>
 (lst 0)
 ;-&#62; a
 
-(set &#39;names &#39;(adam bela cyril david))
+(set names &#39;(adam bela cyril david))
 ;-&#62; (adam bela cyril david)
 
 (nth 2 names)
@@ -10009,7 +10009,7 @@ indices cause an error.</p>
 ;-&#62; david
 </code></pre>
 <p>Multiple indices:</p>
-<pre><code>(set &#39;people &#39;((adam 30) (bela 42) ((cyril nova) 17)))
+<pre><code>(set people &#39;((adam 30) (bela 42) ((cyril nova) 17)))
 
 (people 1 1)
 ;-&#62; 42
@@ -10022,7 +10022,7 @@ indices cause an error.</p>
 ;-&#62; nova
 </code></pre>
 <p>Indices may be supplied via a list or vector:</p>
-<pre><code>(set &#39;idx &#39;(2 0 1))
+<pre><code>(set idx &#39;(2 0 1))
 
 (people idx)
 ;-&#62; nova
@@ -10042,7 +10042,7 @@ indices cause an error.</p>
 ;-&#62; ERR: list index out of bounds
 </code></pre>
 <p>Passing lists by reference using a context functor:</p>
-<pre><code>(set &#39;L:L &#39;(a b c d e f g))
+<pre><code>(set L:L &#39;(a b c d e f g))
 
 (define (second ctx)
   (nth 1 ctx))
@@ -10065,7 +10065,7 @@ L:L
 for large lists and is recommended for lists with
 hundreds of elements or more.</p>
 <p>Arrays behave the same way as lists:</p>
-<pre><code>(set &#39;arr (array 2 3 &#39;(a b c d e f)))
+<pre><code>(set arr (array 2 3 &#39;(a b c d e f)))
 ;-&#62; ((a b c) (d e f))
 
 (nth 1 arr)
@@ -10129,7 +10129,7 @@ as null:</p>
 results where multiple representations of “no value”
 or “invalid value” may occur.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x (sqrt -1))
+<pre><code>(set x (sqrt -1))
 ;-&#62; -nan
 
 (null? x)
@@ -10165,8 +10165,8 @@ number. This includes integers, floating point
 numbers, and big integers. For any other value,
 number? returns nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 1.23)
-(set &#39;y 456)
+<pre><code>(set x 1.23)
+(set y 456)
 
 (number? x)
 ;-&#62; true
@@ -10247,11 +10247,11 @@ zero length if it already exists.</p>
 ;-&#62; 5
 </code></pre>
 <p>Reading from the same file:</p>
-<pre><code>(set &#39;f (open "file.txt" "read"))
+<pre><code>(set f (open "file.txt" "read"))
 
 (seek f 6)
 
-(set &#39;c (read-char f))
+(set c (read-char f))
 
 (print c "\n")
 
@@ -10291,7 +10291,7 @@ nil. When called with no arguments, or returns nil.</p>
 non-nil, non-empty value is found, remaining
 expressions are not evaluated.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x 10)
+<pre><code>(set x 10)
 
 (or (&#62; x 100) (= x 10))
 ;-&#62; true
@@ -10377,11 +10377,11 @@ floating point formats are converted to floats.</p>
 (unpack "c c c" "\000\001\002")
 ;-&#62; (0 1 2)
 
-(set &#39;s (pack "c d u" 10 12345 56789))
+(set s (pack "c d u" 10 12345 56789))
 (unpack "c d u" s)
 ;-&#62; (10 12345 56789)
 
-(set &#39;s (pack "s10 f" "result" 1.23))
+(set s (pack "s10 f" "result" 1.23))
 (unpack "s10 f" s)
 ;-&#62; ("result\000\000\000\000" 1.230000019)
 
@@ -10390,8 +10390,8 @@ floating point formats are converted to floats.</p>
 (pack "n10")
 ;-&#62; "\000\000\000\000\000\000\000\000\000\000"
 
-(set &#39;lst &#39;("A" "B" "C"))
-(set &#39;buf (pack "lululu" lst))
+(set lst &#39;("A" "B" "C"))
+(set buf (pack "lululu" lst))
 (map get-string (unpack "lululu" buf))
 ;-&#62; ("A" "B" "C")
 
@@ -10406,8 +10406,8 @@ floating point formats are converted to floats.</p>
 (pack "&#62;u &#60;u" 1 1)
 ;-&#62; "\000\001\001\000"
 
-(set &#39;txt "我能吞下玻璃而不伤身体。")
-(set &#39;lst (unpack (dup "b" (length txt)) txt))
+(set txt "我能吞下玻璃而不伤身体。")
+(set lst (unpack (dup "b" (length txt)) txt))
 (pack (dup "b" (length lst)) lst)
 ;-&#62; "我能吞下玻璃而不伤身体。"
 </code></pre>
@@ -10617,7 +10617,7 @@ string. With no index, the first character is
 removed. With int-index and int-length, a substring
 is removed and returned.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;((f g) a b c "hello" d e 10))
+<pre><code>(set lst &#39;((f g) a b c "hello" d e 10))
 
 (pop lst)
 ;-&#62; (f g)
@@ -10651,14 +10651,14 @@ lst
 
 ; nested indices
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a 2 (x y (p q) z)))
+(set lst &#39;(a 2 (x y (p q) z)))
 
 (pop lst -1 2 0)
 ;-&#62; p
 
 ; using indices in a list
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b (c d () e)))
+(set lst &#39;(a b (c d () e)))
 
 (push &#39;x lst &#39;(2 2 0))
 ;-&#62; (a b (c d (x) e))
@@ -10674,7 +10674,7 @@ lst
 
 ; pop on strings (UTF-8 aware)
 ;----------------------------------------------------------
-(set &#39;str "Rebel")
+(set str "Rebel")
 
 (pop str -2 2)
 ;-&#62; "el"
@@ -10688,7 +10688,7 @@ str
 str
 ;-&#62; "Rb"
 
-(set &#39;str "x")
+(set str "x")
 
 (pop str)
 ;-&#62; "x"
@@ -10724,7 +10724,7 @@ returned.</p>
 <p>pop-assoc modifies list-assoc in place.</p>
 <p>Examples:</p>
 <pre><code>; simple associations
-(set &#39;lst &#39;((a 1) (b 2) (c 3)))
+(set lst &#39;((a 1) (b 2) (c 3)))
 
 (pop-assoc &#39;b lst)
 ;-&#62; (b 2)
@@ -10734,7 +10734,7 @@ lst
 
 ;----------------------------------------------------------
 ; nested associations
-(set &#39;lst &#39;((a (b 1) (c (d 2)))))
+(set lst &#39;((a (b 1) (c (d 2)))))
 
 (pop-assoc &#39;a lst)
 ;-&#62; (a (b 1) (c (d 2)))
@@ -10742,7 +10742,7 @@ lst
 lst
 ;-&#62; ()
 
-(set &#39;lst &#39;((a (b 1) (c (d 2)))))
+(set lst &#39;((a (b 1) (c (d 2)))))
 
 (pop-assoc &#39;(a b) lst)
 ;-&#62; (b 1)
@@ -10750,7 +10750,7 @@ lst
 lst
 ;-&#62; ((a (c (d 2))))
 
-(set &#39;lst &#39;((a (b 1) (c (d 2)))))
+(set lst &#39;((a (b 1) (c (d 2)))))
 
 (pop-assoc &#39;(a c) lst)
 ;-&#62; (c (d 2))
@@ -10957,7 +10957,7 @@ are returned.</p>
 (sin 1)
 ;-&#62; 0.841
 
-(set &#39;x 0.0)
+(set x 0.0)
 x
 ;-&#62; 0.000
 </code></pre>
@@ -10992,7 +10992,7 @@ primitive symbol. Otherwise, primitive? returns nil.</p>
 <p>Primitive symbols include all built-in functions
 and functions created using import.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;var define)
+<pre><code>(set var define)
 
 (primitive? var)
 ;-&#62; true
@@ -11030,7 +11030,7 @@ the backslash character.</p>
 \xnn   hexadecimal ASCII code (00–FF)
 </code></pre>
 <p>Examples:</p>
-<pre><code>(print (set &#39;res (+ 1 2 3)))
+<pre><code>(print (set res (+ 1 2 3)))
 (print "the result is " res "\n")
 
 "\065\066\067"
@@ -11337,7 +11337,7 @@ not byte positions. UTF-8 characters are handled
 as single characters.</p>
 <p>Examples:</p>
 <pre><code>; inserting at the front
-(set &#39;lst &#39;(b c))
+(set lst &#39;(b c))
 (push &#39;a lst)
 ;-&#62; (a b c)
 
@@ -11366,7 +11366,7 @@ lst
 
 ; using indices in a list
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b (c d () e)))
+(set lst &#39;(a b (c d () e)))
 
 (push &#39;x lst &#39;(2 2 0))
 ;-&#62; (a b (c d (x) e))
@@ -11379,7 +11379,7 @@ lst
 
 ; place reference
 ;----------------------------------------------------------
-(set &#39;lst &#39;((a 1) (b 2) (c 3) (d)))
+(set lst &#39;((a 1) (b 2) (c 3) (d)))
 
 (push 4 (assoc &#39;d lst) -1)
 ;-&#62; (d 4)
@@ -11400,7 +11400,7 @@ var
 
 ; using push and pop as a queue
 ;----------------------------------------------------------
-(set &#39;q &#39;(a b c d e))
+(set q &#39;(a b c d e))
 
 (pop (push &#39;f q -1))
 ;-&#62; a
@@ -11413,7 +11413,7 @@ q
 
 ; push on strings (UTF-8 aware)
 ;----------------------------------------------------------
-(set &#39;str "abcdefg")
+(set str "abcdefg")
 
 (push "hijk" str -1)
 ;-&#62; "abcdefghijk"
@@ -11427,7 +11427,7 @@ str
 (push "4" str 3)
 ;-&#62; "1234abcdefghijk"
 
-(set &#39;str "\u03b1\u03b2\u03b3")
+(set str "\u03b1\u03b2\u03b3")
 ;-&#62; "αβγ"
 
 (push "*" str 1)
@@ -11435,7 +11435,7 @@ str
 
 ; push on a string reference
 ;----------------------------------------------------------
-(set &#39;lst &#39;("abc" "xyz"))
+(set lst &#39;("abc" "xyz"))
 
 (push "x" (lst 0))
 ;-&#62; "xabc"
@@ -11713,7 +11713,7 @@ data. The string must not contain binary zero bytes.</p>
 int-size limit, read returns nil. In all cases, any
 bytes read are still placed into sym-buffer.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;handle (open "file.txt" "read"))
+<pre><code>(set handle (open "file.txt" "read"))
 
 (read handle buf 200)
 ;-&#62; 200
@@ -11754,9 +11754,9 @@ For line-oriented input, use read-line together
 with device.</p>
 <p>Examples:</p>
 <pre><code>(define (copy-bytes from-file to-file)
-  (set &#39;in-file (open from-file "read"))
-  (set &#39;out-file (open to-file "write"))
-  (while (set &#39;chr (read-char in-file))
+  (set in-file (open from-file "read"))
+  (set out-file (open to-file "write"))
+  (while (set chr (read-char in-file))
     (write-char out-file chr))
   (close in-file)
   (close out-file)
@@ -11797,7 +11797,7 @@ the value stored in $count.</p>
 <p>read-expr behaves like eval-string without executing
 the resulting expression.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;code "; a statement
+<pre><code>(set code "; a statement
 (define (double x) (+ x x))")
 
 (read-expr code)
@@ -11884,7 +11884,7 @@ interactive terminal.</p>
 (read-key true)
 ;-&#62; 0     ; when no key has been pressed
 
-(while (!= (set &#39;c (read-key)) 1)
+(while (!= (set c (read-key)) 1)
   (println c))
 </code></pre>
 <p>The loop above can be used to inspect key and control
@@ -11925,9 +11925,9 @@ current-line.</p>
 <p>When input is exhausted, read-line returns nil.</p>
 <p>Examples:</p>
 <pre><code>(print "Enter a num:")
-(set &#39;num (int (read-line)))
+(set num (int (read-line)))
 </code></pre>
-<pre><code>(set &#39;in-file (open "file.txt" "read"))
+<pre><code>(set in-file (open "file.txt" "read"))
 (while (read-line in-file)
   (write-line))
 (close in-file)
@@ -11961,8 +11961,8 @@ returns nil.</p>
 <p>The returned integer value can be converted to a
 displayable UTF-8 character string using char.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;in-file (open "utf8.txt" "read"))
-(while (set &#39;chr (read-utf8 in-file))
+<pre><code>(set in-file (open "utf8.txt" "read"))
+(while (set chr (read-utf8 in-file))
   (print (char chr)))
 (close in-file)
 </code></pre>
@@ -12122,7 +12122,7 @@ index vector.</p>
 <p>The index vector returned by ref can be used directly
 to index into the original list.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;lst &#39;(a b (c d (x) e)))
+<pre><code>(set lst &#39;(a b (c d (x) e)))
 
 (ref &#39;x lst)
 ;-&#62; (2 2 0)
@@ -12130,11 +12130,11 @@ to index into the original list.</p>
 (ref &#39;(x) lst)
 ;-&#62; (2 2)
 
-(set &#39;p &#39;(c d (x) e))
+(set p &#39;(c d (x) e))
 (ref p lst)
 ;-&#62; (2)
 
-(set &#39;v (ref &#39;(x) lst))
+(set v (ref &#39;(x) lst))
 (lst v)
 ;-&#62; (x)
 
@@ -12142,7 +12142,7 @@ to index into the original list.</p>
 ;-&#62; nil
 </code></pre>
 <p>Using comparison functions:</p>
-<pre><code>(set &#39;lst &#39;(a b (c d (e) f)))
+<pre><code>(set lst &#39;(a b (c d (e) f)))
 
 (ref &#39;e lst)
 ;-&#62; (2 2 0)
@@ -12164,12 +12164,12 @@ to index into the original list.</p>
 ;-&#62; d
 </code></pre>
 <p>Using match and unify as comparison functions:</p>
-<pre><code>(set &#39;lst &#39;((l 3) (a 12) (k 5) (a 10) (z 22)))
+<pre><code>(set lst &#39;((l 3) (a 12) (k 5) (a 10) (z 22)))
 
 (ref &#39;(a ?) lst match)
 ;-&#62; (1)
 
-(set &#39;lst &#39;(((a b) (c d)) ((e e) (f g))))
+(set lst &#39;(((a b) (c d)) ((e e) (f g))))
 
 (ref &#39;(X X) lst unify)
 ;-&#62; (1 0)
@@ -12181,7 +12181,7 @@ to index into the original list.</p>
 ;-&#62; (f g)
 </code></pre>
 <p>Passing the list by reference using a context:</p>
-<pre><code>(set &#39;ctx:ctx &#39;(a b (c d) e f))
+<pre><code>(set ctx:ctx &#39;(a b (c d) e f))
 
 (ref &#39;d ctx)
 ;-&#62; (2 1)
@@ -12217,7 +12217,7 @@ the number of matches found.</p>
 <p>Examples:</p>
 <pre><code>; basic usage
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b c (d a f (a h a)) (k a (m n a) (x))))
+(set lst &#39;(a b c (d a f (a h a)) (k a (m n a) (x))))
 
 (ref-all &#39;a lst)
 ;-&#62; ((0) (3 1) (3 3 0) (3 3 2) (4 1) (4 2 2))
@@ -12233,7 +12233,7 @@ $count
 
 ; comparison functions
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b c (d f (h l a)) (k a (m n) (x))))
+(set lst &#39;(a b c (d f (h l a)) (k a (m n) (x))))
 
 (ref-all &#39;c lst)
 ;-&#62; ((2))
@@ -12268,14 +12268,14 @@ $count
 (define (is-it-or-d x y)
   (or (= x y) (= y &#39;d)))
 
-(set &#39;lst &#39;(a b (c d (e) f)))
+(set lst &#39;(a b (c d (e) f)))
 
 (ref-all &#39;e lst is-it-or-d)
 ;-&#62; ((2 1) (2 2 0))
 
 ; using match and unify
 ;----------------------------------------------------------
-(set &#39;lst &#39;((l 3) (a 12) (k 5) (a 10) (z 22)))
+(set lst &#39;((l 3) (a 12) (k 5) (a 10) (z 22)))
 
 (ref-all &#39;(a ?) lst match)
 ;-&#62; ((1) (3))
@@ -12283,7 +12283,7 @@ $count
 (ref-all &#39;(a ?) lst match true)
 ;-&#62; ((a 12) (a 10))
 
-(set &#39;lst &#39;(((a b) (c d)) ((e e) (f g)) ((z) (z))))
+(set lst &#39;(((a b) (c d)) ((e e) (f g)) ((z) (z))))
 
 (ref-all &#39;(X X) lst unify)
 ;-&#62; ((1 0) (2))
@@ -12291,7 +12291,7 @@ $count
 (ref-all &#39;(X X) lst unify true)
 ;-&#62; ((e e) ((z) (z)))
 
-(set &#39;lst &#39;(((x y z) g) ((a b) (c d)) ((e e) (f g))))
+(set lst &#39;(((x y z) g) ((a b) (c d)) ((e e) (f g))))
 
 (ref-all &#39;(X g) lst unify)
 ;-&#62; ((0) (2 1))
@@ -12448,8 +12448,8 @@ which limits replace to a single substitution.</p>
 
 ; faster with pre-compilation
 ;----------------------------------------------------------
-(set &#39;p1 (regex-comp pattern-str1))
-(set &#39;p2 (regex-comp pattern-str2 512))
+(set p1 (regex-comp pattern-str1))
+(set p2 (regex-comp pattern-str2 512))
 
 (dolist (line page)
   (replace p1 line repl1 0x10000)
@@ -12550,7 +12550,7 @@ replaced.</p>
 <p>Examples:</p>
 <pre><code>; list replacement
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b c d e a b c d))
+(set lst &#39;(a b c d e a b c d))
 
 (replace &#39;b lst &#39;B)
 ;-&#62; (a B c d e a B c d)
@@ -12563,7 +12563,7 @@ $count
 
 ; list replacement with comparison function
 ;----------------------------------------------------------
-(set &#39;lst &#39;(1 4 22 5 6 89 2 3 24))
+(set lst &#39;(1 4 22 5 6 89 2 3 24))
 
 (replace 10 lst 10 &#60;)
 ;-&#62; (1 4 10 5 6 10 2 3 10)
@@ -12581,14 +12581,14 @@ $count
 
 ; using match and unify on lists
 ;----------------------------------------------------------
-(set &#39;lst &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+(set lst &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
 
 (replace &#39;(mary *) lst
          (list &#39;mary (apply + (rest $it)))
          match)
 ;-&#62; ((john 5 6 4) (mary 14) (bob 4 2 7 9) (jane 3))
 
-(set &#39;lst &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
+(set lst &#39;((john 5 6 4) (mary 3 4 7) (bob 4 2 7 9) (jane 3)))
 
 (replace &#39;(*) lst
          (list ($it 0) (apply + (rest $it)))
@@ -12603,7 +12603,7 @@ $count
 
 ; list removal
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b a a c d a f g))
+(set lst &#39;(a b a a c d a f g))
 
 (replace &#39;a lst)
 ;-&#62; (b c d f g)
@@ -12616,7 +12616,7 @@ $count
 
 ; string replacement without regex
 ;----------------------------------------------------------
-(set &#39;str "this isa sentence")
+(set str "this isa sentence")
 
 (replace "isa" str "is a")
 ;-&#62; "this is a sentence"
@@ -12626,12 +12626,12 @@ $count
 
 ; regular expression replacement
 ;----------------------------------------------------------
-(set &#39;str "ZZZZZxZZZZyy")
+(set str "ZZZZZxZZZZyy")
 
 (replace "x|y" str "PP" 0)
 ;-&#62; "ZZZZZPPZZZZPPPP"
 
-(set &#39;str "---axb---ayb---")
+(set str "---axb---ayb---")
 
 (replace "(a)(.)(b)" str (append $3 $2 $1) 0)
 ;-&#62; "---bxa---bya---"
@@ -12644,7 +12644,7 @@ $count
 
 ; dynamic regex replacement
 ;----------------------------------------------------------
-(set &#39;str "xxx%41xxx%42")
+(set str "xxx%41xxx%42")
 
 (replace "%([0-9A-F][0-9A-F])" str
          (char (int (append "0x" $1)))
@@ -12746,7 +12746,7 @@ support is enabled.</p>
 (rest &#39;((a b) c d))
 ;-&#62; (c d)
 
-(set &#39;lst &#39;(a b c d e))
+(set lst &#39;(a b c d e))
 
 (rest lst)
 ;-&#62; (b c d e)
@@ -12765,7 +12765,7 @@ support is enabled.</p>
 
 ; array usage
 ;----------------------------------------------------------
-(set &#39;A (array 2 3 (sequence 1 6)))
+(set A (array 2 3 (sequence 1 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (rest A)
@@ -12809,7 +12809,7 @@ boundaries when combined with explode.</p>
 <p>Examples:</p>
 <pre><code>; reverse a list
 ;----------------------------------------------------------
-(set &#39;lst &#39;(a b c d e f))
+(set lst &#39;(a b c d e f))
 
 (reverse lst)
 ;-&#62; (f e d c b a)
@@ -12819,7 +12819,7 @@ lst
 
 ; reverse an array
 ;----------------------------------------------------------
-(set &#39;arr (array 3 2 &#39;(1 2 3 4 5 6)))
+(set arr (array 3 2 &#39;(1 2 3 4 5 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (reverse arr)
@@ -12830,7 +12830,7 @@ arr
 
 ; reverse a byte string
 ;----------------------------------------------------------
-(set &#39;str "Rebel")
+(set str "Rebel")
 
 (reverse str)
 ;-&#62; "lebeR"
@@ -12869,7 +12869,7 @@ a rotation of one position to the right is applied.</p>
 <p>Examples:</p>
 <pre><code>; list rotation
 ;----------------------------------------------------------
-(set &#39;lst &#39;(1 2 3 4 5 6 7 8 9))
+(set lst &#39;(1 2 3 4 5 6 7 8 9))
 
 (rotate lst)
 ;-&#62; (9 1 2 3 4 5 6 7 8)
@@ -12885,7 +12885,7 @@ lst
 
 ; string rotation (byte-based)
 ;----------------------------------------------------------
-(set &#39;str "Rebel")
+(set str "Rebel")
 
 (rotate str)
 ;-&#62; "lRebe"
@@ -13043,7 +13043,7 @@ On failure, nil is returned.</p>
 <p>Examples:</p>
 <pre><code>; plain string search
 ;----------------------------------------------------------
-(set &#39;file (open "file.txt" "read"))
+(set file (open "file.txt" "read"))
 
 (search file "define")
 (print (read-line file) "\n")
@@ -13052,7 +13052,7 @@ On failure, nil is returned.</p>
 
 ; regular expression search
 ;----------------------------------------------------------
-(set &#39;file (open "program.c" "read"))
+(set file (open "program.c" "read"))
 
 (while (search file "#define (.*)" true 0)
   (println $1))
@@ -13123,7 +13123,7 @@ used to restore the generator to the same state.</p>
 ;-&#62; 0.8135413573186572
 
 ; save current generator state
-(set &#39;state (seed))
+(set state (seed))
 ;-&#62; int
 
 (random)
@@ -13176,7 +13176,7 @@ of a method call, self is not defined.</p>
   (inc (self 1) dx)
   (inc (self 2) dy))
 
-(set &#39;Circle1 (Circle 1 2 3))
+(set Circle1 (Circle 1 2 3))
 
 (:move Circle1 10 20)
 
@@ -13185,7 +13185,7 @@ Circle1
 
 ; objects can be anonymous
 ;------------------------------------------------------------
-(set &#39;circles &#39;((Circle 1 2 3) (Circle 4 5 6)))
+(set circles &#39;((Circle 1 2 3) (Circle 4 5 6)))
 
 (:move (circles 0) 10 20)
 (:move (circles 1) 10 20)
@@ -13227,7 +13227,7 @@ extends the file and fills the gap with zeros.
 Such files are sparse files; unused blocks are
 not physically allocated on disk.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;file (open "file.dat" "read"))
+<pre><code>(set file (open "file.dat" "read"))
 ;-&#62; int
 
 (seek file 100)
@@ -13239,7 +13239,7 @@ not physically allocated on disk.</p>
 (seek file -1)        ; seek to end of file
 ;-&#62; int
 
-(set &#39;big (open "large-file" "read"))
+(set big (open "large-file" "read"))
 (seek big 30000000000)
 ;-&#62; 30000000000
 </code></pre>
@@ -13281,7 +13281,7 @@ reorders the result accordingly.</p>
 <p>Examples:</p>
 <pre><code>; list selection
 ;------------------------------------------------------------
-(set &#39;lst &#39;(a b c d e f g))
+(set lst &#39;(a b c d e f g))
 
 (select lst &#39;(0 3 2 5 3))
 ;-&#62; (a d c f d)
@@ -13294,7 +13294,7 @@ reorders the result accordingly.</p>
 
 ; string selection (UTF-8 aware)
 ;------------------------------------------------------------
-(set &#39;str "abcdefg")
+(set str "abcdefg")
 
 (select str &#39;(0 3 2 5 3))
 ;-&#62; "adcfd"
@@ -13360,7 +13360,7 @@ to retrieve the underlying system error.</p>
 <p>Examples:</p>
 <pre><code>; create semaphore
 ;------------------------------------------------------------
-(set &#39;sid (semaphore))
+(set sid (semaphore))
 ;-&#62; int
 
 (semaphore sid)
@@ -13389,7 +13389,7 @@ to retrieve the underlying system error.</p>
     (semaphore sid -1)
     (println x)))
 
-(set &#39;sid (semaphore))
+(set sid (semaphore))
 
 (fork (counter 5))
 
@@ -13443,7 +13443,7 @@ is not limited.</p>
 <p>Examples:</p>
 <pre><code>; child sending message to parent
 ;------------------------------------------------------------
-(set &#39;ppid (sys-info -4))
+(set ppid (sys-info -4))
 (send ppid "hello")
 
 ; parent receiving message
@@ -13460,7 +13460,7 @@ msg
 ; parent dispatching messages from multiple children
 ;------------------------------------------------------------
 (define (child)
-  (set &#39;ppid (sys-info -4))
+  (set ppid (sys-info -4))
   (while true
     (until (send ppid (rand 100)))))
 
@@ -13629,10 +13629,10 @@ processes them from left to right.</p>
 <p>Examples:</p>
 <pre><code>; basic assignment
 ;------------------------------------------------------------
-(set &#39;x 123)
+(set x 123)
 ;-&#62; 123
 
-(set &#39;x &#39;y)
+(set x &#39;y)
 ;-&#62; y
 
 (set x "hello")
@@ -13641,12 +13641,12 @@ processes them from left to right.</p>
 y
 ;-&#62; "hello"
 
-(set &#39;lst &#39;(1 2 3))
+(set lst &#39;(1 2 3))
 ;-&#62; (1 2 3)
 
 ; multiple assignments
 ;------------------------------------------------------------
-(set &#39;x 1 &#39;y "hello")
+(set x 1 &#39;y "hello")
 ;-&#62; "hello"
 
 x
@@ -13657,7 +13657,7 @@ y
 
 ; symbol computed by expression
 ;------------------------------------------------------------
-(set &#39;lst &#39;(x y z))
+(set lst &#39;(x y z))
 ;-&#62; (x y z)
 
 (set (first lst) 123)
@@ -13668,7 +13668,7 @@ x
 
 ; expressions may depend on earlier assignments
 ;------------------------------------------------------------
-(set &#39;a 10 &#39;b (+ a a))
+(set a 10 &#39;b (+ a a))
 
 a
 ;-&#62; 10
@@ -13678,7 +13678,7 @@ b
 
 ; assigning functions
 ;------------------------------------------------------------
-(set &#39;double (fn (x) (+ x x)))
+(set double (fn (x) (+ x x)))
 ;-&#62; (fn (x) (+ x x))
 
 ; equivalent to define
@@ -13774,7 +13774,7 @@ reference.</p>
 <p>Examples:</p>
 <pre><code>; simple replacement in nested list
 ;------------------------------------------------------------
-(set &#39;data &#39;(fruits (apples 123 44) (oranges 1 5 3)))
+(set data &#39;(fruits (apples 123 44) (oranges 1 5 3)))
 
 (set-ref &#39;apples data &#39;Apples)
 ;-&#62; (fruits (Apples 123 44) (oranges 1 5 3))
@@ -13784,7 +13784,7 @@ data
 
 ; passing list by reference via context
 ;------------------------------------------------------------
-(set &#39;db:db &#39;(fruits (apples 123 44) (oranges 1 5 3)))
+(set db:db &#39;(fruits (apples 123 44) (oranges 1 5 3)))
 
 (define (update ct key value)
   (set-ref key ct value))
@@ -13832,7 +13832,7 @@ reference.</p>
 <p>Examples:</p>
 <pre><code>; replace all matching elements
 ;------------------------------------------------------------
-(set &#39;data
+(set data
  &#39;((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -13845,7 +13845,7 @@ $count
 
 ; passing list by reference via context
 ;------------------------------------------------------------
-(set &#39;db:db
+(set db:db
  &#39;((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -13862,7 +13862,7 @@ db:db
 
 ; custom comparison using match
 ;------------------------------------------------------------
-(set &#39;data
+(set data
  &#39;((monday (apples 20 30) (oranges 2 4 9))
    (tuesday (apples 5) (oranges 32 1))))
 
@@ -13967,7 +13967,7 @@ lst
 
 ; string modification
 ;------------------------------------------------------------
-(set &#39;s "Example")
+(set s "Example")
 
 (setf (s 0) "e")
 ;-&#62; "e"
@@ -13988,7 +13988,7 @@ s
 lst
 ;-&#62; ((apples 4) (oranges 2))
 
-(set &#39;s "Sample")
+(set s "Sample")
 
 (setf (s 0) (lower-case $it))
 ;-&#62; "s"
@@ -14098,7 +14098,7 @@ process and its child processes.</p>
 <p>Examples:</p>
 <pre><code>; allocate shared memory
 ;------------------------------------------------------------
-(set &#39;mem (share))
+(set mem (share))
 ;-&#62; int-address
 
 ; write and read values
@@ -14272,7 +14272,7 @@ in radians.</p>
 <pre><code>(sin 1)
 ;-&#62; 0.8414709838
 
-(set &#39;pi (mul 2 (acos 0)))
+(set pi (mul 2 (acos 0)))
 ;-&#62; 3.141592654
 
 (sin (div pi 2))
@@ -14359,7 +14359,7 @@ boundaries.</p>
 
 ; array slicing
 ;------------------------------------------------------------
-(set &#39;arr (array 3 2 (sequence 1 6)))
+(set arr (array 3 2 (sequence 1 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (slice arr 1 2)
@@ -14439,7 +14439,7 @@ boundaries.</p>
 
 ; array slicing
 ;------------------------------------------------------------
-(set &#39;A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (sequence 1 6)))
 ;-&#62; ((1 2) (3 4) (5 6))
 
 (slice A 1 2)
@@ -14516,7 +14516,7 @@ supplied. When provided, it must be compatible with
 
 ; destructive behavior
 ;------------------------------------------------------------
-(set &#39;s &#39;(k a l s))
+(set s &#39;(k a l s))
 (sort s)
 ;-&#62; (a k l s)
 
@@ -14542,7 +14542,7 @@ s
 (define (comp x y)
   (&#62;= (last x) (last y)))
 
-(set &#39;db &#39;((a 3) (g 2) (c 5)))
+(set db &#39;((a 3) (g 2) (c 5)))
 
 (sort db comp)
 ;-&#62; ((c 5) (a 3) (g 2))
@@ -14631,7 +14631,7 @@ returns the process ID of the child.</p>
         (push i plist -1)))
     plist))
 
-(set &#39;start (time-of-day))
+(set start (time-of-day))
 
 (spawn &#39;p1 (primes 1 1000000))
 (spawn &#39;p2 (primes 1000001 2000000))
@@ -14725,11 +14725,11 @@ result as a floating-point number.</p>
 <p>Calculates the sum of squares of the numeric elements
 in list-vector or array-vector and returns the result.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;vector (sequence 1 10))
+<pre><code>(set vector (sequence 1 10))
 (ssq vector)
 ;-&#62; 385
 
-(set &#39;vector (array 10 (sequence 1 10)))
+(set vector (array 10 (sequence 1 10)))
 (ssq vector)
 ;-&#62; 385
 </code></pre>
@@ -14820,7 +14820,7 @@ values in this order:</p>
 <p>kurt
   Kurtosis of the distribution</p>
 <p>Examples:</p>
-<pre><code>(set &#39;data &#39;(90 100 130 150 180 200 220 300 350 400))
+<pre><code>(set data &#39;(90 100 130 150 180 200 220 300 350 400))
 
 (println
   (format [text]
@@ -14882,7 +14882,7 @@ are concatenated in order.</p>
 <p>If a buffer passed to string contains zero bytes
 (\000), copying stops at the first terminating
 zero.</p>
-<pre><code>(set &#39;buff "ABC\000\000\000")
+<pre><code>(set buff "ABC\000\000\000")
 ;-&#62; "ABC\000\000\000"
 
 (length buff)
@@ -14916,7 +14916,7 @@ string.</p>
 <p>Returns true if the evaluated expression is a
 string, otherwise nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;var "hello")
+<pre><code>(set var "hello")
 
 (string? var)
 ;-&#62; true
@@ -14965,10 +14965,10 @@ structure.</p>
 
 ; obtain current time
 ;------------------------------------------------------------
-(set &#39;today (date-value))
+(set today (date-value))
 
 ; localtime returns a pointer to struct tm
-(set &#39;ptr (localtime (address today)))
+(set ptr (localtime (address today)))
 
 ; unpack struct fields into a list
 (unpack tm ptr)
@@ -15056,7 +15056,7 @@ to the same object or to different objects.</p>
 <p>Examples:</p>
 <pre><code>; swapping elements in a list
 ;------------------------------------------------------------
-(set &#39;lst &#39;(a b c d e f))
+(set lst &#39;(a b c d e f))
 
 (swap (first lst) (last lst))
 ;-&#62; a
@@ -15066,7 +15066,7 @@ lst
 
 ; swapping between two lists
 ;------------------------------------------------------------
-(set &#39;lst-b &#39;(x y z))
+(set lst-b &#39;(x y z))
 
 (swap (lst 0) (lst-b -1))
 ;-&#62; f
@@ -15079,7 +15079,7 @@ lst-b
 
 ; swapping array rows
 ;------------------------------------------------------------
-(set &#39;A (array 2 3 (sequence 1 6)))
+(set A (array 2 3 (sequence 1 6)))
 
 (swap (A 0) (A 1))
 ;-&#62; (1 2 3)
@@ -15089,7 +15089,7 @@ A
 
 ; swapping symbol values
 ;------------------------------------------------------------
-(set &#39;x 1 &#39;y 2)
+(set x 1 &#39;y 2)
 
 (swap x y)
 ;-&#62; 1
@@ -15102,7 +15102,7 @@ y
 
 ; swapping via assoc and lookup
 ;------------------------------------------------------------
-(set &#39;lst &#39;((a 1 2 3) (b 10 20 30)))
+(set lst &#39;((a 1 2 3) (b 10 20 30)))
 
 (swap (lookup &#39;a lst -1) (lookup &#39;b lst 1))
 
@@ -15244,7 +15244,7 @@ resulting value is a symbol. Otherwise, nil is returned.</p>
 <p>symbol? tests the value produced by evaluation, not
 the syntactic form of the expression.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;x &#39;y)
+<pre><code>(set x &#39;y)
 ;-&#62; y
 
 (symbol? x)
@@ -15290,7 +15290,7 @@ is optional.</p>
 (symbols &#39;ctx)
 (symbols ctx)
 
-(set &#39;ct ctx)
+(set ct ctx)
 (symbols ct)
 </code></pre>
 <p>Notes:</p>
@@ -15531,16 +15531,16 @@ same subjects taken under different conditions.</p>
 <p>Examples:</p>
 <pre><code>; two independent samples
 ;------------------------------------------------------------
-(set &#39;hours-sleep-8 &#39;(5 7 5 3 5 3 3 9))
-(set &#39;hours-sleep-4 &#39;(8 1 4 6 6 4 1 2))
+(set hours-sleep-8 &#39;(5 7 5 3 5 3 3 9))
+(set hours-sleep-4 &#39;(8 1 4 6 6 4 1 2))
 
 (t-test hours-sleep-8 hours-sleep-4)
 ;-&#62; (5 4 2.138 2.563 0.847 14 0.411)
 
 ; two related samples
 ;------------------------------------------------------------
-(set &#39;mood-pre &#39;(3 0 6 7 4 3 2 1 4))
-(set &#39;mood-post &#39;(5 1 5 7 10 9 7 11 8))
+(set mood-pre &#39;(3 0 6 7 4 3 2 1 4))
+(set mood-post &#39;(5 1 5 7 10 9 7 11 8))
 
 (t-test mood-pre mood-post true)
 ;-&#62; (3.333 7 2.236 3.041 -3.143 8 0.0137)
@@ -15589,7 +15589,7 @@ The result is returned as a floating point number.</p>
 <pre><code>(tan 1)
 ;-&#62; 1.557407725
 
-(set &#39;pi (mul 2 (asin 1)))
+(set pi (mul 2 (asin 1)))
 ;-&#62; 3.141592654
 
 (tan (div pi 4))
@@ -15646,8 +15646,8 @@ the context prefix.</p>
 <p>The term is the symbol name following the context
 separator. The returned value is always a string.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;ctx:var 123)
-(set &#39;sm &#39;ctx:var)
+<pre><code>(set ctx:var 123)
+(set sm &#39;ctx:var)
 
 (string sm)
 ;-&#62; "ctx:var"
@@ -15657,7 +15657,7 @@ separator. The returned value is always a string.</p>
 
 ; reconstructing the original symbol
 ;------------------------------------------------------------
-(set &#39;s &#39;ctx:var)
+(set s &#39;ctx:var)
 
 (= s (sym (term s) (prefix s)))
 ;-&#62; true
@@ -16030,7 +16030,7 @@ elements.</p>
 <p>Examples:</p>
 <pre><code>; basic list matrix
 ;------------------------------------------------------------
-(set &#39;mtx &#39;((1 2 3) (4 5 6)))
+(set mtx &#39;((1 2 3) (4 5 6)))
 
 (transpose mtx)
 ;-&#62; ((1 4) (2 5) (3 6))
@@ -16047,22 +16047,22 @@ elements.</p>
 
 ; array matrix
 ;------------------------------------------------------------
-(set &#39;arr (array 2 3 (sequence 1 6)))
-(set &#39;mtx (transpose arr))
+(set arr (array 2 3 (sequence 1 6)))
+(set mtx (transpose arr))
 
 mtx
 ;-&#62; ((1 4) (2 5) (3 6))
 
 ; uneven rows
 ;------------------------------------------------------------
-(set &#39;mtx &#39;((1 2 3) (4 5) (7 8 9)))
+(set mtx &#39;((1 2 3) (4 5) (7 8 9)))
 
 (transpose mtx)
 ;-&#62; ((1 4 7) (2 5 8) (3 nil 9))
 
 ; non-list row expansion
 ;------------------------------------------------------------
-(set &#39;mtx &#39;((1 2 3) X (7 8 9)))
+(set mtx &#39;((1 2 3) X (7 8 9)))
 
 (transpose mtx)
 ;-&#62; ((1 X 7) (2 X 8) (3 X 9))
@@ -16248,7 +16248,7 @@ It returns logical bindings as a list.</li>
 in search and replacement functions.</li>
 </ul>
 <p>Use unify with expand to substitute bound variables:</p>
-<pre><code>(set &#39;bindings (unify &#39;(f (g A) A) &#39;(f B xyz)))
+<pre><code>(set bindings (unify &#39;(f (g A) A) &#39;(f B xyz)))
 ;-&#62; ((B (g xyz)) (A xyz))
 
 (expand &#39;(f (g A) A) bindings)
@@ -16399,29 +16399,29 @@ nn    n null bytes
 (unpack "c c c" "ABC")
 ;-&#62; (65 66 67)
 
-(set &#39;buf (pack "c d u" 10 12345 56789))
+(set buf (pack "c d u" 10 12345 56789))
 (unpack "c d u" buf)
 ;-&#62; (10 12345 56789)
 
 ; strings and floats
 ;------------------------------------------------------------
-(set &#39;buf (pack "s10 f" "result" 1.23))
+(set buf (pack "s10 f" "result" 1.23))
 (unpack "s10 f" buf)
 ;-&#62; ("result\000\000\000\000" 1.230000019)
 
-(set &#39;buf (pack "s3 lf" "result" 1.23))
+(set buf (pack "s3 lf" "result" 1.23))
 (unpack "s3 f" buf)
 ;-&#62; ("res" 1.23)
 
 ; null padding
 ;------------------------------------------------------------
-(set &#39;buf (pack "c n7 c" 11 22))
+(set buf (pack "c n7 c" 11 22))
 (unpack "c n7 c" buf)
 ;-&#62; (11 22)
 
 ; byte order control
 ;------------------------------------------------------------
-(set &#39;buf (pack "d" 1))
+(set buf (pack "d" 1))
 (unpack "d" buf)
 ;-&#62; (1)
 
@@ -16430,7 +16430,7 @@ nn    n null bytes
 
 ; different pack and unpack formats
 ;------------------------------------------------------------
-(set &#39;buf (pack "s3" "ABC"))
+(set buf (pack "s3" "ABC"))
 (unpack "c c c" buf)
 ;-&#62; (65 66 67)
 </code></pre>
@@ -16467,7 +16467,7 @@ exp-condition and returns its last value.</p>
 iterator symbol $idx.</p>
 <p>Examples:</p>
 <pre><code>(device (open "somefile.txt" "read"))
-(set &#39;line-count 0)
+(set line-count 0)
 
 (until (not (read-line))
   (inc line-count))
@@ -16604,7 +16604,7 @@ avoid collisions with real MAC addresses.</p>
 ; type 1 UUID using a node ID
 ;------------------------------------------------------------
 ; node ID for MAC 00:14:51:0a:e0:bc
-(set &#39;id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
+(set id (pack "cccccc" 0x00 0x14 0x51 0x0a 0xe0 0xbc))
 
 (uuid id)
 ;-&#62; "0749161C-2EC2-11DB-BBB2-0014510AE0BC"
@@ -16653,9 +16653,9 @@ of 0 indicates that no child process has terminated.</p>
 <p>Examples:</p>
 <pre><code>; wait for a specific child
 ;------------------------------------------------------------
-(set &#39;pid (fork (my-process)))
+(set pid (fork (my-process)))
 
-(set &#39;ret (wait-pid pid))
+(set ret (wait-pid pid))
 ;-&#62; (8596 0)
 
 (println "process: " pid
@@ -16693,7 +16693,7 @@ expressions in body do not need to be grouped
 using begin.</p>
 <p>Examples:</p>
 <pre><code>(when (read-line)
-  (set &#39;result (analyze (current-line)))
+  (set result (analyze (current-line)))
   (report result)
   (finish))
 </code></pre>
@@ -16720,7 +16720,7 @@ of the last expression evaluated in body.</p>
 iterator symbol $idx.</p>
 <p>Examples:</p>
 <pre><code>(device (open "somefile.txt" "read"))
-(set &#39;line-count 0)
+(set line-count 0)
 
 (while (read-line)
   (inc line-count))
@@ -16763,14 +16763,14 @@ name is deprecated and should be avoided in new code.</p>
 <p>Examples:</p>
 <pre><code>; writing to a file
 ;------------------------------------------------------------
-(set &#39;handle (open "file.ext" "write"))
+(set handle (open "file.ext" "write"))
 
 (write handle data 100)
 (write handle "a quick message\n")
 
 ; destructive string append
 ;------------------------------------------------------------
-(set &#39;str "")
+(set str "")
 (write str "hello world")
 
 str
@@ -16807,10 +16807,10 @@ the number of bytes written.</p>
 <pre><code>; slow byte-by-byte file copy
 ;------------------------------------------------------------
 (define (slow-file-copy from-file to-file)
-  (set &#39;in-file (open from-file "read"))
-  (set &#39;out-file (open to-file "write"))
+  (set in-file (open from-file "read"))
+  (set out-file (open to-file "write"))
 
-  (while (set &#39;chr (read-char in-file))
+  (while (set chr (read-char in-file))
     (write-char out-file chr))
 
   (close in-file)
@@ -16892,20 +16892,20 @@ destructively to that string.</p>
 <p>Examples:</p>
 <pre><code>; write a line to a file
 ;------------------------------------------------------------
-(set &#39;out (open "file.txt" "write"))
+(set out (open "file.txt" "write"))
 (write-line out "hello there")
 (close out)
 
 ; write last read line to stdout
 ;------------------------------------------------------------
-(set &#39;in (open "init.txt" "read"))
+(set in (open "init.txt" "read"))
 (while (read-line in)
   (write-line))
 (close in)
 
 ; append lines to a string
 ;------------------------------------------------------------
-(set &#39;str "")
+(set str "")
 (write-line str "hello")
 (write-line str "world")
 
@@ -17041,7 +17041,7 @@ using assoc.</p>
 returns nil and xml-error can be used to retrieve
 error information.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;xml
+<pre><code>(set xml
   "&#60;person name=&#39;John Doe&#39; tel=&#39;555-1212&#39;&#62;nice guy&#60;&#47;person&#62;")
 
 (xml-parse xml)
@@ -17181,8 +17181,8 @@ returned.</p>
 <p>Both integer and floating-point zero are accepted.
 For all non-numeric data types, zero? returns nil.</p>
 <p>Examples:</p>
-<pre><code>(set &#39;value 1.2)
-(set &#39;var 0)
+<pre><code>(set value 1.2)
+(set var 0)
 
 (zero? value)
 ;-&#62; nil
