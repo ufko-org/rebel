@@ -526,6 +526,13 @@ true
    (inc x) 
    (= x 2)))
 
+(define (test-do , x )
+  (do 
+   (set x 0) 
+   (inc x) 
+   (inc x) 
+   (= x 2)))
+
 (define (test-beta )
   (< (abs (sub (beta 1 2) 0.5)) 1e-05))
 
@@ -2014,6 +2021,9 @@ true
     (= "hello" (first (net-receive-from sock 10)))
     (net-close sock)))
 
+(define (test-with)
+  (map with '(a b) '(1 2))
+  (and (= a 1) (= b 2)))
 
 (define (test-net-receive-udp)
     (write-file "udptest.lsp"
