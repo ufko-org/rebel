@@ -31,14 +31,22 @@
   '(((((a b) c) d) e) f)
 )
 
+; Variables
+; ------------------------------------------------------------
+(test "5: apply with and increment"
+  (let ((x 0))
+    (= (inc (apply with '(x 123))) 124 x))
+  true
+)
+
 ; Large sums
 ; ------------------------------------------------------------
-(test "5: apply + over array and sequences"
+(test "6: apply + over array and sequences"
   (apply + (array 100 (sequence 1 100)))
   (apply + (sequence 1 100))
 )
 
-(test "6: apply + over 0..100 array"
+(test "7: apply + over 0..100 array"
   (apply + (0 100 (array 100 (sequence 1 100))))
   (apply + (sequence 1 100))
 )
