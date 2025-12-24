@@ -94,7 +94,7 @@ PRIMITIVE primitive[] =
     {"constant",    p_constant, 0x400},
     {"global",      p_global,   0},
     {"set",         p_setdef,   0x400}, /* :rebel, retires set '/setq/setf */ 
-    {"with",        p_with,     0x400}, /* :rebel
+    {"with",        p_with,     0x400}, /* :rebel */
     /* retired from language:
     {"set",         p_set,      0x400},
     {"setf",        p_setf,     0x400},
