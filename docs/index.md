@@ -10,7 +10,7 @@ css:rebel.css
 - Rebel starts without initialization steps or external dependencies.
 - Rebel provides one binary under 350 KB containing 370+ functions and an FFI interface.
 - Rebel evaluates expressions as graphs of CELL objects.
-- Rebel uses a prefix expression syntax.
+- Rebel uses prefix expression syntax (Polish notation).
 - Rebel avoids implicit behavior and hidden evaluation rules.
 - Rebel does not target any language category.
 - Rebel is Rebel.
