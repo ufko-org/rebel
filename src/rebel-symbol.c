@@ -267,7 +267,6 @@ CELL *assignSymbol(SYMBOL *sPtr, CELL *content)
 
 /* ------------------------- dump RB tree info of a symbol -------------------- */
 
-#ifdef SYMBOL_DEBUG
 CELL *p_dumpSymbol(CELL *params)
 {
     char *name;
@@ -291,7 +290,6 @@ CELL *p_dumpSymbol(CELL *params)
 
     return(trueCell);
 }
-#endif
 
 
 /* ----------------------------- delete a symbol --------------------------- */
