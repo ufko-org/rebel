@@ -946,10 +946,32 @@ CELL *p_directory(CELL *params)
     return(dirList);
 }
 
+/* ufko: new realpath */
+CELL *p_realpath(CELL *params)
+{
+	char  resolved[PATH_MAX];
+	char *name;
 
+	/* no args -> current directory */
+	if(params == nilCell)
+	{
+		name = ".";
+	}
+	else
+	{
+		params = getString(params, &name);
+	}
+
+	if(realpath(name, resolved) == NULL)
+	{
+		return(nilCell);
+	}
+
+	return(stuffString(resolved));
+}
+
+/* ufko: old and unreal :)
 #define DOT_PATH ".\000"
-
-
 CELL *p_realpath(CELL *params)
 {
     char  path[PATH_MAX];
@@ -986,6 +1008,7 @@ CELL *p_realpath(CELL *params)
 
     return(stuffString(path));
 }
+*/
 
 CELL *p_fileInfo(CELL *params)
 {
