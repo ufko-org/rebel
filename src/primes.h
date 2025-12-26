@@ -37,6 +37,15 @@
     a new C implementation with new semantics.
     ---------------------------------------------------------------------
 
+    Free simple names:
+
+      - any?
+      - check
+      - count
+      - none?
+      - pick
+      - take
+
     primes.h is the authoritative source.
 */
 
@@ -47,115 +56,121 @@ PRIMITIVE primitive[] =
 {
     /* CORE ------------------------------------------------------------- */
 
-    /* core - data operations */
+    /* core - data - creators */
 
-
+    {"constant",    p_constant, 0x400},
+    {"global",      p_global,   0},
     {"def",         p_define,   0x402},
+    {"let",         p_let,      0x402},
+    {"letex",       p_letExpand,0x403},
+    {"letn",        p_letn,     0x002},
+    {"local",       p_local,    2},
     {"mac",         p_defineMacro,  0x402},
+    {"macro",       p_macro,    2},
+    {"set",         p_setdef,   0x400}, /* :rebel */ 
+    {"with",        p_with,     0x400}, /* :rebel */
+
+    /* core - data - iterators */
+    
     {"doargs",      p_doargs,   2},
     {"dolist",      p_dolist,   2},
     {"dostring",    p_dostring, 2},
     {"dotimes",     p_dotimes,  2},
     {"dotree",      p_dotree,   2},
+
+    /* core - data - sequencers */
+
+    {"array",       p_array,    0},
+    {"arraylist",   p_arrayList,    0},
+    {"list",        p_list,     0},
     {"sequence",    p_sequence, 0},
     {"series",      p_series,   0},
-    {"apply",       p_apply,    0},
-    {"args",        p_args,     0},
-    {"catch",       p_catch,    0},
-    {"clean",       p_clean,    0},
-    {"copy",        p_copy, 0},
-    {"curry",       p_curry,    0},
-    {"eval",        p_eval,     0},
-    {"filter",      p_filter,   0},
-    {"index",       p_index,    0},
-    {"map",         p_map,      0},
-    {"quote",       p_quote,    0},
-    {"silent",      p_silent,   0},
-    {"term",        p_term,     0},
-    {"throw",       p_throw,    0},
-    {"macro",       p_macro,    2},
-    {"expand",      p_expand,   0},
-    {"constant",    p_constant, 0x400},
-    {"global",      p_global,   0},
-    {"set",         p_setdef,   0x400}, /* :rebel */ 
-    {"with",        p_with,     0x400}, /* :rebel */
-    {"let",         p_let,      0x402},
-    {"local",       p_local,    2},
-    {"letn",        p_letn,     0x002},
-    {"letex",       p_letExpand,0x403},
-    {"first",       p_first,    0},
-    {"flat",        p_flat,     0},
-    {"last",        p_last,     0},
-    {"rest",        p_rest,     0},
-    {"cons",        p_cons,     0},
-    {"append",      p_append,   0},
-    {"extend",      p_extend,   0x400},
-    {"list",        p_list,     0},
-    {"nth",         p_nth,      0},
-    {"ref",         p_ref,      0},
-    {"refall",     p_refAll,   0},
-    {"refset",     p_setRef,   0x400},
-    {"refsetall", p_setRefAll,0x400},
-    {"select",      p_select,   0},
-    {"collect",     p_collect,  0},
-    {"swap",        p_swap,     0},
-    {"slice",       p_slice,    0},
-    {"length",      p_length,   0},
-    {"exists",     p_exists,   0},
-    {"find",        p_find,     0},
-    {"findall",    p_findAll,  0},
-    {"member",      p_member,   0},
-    {"intersect",   p_intersect,    0},
-    {"difference",  p_difference,   0},
-    {"union",       p_union,    0},
-    {"unique",      p_unique,   0},
-    {"assoc",       p_assoc,    0},
-    {"lookup",      p_lookup,   0},
-    {"count",       p_count,    0}, /* misleading name
-    {"freq",        p_count,    0}, /* better than count */
-    {"popassoc",   p_popAssoc, 0x400},
-    {"replace",     p_replace,  0x400},
-    {"sort",        p_sort,     0x400},
-    {"push",        p_push,     0x400},
-    {"pop",         p_pop,      0x400},
-    {"reverse",     p_reverse,  0x400},
-    {"rotate",      p_rotate,   0x400},
-    {"dup",         p_dup,      0},
-    {"array",       p_array,    0},
-    {"arraylist",  p_arrayList,    0},
-    {"unify",       p_unify,        0},
-    {"bind",        p_bind,         0x400},
-    {"join",        p_join,         0},
-    {"chop",        p_chop,         0},
-    {"explode",     p_explode,      0},
-    {"trim",        p_trim,         0},
-    {"char",        p_char,         0},
-    {"ucase",       p_upper,    0},
-    {"lcase",       p_lower,    0},
-    {"tcase",       p_title,    0},
-    {"fmt",         p_format,   0},
-    {"match",       p_match,    0},
-    {"rx",          p_regex,    0},
-    {"rxcomp",      p_regexComp,0},
-    {"int",         p_integer,  0},
+
+    /* core - data - convertors/extractors */
+
     {"bigint",      p_bigInt,   0},
-    {"float",       p_float,    0},
-    {"string",      p_string,   0},
     {"bits",        p_bits,     0},
+    {"char",        p_char,         0},
+    {"float",       p_float,    0},
+    {"int",         p_integer,  0},
+    {"string",      p_string,   0},
     {"sym",         p_symbol,   0},
-    {"parse",       p_parse,    0},
+
+    /* core - data - transformers */
     {"uuid",        p_uuid,         0},
     {"encrypt",     p_encrypt,  0},
     {"b64enc",      p_base64Enc,    0},
     {"b64dec",      p_base64Dec,    0},
     {"crc32",       p_crc32,    0},
+
+    /* core - data - workers */
+
+    {"append",      p_append,   0},
+    {"apply",       p_apply,    0},
+    {"assoc",       p_assoc,    0},
+    {"bind",        p_bind,         0x400},
+    {"chop",        p_chop,         0},
+    {"clean",       p_clean,    0},
+    {"collect",     p_collect,  0},
+    {"cons",        p_cons,     0},
+    {"curry",       p_curry,    0},
+    {"freq",        p_count,    0}, /* better than count */
+    {"difference",  p_difference,   0},
+    {"dup",         p_dup,      0},
+    {"exists",      p_exists,   0},
+    {"expand",      p_expand,   0},
+    {"explode",     p_explode,      0},
+    {"extend",      p_extend,   0x400},
+    {"filter",      p_filter,   0},
+    {"find",        p_find,     0},
+    {"findall",     p_findAll,  0},
+    {"first",       p_first,    0},
+    {"flat",        p_flat,     0},
+    {"fmt",         p_format,   0},
+    {"index",       p_index,    0},
+    {"intersect",   p_intersect,    0},
+    {"join",        p_join,         0},
+    {"last",        p_last,     0},
+    {"lcase",       p_lower,    0},
+    {"length",      p_length,   0},
+    {"lookup",      p_lookup,   0},
+    {"map",         p_map,      0},
+    {"match",       p_match,    0},
+    {"member",      p_member,   0},
+    {"nth",         p_nth,      0},
+    {"parse",       p_parse,    0},
+    {"pop",         p_pop,      0x400},
+    {"popassoc",    p_popAssoc, 0x400},
+    {"push",        p_push,     0x400},
+    {"ref",         p_ref,      0},
+    {"refall",      p_refAll,   0},
+    {"refset",      p_setRef,   0x400},
+    {"refsetall",   p_setRefAll,0x400},
+    {"replace",     p_replace,  0x400},
+    {"rest",        p_rest,     0},
+    {"reverse",     p_reverse,  0x400},
+    {"rotate",      p_rotate,   0x400},
+    {"rx",          p_regex,    0},
+    {"rxcomp",      p_regexComp,0},
+    {"select",      p_select,   0},
+    {"slice",       p_slice,    0},
+    {"sort",        p_sort,     0x400},
+    {"swap",        p_swap,     0},
+    {"tcase",       p_title,    0},
+    {"throw",       p_throw,    0},
+    {"trim",        p_trim,         0},
+    {"ucase",       p_upper,    0},
+    {"unify",       p_unify,        0},
+    {"union",       p_union,    0},
+    {"unique",      p_unique,   0},
+
     #ifdef SUPPORT_UTF8
     {"unicode",     p_unicode,  0},
     {"utf8",        p_utf8,     0},
     {"utf8len",     p_utf8len,  0},
     #endif
 
-    /* core - math basic */
+    /* core - math - int */
 
     {"+",           p_add,      0},
     {"-",           p_subtract, 0},
@@ -164,6 +179,9 @@ PRIMITIVE primitive[] =
     {"%",           p_modulo,   0},
     {"++",          p_incrementI,0x400},
     {"--",          p_decrementI,0x400},
+
+    /* core - math - float */
+
     {"add",         p_addFloat, 0},
     {"sub",         p_subFloat, 0},
     {"mul",         p_mulFloat, 0},
@@ -172,7 +190,7 @@ PRIMITIVE primitive[] =
     {"inc",         p_incrementF,0x400},
     {"dec",         p_decrementF,0x400},
 
-    /* core - math extended */
+    /* core - math - float extended */
 
     {"abs",         p_abs,      0},
     {"acos",        p_acos,     0},
@@ -189,7 +207,7 @@ PRIMITIVE primitive[] =
     {"exp",         p_exp,      0},
     {"factor",      p_factor,   0},
     {"floor",       p_floor,    0},
-    {"gcd",         p_gcd,          0},
+    {"gcd",         p_gcd,      0},
     {"log",         p_log,      0},
     {"max",         p_maxFloat, 0},
     {"min",         p_minFloat, 0},
@@ -206,6 +224,7 @@ PRIMITIVE primitive[] =
     /* core - flow */
 
     {"do",          p_evalBlock,1},
+    {"silent",      p_silent,   0},
     {"case",        p_case,     2},
     {"cond",        p_condition,1},
     {"dountil",     p_doUntil,  2},
@@ -275,9 +294,9 @@ PRIMITIVE primitive[] =
     /* core - io - via std */
 
     {"pprint",          p_prettyPrint,  0},
-    {"pr",          p_print,    0},
-    {"prn",         p_println,  0},
-    {"readkey",    p_readKey,  0}, /* reads user input */
+    {"pr",              p_print,    0},
+    {"prn",             p_println,  0},
+    {"readkey",         p_readKey,  0}, /* reads user input */
 
     /* core - io - via device number */
     
@@ -294,7 +313,7 @@ PRIMITIVE primitive[] =
     {"writel",  p_writeLine,    0},
     {"read",    p_readBuffer,0x400}, /* orig short for read-buff */
     {"write",   p_writeBuffer,0}, /* orig short for write-buff */
-    {"cline", p_currentLine,0},
+    {"cline",   p_currentLine,0},
 
     /* core - io - via path */
 
@@ -302,19 +321,19 @@ PRIMITIVE primitive[] =
     {"finfo",   p_fileInfo, 0},
     {"fappend", p_appendFile,   0},
     {"fread",   p_readFile, 0},
-    {"fwrite",   p_writeFile, 0},
+    {"fwrite",  p_writeFile, 0},
     {"fcopy",   p_copyFile, 0},
-    {"fmove", p_renameFile,   0},
-    {"fdel", p_deleteFile,   0},
-    {"fsearch",      p_search,   0},
+    {"fmove",   p_renameFile,   0},
+    {"fdel",    p_deleteFile,   0},
+    {"fsearch", p_search,   0},
     
     /* core - io - directories */
 
-    {"dir",   p_directory,    0},
+    {"dir",       p_directory,    0},
     {"dirpath",   p_realpath,     0},
-    {"dirmk",    p_makeDir,  0},
-    {"dirrm",  p_removeDir,    0},
-    {"dircd",  p_changeDir,    0},
+    {"dirmk",     p_makeDir,  0},
+    {"dirrm",     p_removeDir,    0},
+    {"dircd",     p_changeDir,    0},
 
     /* core - OS/CILK processes */
 
@@ -335,26 +354,37 @@ PRIMITIVE primitive[] =
     {"semaphore",   p_semaphore,0},
     {"peek",        p_peek,     0},
 
-    /* core - interpreter internals or not-sorted for now */
+    /* core - internals */
 
     {"$",           p_systemSymbol, 0},
     {":",           p_colon,    0},
+
+    {"args",        p_args,     0},
+    {"argv",        p_mainArgs, 0},
+    {"catch",       p_catch,    0},
     {"commandevent", p_commandEvent, 0},
     {"context",     p_context,  0},
+    {"contextdefault",     p_default,  0}, /* art relict? */
+    {"copy",        p_copy, 0},
+    {"defnew",     p_defineNew,    0},
     {"delete",      p_deleteSymbol, 0},
     {"dump",        p_dump,         0},
     {"dumpsym",     p_dumpSymbol,   0},
     {"env",         p_env,      0},
     {"errorevent", p_errorEvent,   0},
+    {"eval",        p_eval,     0},
     {"evalstr", p_evalString,   0},
     {"exit",        p_exit,     0},
     {"history",     p_history, 0},
     {"lasterr",  p_lastError, 0},
     {"load",        p_load,     0},
+    {"locale",      p_setLocale,    0},
+    {"new",         p_new,      0},
     {"prefix",      p_prefix,   0},
     {"promptevent",p_promptEvent,  0},
-    {"readexpr",   p_readExpr,     0},
+    {"quote",       p_quote,    0},
     {"readerevent",    p_readerEvent, 0},
+    {"readexpr",   p_readExpr,     0},
     {"reset",       p_reset,    0},
     {"save",        p_save,     0},
     {"self",        p_self,     0},
@@ -362,15 +392,11 @@ PRIMITIVE primitive[] =
     {"symbols",     p_symbols,  0},
     {"syserr",   p_systemError,  0},
     {"sysinfo",    p_systemInfo,   0},
+    {"term",        p_term,     0},
     {"throwerror", p_throwError,   0},
     {"timer",       p_timerEvent,   0},
     {"trace",       p_trace,    0},
     {"xferevent",  p_transferEvent, 0},
-    {"new",         p_new,      0},
-    {"defnew",     p_defineNew,    0},
-    {"contextdefault",     p_default,  0}, /* art relict? */
-    {"argv",        p_mainArgs, 0},
-    {"locale",      p_setLocale,    0},
     #ifdef DEBUGGER
     {"debug",       p_debug,    0},
     {"tracemark",     p_traceHighlight,0},
@@ -511,12 +537,12 @@ PRIMITIVE primitive[] =
 
     /* non-core - finantial math */
 
-    {"pmt",         p_pmt,          0},
-    {"pv",          p_pv,           0},
-    {"fv",          p_fv,           0},
-    {"nper",        p_nper,         0},
-    {"npv",         p_npv,          0},
-    {"irr",         p_irr,      0},
+    {"fin-pmt",         p_pmt,          0},
+    {"fin-pv",          p_pv,           0},
+    {"fin-fv",          p_fv,           0},
+    {"fin-nper",        p_nper,         0},
+    {"fin-npv",         p_npv,          0},
+    {"fin-irr",         p_irr,      0},
       
     /* non-core - encoding */
 
