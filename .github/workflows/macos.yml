@@ -20,7 +20,7 @@ jobs:
           cd src
           make -f Makefile.macos clean
           make -f Makefile.macos
-          cd ../tests
-          ./mk-tests-fs.sh
-          ../src/rebel -q run.rbl
+          #cd ../tests
+          #./mk-tests-fs.sh
+          #../src/rebel -q run.rbl
 

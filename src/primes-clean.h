@@ -133,7 +133,7 @@ PRIMITIVE primitive[] =
     {"ucase",       p_upper,    0},
     {"lcase",       p_lower,    0},
     {"tcase",       p_title,    0},
-    {"fmt",         p_format,   0},
+    {"format",      p_format,   0},
     {"match",       p_match,    0},
     {"rx",          p_regex,    0},
     {"rxcomp",      p_regexComp,0},

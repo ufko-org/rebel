@@ -22,7 +22,7 @@
 ; Macro functor
 ; ---------------------------------------------------------------------
 (context 'test)
-(define-macro (test:test name expr want (re 0))
+(mac (test:test name expr want (re 0))
   (set expr (eval expr))
   (set want (eval want))
   (if (= test:pass nil) (set test:pass 0))
@@ -31,24 +31,24 @@
 
   (if (= re 0)
     (if (= expr want)
-      (begin
+      (do
         (++ test:pass)
-        (println (format "Test: %s\n\tpass: %s" 
+        (prn (fmt "Test: %s\n\tpass: %s" 
           name (string expr))))
-      (begin
+      (do
         (++ test:fail)
-        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+        (prn (fmt "Test: %s\n\tfail: want: %s got: %s" 
           name (string want) (string expr))))))
 
   (if (= re 1)
-    (if (regex (string want) (string expr))
-      (begin
+    (if (rx (string want) (string expr))
+      (do
         (++ test:pass)
-        (println (format "Test: %s\n\tpass: %s" 
+        (prn (fmt "Test: %s\n\tpass: %s" 
           name (string expr))))
-      (begin
+      (do
         (++ test:fail)
-        (println (format "Test: %s\n\tfail: want: %s got: %s" 
+        (prn (fmt "Test: %s\n\tfail: want: %s got: %s" 
           name (string want) (string expr))))))
 
 )

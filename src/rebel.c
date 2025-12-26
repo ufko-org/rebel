@@ -73,7 +73,7 @@ char linkOffset[] = "&&&&@@@@";
 char preLoad[] =
     "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
     "(context 'Tree) (constant 'Tree:Tree) (context MAIN)"
-    "(define (Class:Class) (cons (context) (args)))";
+    "(def (Class:Class) (cons (context) (args)))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
@@ -3010,11 +3010,11 @@ void printFn(SYMBOL *sPtr, UINT device)
 
     if(symbolType(sPtr) == CELL_FN)
     {
-        varPrintf(device, "(define (");
+        varPrintf(device, "(def (");
     }
     else
     {
-        varPrintf(device, "(define-macro (");
+        varPrintf(device, "(mac (");
     }
     prettyPrintPars += 2;
 

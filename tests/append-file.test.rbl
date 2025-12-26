@@ -5,17 +5,17 @@
 
 ; ------------------------------------------------------------
 (test "1: append string to file"
-  (append-file "junk" "ABC")
+  (fappend "junk" "ABC")
   3
 )
 
 (test "2: append string to file using file:// URL"
-  (append-file "file://junk" "DEF")
+  (fappend "file://junk" "DEF")
   3
 )
 
 (test "3: read file and check content"
-  (= (read-file "junk") "ABCDEF")
+  (= (fread "junk") "ABCDEF")
   true
 )
 
