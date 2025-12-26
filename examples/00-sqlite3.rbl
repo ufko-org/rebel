@@ -40,7 +40,7 @@
 (sql3:close)
 
 ;; delete db file
-(if (delete-file "people.db")
+(if (fdel "people.db")
   (println "Deleting: people.db")
   (println "Can't delete: people.db"))
 (println "Done.")

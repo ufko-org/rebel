@@ -14,12 +14,12 @@
 ;; Module constants and global vars
 ;; ---------------------------------------------------------------------
 
-(define db nil)
-(define dbp "\000\000\000\000\000\000\000\000")
-(define error-message nil)
-(define col-names '())
-(define col-types '())
-(define pstm "\000\000\000\000\000\000\000\000\000")
+(set db nil)
+(set dbp "\000\000\000\000\000\000\000\000")
+(set error-message nil)
+(set col-names '())
+(set col-types '())
+(set pstm "\000\000\000\000\000\000\000\000\000")
 
 (constant 'SQLITE_OK 0)
 (constant 'SQLITE_ROW 100)
@@ -66,21 +66,21 @@
 ;; Explicitly prefixed functions to avoid conflicts with built-ins
 ;; ---------------------------------------------------------------------
 
-(define (sql3:open db-name)
+(def (sql3:open db-name)
   ;; prefixed to avoid clash with built-in open
   (if (not db)
-    (begin
+    (do
       (set result (sqlite3_open db-name dbp))
       (if (!= result SQLITE_OK)
         (set db nil)
-        (set db (get-long dbp))))
-    (begin
+        (set db (getlong dbp))))
+    (do
       (set error-message "A database is already open")
       nil)))
 
-(define (sql3:close)
+(def (sql3:close)
   ;; prefixed to avoid clash with built-in close
-	(if db (begin
+	(if db (do
 		(sqlite3_close db)
 		(set db nil)
 		true)))
@@ -88,7 +88,7 @@
 ;; Internal module helpers
 ;; ---------------------------------------------------------------------
 
-(define (bind-parameter pstm param value)
+(def (bind-parameter pstm param value)
 	(let (idx param)
 		(unless (integer? param)
 			(set idx (sqlite3_bind_parameter_index pstm
@@ -99,52 +99,52 @@
 			((nil? value) (sqlite3_bind_null pstm idx))
 			(true (sqlite3_bind_text pstm idx (string value) (length (string value)) -1)))))
 
-(define (get-values pstm cols) 
+(def (get-values pstm cols) 
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
 		(case (nth idx col-types idx)
 			(SQLITE_INTEGER 
 				(set pstr (sqlite3_column_text pstm i)) 
-				(if (= pstr 0) (push nil row -1) (push (int (get-string pstr)) row -1))) 
+				(if (= pstr 0) (push nil row -1) (push (int (getstring pstr)) row -1))) 
 			(SQLITE_FLOAT 
 				(set pstr (sqlite3_column_text pstm i))
-				(if (= pstr 0) (push nil row -1) (push (float (get-string pstr)) row -1)))
+				(if (= pstr 0) (push nil row -1) (push (float (getstring pstr)) row -1)))
 			(SQLITE_TEXT 
 				(set pstr (sqlite3_column_text pstm i))
-				(if (= pstr 0) (push "" row -1) (push (get-string pstr) row -1)))
+				(if (= pstr 0) (push "" row -1) (push (getstring pstr) row -1)))
 			(SQLITE_BLOB 
 				(set pstr (sqlite3_column_blob pstm i))
 				(set len (sqlite3_column_bytes pstm i))
 				(set buff (dup "\000" len))
-				(if (= pstr 0) (push "" row -1) (begin (cpymem pstr buff len) (push buff row -1))))
+				(if (= pstr 0) (push "" row -1) (do (cpymem pstr buff len) (push buff row -1))))
 			(SQLITE_NULL 
 				(push nil row -1))))
 	row)
 
-(define (get-names pstm cols) 
+(def (get-names pstm cols) 
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
 		(set ps (sqlite3_column_name pstm i))
-		(if (= ps 0) (push "" row -1) (push (get-string ps) row -1)))
+		(if (= ps 0) (push "" row -1) (push (getstring ps) row -1)))
 	row)
 
-(define (get-types pstm cols)
+(def (get-types pstm cols)
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
 		(push (nth (sqlite3_column_type pstm i) SQLITE_TYPES) row -1))
 	row)
 
-(define (set-error)
+(def (set-error)
 	(set result (sqlite3_errmsg db))
-	(if (= result 0) (set error-message nil) (set error-message (get-string result)) nil))
+	(if (= result 0) (set error-message nil) (set error-message (getstring result)) nil))
 
 ;; SQL query function
 ;; ---------------------------------------------------------------------
 
-(define (sql sql-str sql-args)
+(def (sql sql-str sql-args)
 	(set result nil done nil error-message nil)
 	(set sqarray '())
 	(set col-names '())
@@ -154,7 +154,7 @@
 	(set pptail "\000\000\000\000\000\000\000\000") ; pointer to statement tail
 
 	(if db (set result (sqlite3_prepare_v2 db sql-str -1 ppstm pptail)))
-	(set pstm (get-long ppstm))
+	(set pstm (getlong ppstm))
 
 	(if (and (= result SQLITE_OK) sql-args)
   		(let (argi 0)
@@ -176,7 +176,7 @@
 		))
 
 	(if (= result SQLITE_DONE)
-		(begin
+		(do
 			(set result (sqlite3_finalize pstm))
 			(if (> num-cols 0) sqarray true))
 		(if (= result 0) true (set-error))))
@@ -184,13 +184,13 @@
 ;; Module functions
 ;; ---------------------------------------------------------------------
 
-(define (colnames) col-names)
-(define (rowid) (if db (sqlite3_last_insert_rowid db)))
-(define (tables) (if db (set lst (sql "select tbl_name from sqlite_master")) (if lst (set lst (first (transpose lst))))))
-(define (columns aTable) (if (list? (sql (append "select * from " aTable " where 0;"))) col-names))
-(define (changes) (if db (sqlite3_changes db)))
-(define (timeout ms) (if db (zero? (sqlite3_busy_timeout db (int ms)))))
-(define (error) error-message)
+(def (colnames) col-names)
+(def (rowid) (if db (sqlite3_last_insert_rowid db)))
+(def (tables) (if db (set lst (sql "select tbl_name from sqlite_master")) (if lst (set lst (first (transpose lst))))))
+(def (columns aTable) (if (list? (sql (append "select * from " aTable " where 0;"))) col-names))
+(def (changes) (if db (sqlite3_changes db)))
+(def (timeout ms) (if db (zero? (sqlite3_busy_timeout db (int ms)))))
+(def (error) error-message)
 
 ;; ---------------------------------------------------------------------
 (println "Loaded: sqlite3 module")
