@@ -37,11 +37,16 @@
     a new C implementation with new semantics.
     ---------------------------------------------------------------------
 
-    Naming rules:
+    Function naming rules:
     noun
     action
-    nounaction
-    allowed chars in core names: [a-z0-9?]
+    nounaction 
+    modifiernoun 
+
+    Special form rules:
+    actionfamily
+
+    Allowed chars in core names: [a-z0-9?]
 
     Free simple names:
 
@@ -82,7 +87,6 @@ PRIMITIVE primitive[] =
     {"doargs",           p_doargs,           2},
     {"dolist",           p_dolist,           2},
     {"dostring",         p_dostring,         2},
-    {"dotimes",          p_dotimes,          2},
     {"dotree",           p_dotree,           2},
 
     /* core - data - sequencers */
@@ -237,6 +241,7 @@ PRIMITIVE primitive[] =
     {"cond",             p_condition,        1},
     {"dountil",          p_doUntil,          2},
     {"dowhile",          p_doWhile,          2},
+    {"dotimes",          p_dotimes,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"unless",           p_unless,           2},
