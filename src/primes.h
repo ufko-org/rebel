@@ -60,13 +60,13 @@ PRIMITIVE primitive[] =
 
     {"constant",         p_constant, 0x400},
     {"global",           p_global,   0},
-    {"def",              p_define,   0x402},
     {"let",              p_let,      0x402},
     {"letex",            p_letExpand,0x403},
     {"letn",             p_letn,     0x002},
     {"local",            p_local,    2},
     {"mac",              p_defineMacro,  0x402},
     {"macro",            p_macro,    2},
+    {"def",              p_define,   0x402},
     {"set",              p_setdef,   0x400}, /* :rebel */ 
     {"with",             p_with,     0x400}, /* :rebel */
 
@@ -97,11 +97,12 @@ PRIMITIVE primitive[] =
     {"sym",              p_symbol,   0},
 
     /* core - data - transformers */
-    {"uuid",             p_uuid,         0},
-    {"encrypt",          p_encrypt,  0},
-    {"b64enc",           p_base64Enc,    0},
+
     {"b64dec",           p_base64Dec,    0},
+    {"b64enc",           p_base64Enc,    0},
     {"crc32",            p_crc32,    0},
+    {"encrypt",          p_encrypt,  0},
+    {"uuid",             p_uuid,         0},
 
     /* core - data - workers */
 
@@ -246,19 +247,14 @@ PRIMITIVE primitive[] =
 
     {"<",                p_less, 0},
     {"lt",               p_less, 0},
-
     {">",                p_greater,  0},
     {"gt",               p_greater,  0},
-
     {"<=",               p_lessEqual,0},
     {"le",               p_lessEqual,0},
-
     {">=",               p_greaterEqual,0},
     {"ge",               p_greaterEqual,0},
-
     {"=",                p_equal,    0},
     {"eq",               p_equal,    0},
-
     {"!=",               p_notEqual, 0},
     {"ne",               p_notEqual, 0},
 
@@ -266,19 +262,14 @@ PRIMITIVE primitive[] =
 
     {"<<",               p_shiftLeft,0},
     {"shl",              p_shiftLeft,0},
-
     {">>",               p_shiftRight,   0},
     {"shr",              p_shiftRight,   0},
-
     {"&",                p_bitAnd,   0},
     {"band",             p_bitAnd,   0},
-
     {"|",                p_bitOr,    0},
     {"bor",              p_bitOr,    0},
-
     {"^",                p_bitXor,   0},
     {"bxor",             p_bitXor,   0},
-
     {"~",                p_bitNot,   0},
     {"bnot",             p_bitNot,   0},
 
@@ -295,7 +286,9 @@ PRIMITIVE primitive[] =
 
     {"pprint",           p_prettyPrint,  0},
     {"pr",               p_print,    0},
+    {"print",            p_print,    0},
     {"prn",              p_println,  0},
+    {"println",          p_println,  0},
     {"readkey",          p_readKey,  0}, /* reads user input */
 
     /* core - io - via device number */
@@ -325,7 +318,7 @@ PRIMITIVE primitive[] =
     {"fcopy",   p_copyFile, 0},
     {"fmove",   p_renameFile,   0},
     {"fdel",    p_deleteFile,   0},
-    {"fsearch", p_search,   0},
+    {"fgrep",   p_search,   0},
     
     /* core - io - directories */
 
@@ -338,6 +331,7 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",           p_system,   0},
+
     {"destroy",     p_destroyProcess, 0},
     {"exec",        p_exec,     0},
     {"process",     p_process,  0},
