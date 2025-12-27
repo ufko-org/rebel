@@ -87,8 +87,8 @@ PRIMITIVE primitive[] =
     /* core - data - creators */
 
     {"constant",         p_constant,         0x400},
-    {"const",            p_constant,         0x400},
-    {"alias",            p_constant,         0x400},
+    {"const",            p_constant,         0x400}, /* :alt */
+    {"alias",            p_constant,         0x400}, /* :alt */
     {"global",           p_global,           0},
     {"let",              p_let,              0x402},
     {"letex",            p_letExpand,        0x403},
@@ -110,13 +110,13 @@ PRIMITIVE primitive[] =
     /* core - data - sequencers */
 
     {"array",            p_array,            0},
-    {"arraylist",        p_arrayList,        0},
     {"list",             p_list,             0},
     {"sequence",         p_sequence,         0},
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
 
+    {"arraylist",        p_arrayList,        0},
     {"bigint",           p_bigInt,           0},
     {"bits",             p_bits,             0},
     {"char",             p_char,             0},
@@ -276,32 +276,32 @@ PRIMITIVE primitive[] =
     /* core - comparison ops */
 
     {"<",                p_less,             0},
-    {"lt",               p_less,             0},
+    {"lt",               p_less,             0}, /* :alt */
     {">",                p_greater,          0},
-    {"gt",               p_greater,          0},
+    {"gt",               p_greater,          0}, /* :alt */
     {"<=",               p_lessEqual,        0},
-    {"le",               p_lessEqual,        0},
+    {"le",               p_lessEqual,        0}, /* :alt */
     {">=",               p_greaterEqual,     0},
-    {"ge",               p_greaterEqual,     0},
+    {"ge",               p_greaterEqual,     0}, /* :alt */
     {"=",                p_equal,            0},
-    {"eq",               p_equal,            0},
+    {"eq",               p_equal,            0}, /* :alt */
     {"!=",               p_notEqual,         0},
-    {"ne",               p_notEqual,         0},
+    {"ne",               p_notEqual,         0}, /* :alt */
 
     /* core - bit ops */
 
     {"<<",               p_shiftLeft,        0},
-    {"shl",              p_shiftLeft,        0},
+    {"shl",              p_shiftLeft,        0}, /* :alt */
     {">>",               p_shiftRight,       0},
-    {"shr",              p_shiftRight,       0},
+    {"shr",              p_shiftRight,       0}, /* :alt */
     {"&",                p_bitAnd,           0},
-    {"band",             p_bitAnd,           0},
+    {"band",             p_bitAnd,           0}, /* :alt */
     {"|",                p_bitOr,            0},
-    {"bor",              p_bitOr,            0},
+    {"bor",              p_bitOr,            0}, /* :alt */
     {"^",                p_bitXor,           0},
-    {"bxor",             p_bitXor,           0},
+    {"bxor",             p_bitXor,           0}, /* :alt */
     {"~",                p_bitNot,           0},
-    {"bnot",             p_bitNot,           0},
+    {"bnot",             p_bitNot,           0}, /* :alt */
 
     /* core - random */
 
@@ -315,9 +315,9 @@ PRIMITIVE primitive[] =
     /* core - io - via std */
 
     {"pprint",           p_prettyPrint,      0},
-    {"pr",               p_print,            0},
+    {"pr",               p_print,            0}, /* :alt */
     {"print",            p_print,            0},
-    {"prn",              p_println,          0},
+    {"prn",              p_println,          0}, /* :alt */
     {"println",          p_println,          0},
     {"readkey",          p_readKey,          0}, /* reads user input */
 
