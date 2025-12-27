@@ -395,6 +395,7 @@ PRIMITIVE primitive[] =
     {"contextdefault",   p_default,          0}, /* art relict? */
     {"copy",             p_copy,             0},
     {"defnew",           p_defineNew,        0},
+    {"cloneone",         p_defineNew,        0}, /* :alt */
     {"delete",           p_deleteSymbol,     0},
     {"dump",             p_dump,             0},
     {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
@@ -409,6 +410,7 @@ PRIMITIVE primitive[] =
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
     {"new",              p_new,              0},
+    {"clone",            p_new,              0}, /* :alt this is obviously cloning */
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
     {"quote",            p_quote,            0},
