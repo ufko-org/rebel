@@ -72,6 +72,7 @@
       - count
       - none?
       - pick
+      - shift
       - take
 
     primes.h is the authoritative source.
@@ -104,6 +105,7 @@ PRIMITIVE primitive[] =
     
     {"doargs",           p_doargs,           2},
     {"dolist",           p_dolist,           2},
+    {"each",             p_dolist,           2}, /* :alt */
     {"dostring",         p_dostring,         2},
     {"dotree",           p_dotree,           2},
 
