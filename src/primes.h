@@ -199,9 +199,6 @@ PRIMITIVE primitive[] =
     {"unique",           p_unique,           0},
 
     #ifdef SUPPORT_UTF8
-    /* ??? */
-    {"unicode",          p_unicode,          0}, /* :check */
-    {"utf8",             p_utf8,             0}, /* :check */
     {"utf8len",          p_utf8len,          0},
     #endif
 
