@@ -363,7 +363,7 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",                p_system,           0},
-    {"kill",             p_destroyProcess,   0},
+    {"kill",             p_destroyProcess,   0}, /* this is Unix */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
     {"pipe",             p_pipe,             0},
