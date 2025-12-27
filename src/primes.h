@@ -40,12 +40,13 @@
     2) A function that is typically used standalone or mapped/applied by
        another function should be named after what it does.
 
-    Function name patterns:
+    Function name patterns if possible:
 
        noun          - string            (conversion operation) 
        action        - rotate            (generic operation)
        nounaction    - stringrotate      (specific operation)
        value         - crc32             (computed value / algorithm name)
+       actionnoun    - dumpsym           (the worst)
 
     Special form names:
 
@@ -57,12 +58,13 @@
 
     Allowed characters in core names: [a-z0-9?]
 
-    Some functions may have alternative names that provide clearer meaning
-    in a given context or improve code readability/writability, e.g.:
+    Some functions may have alternative names :alt that provide clearer 
+    meaning in a given context or improve code readability/writability: 
 
     constant -> alias
     =        -> eq, is
     true?    -> ok
+    false?   -> ko
 
 
     List of free simple function names:
@@ -146,7 +148,7 @@ PRIMITIVE primitive[] =
     {"collect",          p_collect,          0},
     {"cons",             p_cons,             0},
     {"curry",            p_curry,            0},
-    {"freq",             p_count,            0}, /* better than count */
+    {"freq",             p_count,            0}, /* count is misleading */
     {"difference",       p_difference,       0},
     {"dup",              p_dup,              0},
     {"exists",           p_exists,           0},
@@ -197,8 +199,9 @@ PRIMITIVE primitive[] =
     {"unique",           p_unique,           0},
 
     #ifdef SUPPORT_UTF8
-    {"unicode",          p_unicode,          0},
-    {"utf8",             p_utf8,             0},
+    /* ??? */
+    {"unicode",          p_unicode,          0}, /* :check */
+    {"utf8",             p_utf8,             0}, /* :check */
     {"utf8len",          p_utf8len,          0},
     #endif
 
@@ -218,7 +221,7 @@ PRIMITIVE primitive[] =
     {"sub",              p_subFloat,         0},
     {"mul",              p_mulFloat,         0},
     {"div",              p_divFloat,         0},
-    {"mod",              p_modFloat,         0}, /* misleading name for remainder; fmod? rem? remf?*/
+    {"mod",              p_modFloat,         0}, /* mod is misleading; fmod? rem? remf?*/
     {"inc",              p_incrementF,       0x400},
     {"dec",              p_decrementF,       0x400},
 
@@ -321,7 +324,7 @@ PRIMITIVE primitive[] =
     {"print",            p_print,            0},
     {"prn",              p_println,          0}, /* :alt */
     {"println",          p_println,          0},
-    {"readkey",          p_readKey,          0}, /* reads user input */
+    {"readkey",          p_readKey,          0}, /* user input */
 
     /* core - io - via device number */
     
@@ -332,8 +335,8 @@ PRIMITIVE primitive[] =
     #ifdef SUPPORT_UTF8
     {"readc8",           p_readUTF8,         0},
     #endif
-    {"read",             p_readBuffer,       0x400}, /* orig short for read-buff */
-    {"write",            p_writeBuffer,      0}, /* orig short for write-buff */
+    {"read",             p_readBuffer,       0x400}, 
+    {"write",            p_writeBuffer,      0}, 
     {"readc",            p_readChar,         0},
     {"writec",           p_writeChar,        0},
     {"readln",           p_readLine,         0},
@@ -343,7 +346,7 @@ PRIMITIVE primitive[] =
     /* core - io - via path */
 
     {"fpath",            p_realpath,         0},
-    {"finfo",            p_fileInfo,         0},
+    {"finfo",            p_fileInfo,         0}, /* not all stat fields */
     {"fappend",          p_appendFile,       0},
     {"fread",            p_readFile,         0},
     {"fwrite",           p_writeFile,        0},
@@ -363,7 +366,7 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",                p_system,           0},
-    {"destroy",          p_destroyProcess,   0},
+    {"kill",             p_destroyProcess,   0},
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
     {"pipe",             p_pipe,             0},
@@ -394,7 +397,7 @@ PRIMITIVE primitive[] =
     {"defnew",           p_defineNew,        0},
     {"delete",           p_deleteSymbol,     0},
     {"dump",             p_dump,             0},
-    {"dumpsym",          p_dumpSymbol,       0},
+    {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
     {"etime",            p_time,             0}, /* measures elapsed eval time */
