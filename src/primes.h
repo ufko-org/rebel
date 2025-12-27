@@ -17,38 +17,55 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     ---------------------------------------------------------------------
+
     NOTE:
+
     This table defines the active Rebel language interface.
-     
+
     Names may change or disappear over time.
     For backward compatibility, users can define their own aliases
     or migrate to the current names listed here.
 
-    All original primitives are either still available as working
-    alternatives or commented out when retired. Commented entries
-    remain in this file as historical reference.
-
-    Alternatives always appear grouped together and can be
-    identified by sharing the same underlying C function.
-     
-    ---------------------------------------------------------------------
     Any brand new primitive, if added, is marked with a
     :rebel comment next to it, indicating
     a new C implementation with new semantics.
+
     ---------------------------------------------------------------------
 
-    Function naming rules:
-    noun
-    action
-    nounaction 
-    modifiernoun 
+    Function naming notes (this is harder than it looks):
 
-    Special form rules:
-    actionfamily
+    1) A function that may be used standalone but is mostly used as an
+       argument to another function should be named after what it returns.
 
-    Allowed chars in core names: [a-z0-9?]
+    2) A function that is typically used standalone or mapped/applied by
+       another function should be named after what it does.
 
-    Free simple names:
+    Function name patterns:
+
+       noun          - string            (conversion operation) 
+       action        - rotate            (generic operation)
+       nounaction    - stringrotate      (specific operation)
+       value         - crc32             (computed value / algorithm name)
+
+    Special form names:
+
+       actionfamily  - dolist, dostring, do*
+
+    Core function names should be as short as possible while still allowing
+    a reasonable guess of what they do or return. Fancy characters other
+    than '?' are reserved for wild userland.
+
+    Allowed characters in core names: [a-z0-9?]
+
+    Some functions may have alternative names that provide clearer meaning
+    in a given context or improve code readability/writability, e.g.:
+
+    constant -> alias
+    =        -> eq, is
+    true?    -> ok
+
+
+    List of free simple function names:
 
       - any?
       - check
@@ -70,6 +87,7 @@ PRIMITIVE primitive[] =
     /* core - data - creators */
 
     {"constant",         p_constant,         0x400},
+    {"const",            p_constant,         0x400},
     {"alias",            p_constant,         0x400},
     {"global",           p_global,           0},
     {"let",              p_let,              0x402},
@@ -363,6 +381,7 @@ PRIMITIVE primitive[] =
 
     {"$",                p_systemSymbol,     0},
     {":",                p_colon,            0},
+
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
@@ -376,6 +395,7 @@ PRIMITIVE primitive[] =
     {"dumpsym",          p_dumpSymbol,       0},
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
+    {"etime",            p_time,             0}, /* measures elapsed eval time */
     {"eval",             p_eval,             0},
     {"evalstr",          p_evalString,       0},
     {"exit",             p_exit,             0},
@@ -401,6 +421,7 @@ PRIMITIVE primitive[] =
     {"timer",            p_timerEvent,       0},
     {"trace",            p_trace,            0},
     {"xferevent",        p_transferEvent,    0},
+
     #ifdef DEBUGGER
     {"debug",            p_debug,            0},
     {"tracemark",        p_traceHighlight,   0},
@@ -410,22 +431,22 @@ PRIMITIVE primitive[] =
     
     {"address",          p_address,          0},
     {"callback",         p_callback,         0},
-    {"cpymem",           p_copyMemory,       0},
     {"flt",              p_flt,              0},
+    {"getchar",          p_getChar,          0},
     {"getfloat",         p_getFloat,         0},
-    {"getstring",        p_getString,        0},
     {"getint",           p_getInteger,       0},
     {"getlong",          p_getLong,          0},
-    {"getchar",          p_getChar,          0},
+    {"getstring",        p_getString,        0},
     {"import",           p_importLib,        0},
+    {"memcpy",           p_copyMemory,       0},
     {"pack",             p_pack,             0},
-    {"unpack",           p_unpack,           0},
-    {"struct",           p_struct,           0},
     {"sleep",            p_sleep,            0},
+    {"struct",           p_struct,           0},
+    {"unpack",           p_unpack,           0},
 
     /* core - predicates */
 
-    {"NaN?",             p_isnan,            0},
+    {"nan?",             p_isnan,            0},
     {"all?",             p_forAll,           0},
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
@@ -459,13 +480,12 @@ PRIMITIVE primitive[] =
 
     /* core - date and time */
 
-    {"date",             p_date,             0},
-    {"time",             p_time,             0},
-    {"timeofday",        p_timeOfDay,        0},
-    {"now",              p_now,              0},
-    {"dateparse",        p_dateParse,        0},
-    {"datelist",         p_dateList,         0},
-    {"epoch",            p_dateValue,        0},
+    {"date",             p_date,             0}, /* date as string */ 
+    {"datelist",         p_dateList,         0}, /* date time as list */
+    {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date */
+    {"time",             p_dateValue,        0}, /* seconds since epoch to now*/ 
+    {"timelist",         p_now,              0}, /* curent date time +/-sec offset as list */
+    {"timeofday",        p_timeOfDay,        0}, /* seconds elapsed since midnight */
 
     /* core - network */
 
@@ -506,55 +526,55 @@ PRIMITIVE primitive[] =
 
     /* non-core - matrix ops */
 
-    {"mat-transpose",    p_matTranspose,     0},
-    {"mat-multiply",     p_matMultiply,      0},
-    {"mat-invert",       p_matInvert,        0},
-    {"mat-det",          p_determinant,      0},
-    {"mat-apply",        p_matScalar,        0},
+    {"transpose",        p_matTranspose,     0},
+    {"multiply",         p_matMultiply,      0},
+    {"invert",           p_matInvert,        0},
+    {"det",              p_determinant,      0},
+    {"mat",              p_matScalar,        0},
 
     /* non-core - statistics */
 
-    {"st-bayestrain",    p_bayesTrain,       0},
-    {"st-bayesquery",    p_bayesQuery,       0},
-    {"st-kmeanstrain",   p_kmeansTrain,      0},
-    {"st-kmeansquery",   p_kmeansQuery,      0},
-    {"st-stats",         p_stats,            0},
-    {"st-ttest",         p_ttest,            0},
-    {"st-corr",          p_corr,             0},
-    {"st-probz",         p_probabilityZ,     0},
-    {"st-probchi2",      p_probabilityChi2,  0},
-    {"st-probt",         p_probabilityT,     0},
-    {"st-probf",         p_probabilityF,     0},
-    {"st-critchi2",      p_criticalChi2,     0},
-    {"st-critz",         p_criticalZ,        0},
-    {"st-critt",         p_criticalT,        0},
-    {"st-critf",         p_criticalF,        0},
-    {"st-fft",           p_fft,              0},
-    {"st-ifft",          p_ifft,             0},
-    {"st-beta",          p_beta,             0},
-    {"st-betai",         p_betai,            0},
-    {"st-gammaln",       p_gammaln,          0},
-    {"st-gammai",        p_gammai,           0},
-    {"st-binomial",      p_binomial,         0},
+    {"bayes-train",      p_bayesTrain,       0},
+    {"bayes-query",      p_bayesQuery,       0},
+    {"kmeans-train",     p_kmeansTrain,      0},
+    {"kmeans-query",     p_kmeansQuery,      0},
+    {"stats",            p_stats,            0},
+    {"t-test",           p_ttest,            0},
+    {"corr",             p_corr,             0},
+    {"prob-z",           p_probabilityZ,     0},
+    {"prob-chi2",        p_probabilityChi2,  0},
+    {"prob-t",           p_probabilityT,     0},
+    {"prob-f",           p_probabilityF,     0},
+    {"crit-chi2",        p_criticalChi2,     0},
+    {"crit-z",           p_criticalZ,        0},
+    {"crit-t",           p_criticalT,        0},
+    {"crit-f",           p_criticalF,        0},
+    {"fft",              p_fft,              0},
+    {"ifft",             p_ifft,             0},
+    {"beta",             p_beta,             0},
+    {"betai",            p_betai,            0},
+    {"gammaln",          p_gammaln,          0},
+    {"gammai",           p_gammai,           0},
+    {"binomial",         p_binomial,         0},
 
     /* non-core - finantial math */
 
-    {"fin-pmt",          p_pmt,              0},
-    {"fin-pv",           p_pv,               0},
-    {"fin-fv",           p_fv,               0},
-    {"fin-nper",         p_nper,             0},
-    {"fin-npv",          p_npv,              0},
-    {"fin-irr",          p_irr,              0},
+    {"pmt",          p_pmt,              0},
+    {"pv",           p_pv,               0},
+    {"fv",           p_fv,               0},
+    {"nper",         p_nper,             0},
+    {"npv",          p_npv,              0},
+    {"irr",          p_irr,              0},
       
     /* non-core - encoding */
 
     #ifdef XML_SUPPORT
-    {"enc-xmlparse",     p_XMLparse,         0},
-    {"enc-xmlerror",     p_XMLerror,         0},
-    {"enc-xmltypetags",  p_XMLtypeTags,      0},
+    {"xml-parse",     p_XMLparse,         0},
+    {"xml-error",     p_XMLerror,         0},
+    {"xml-type-tags",  p_XMLtypeTags,      0},
     #endif
-    {"enc-jsonparse",    p_JSONparse,        0},
-    {"enc-jsonerror",    p_JSONerror,        0},
+    {"json-parse",    p_JSONparse,        0},
+    {"json-error",    p_JSONerror,        0},
 
     #endif /* NON_CORE */
 
