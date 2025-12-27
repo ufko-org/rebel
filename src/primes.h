@@ -218,7 +218,7 @@ PRIMITIVE primitive[] =
     {"sub",              p_subFloat,         0},
     {"mul",              p_mulFloat,         0},
     {"div",              p_divFloat,         0},
-    {"mod",              p_modFloat,         0}, /* mod is misleading; fmod? rem? remf?*/
+    {"mod",              p_modFloat,         0}, /* mod is misleading; fmod? rem? remf? or explain in manual */
     {"inc",              p_incrementF,       0x400},
     {"dec",              p_decrementF,       0x400},
 
