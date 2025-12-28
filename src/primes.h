@@ -321,10 +321,10 @@ PRIMITIVE primitive[] =
     /* core - io - via std */
 
     {"pprint",           p_prettyPrint,      0},
-    {"pr",               p_print,            0}, /* :alt */
     {"print",            p_print,            0},
-    {"prn",              p_println,          0}, /* :alt */
+    {"pr",               p_print,            0}, /* :alt */
     {"println",          p_println,          0},
+    {"prn",              p_println,          0}, /* :alt */
     {"readkey",          p_readKey,          0}, /* user input */
 
     /* core - io - via device number */
@@ -487,7 +487,7 @@ PRIMITIVE primitive[] =
     {"true?",            p_isTrue,           0},
     {"zero?",            p_isZero,           0},
 
-    /* core - flow - intent markers - beating implicit conversions */
+    /* core - flow - intent markers */
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit value -> boolean */
 
