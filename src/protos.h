@@ -177,6 +177,7 @@ CELL *p_criticalF(CELL *params);
 CELL *p_currentLine(CELL *params);
 CELL *p_curry(CELL *params);
 CELL *p_date(CELL *params);
+CELL *p_dateISO(CELL *params);
 CELL *p_dateList(CELL *params);
 CELL *p_dateParse(CELL *params);
 CELL *p_dateValue(CELL *params);

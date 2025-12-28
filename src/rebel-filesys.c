@@ -2646,6 +2646,54 @@ CELL *p_now(CELL *params)
     return(cell);
 }
 
+/* ufko: New primitive based on p_dateList
+   Convert Unix epoch seconds to SQLite-compatible
+   ISO date string: YYYY-MM-DD HH:MM:SS (UTC) */
+CELL *p_dateISO(CELL *params)
+{
+    struct tm *ttm;
+    ssize_t timeValue;
+    time_t timer;
+    char buf[20];
+    int year, month, day, hour, min, sec;
+
+    if(params == nilCell)
+    {
+        timeValue = currentDateValue();
+    }
+    else
+    {
+        getInteger(params, (UINT *)&timeValue);
+    }
+
+    timer = (time_t)timeValue;
+    ttm = gmtime(&timer);
+    if(ttm == NULL)
+    {
+        return(errorProcExt2(
+            ERR_INVALID_PARAMETER,
+            stuffInteger((UINT)timeValue)
+        ));
+    }
+
+    year  = ttm->tm_year + 1900;
+    month = ttm->tm_mon + 1;
+    day   = ttm->tm_mday;
+    hour  = ttm->tm_hour;
+    min   = ttm->tm_min;
+    sec   = ttm->tm_sec;
+
+    snprintf(
+        buf,
+        sizeof(buf),
+        "%04d-%02d-%02d %02d:%02d:%02d",
+        year, month, day, hour, min, sec
+    );
+
+    return(stuffString(buf));
+}
+
+
 CELL *p_dateList(CELL *params)
 {
     struct tm *ttm;
@@ -2736,7 +2784,12 @@ CELL *p_dateValue(CELL *params)
 }
 
 
-/* changed for 10.6.1 where time_t can be 64-bit on 32-bit Windows */
+/* ufko:
+ Convert a Gregorian calendar date to Unix epoch seconds.
+ The calculation is purely arithmetic, independent of
+ system timezone, locale, or daylight saving rules.
+ The result represents seconds since 1970-01-01 00:00:00 UTC.
+ */
 time_t calcDateValue(int year, int month, int day, int hour, int min, int sec)
 {
     time_t dateValue;
