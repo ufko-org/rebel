@@ -66,6 +66,8 @@
     true?    -> ok
     false?   -> ko
 
+    Some alternative functions can replace original functions in future.
+
 
     List of free simple function names:
 
@@ -73,7 +75,6 @@
       - check
       - count
       - none?
-      - pick
       - shift
       - take
 
@@ -151,7 +152,8 @@ PRIMITIVE primitive[] =
     {"freq",             p_count,            0}, /* count is misleading */
     {"difference",       p_difference,       0},
     {"dup",              p_dup,              0},
-    {"exists",           p_exists,           0},
+    {"exists",           p_exists,           0}, /* misleading name. looks like predicate, returns value/nil */
+    {"pickif",           p_exists,           0}, /* :alt */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -308,6 +310,7 @@ PRIMITIVE primitive[] =
     /* core - random */
 
     {"amb",              p_amb,              0},
+    {"pick",             p_amb,              0}, /* :alt */
     {"normal",           p_normal,           0},
     {"rand",             p_rand,             0},
     {"random",           p_random,           0},
@@ -481,6 +484,10 @@ PRIMITIVE primitive[] =
     {"symbol?",          p_isSymbol,         0},
     {"true?",            p_isTrue,           0},
     {"zero?",            p_isZero,           0},
+
+    /* core - flow - intent markers - beating implicit conversions */
+
+    {"ok",               p_isTrue,           0}, /* :alt, explicit value -> boolean */
 
     /* core - date and time */
 
