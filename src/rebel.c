@@ -128,7 +128,7 @@ SYMBOL *listIdxSymbol;
 SYMBOL *itSymbol;
 SYMBOL *sysxSymbol;
 SYMBOL *countSymbol;
-SYMBOL *beginSymbol;
+SYMBOL *doSymbol;
 SYMBOL *expandSymbol;
 
 SYMBOL *sysSymbol[MAX_REGEX_EXP];
@@ -1342,7 +1342,7 @@ void initialize(void)
     itSymbol = translateCreateSymbol("$it", CELL_NIL, mainContext, TRUE);
     countSymbol = translateCreateSymbol("$count", CELL_NIL, mainContext, TRUE);
     sysxSymbol = translateCreateSymbol("$x", CELL_NIL, mainContext, TRUE);
-    beginSymbol = translateCreateSymbol("begin", CELL_NIL, mainContext, TRUE);
+    doSymbol = translateCreateSymbol("do", CELL_NIL, mainContext, TRUE);
     expandSymbol = translateCreateSymbol("expand", CELL_NIL, mainContext, TRUE);
 
     symbol = translateCreateSymbol("ostype", CELL_STRING, mainContext, TRUE);
@@ -5256,8 +5256,14 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
     {
         if(body->next != nilCell)
         {
-            /* body has multiple expressions (expand '(begin ...)) */
-            cell = stuffSymbol(beginSymbol);
+            /* ufko: 
+            body has multiple expressions (expand '(do ...)) 
+            > (macro (m a b) (a) (b))
+            (fn-macro (a b) (expand '(do
+               (a)
+               (b))))
+            */
+            cell = stuffSymbol(doSymbol);
             cell->next = body;
             body = makeCell(CELL_EXPRESSION, (UINT)cell);
         }
