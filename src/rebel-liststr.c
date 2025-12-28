@@ -53,8 +53,7 @@ size_t adjustNegativeIndex(ssize_t index, size_t length)
 size_t adjustCount(ssize_t count, ssize_t length)
 {
     /*
-    negative rotate bug fixed:
-    https://newlispfanclub.com/index.php?topic=5261.msg25276#msg25276
+    ufko: negative rotate bug fixed:
     if(length <= 1 || count == 0 || length == labs(count))
     */
     if (length <= 1 || count == 0 || length == labs(count) || count % length == 0)
