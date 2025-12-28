@@ -56,14 +56,14 @@ int bigEndian = 1; /* gets set in main() */
 
 int version = 10000; /*v.1.0*/
 char copyright[] =
-    "\n Rebel v1.0 (C) 2025 Ufko (ufko.org).\n Usage: rebel [options] [file ...]\n Options:\n\n";
+    "\n Rebel (C) 2025 Ufko (ufko.org).\n Usage: rebel [options] [file ...]\n Options:\n\n";
 
 #ifdef SUPPORT_UTF8
     char banner[]=
-    "Rebel v1.0 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
+    "Rebel 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
 #else
     char banner[]=
-    "Rebel v1.0 64-bit on %s IPv4/6%s%s\n\n";
+    "Rebel 64-bit on %s IPv4/6%s%s\n\n";
 #endif
 
 char banner2[]= ", options: rebel -h";
@@ -704,11 +704,13 @@ int main(int argc, char *argv[])
             continue;
         }
 
+        /* ufko:
         if(strcmp(argv[idx], "-v") == 0)
         {
             varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, ".");
             exit(0);
         }
+        */
 
         if(strncmp(argv[idx], "-e", 2) == 0)
         {
@@ -908,7 +910,7 @@ void printHelpText(void)
     varPrintf(OUT_CONSOLE, copyright,
               "usage: rebel [file | url ...] [options ...] [file | url ...]\n\noptions:");
     varPrintf(OUT_CONSOLE,
-              "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n",
+              "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n",
               " -q exits after executing its file arguments",
               "    no explicit (exit) call is required",
               "    all other options are ignored",
@@ -916,7 +918,6 @@ void printHelpText(void)
               " -h this help (no init.rbl)",
               " -n no init.rbl (must be first)",
               " -x <source> <target> link (no init.rbl)",
-              " -v version",
               " -s <stacksize>",
               " -m <max-mem-MB> cell memory",
               " -e <quoted expression>",
