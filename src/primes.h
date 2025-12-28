@@ -485,7 +485,7 @@ PRIMITIVE primitive[] =
     /* core - date and time */
 
     {"date",             p_date,             0}, /* date as human-readable string */ 
-    {"dateiso",          p_dateISO,          0}, /* date as ISO8601 */ 
+    {"dateiso",          p_dateISO,          0}, /* :rebel date as ISO8601 */ 
     {"datelist",         p_dateList,         0}, /* date time as list */
     {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date */
     {"time",             p_dateValue,        0}, /* seconds since epoch (UTC) */ 
