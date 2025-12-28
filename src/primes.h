@@ -128,7 +128,8 @@ PRIMITIVE primitive[] =
     {"float",            p_float,            0},
     {"int",              p_integer,          0},
     {"string",           p_string,           0},
-    {"sym",              p_symbol,           0},
+    {"sym",              p_symbol,           0}, /* value of symbol name by usage freq */
+    {"functor",          p_default,          0}, /* value of default functor */
 
     /* core - data - transformers */
 
@@ -366,6 +367,7 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",                p_system,           0},
+    {"run",              p_system,           0}, /* :alt */
     {"kill",             p_destroyProcess,   0}, /* this is Unix */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
@@ -392,7 +394,6 @@ PRIMITIVE primitive[] =
     {"catch",            p_catch,            0},
     {"commandevent",     p_commandEvent,     0},
     {"context",          p_context,          0},
-    {"contextdefault",   p_default,          0}, /* art relict? */
     {"copy",             p_copy,             0},
     {"defnew",           p_defineNew,        0},
     {"cloneone",         p_defineNew,        0}, /* :alt */
