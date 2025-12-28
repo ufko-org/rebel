@@ -1375,6 +1375,7 @@ CELL *p_sequence(CELL *params)
 #define FILTER_CLEAN 2
 #define FILTER_FOR_ALL 3
 #define FILTER_EXISTS 4
+#define FILTER_ANY 5    /* ufko: based on exists */
 
 /* on EMSCRIPTEN, when compiling with -O1 or -O2, this is necessary
    optimization messes up setjmp/longjmp
@@ -1401,6 +1402,11 @@ CELL *p_clean(CELL *params)
 CELL *p_exists(CELL *params)
 {
     return filterIndex(params, FILTER_EXISTS);
+}
+
+CELL *p_any(CELL *params)
+{
+    return filterIndex(params, FILTER_ANY);
 }
 
 CELL *p_forAll(CELL *params)
@@ -1466,6 +1472,12 @@ CELL *filterIndex(CELL *params, int mode)
             return(copyCell(args));
         }
 
+        else if(mode == FILTER_ANY && trueFlag)
+        {
+            memcpy(errorJump, errorJumpSave, sizeof(jmp_buf));
+            return(trueCell);
+        }
+
         else if (mode == FILTER_FOR_ALL)
         {
             if(trueFlag)
@@ -1500,6 +1512,11 @@ CONTINUE_FOR_ALL:
     memcpy(errorJump, errorJumpSave, sizeof(jmp_buf));
 
     if(mode == FILTER_EXISTS)
+    {
+        return(nilCell);
+    }
+
+    if(mode == FILTER_ANY)
     {
         return(nilCell);
     }

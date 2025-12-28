@@ -455,6 +455,7 @@ PRIMITIVE primitive[] =
 
     {"nan?",             p_isnan,            0},
     {"all?",             p_forAll,           0},
+    {"any?",             p_any,              0}, /* :rebel */
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},

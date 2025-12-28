@@ -117,6 +117,7 @@ CELL *p_addFloat(CELL *params);
 CELL *p_address(CELL *params);
 CELL *p_amb(CELL *params);
 CELL *p_and(CELL *params);
+CELL *p_any(CELL *params);
 CELL *p_append(CELL *params);
 CELL *p_appendFile(CELL *params);
 CELL *p_apply(CELL *params);
