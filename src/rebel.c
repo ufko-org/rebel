@@ -1412,7 +1412,7 @@ void initStacks(void)
 }
 
 
-/* ------------------------- evaluate s-expression --------------------- */
+/* ------------------------- evaluate expression --------------------- */
 
 
 CELL *evaluateExpression(CELL *cell)
@@ -3550,7 +3550,7 @@ void linkSource(char *pathname, char *source, char *target)
 /* -------------------------- parse / compile -----------------------------
 
    Takes source in a string stream and and envelope cell and compiles
-   Rebel source into an internal LISP cell structure tree. The tree
+   Rebel source into an internal cell structure tree. The tree
    can be decompiled to source at any time and is processed by the
    evaluateExpression() function.
 
@@ -4802,7 +4802,7 @@ CELL *evalString(CELL *params, int mode)
 
 /* modes:
 EVAL_STRING
-  the classic eval-string: read the string, compile to s-expression , evaluate
+  the classic eval-string: read the string, compile to expression , evaluate
 READ_EXPR_SYNC
   used by p_sync() in nl-filesys.c
 READ_EXPR
@@ -6906,7 +6906,6 @@ CELL *println(CELL *params, int lineFeed)
 
     return(copyCell(result));
 }
-
 
 CELL *p_device(CELL *params)
 {

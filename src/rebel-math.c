@@ -3597,7 +3597,7 @@ CELL *p_bayesQuery(CELL *params)
 */
 
 /*
- 'unify' for Prolog like unification of s-expressions:
+ 'unify' for Prolog like unification of expressions:
   (unify '(f (g A) A) '(f B xyz)) => binds A to xyz and B to (g xyz)
 
   variable symbols must start with an upper-case letter, variables
