@@ -61,10 +61,10 @@
         #include <ffi.h>
     #endif
 
-    #define LIBFFI " libffi"
+    #define FFI_STR " FFI"
 
 #else /* not FFI */
-    #define LIBFFI ""
+    #define FFI_STR ""
 #endif /* FFI */
 
 #define MY_RAND_MAX RAND_MAX

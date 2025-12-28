@@ -60,13 +60,13 @@ char copyright[] =
 
 #ifdef SUPPORT_UTF8
     char banner[]=
-    "Rebel 64-bit on %s IPv4/6 UTF-8%s%s\n\n";
+    "Rebel on %s IPv4/6 UTF-8%s%s\n\n";
 #else
     char banner[]=
-    "Rebel 64-bit on %s IPv4/6%s%s\n\n";
+    "Rebel on %s IPv4/6%s%s\n\n";
 #endif
 
-char banner2[]= ", options: rebel -h";
+char banner2[]= ". Options: rebel -h";
 
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
@@ -707,7 +707,7 @@ int main(int argc, char *argv[])
         /* ufko:
         if(strcmp(argv[idx], "-v") == 0)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, ".");
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, FFI_STR, ".");
             exit(0);
         }
         */
@@ -743,7 +743,7 @@ AFTER_ERROR_ENTRY:
         isTTY = TRUE;
         if(!noPromptMode)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, banner2);
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, FFI_STR, banner2);
         }
     }
     else
@@ -751,7 +751,7 @@ AFTER_ERROR_ENTRY:
         setbuf(IOchannel,0);
         if(forcePromptMode)
         {
-            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, banner2);
+            varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, FFI_STR, banner2);
         }
     }
 
@@ -947,7 +947,7 @@ void setupServer(int reconnect)
 
     if(!reconnect && !noPromptMode)
     {
-        varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, LIBFFI, ".");
+        varPrintf(OUT_CONSOLE, banner, OSTYPE_HUMAN, FFI_STR, ".");
     }
 }
 
