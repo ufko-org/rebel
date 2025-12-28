@@ -484,10 +484,11 @@ PRIMITIVE primitive[] =
 
     /* core - date and time */
 
-    {"date",             p_date,             0}, /* date as string */ 
+    {"date",             p_date,             0}, /* date as human-readable string */ 
+    {"dateiso",          p_date,             0}, /* placeholder; future ISO8601 */ 
     {"datelist",         p_dateList,         0}, /* date time as list */
     {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date */
-    {"time",             p_dateValue,        0}, /* seconds since epoch to now*/ 
+    {"time",             p_dateValue,        0}, /* seconds since epoch (UTC) */ 
     {"timelist",         p_now,              0}, /* curent date time +/-sec offset as list */
     {"timeofday",        p_timeOfDay,        0}, /* seconds elapsed since midnight */
 
