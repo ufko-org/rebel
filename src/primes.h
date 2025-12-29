@@ -18,6 +18,10 @@
 
     ---------------------------------------------------------------------
 
+    Author's musings:
+    =================
+
+
     This table defines the active Rebel language interface.
 
     Rebel encourages users to adapt the language to their needs.
@@ -26,12 +30,20 @@
 
     Aliases also provide long-term stability. If a function name 
     changes in the future, only the alias definition needs to be 
-    updated and existing code keeps working.
+    updated and existing code keeps working. The best place for 
+    user created aliases is ~/.init.rbl file.
 
     (alias 'bt sta-bayes-train) for current context
     (alias (global 'bt) sta-bayes-train) for all contexts
 
-    The best place for user created aliases is ~/.init.rbl file.
+    ---
+
+    In an extreme case, users can define their own naming
+    directly in primes.h by providing alternative (:alt)
+    names mapped to the same C primitives.
+
+    In this setup, Rebel provides the runtime engine,
+    while users provide the vocabulary at compile time.
 
     ---------------------------------------------------------------------
 
