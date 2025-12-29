@@ -123,6 +123,7 @@ PRIMITIVE primitive[] =
     {"array",            p_array,            0},
     {"list",             p_list,             0},
     {"sequence",         p_sequence,         0},
+    {"seq",              p_sequence,         0}, /* :alt */
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
@@ -134,8 +135,6 @@ PRIMITIVE primitive[] =
     {"float",            p_float,            0},
     {"int",              p_integer,          0},
     {"string",           p_string,           0},
-    {"sym",              p_symbol,           0}, /* value of symbol */
-    {"functor",          p_default,          0}, /* value of default functor */
 
     /* core - data - transformers */
 
@@ -156,11 +155,11 @@ PRIMITIVE primitive[] =
     {"collect",          p_collect,          0},
     {"cons",             p_cons,             0},
     {"curry",            p_curry,            0},
-    {"freq",             p_count,            0}, /* freq, not the count */
+    {"freq",             p_count,            0}, /* :replaces count */
     {"difference",       p_difference,       0},
+    {"diff",             p_difference,       0}, /* :alt */
     {"dup",              p_dup,              0},
-    {"exists",           p_exists,           0}, /* misleading name. looks like predicate, returns value/nil */
-    {"pickif",           p_exists,           0}, /* :alt */
+    {"pickif",           p_exists,           0}, /* :replaces exists */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -264,13 +263,12 @@ PRIMITIVE primitive[] =
 
     /* core - flow */
 
-    {"do",               p_evalBlock,        1}, /* begin */
-    {"silent",           p_silent,           0},
+    {"do",               p_evalBlock,        1}, /* :replaces begin */
     {"case",             p_case,             2},
     {"cond",             p_condition,        1},
+    {"dotimes",          p_dotimes,          2},
     {"dountil",          p_doUntil,          2},
     {"dowhile",          p_doWhile,          2},
-    {"dotimes",          p_dotimes,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"unless",           p_unless,           2},
@@ -302,22 +300,15 @@ PRIMITIVE primitive[] =
     /* core - bit ops */
 
     {"<<",               p_shiftLeft,        0},
-    {"shl",              p_shiftLeft,        0}, /* :alt */
     {">>",               p_shiftRight,       0},
-    {"shr",              p_shiftRight,       0}, /* :alt */
     {"&",                p_bitAnd,           0},
-    {"band",             p_bitAnd,           0}, /* :alt */
     {"|",                p_bitOr,            0},
-    {"bor",              p_bitOr,            0}, /* :alt */
     {"^",                p_bitXor,           0},
-    {"bxor",             p_bitXor,           0}, /* :alt */
     {"~",                p_bitNot,           0},
-    {"bnot",             p_bitNot,           0}, /* :alt */
 
     /* core - random */
 
-    {"amb",              p_amb,              0},
-    {"pick",             p_amb,              0}, /* :alt */
+    {"pick",             p_amb,              0}, /* :replaces amb */
     {"normal",           p_normal,           0},
     {"rand",             p_rand,             0},
     {"random",           p_random,           0},
@@ -331,7 +322,7 @@ PRIMITIVE primitive[] =
     {"pr",               p_print,            0}, /* :alt */
     {"println",          p_println,          0},
     {"prn",              p_println,          0}, /* :alt */
-    {"readkey",          p_readKey,          0}, /* user input */
+    {"readkey",          p_readKey,          0}, 
 
     /* core - io - via device number */
     
@@ -374,7 +365,7 @@ PRIMITIVE primitive[] =
 
     {"!",                p_system,           0},
     {"run",              p_system,           0}, /* :alt */
-    {"kill",             p_destroyProcess,   0}, /* this is Unix */
+    {"kill",             p_destroyProcess,   0}, /* :replaces destroy-process this is Unix */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
     {"pipe",             p_pipe,             0},
@@ -398,11 +389,11 @@ PRIMITIVE primitive[] =
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
+    {"clone",            p_new,              0}, /* :replaces new, this is obviously cloning op */
+    {"cloneone",         p_defineNew,        0}, /* :replaces def-new -||- */
     {"commandevent",     p_commandEvent,     0},
     {"context",          p_context,          0},
     {"copy",             p_copy,             0},
-    {"defnew",           p_defineNew,        0},
-    {"cloneone",         p_defineNew,        0}, /* :alt */
     {"delete",           p_deleteSymbol,     0},
     {"dump",             p_dump,             0},
     {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
@@ -412,12 +403,11 @@ PRIMITIVE primitive[] =
     {"eval",             p_eval,             0},
     {"evalstr",          p_evalString,       0},
     {"exit",             p_exit,             0},
+    {"functor",          p_default,          0}, /* :replaces default, returns value of default functor */
     {"history",          p_history,          0},
     {"lasterr",          p_lastError,        0},
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
-    {"new",              p_new,              0},
-    {"clone",            p_new,              0}, /* :alt this is obviously cloning op */
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
     {"quote",            p_quote,            0},
@@ -426,7 +416,9 @@ PRIMITIVE primitive[] =
     {"reset",            p_reset,            0},
     {"save",             p_save,             0},
     {"self",             p_self,             0},
+    {"silent",           p_silent,           0},
     {"source",           p_symbolSource,     0},
+    {"sym",              p_symbol,           0}, 
     {"symbols",          p_symbols,          0},
     {"syserr",           p_systemError,      0},
     {"sysinfo",          p_systemInfo,       0},
