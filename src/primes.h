@@ -24,11 +24,12 @@
     Creating aliases for built-in functions is normal daily practice.
     It is an idiom and has no speed penalty.
 
-    Aliases also provide long-term stability.
-    If a function name changes in the future, only the alias
-    definition needs to be updated and existing code keeps working.
+    Aliases also provide long-term stability. If a function name 
+    changes in the future, only the alias definition needs to be 
+    updated and existing code keeps working.
 
-    (alias 'bt sta-bayes-train)
+    (alias 'bt sta-bayes-train) for current context
+    (alias (global 'bt) sta-bayes-train) for all contexts
 
     The best place for user created aliases is ~/.init.rbl file.
 
