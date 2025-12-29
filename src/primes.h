@@ -18,17 +18,19 @@
 
     ---------------------------------------------------------------------
 
-    NOTE:
-
     This table defines the active Rebel language interface.
 
-    Names may change or disappear over time.
-    For backward compatibility, users can define their own aliases
-    or migrate to the current names listed here.
+    Rebel encourages users to adapt the language to their needs.
+    Creating aliases for built-in functions is normal daily practice.
+    It is an idiom and has no speed penalty.
 
-    Any brand new primitive, if added, is marked with a
-    :rebel comment next to it, indicating
-    a new C implementation with new semantics.
+    Aliases also provide long-term stability.
+    If a function name changes in the future, only the alias
+    definition needs to be updated and existing code keeps working.
+
+    (alias 'bt sta-bayes-train)
+
+    The best place for user created aliases is ~/.init.rbl file.
 
     ---------------------------------------------------------------------
 
@@ -40,7 +42,7 @@
     2) A function that is typically used standalone or mapped/applied by
        another function should be named after what it does.
 
-    Function name patterns if possible:
+    Function name patterns, if possible:
 
        noun          - string            (conversion operation) 
        action        - rotate            (generic operation)
@@ -58,25 +60,17 @@
 
     Allowed characters in core names: [a-z0-9?]
 
-    Some functions may have alternative names :alt that provide clearer 
-    meaning in a given context or improve code readability/writability: 
+    Any brand new function, if added, is marked with a :rebel comment 
+    next to it, indicating a new C implementation with new semantics.
 
-    constant -> alias
+    Some functions may have alternative names marked :alt that provide 
+    clearer meaning in a given context or improve code reading and writing 
+    flow. Alternatives can replace original functions in future.
+
+    constant -> const, alias
     =        -> eq, is
     true?    -> ok
-    false?   -> ko
-
-    Some alternative functions can replace original functions in future.
-
-
-    List of free simple function names:
-
-      - any?
-      - check
-      - count
-      - none?
-      - shift
-      - take
+    false?   -> no, ko
 
     primes.h is the authoritative source.
 */
@@ -128,7 +122,7 @@ PRIMITIVE primitive[] =
     {"float",            p_float,            0},
     {"int",              p_integer,          0},
     {"string",           p_string,           0},
-    {"sym",              p_symbol,           0}, /* value of symbol name by usage freq */
+    {"sym",              p_symbol,           0}, /* value of symbol */
     {"functor",          p_default,          0}, /* value of default functor */
 
     /* core - data - transformers */
@@ -150,7 +144,7 @@ PRIMITIVE primitive[] =
     {"collect",          p_collect,          0},
     {"cons",             p_cons,             0},
     {"curry",            p_curry,            0},
-    {"freq",             p_count,            0}, /* count is misleading */
+    {"freq",             p_count,            0}, /* freq, not the count */
     {"difference",       p_difference,       0},
     {"dup",              p_dup,              0},
     {"exists",           p_exists,           0}, /* misleading name. looks like predicate, returns value/nil */
@@ -221,7 +215,7 @@ PRIMITIVE primitive[] =
     {"sub",              p_subFloat,         0},
     {"mul",              p_mulFloat,         0},
     {"div",              p_divFloat,         0},
-    {"mod",              p_modFloat,         0}, /* mod is misleading; fmod? rem? remf? or explain in manual */
+    {"mod",              p_modFloat,         0}, 
     {"inc",              p_incrementF,       0x400},
     {"dec",              p_decrementF,       0x400},
 
@@ -258,7 +252,7 @@ PRIMITIVE primitive[] =
 
     /* core - flow */
 
-    {"do",               p_evalBlock,        1},
+    {"do",               p_evalBlock,        1}, /* begin */
     {"silent",           p_silent,           0},
     {"case",             p_case,             2},
     {"cond",             p_condition,        1},
@@ -402,7 +396,7 @@ PRIMITIVE primitive[] =
     {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
-    {"etime",            p_time,             0}, /* measures elapsed eval time */
+    {"etime",            p_time,             0}, /* measures elapsed eval time like sh time */
     {"eval",             p_eval,             0},
     {"evalstr",          p_evalString,       0},
     {"exit",             p_exit,             0},
@@ -411,7 +405,7 @@ PRIMITIVE primitive[] =
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
     {"new",              p_new,              0},
-    {"clone",            p_new,              0}, /* :alt this is obviously cloning */
+    {"clone",            p_new,              0}, /* :alt this is obviously cloning op */
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
     {"quote",            p_quote,            0},
@@ -534,61 +528,62 @@ PRIMITIVE primitive[] =
     {"hpost",            p_postUrl,          0},
     {"hdel",             p_deleteUrl,        0},
 
-    /* NON-CORE --------------------------------------------------------- */
+  
+    /* NON-CORE - not needed for my daily work -------------------------- */
 
     #ifdef NON_CORE
 
-    /* non-core - matrix ops */
+    /* non-core - matrix */
 
-    {"transpose",        p_matTranspose,     0},
-    {"multiply",         p_matMultiply,      0},
-    {"invert",           p_matInvert,        0},
-    {"det",              p_determinant,      0},
-    {"mat",              p_matScalar,        0},
+    {"mat-transpose",        p_matTranspose,     0},
+    {"mat-multiply",         p_matMultiply,      0},
+    {"mat-invert",           p_matInvert,        0},
+    {"mat-det",              p_determinant,      0},
+    {"mat-apply",            p_matScalar,        0},
 
     /* non-core - statistics */
 
-    {"bayes-train",      p_bayesTrain,       0},
-    {"bayes-query",      p_bayesQuery,       0},
-    {"kmeans-train",     p_kmeansTrain,      0},
-    {"kmeans-query",     p_kmeansQuery,      0},
-    {"stats",            p_stats,            0},
-    {"t-test",           p_ttest,            0},
-    {"corr",             p_corr,             0},
-    {"prob-z",           p_probabilityZ,     0},
-    {"prob-chi2",        p_probabilityChi2,  0},
-    {"prob-t",           p_probabilityT,     0},
-    {"prob-f",           p_probabilityF,     0},
-    {"crit-chi2",        p_criticalChi2,     0},
-    {"crit-z",           p_criticalZ,        0},
-    {"crit-t",           p_criticalT,        0},
-    {"crit-f",           p_criticalF,        0},
-    {"fft",              p_fft,              0},
-    {"ifft",             p_ifft,             0},
-    {"beta",             p_beta,             0},
-    {"betai",            p_betai,            0},
-    {"gammaln",          p_gammaln,          0},
-    {"gammai",           p_gammai,           0},
-    {"binomial",         p_binomial,         0},
+    {"sta-bayes-train",      p_bayesTrain,       0},
+    {"sta-bayes-query",      p_bayesQuery,       0},
+    {"sta-kmeans-train",     p_kmeansTrain,      0},
+    {"sta-kmeans-query",     p_kmeansQuery,      0},
+    {"sta-stats",            p_stats,            0},
+    {"sta-t-test",           p_ttest,            0},
+    {"sta-corr",             p_corr,             0},
+    {"sta-prob-z",           p_probabilityZ,     0},
+    {"sta-prob-chi2",        p_probabilityChi2,  0},
+    {"sta-prob-t",           p_probabilityT,     0},
+    {"sta-prob-f",           p_probabilityF,     0},
+    {"sta-crit-chi2",        p_criticalChi2,     0},
+    {"sta-crit-z",           p_criticalZ,        0},
+    {"sta-crit-t",           p_criticalT,        0},
+    {"sta-crit-f",           p_criticalF,        0},
+    {"sta-fft",              p_fft,              0},
+    {"sta-ifft",             p_ifft,             0},
+    {"sta-beta",             p_beta,             0},
+    {"sta-betai",            p_betai,            0},
+    {"sta-gammaln",          p_gammaln,          0},
+    {"sta-gammai",           p_gammai,           0},
+    {"sta-binomial",         p_binomial,         0},
 
     /* non-core - finantial math */
 
-    {"pmt",          p_pmt,              0},
-    {"pv",           p_pv,               0},
-    {"fv",           p_fv,               0},
-    {"nper",         p_nper,             0},
-    {"npv",          p_npv,              0},
-    {"irr",          p_irr,              0},
+    {"fin-pmt",              p_pmt,              0},
+    {"fin-pv",               p_pv,               0},
+    {"fin-fv",               p_fv,               0},
+    {"fin-nper",             p_nper,             0},
+    {"fin-npv",              p_npv,              0},
+    {"fin-irr",              p_irr,              0},
       
     /* non-core - encoding */
 
     #ifdef XML_SUPPORT
-    {"xml-parse",     p_XMLparse,         0},
-    {"xml-error",     p_XMLerror,         0},
-    {"xml-type-tags",  p_XMLtypeTags,      0},
+    {"enc-xml-parse",        p_XMLparse,         0},
+    {"enc-xml-error",        p_XMLerror,         0},
+    {"enc-xml-type-tags",    p_XMLtypeTags,      0},
     #endif
-    {"json-parse",    p_JSONparse,        0},
-    {"json-error",    p_JSONerror,        0},
+    {"enc-json-parse",       p_JSONparse,        0},
+    {"enc-json-error",       p_JSONerror,        0},
 
     #endif /* NON_CORE */
 
