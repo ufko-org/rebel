@@ -60,8 +60,8 @@
        noun          - string            (conversion operation) 
        action        - rotate            (generic operation)
        nounaction    - stringrotate      (specific operation)
+       actionnoun    - rotatestring      (worst case)
        value         - crc32             (computed value / algorithm name)
-       actionnoun    - dumpsym           (the worst)
 
     Special form names:
 
@@ -105,10 +105,10 @@ PRIMITIVE primitive[] =
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
-    {"mac",              p_defineMacro,      0x402},
+    {"mac",              p_defineMacro,      0x402}, /* :replaces define-macro */
     {"macro",            p_macro,            2},
-    {"def",              p_define,           0x402},
-    {"set",              p_setdef,           0x400}, /* :rebel */ 
+    {"def",              p_define,           0x402}, /* :replaces define */
+    {"set",              p_setdef,           0x400}, /* :rebel :replaces setq/setf */ 
     {"with",             p_with,             0x400}, /* :rebel */
 
     /* core - data - iterators */
@@ -159,7 +159,7 @@ PRIMITIVE primitive[] =
     {"difference",       p_difference,       0},
     {"diff",             p_difference,       0}, /* :alt */
     {"dup",              p_dup,              0},
-    {"pickif",           p_exists,           0}, /* :replaces exists */
+    {"pickif",           p_exists,           0}, /* :replaces exists, can't find good name */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -173,7 +173,7 @@ PRIMITIVE primitive[] =
     {"intersect",        p_intersect,        0},
     {"join",             p_join,             0},
     {"last",             p_last,             0},
-    {"lcase",            p_lower,            0},
+    {"lcase",            p_lower,            0}, /* :replaces lower-case */
     {"length",           p_length,           0},
     {"lookup",           p_lookup,           0},
     {"map",              p_map,              0},
@@ -186,22 +186,22 @@ PRIMITIVE primitive[] =
     {"push",             p_push,             0x400},
     {"ref",              p_ref,              0},
     {"refall",           p_refAll,           0},
-    {"refset",           p_setRef,           0x400},
-    {"refsetall",        p_setRefAll,        0x400},
+    {"refset",           p_setRef,           0x400}, /* :replaces set-ref */
+    {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
     {"replace",          p_replace,          0x400},
     {"rest",             p_rest,             0},
     {"reverse",          p_reverse,          0x400},
     {"rotate",           p_rotate,           0x400},
-    {"rx",               p_regex,            0},
-    {"rxcomp",           p_regexComp,        0},
+    {"rx",               p_regex,            0}, /* :replaces regex */
+    {"rxcomp",           p_regexComp,        0}, /* :replaces regex-comp */
     {"select",           p_select,           0},
     {"slice",            p_slice,            0},
     {"sort",             p_sort,             0x400},
     {"swap",             p_swap,             0},
-    {"tcase",            p_title,            0},
+    {"tcase",            p_title,            0}, /* :replaces title-case */
     {"throw",            p_throw,            0},
     {"trim",             p_trim,             0},
-    {"ucase",            p_upper,            0},
+    {"ucase",            p_upper,            0}, /* :replaces upper-case */
     {"unify",            p_unify,            0},
     {"union",            p_union,            0},
     {"unique",           p_unique,           0},
@@ -365,7 +365,7 @@ PRIMITIVE primitive[] =
 
     {"!",                p_system,           0},
     {"run",              p_system,           0}, /* :alt */
-    {"kill",             p_destroyProcess,   0}, /* :replaces destroy-process this is Unix */
+    {"kill",             p_destroyProcess,   0}, /* :replaces destroy-process */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
     {"pipe",             p_pipe,             0},
@@ -385,7 +385,6 @@ PRIMITIVE primitive[] =
 
     {"$",                p_systemSymbol,     0},
     {":",                p_colon,            0},
-
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
@@ -461,14 +460,14 @@ PRIMITIVE primitive[] =
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
     {"empty?",           p_isEmpty,          0},
-    {"ends?",            p_endsWith,         0},
+    {"ends?",            p_endsWith,         0}, /* :replaces ends-with */
     {"even?",            p_isEven,           0},
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
     {"fn?",              p_isFn,             0},
     {"global?",          p_isGlobal,         0},
     {"inf?",             p_isinf,            0},
-    {"integer?",         p_isInteger,        0},
+    {"int?",             p_isInteger,        0}, /* :replaces integer */
     {"legal?",           p_isLegal,          0},
     {"list?",            p_isList,           0},
     {"macro?",           p_isMacro,          0},
@@ -479,7 +478,7 @@ PRIMITIVE primitive[] =
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
-    {"starts?",          p_startsWith,       0},
+    {"starts?",          p_startsWith,       0}, /* :replaces starts-with */
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},
     {"true?",            p_isTrue,           0},
@@ -487,7 +486,8 @@ PRIMITIVE primitive[] =
 
     /* core - flow - intent markers */
 
-    {"ok",               p_isTrue,           0}, /* :alt, explicit value -> boolean */
+    {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some ops */
+    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some ops */
 
     /* core - date and time */
 
