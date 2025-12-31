@@ -153,6 +153,7 @@ PRIMITIVE primitive[] =
     {"apply",            p_apply,            0},
     {"assoc",            p_assoc,            0},
     {"bind",             p_bind,             0x400},
+    {"cap",              p_intersect,        0}, /* :replaces intersect */
     {"chop",             p_chop,             0},
     {"clean",            p_clean,            0},
     {"collect",          p_collect,          0},
@@ -172,7 +173,6 @@ PRIMITIVE primitive[] =
     {"flat",             p_flat,             0},
     {"fmt",              p_format,           0},
     {"index",            p_index,            0},
-    {"cap",              p_intersect,        0}, /* :replaces intersect */
     {"join",             p_join,             0},
     {"last",             p_last,             0},
     {"lcase",            p_lower,            0}, /* :replaces lower-case */
@@ -491,7 +491,7 @@ PRIMITIVE primitive[] =
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some ops */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some ops */
-    {"loop",             p_dolist,           2}, /* :alt, dolist over list representation */
+    {"loop",             p_dolist,           2}, /* :alt, dolist over list/value converted to list*/
 
     /* core - date and time */
 
