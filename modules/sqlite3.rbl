@@ -73,7 +73,7 @@
       (set result (sqlite3_open db-name dbp))
       (if (!= result SQLITE_OK)
         (set db nil)
-        (set db (getlong dbp))))
+        (set db (longc dbp))))
     (do
       (set error-message "A database is already open")
       nil)))
@@ -90,7 +90,7 @@
 
 (def (bind-parameter pstm param value)
 	(let (idx param)
-		(unless (integer? param)
+		(unless (int? param)
 			(set idx (sqlite3_bind_parameter_index pstm
 				(if (symbol? param) (term param) (string param)))))
 		(cond
@@ -106,18 +106,18 @@
 		(case (nth idx col-types idx)
 			(SQLITE_INTEGER 
 				(set pstr (sqlite3_column_text pstm i)) 
-				(if (= pstr 0) (push nil row -1) (push (int (getstring pstr)) row -1))) 
+				(if (= pstr 0) (push nil row -1) (push (int (stringc pstr)) row -1))) 
 			(SQLITE_FLOAT 
 				(set pstr (sqlite3_column_text pstm i))
-				(if (= pstr 0) (push nil row -1) (push (float (getstring pstr)) row -1)))
+				(if (= pstr 0) (push nil row -1) (push (float (stringc pstr)) row -1)))
 			(SQLITE_TEXT 
 				(set pstr (sqlite3_column_text pstm i))
-				(if (= pstr 0) (push "" row -1) (push (getstring pstr) row -1)))
+				(if (= pstr 0) (push "" row -1) (push (stringc pstr) row -1)))
 			(SQLITE_BLOB 
 				(set pstr (sqlite3_column_blob pstm i))
 				(set len (sqlite3_column_bytes pstm i))
 				(set buff (dup "\000" len))
-				(if (= pstr 0) (push "" row -1) (do (cpymem pstr buff len) (push buff row -1))))
+				(if (= pstr 0) (push "" row -1) (do (memcpy pstr buff len) (push buff row -1))))
 			(SQLITE_NULL 
 				(push nil row -1))))
 	row)
@@ -127,7 +127,7 @@
 	(dotimes (idx cols)
 		(set i (int idx))
 		(set ps (sqlite3_column_name pstm i))
-		(if (= ps 0) (push "" row -1) (push (getstring ps) row -1)))
+		(if (= ps 0) (push "" row -1) (push (stringc ps) row -1)))
 	row)
 
 (def (get-types pstm cols)
@@ -139,7 +139,7 @@
 
 (def (set-error)
 	(set result (sqlite3_errmsg db))
-	(if (= result 0) (set error-message nil) (set error-message (getstring result)) nil))
+	(if (= result 0) (set error-message nil) (set error-message (stringc result)) nil))
 
 ;; SQL query function
 ;; ---------------------------------------------------------------------
@@ -154,7 +154,7 @@
 	(set pptail "\000\000\000\000\000\000\000\000") ; pointer to statement tail
 
 	(if db (set result (sqlite3_prepare_v2 db sql-str -1 ppstm pptail)))
-	(set pstm (getlong ppstm))
+	(set pstm (longc ppstm))
 
 	(if (and (= result SQLITE_OK) sql-args)
   		(let (argi 0)
