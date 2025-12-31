@@ -86,7 +86,8 @@
     constant -> const, alias
     =        -> eq, is
     true?    -> ok
-    false?   -> no, ko
+    nil?     -> ko
+    null?    -> no
 
     primes.h is the authoritative source.
 */
@@ -386,6 +387,7 @@ PRIMITIVE primitive[] =
 
     {"$",                p_systemSymbol,     0},
     {":",                p_colon,            0},
+
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
@@ -417,6 +419,7 @@ PRIMITIVE primitive[] =
     {"save",             p_save,             0},
     {"self",             p_self,             0},
     {"silent",           p_silent,           0},
+    {"sleep",            p_sleep,            0},
     {"source",           p_symbolSource,     0},
     {"sym",              p_symbol,           0}, 
     {"symbols",          p_symbols,          0},
@@ -446,7 +449,6 @@ PRIMITIVE primitive[] =
     {"import",           p_importLib,        0},
     {"memcpy",           p_copyMemory,       0},
     {"pack",             p_pack,             0},
-    {"sleep",            p_sleep,            0},
     {"struct",           p_struct,           0},
     {"unpack",           p_unpack,           0},
 
@@ -489,17 +491,17 @@ PRIMITIVE primitive[] =
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some ops */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some ops */
-    {"loop",             p_dolist,           2}, /* :alt */
+    {"loop",             p_dolist,           2}, /* :alt, dolist over list representation */
 
     /* core - date and time */
 
-    {"date",             p_date,             0}, /* date as human-readable string */ 
-    {"dateiso",          p_dateISO,          0}, /* :rebel date as ISO8601 */ 
-    {"datelist",         p_dateList,         0}, /* date time as list */
-    {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date argument */
-    {"time",             p_dateValue,        0}, /* seconds since epoch (UTC) */ 
-    {"timelist",         p_now,              0}, /* curent date time +/-sec offset as list */
-    {"timeofday",        p_timeOfDay,        0}, /* seconds elapsed since midnight */
+    {"date",        p_date,        0}, /* date as human-readable string */
+    {"dateiso",     p_dateISO,     0}, /* :rebel date as ISO 8601 string */
+    {"datelist",    p_dateList,    0}, /* date and time as list */
+    {"datestamp",   p_dateParse,   0}, /* seconds since epoch to date */
+    {"time",        p_dateValue,   0}, /* seconds since epoch (UTC) */
+    {"timelist",    p_now,         0}, /* current date and time +/- sec offset as list */
+    {"timeofday",   p_timeOfDay,   0}, /* seconds elapsed since midnight */
 
     /* core - network */
 
