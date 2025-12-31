@@ -36,6 +36,9 @@
     (alias 'bt sta-bayes-train) for current context
     (alias (global 'bt) sta-bayes-train) for all contexts
 
+    Also there is no module system at the API level; modularity
+    is a userland concept implemented explicitly via contexts.
+
     ---
 
     In an extreme case, users can define their own naming
@@ -105,8 +108,8 @@ PRIMITIVE primitive[] =
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
-    {"mac",              p_defineMacro,      0x402}, /* :replaces define-macro */
-    {"macro",            p_macro,            2},
+    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro;  */
+    {"macro",            p_macro,            2},     /* expand macro */
     {"def",              p_define,           0x402}, /* :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces setq/setf */ 
     {"with",             p_with,             0x400}, /* :rebel */
@@ -122,8 +125,7 @@ PRIMITIVE primitive[] =
 
     {"array",            p_array,            0},
     {"list",             p_list,             0},
-    {"sequence",         p_sequence,         0},
-    {"seq",              p_sequence,         0}, /* :alt */
+    {"seq",              p_sequence,         0}, /* :replaces sequence */
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
@@ -156,10 +158,9 @@ PRIMITIVE primitive[] =
     {"cons",             p_cons,             0},
     {"curry",            p_curry,            0},
     {"freq",             p_count,            0}, /* :replaces count */
-    {"difference",       p_difference,       0},
-    {"diff",             p_difference,       0}, /* :alt */
+    {"diff",             p_difference,       0}, /* :replaces difference */
     {"dup",              p_dup,              0},
-    {"pickif",           p_exists,           0}, /* :replaces exists, can't find good name */
+    {"next",             p_exists,           0}, /* :replaces exists, gives meaning to exists */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -170,7 +171,7 @@ PRIMITIVE primitive[] =
     {"flat",             p_flat,             0},
     {"fmt",              p_format,           0},
     {"index",            p_index,            0},
-    {"intersect",        p_intersect,        0},
+    {"cap",              p_intersect,        0}, /* :replaces intersect */
     {"join",             p_join,             0},
     {"last",             p_last,             0},
     {"lcase",            p_lower,            0}, /* :replaces lower-case */
@@ -344,7 +345,7 @@ PRIMITIVE primitive[] =
     /* core - io - via path */
 
     {"fpath",            p_realpath,         0},
-    {"finfo",            p_fileInfo,         0}, /* not all stat fields */
+    {"finfo",            p_fileInfo,         0}, /* fstat would be lie, not all stat fields */
     {"fappend",          p_appendFile,       0},
     {"fread",            p_readFile,         0},
     {"fwrite",           p_writeFile,        0},
@@ -484,17 +485,18 @@ PRIMITIVE primitive[] =
     {"true?",            p_isTrue,           0},
     {"zero?",            p_isZero,           0},
 
-    /* core - flow - intent markers */
+    /* core - flow - flow boosters, intent markers */
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some ops */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some ops */
+    {"loop",             p_dolist,           2}, /* :alt */
 
     /* core - date and time */
 
     {"date",             p_date,             0}, /* date as human-readable string */ 
     {"dateiso",          p_dateISO,          0}, /* :rebel date as ISO8601 */ 
     {"datelist",         p_dateList,         0}, /* date time as list */
-    {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date */
+    {"datestamp",        p_dateParse,        0}, /* seconds since epoch to date argument */
     {"time",             p_dateValue,        0}, /* seconds since epoch (UTC) */ 
     {"timelist",         p_now,              0}, /* curent date time +/-sec offset as list */
     {"timeofday",        p_timeOfDay,        0}, /* seconds elapsed since midnight */
