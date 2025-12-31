@@ -20,7 +20,7 @@ CC = cc
 
 CFLAGS = -std=c90 -Wall -Oz -c \
 	-I/usr/local/include \
-	-D_BSD -DFFI -DREADLINE -DSUPPORT_UTF8 
+	-D_BSD -DFFI -DREADLINE -DSUPPORT_UTF8 -DNON_CORE
 
 default: rebel
 
