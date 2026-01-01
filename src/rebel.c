@@ -6210,7 +6210,38 @@ IF_RETURN:
     return(cell);
 }
 
+/* ufko: new implementation */
+CELL *p_ifNot(CELL *params)
+{
+    CELL *cell;
 
+    cell = evaluateExpression(params);
+    itSymbol->contents = (UINT)cell;
+
+    while(!isNil(cell) && !isEmpty(cell))
+    {
+        params = params->next;
+        if(params->next == nilCell)
+        {
+            goto IFNOT_RETURN;
+        }
+        params = params->next;
+        cell = evaluateExpression(params);
+        itSymbol->contents = (UINT)cell;
+    }
+
+    if(params->next != nilCell)
+    {
+        cell = evaluateExpression(params->next);
+    }
+
+IFNOT_RETURN:
+    itSymbol->contents = (UINT)nilCell;
+    pushResultFlag = FALSE;
+    return(cell);
+}
+
+/* ufko: old if-not, not counterpart of if.
 CELL *p_ifNot(CELL *params)
 {
     CELL *cell;
@@ -6226,6 +6257,7 @@ CELL *p_ifNot(CELL *params)
     pushResultFlag = FALSE;
     return(cell);
 }
+*/
 
 
 CELL *p_when(CELL *params)
