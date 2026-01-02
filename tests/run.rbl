@@ -4,7 +4,7 @@
 ./mk-tests-fs
 
 # load and run test files
-(set test-files (sort (directory "." {\.test\.rbl})))
+(set test-files (sort (dir "." {\.test\.rbl})))
 (dolist (test-file test-files)
   (println)
   (println "File: " test-file)
@@ -21,7 +21,7 @@
 (println (dup "-" 60)) 
 (println "PASSED: " test:pass)
 (println "FAILED: " test:fail)
-(write-file ".stats" 
-  (format "Tests count: %d\nPass: %d\nFail: %d\n" 
+(fwrite ".stats" 
+  (fmt "Tests count: %d\nPass: %d\nFail: %d\n" 
     test:cases test:pass test:fail))
 (exit)
