@@ -109,10 +109,10 @@ PRIMITIVE primitive[] =
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
-    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro;  */
-    {"macro",            p_macro,            2},     /* expand macro */
     {"def",              p_define,           0x402}, /* :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces setq/setf */ 
+    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro;  */
+    {"macro",            p_macro,            2},     /* expand macro */
     {"with",             p_with,             0x400}, /* :rebel */
 
     /* core - data - iterators */
@@ -141,8 +141,8 @@ PRIMITIVE primitive[] =
 
     /* core - data - transformers */
 
-    {"b64dec",           p_base64Dec,        0},
-    {"b64enc",           p_base64Enc,        0},
+    {"b64dec",           p_base64Dec,        0}, /* :replaces base64-dec */
+    {"b64enc",           p_base64Enc,        0}, /* :replaces base64-enc */
     {"crc32",            p_crc32,            0},
     {"encrypt",          p_encrypt,          0},
     {"uuid",             p_uuid,             0},
@@ -162,7 +162,7 @@ PRIMITIVE primitive[] =
     {"freq",             p_count,            0}, /* :replaces count */
     {"diff",             p_difference,       0}, /* :replaces difference */
     {"dup",              p_dup,              0},
-    {"next",             p_exists,           0}, /* :replaces exists, gives meaning to exists */
+    {"next",             p_exists,           0}, /* :replaces exists, gives real meaning to exists */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -171,7 +171,7 @@ PRIMITIVE primitive[] =
     {"findall",          p_findAll,          0},
     {"first",            p_first,            0},
     {"flat",             p_flat,             0},
-    {"fmt",              p_format,           0},
+    {"fmt",              p_format,           0}, /* :replaces format */
     {"index",            p_index,            0},
     {"join",             p_join,             0},
     {"last",             p_last,             0},
@@ -188,7 +188,7 @@ PRIMITIVE primitive[] =
     {"push",             p_push,             0x400},
     {"ref",              p_ref,              0},
     {"refall",           p_refAll,           0},
-    {"refset",           p_setRef,           0x400}, /* :replaces set-ref */
+    {"refset",           p_setRef,           0x400}, /* :replaces set-ref doesn't evoke value binding */
     {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
     {"replace",          p_replace,          0x400},
     {"rest",             p_rest,             0},
@@ -207,7 +207,6 @@ PRIMITIVE primitive[] =
     {"unify",            p_unify,            0},
     {"union",            p_union,            0},
     {"uniq",             p_unique,           0}, /* :replaces unique */
-
     #ifdef SUPPORT_UTF8
     {"utf8len",          p_utf8len,          0},
     #endif
@@ -435,7 +434,7 @@ PRIMITIVE primitive[] =
 
     #ifdef DEBUGGER
     {"debug",            p_debug,            0},
-    {"tracemark",        p_traceHighlight,   0},
+    {"tracemark",        p_traceHighlight,   0}, /* :replaces trace-highlight */
     #endif
 
     /* core - C */
@@ -443,13 +442,13 @@ PRIMITIVE primitive[] =
     {"address",          p_address,          0},
     {"callback",         p_callback,         0},
     {"flt",              p_flt,              0},
-    {"charc",            p_getChar,          0},
-    {"floatc",           p_getFloat,         0},
-    {"intc",             p_getInteger,       0},
-    {"longc",            p_getLong,          0},
-    {"stringc",          p_getString,        0},
+    {"charc",            p_getChar,          0}, /* :replaces get- prefix with c suffix */
+    {"floatc",           p_getFloat,         0}, /* :replaces get- prefix with c suffix */
+    {"intc",             p_getInteger,       0}, /* :replaces get- prefix with c suffix */
+    {"longc",            p_getLong,          0}, /* :replaces get- prefix with c suffix */
+    {"stringc",          p_getString,        0}, /* :replaces get- prefix with c suffix */
     {"import",           p_importLib,        0},
-    {"memcpy",           p_copyMemory,       0},
+    {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem, this is memcpy to the bone */
     {"pack",             p_pack,             0},
     {"struct",           p_struct,           0},
     {"unpack",           p_unpack,           0},
@@ -493,20 +492,21 @@ PRIMITIVE primitive[] =
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
+    {"mut",              p_setdef,           0}, /* :alt, sentinel of conscious mutate operation */
     {"loop",             p_dolist,           2}, /* :alt, dolist over list or value converted to list*/
 
     /* core - date and time */
 
-    {"date",        p_date,                  0}, /* date as human-readable string */
-    {"dateiso",     p_dateISO,               0}, /* :rebel date as ISO 8601 string */
-    {"datelist",    p_dateList,              0}, /* date and time as list */
-    {"datestamp",   p_dateParse,             0}, /* :replaces date-parse, seconds since epoch to date */
-    {"time",        p_dateValue,             0}, /* :replaces date-value, seconds since epoch (UTC); adjustable */
-    {"timelist",    p_now,                   0}, /* :replaces now, current date and time +/- sec offset as list */
+    {"date",             p_date,             0}, /* date as human-readable string */
+    {"dateiso",          p_dateISO,          0}, /* :rebel date as ISO 8601 string */
+    {"datelist",         p_dateList,         0}, /* date and time as list */
+    {"datestamp",        p_dateParse,        0}, /* :replaces date-parse, seconds since epoch to date */
+    {"time",             p_dateValue,        0}, /* :replaces date-value, seconds since epoch (UTC); adjustable */
+    {"timelist",         p_now,              0}, /* :replaces now, current date and time +/- sec offset as list */
 
     /* core - network */
 
-    {"nclose",           p_netClose,         0},
+    {"nclose",           p_netClose,         0}, /* :replaces net- with n in all cases */
     {"nservice",         p_netService,       0},
     {"nconnect",         p_netConnect,       0},
     {"naccept",          p_netAccept,        0},
@@ -532,10 +532,10 @@ PRIMITIVE primitive[] =
 
     /* core - http */
 
-    {"hget",             p_getUrl,           0},
-    {"hput",             p_putUrl,           0},
-    {"hpost",            p_postUrl,          0},
-    {"hdel",             p_deleteUrl,        0},
+    {"hget",             p_getUrl,           0}, /* :replaces get-url */
+    {"hput",             p_putUrl,           0}, /* :replaces put-url */
+    {"hpost",            p_postUrl,          0}, /* :replaces post-url */
+    {"hdel",             p_deleteUrl,        0}, /* :replaces delete-url */
 
   
     /* NON-CORE - science domain specific -------------------------- */
@@ -544,7 +544,7 @@ PRIMITIVE primitive[] =
 
     /* non-core - matrix */
 
-    {"mat-apply",            p_matScalar,        0},
+    {"mat-apply",            p_matScalar,        0}, /* :replaces mat */
     {"mat-det",              p_determinant,      0},
     {"mat-invert",           p_matInvert,        0},
     {"mat-multiply",         p_matMultiply,      0},
