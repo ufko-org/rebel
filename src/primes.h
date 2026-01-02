@@ -389,6 +389,7 @@ PRIMITIVE primitive[] =
     {"$",                p_systemSymbol,     0},
     {":",                p_colon,            0},
 
+    {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
@@ -402,7 +403,7 @@ PRIMITIVE primitive[] =
     {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
-    {"etime",            p_time,             0}, /* measures elapsed eval time like sh time */
+    {"etime",            p_time,             0}, /* :replaces time, measures elapsed eval time like sh time */
     {"eval",             p_eval,             0},
     {"evalstr",          p_evalString,       0},
     {"exit",             p_exit,             0},
@@ -411,6 +412,7 @@ PRIMITIVE primitive[] =
     {"lasterr",          p_lastError,        0},
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
+    {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
     {"quote",            p_quote,            0},
@@ -428,7 +430,6 @@ PRIMITIVE primitive[] =
     {"sysinfo",          p_systemInfo,       0},
     {"term",             p_term,             0},
     {"throwerror",       p_throwError,       0},
-    {"timer",            p_timerEvent,       0},
     {"trace",            p_trace,            0},
     {"xferevent",        p_transferEvent,    0},
 
@@ -490,19 +491,18 @@ PRIMITIVE primitive[] =
 
     /* core - flow - flow boosters, intent markers */
 
-    {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some ops */
-    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some ops */
-    {"loop",             p_dolist,           2}, /* :alt, dolist over list/value converted to list*/
+    {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
+    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
+    {"loop",             p_dolist,           2}, /* :alt, dolist over list or value converted to list*/
 
     /* core - date and time */
 
-    {"date",        p_date,        0}, /* date as human-readable string */
-    {"dateiso",     p_dateISO,     0}, /* :rebel date as ISO 8601 string */
-    {"datelist",    p_dateList,    0}, /* date and time as list */
-    {"datestamp",   p_dateParse,   0}, /* seconds since epoch to date */
-    {"time",        p_dateValue,   0}, /* seconds since epoch (UTC) */
-    {"timelist",    p_now,         0}, /* current date and time +/- sec offset as list */
-    {"timeofday",   p_timeOfDay,   0}, /* seconds elapsed since midnight */
+    {"date",        p_date,                  0}, /* date as human-readable string */
+    {"dateiso",     p_dateISO,               0}, /* :rebel date as ISO 8601 string */
+    {"datelist",    p_dateList,              0}, /* date and time as list */
+    {"datestamp",   p_dateParse,             0}, /* :replaces date-parse, seconds since epoch to date */
+    {"time",        p_dateValue,             0}, /* :replaces date-value, seconds since epoch (UTC); adjustable */
+    {"timelist",    p_now,                   0}, /* :replaces now, current date and time +/- sec offset as list */
 
     /* core - network */
 
