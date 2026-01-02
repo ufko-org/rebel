@@ -176,7 +176,7 @@ PRIMITIVE primitive[] =
     {"join",             p_join,             0},
     {"last",             p_last,             0},
     {"lcase",            p_lower,            0}, /* :replaces lower-case */
-    {"length",           p_length,           0},
+    {"len",              p_length,           0}, /* :replaces length */
     {"lookup",           p_lookup,           0},
     {"map",              p_map,              0},
     {"match",            p_match,            0},
@@ -192,11 +192,11 @@ PRIMITIVE primitive[] =
     {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
     {"replace",          p_replace,          0x400},
     {"rest",             p_rest,             0},
-    {"reverse",          p_reverse,          0x400},
-    {"rotate",           p_rotate,           0x400},
+    {"rev",              p_reverse,          0x400}, /* :replaces reverse */
+    {"rot",              p_rotate,           0x400}, /* :replaces rotate */
     {"rx",               p_regex,            0}, /* :replaces regex */
     {"rxcomp",           p_regexComp,        0}, /* :replaces regex-comp */
-    {"select",           p_select,           0},
+    {"sel",              p_select,           0}, /* :replaces select */
     {"slice",            p_slice,            0},
     {"sort",             p_sort,             0x400},
     {"swap",             p_swap,             0},
@@ -206,7 +206,7 @@ PRIMITIVE primitive[] =
     {"ucase",            p_upper,            0}, /* :replaces upper-case */
     {"unify",            p_unify,            0},
     {"union",            p_union,            0},
-    {"unique",           p_unique,           0},
+    {"uniq",             p_unique,           0}, /* :replaces unique */
 
     #ifdef SUPPORT_UTF8
     {"utf8len",          p_utf8len,          0},
