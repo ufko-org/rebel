@@ -274,9 +274,9 @@ PRIMITIVE primitive[] =
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"ifnot",            p_ifNot,            2}, /* :rebel reimplemented as a full countepart of if */
-    {"unless",           p_unless,           2}, /* :legacy? */
+    {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
-    {"when",             p_when,             2}, /* :legacy? */
+    {"when",             p_when,             2}, 
     {"while",            p_while,            2},
 
     /* core - logical */
