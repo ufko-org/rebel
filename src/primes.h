@@ -110,7 +110,7 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"def",              p_define,           0x402}, /* :replaces define */
-    {"set",              p_setdef,           0x400}, /* :rebel :replaces setq/setf */ 
+    {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro;  */
     {"macro",            p_macro,            2},     /* expand macro */
     {"with",             p_with,             0x400}, /* :rebel */
@@ -162,7 +162,7 @@ PRIMITIVE primitive[] =
     {"freq",             p_count,            0}, /* :replaces count */
     {"diff",             p_difference,       0}, /* :replaces difference */
     {"dup",              p_dup,              0},
-    {"next",             p_exists,           0}, /* :replaces exists, gives real meaning to exists */
+    {"next",             p_exists,           0}, /* :replaces exists, gives real meaning to exists' C code */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -188,7 +188,7 @@ PRIMITIVE primitive[] =
     {"push",             p_push,             0x400},
     {"ref",              p_ref,              0},
     {"refall",           p_refAll,           0},
-    {"refset",           p_setRef,           0x400}, /* :replaces set-ref doesn't evoke value binding */
+    {"refset",           p_setRef,           0x400}, /* :replaces set-ref which evokes value binding */
     {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
     {"replace",          p_replace,          0x400},
     {"rest",             p_rest,             0},
@@ -272,7 +272,7 @@ PRIMITIVE primitive[] =
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
-    {"ifnot",            p_ifNot,            2}, /* :rebel reimplemented as a full countepart of if */
+    {"ifnot",            p_ifNot,            2}, /* :rebel reimplemented as a full countepart of if with 2 branches */
     {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
     {"when",             p_when,             2}, 
@@ -402,7 +402,7 @@ PRIMITIVE primitive[] =
     {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
-    {"etime",            p_time,             0}, /* :replaces time, measures elapsed eval time like sh time */
+    {"etime",            p_time,             0}, /* :replaces time, measures elapsed eval time */
     {"eval",             p_eval,             0},
     {"evalstr",          p_evalString,       0},
     {"exit",             p_exit,             0},
