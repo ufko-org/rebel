@@ -393,7 +393,7 @@ PRIMITIVE primitive[] =
     {"argv",             p_mainArgs,         0},
     {"catch",            p_catch,            0},
     {"clone",            p_new,              0}, /* :replaces new, this is obviously cloning op */
-    {"cloneone",         p_defineNew,        0}, /* :replaces def-new -||- */
+    {"clonesym",         p_defineNew,        0}, /* :replaces def-new -||- */
     {"commandevent",     p_commandEvent,     0},
     {"context",          p_context,          0},
     {"copy",             p_copy,             0},
