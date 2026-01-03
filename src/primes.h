@@ -111,8 +111,8 @@ PRIMITIVE primitive[] =
     {"local",            p_local,            2},
     {"def",              p_define,           0x402}, /* :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
-    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro;  */
-    {"macro",            p_macro,            2},     /* expand macro */
+    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
+    {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
     {"with",             p_with,             0x400}, /* :rebel */
 
     /* core - data - iterators */
