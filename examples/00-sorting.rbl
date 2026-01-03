@@ -2,16 +2,16 @@
 ; standard bubble sort implementation using local variables
 ; iterates repeatedly swapping adjacent elements until sorted
 ; ---------------------------------------------------------------------
-(define (bubble-sort lst)
-  (local (j next)
-    (set next 1)
-    (set j (length lst))
-    (while (= next 1)
-      (set next 0)
+(def (bubble-sort lst)
+  (local (j m)
+    (set m 1)
+    (set j (len lst))
+    (while (= m 1)
+      (set m 0)
       (for (i 1 (- j 1))
         (cond ((< (lst i) (lst (- i 1)))
                (swap (lst i) (lst (- i 1)))
-               (set next 1))
+               (set m 1))
         )
       )
       (-- j)
@@ -26,7 +26,7 @@
 ; keeps only elements that satisfy the given comparison operator
 ; inspired by the humorous "Stalin sort" concept
 ; ---------------------------------------------------------------------
-(define (stalin-sort lst op)
+(def (stalin-sort lst op)
   (if (nil? lst)
     '()
     (let (out (list (first lst))
@@ -42,5 +42,5 @@
   )
 )
 
-(stalin-sort '(1 3 4 2 3 6 8 5) <=)) 
+(stalin-sort '(1 3 4 2 3 6 8 5) <=)
 ;-> (1)
