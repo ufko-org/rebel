@@ -3636,6 +3636,7 @@ GETNEXT:
             break;
 
         case TKN_SYMBOL:
+            /* ufko: for (fn ... call to create anonymous function */
             if(strcmp(token, "fn") == 0)
             {
                 if(cell->type != CELL_EXPRESSION)
@@ -3647,6 +3648,7 @@ GETNEXT:
                 cell->aux = (UINT)nilCell;
                 goto GETNEXT;
             }
+            /* ufko: for (fn-macro ... call to internally manipulate macros */
             else if(strcmp(token, "fn-macro") == 0)
             {
                 if(cell->type != CELL_EXPRESSION)
