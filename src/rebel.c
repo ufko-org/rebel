@@ -5424,6 +5424,127 @@ SETDEF_BEGIN:
     return(cell);
 }
 
+CELL *p_setmut(CELL *params)
+{
+    SYMBOL *symbolRef = NULL;
+    CELL *cell;
+    CELL *new;
+    CELL *stringRef;
+    char *indexRefPtr;
+
+SETMUT_BEGIN:
+    if(params->next == nilCell)
+    {
+        return(errorProc(ERR_MISSING_ARGUMENT));
+    }
+
+    /* Reject quoted symbol as assignment target */
+    /* case 1: 'sym  (CELL_QUOTE) */
+    if(params->type == CELL_QUOTE)
+    {
+        return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
+    }
+
+    /* case 2: (quote sym) */
+    if(params->type == CELL_EXPRESSION)
+    {
+        CELL *head = (CELL *)params->contents;
+
+        if(head &&
+           head->type == CELL_SYMBOL &&
+           strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
+        {
+            return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
+        }
+    }
+    /* ~ reject */
+
+
+    cell = evaluateExpression(params);
+
+    if(cell == nilCell || cell == trueCell)
+    {
+        errorProcExt(ERR_IS_NOT_REFERENCED, cell);
+    }
+
+    /* Reject create/set unbound variable */
+    if(cell->contents == (UINT)nilCell)
+    {
+        return errorProc(ERR_SYMBOL_UNBOUND_MUT);
+    }
+    /* ~ reject */
+
+    symbolRef = symbolCheck;
+    stringRef = stringCell;
+    indexRefPtr = stringIndexPtr;
+
+    if(symbolRef && isProtected(symbolRef->flags) && symbolRef->contents == (UINT)cell)
+    {
+        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbolRef)));
+    }
+
+    itSymbol->contents = (UINT)cell;
+    new = copyCell(evaluateExpression(params->next));
+    itSymbol->contents = (UINT)nilCell;
+
+    params = params->next;
+    params = params->next;
+
+
+    if(stringRef && indexRefPtr)
+    {
+        cell = setNthStr((CELL *)stringRef, new, indexRefPtr);
+        if(params != nilCell)
+        {
+            goto SETMUT_BEGIN;
+        }
+        return(cell);
+    }
+
+    /* delete contents of original cell */
+    if(isEnvelope(cell->type))
+    {
+        if(cell->type == CELL_ARRAY)
+        {
+            deleteArray(cell);
+        }
+        else
+        {
+            deleteList((CELL *)cell->contents);
+        }
+    }
+    else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
+            || cell->type == CELL_BIGINT
+           )
+    {
+        freeMemory( (void *)cell->contents);
+    }
+
+
+    /* get new contents */
+    cell->type = new->type;
+    cell->aux = new->aux;
+    cell->contents = new->contents;
+
+    /* free cell */
+    new->type = CELL_FREE;
+    new->aux = 0;
+    new->contents = 0;
+    new->next = firstFreeCell;
+    firstFreeCell = new;
+    --cellCount;
+
+    if(params != nilCell)
+    {
+        goto SETMUT_BEGIN;
+    }
+
+    /* return modified cell */
+    symbolCheck = symbolRef;
+    pushResultFlag = FALSE;
+    return(cell);
+}
+
 /* also called from setq */
 CELL *p_setf(CELL *params)
 {
