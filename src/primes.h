@@ -111,7 +111,6 @@ PRIMITIVE primitive[] =
     {"local",            p_local,            2},
     {"func",              p_define,          0x402}, /* :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
-    {"mut",              p_setmut,           0},     /* :rebel, conscious mutate operation */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
     {"with",             p_with,             0x400}, /* :rebel */
@@ -182,6 +181,7 @@ PRIMITIVE primitive[] =
     {"map",              p_map,              0},
     {"match",            p_match,            0},
     {"member",           p_member,           0},
+    {"mut",              p_setmut,           0}, /* :rebel, conscious mutate operation */
     {"nth",              p_nth,              0},
     {"parse",            p_parse,            0},
     {"pop",              p_pop,              0x400},
