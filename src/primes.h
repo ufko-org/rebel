@@ -472,7 +472,7 @@ PRIMITIVE primitive[] =
     {"fn?",              p_isFn,             0},
     {"global?",          p_isGlobal,         0},
     {"inf?",             p_isinf,            0},
-    {"int?",             p_isInteger,        0}, /* :replaces integer */
+    {"int?",             p_isInteger,        0}, /* :replaces integer? */
     {"legal?",           p_isLegal,          0},
     {"list?",            p_isList,           0},
     {"macro?",           p_isMacro,          0},
