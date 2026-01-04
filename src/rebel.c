@@ -3229,6 +3229,8 @@ char *errorMessage[] =
     "not a number or infinite",     /* 75 */
     "cannot convert NULL to string",/* 76 */
     "quoted symbol used",           /* 77 ufko */
+    "unbound symbol used",          /* 78 ufko */
+    "named function definition expected",  /* 79 ufko */
     NULL
 };
 
