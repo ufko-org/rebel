@@ -297,6 +297,7 @@ PRIMITIVE primitive[] =
     {"ge",               p_greaterEqual,     0}, /* :alt */
     {"=",                p_equal,            0},
     {"eq",               p_equal,            0}, /* :alt */
+    {"is",               p_equal,            0}, /* :alt */
     {"!=",               p_notEqual,         0},
     {"ne",               p_notEqual,         0}, /* :alt */
 
