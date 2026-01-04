@@ -111,6 +111,7 @@ PRIMITIVE primitive[] =
     {"local",            p_local,            2},
     {"def",              p_define,           0x402}, /* :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
+    {"mut",              p_setmut,           0},     /* :rebel, conscious mutate operation */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
     {"with",             p_with,             0x400}, /* :rebel */
@@ -492,7 +493,6 @@ PRIMITIVE primitive[] =
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
-    {"mut",              p_setdef,           0}, /* :alt, sentinel of conscious mutate operation */
     {"loop",             p_dolist,           2}, /* :alt, dolist over list or value converted to list*/
 
     /* core - date and time */
