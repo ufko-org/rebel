@@ -110,7 +110,6 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"func",              p_define,          0x402}, /* :replaces define */
-    {"def",              p_define,           0x402}, /* :alt :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
     {"mut",              p_setmut,           0},     /* :rebel, conscious mutate operation */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
@@ -164,7 +163,7 @@ PRIMITIVE primitive[] =
     {"freq",             p_count,            0}, /* :replaces count */
     {"diff",             p_difference,       0}, /* :replaces difference */
     {"dup",              p_dup,              0},
-    {"next",             p_exists,           0}, /* :replaces exists, gives real meaning to exists' C code */
+    {"next",             p_exists,           0}, /* :replaces exists */
     {"expand",           p_expand,           0},
     {"explode",          p_explode,          0},
     {"extend",           p_extend,           0x400},
@@ -190,7 +189,7 @@ PRIMITIVE primitive[] =
     {"push",             p_push,             0x400},
     {"ref",              p_ref,              0},
     {"refall",           p_refAll,           0},
-    {"refset",           p_setRef,           0x400}, /* :replaces set-ref which evokes value binding */
+    {"refset",           p_setRef,           0x400}, /* :replaces set-ref */
     {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
     {"replace",          p_replace,          0x400},
     {"rest",             p_rest,             0},
@@ -348,7 +347,7 @@ PRIMITIVE primitive[] =
     /* core - io - via path */
 
     {"fpath",            p_realpath,         0},
-    {"finfo",            p_fileInfo,         0}, /* fstat would be lie, not all stat fields */
+    {"finfo",            p_fileInfo,         0}, 
     {"fappend",          p_appendFile,       0},
     {"fread",            p_readFile,         0},
     {"fwrite",           p_writeFile,        0},
@@ -444,13 +443,13 @@ PRIMITIVE primitive[] =
     {"address",          p_address,          0},
     {"callback",         p_callback,         0},
     {"flt",              p_flt,              0},
-    {"charc",            p_getChar,          0}, /* :replaces get- prefix with c suffix */
-    {"floatc",           p_getFloat,         0}, /* :replaces get- prefix with c suffix */
-    {"intc",             p_getInteger,       0}, /* :replaces get- prefix with c suffix */
-    {"longc",            p_getLong,          0}, /* :replaces get- prefix with c suffix */
-    {"stringc",          p_getString,        0}, /* :replaces get- prefix with c suffix */
+    {"charc",            p_getChar,          0}, 
+    {"floatc",           p_getFloat,         0}, 
+    {"intc",             p_getInteger,       0}, 
+    {"longc",            p_getLong,          0}, 
+    {"stringc",          p_getString,        0}, 
     {"import",           p_importLib,        0},
-    {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem, this is memcpy to the bone */
+    {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem */
     {"pack",             p_pack,             0},
     {"struct",           p_struct,           0},
     {"unpack",           p_unpack,           0},
@@ -490,7 +489,7 @@ PRIMITIVE primitive[] =
     {"true?",            p_isTrue,           0},
     {"zero?",            p_isZero,           0},
 
-    /* core - flow - flow boosters, intent markers */
+    /* core - flow - boosters, intent markers */
 
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
