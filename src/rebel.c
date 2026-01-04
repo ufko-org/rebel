@@ -5288,7 +5288,17 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
     return(fnCell);
 }
 
+/* ufko: only function definition is allowed, removes set redundancy */
+CELL *p_define(CELL *params)
+{
+    if((params->type != CELL_SYMBOL) && (params->type != CELL_DYN_SYMBOL))
+    {
+       return(defineOrMacro(params, CELL_FN, FALSE));
+    }
+    return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED);
+}
 
+/* ufko: 
 CELL *p_define(CELL *params)
 {
     if(params->type != CELL_SYMBOL)
@@ -5302,6 +5312,7 @@ CELL *p_define(CELL *params)
 
     return(setDefine((SYMBOL *)params->contents, params->next, SET_SET));
 }
+*/
 
 CELL *p_defineMacro(CELL *params)
 {
