@@ -4477,8 +4477,8 @@ CELL *getSymbol(CELL *params, SYMBOL * * symbol)
     return(params->next);
 }
 
-/* only used for internal syms: $timer, $error-event, $prompt-event, $command-event
-   $transfer-event, and $signal-1-> $signal-32
+/* only used for internal syms: $alarm-event, $error-event, $prompt-event, $command-event
+   $reader-event, $transfer-event, and $signal-1-> $signal-32
    If a quoted symbols hasn't been passed take the evaluated params as contents
    of the system event symbols starting with $ */
 CELL *getCreateSymbol(CELL *params, SYMBOL * * symbol, char *name)
@@ -8001,7 +8001,7 @@ CELL *p_timerEvent(CELL *params)
 
     if(params != nilCell)
     {
-        params = getCreateSymbol(params, &timerEvent, "$timer");
+        params = getCreateSymbol(params, &timerEvent, "$alarm-event");
 
         if(params != nilCell)
         {
