@@ -4,7 +4,7 @@
 ; 1. using default functor
 ; default functor is always passed by reference (automatically)
 (set x:x 10)
-(def (f p) 
+(func (f p) 
   (set p 5))
 (f x:x)
 (println x:x) ;-> 5
@@ -13,7 +13,7 @@
 (set y 10)
 ; use _p suffix for param name to avoid conflict 
 ; with global symbol
-(def (f y_p) 
+(func (f y_p) 
   (set (eval y_p) 5))  
 (f 'y)
 (println y) ;-> 5
@@ -32,7 +32,7 @@
 ; conflicts with a global symbol to demonstrate 
 ; call-by-reference using eval
 (set p 'x:x)
-(def (f p) 
+(func (f p) 
   (set (eval p) 5)) ; p points to x:x
 (f p)
 (println x:x) ;-> 5

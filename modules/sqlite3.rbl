@@ -66,7 +66,7 @@
 ;; Explicitly prefixed functions to avoid conflicts with built-ins
 ;; ---------------------------------------------------------------------
 
-(def (sql3:open db-name)
+(func (sql3:open db-name)
   ;; prefixed to avoid clash with built-in open
   (if (not db)
     (do
@@ -78,7 +78,7 @@
       (set error-message "A database is already open")
       nil)))
 
-(def (sql3:close)
+(func (sql3:close)
   ;; prefixed to avoid clash with built-in close
 	(if db (do
 		(sqlite3_close db)
@@ -88,18 +88,18 @@
 ;; Internal module helpers
 ;; ---------------------------------------------------------------------
 
-(def (bind-parameter pstm param value)
+(func (bind-parameter pstm param value)
 	(let (idx param)
 		(unless (int? param)
 			(set idx (sqlite3_bind_parameter_index pstm
 				(if (symbol? param) (term param) (string param)))))
 		(cond
 			((float? value) (sqlite3_bind_double pstm idx (float value)))
-			((string? value) (sqlite3_bind_text pstm idx value (length value) -1))
+			((string? value) (sqlite3_bind_text pstm idx value (len value) -1))
 			((nil? value) (sqlite3_bind_null pstm idx))
-			(true (sqlite3_bind_text pstm idx (string value) (length (string value)) -1)))))
+			(true (sqlite3_bind_text pstm idx (string value) (len (string value)) -1)))))
 
-(def (get-values pstm cols) 
+(func (get-values pstm cols) 
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
@@ -122,7 +122,7 @@
 				(push nil row -1))))
 	row)
 
-(def (get-names pstm cols) 
+(func (get-names pstm cols) 
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
@@ -130,21 +130,21 @@
 		(if (= ps 0) (push "" row -1) (push (stringc ps) row -1)))
 	row)
 
-(def (get-types pstm cols)
+(func (get-types pstm cols)
 	(set row '())
 	(dotimes (idx cols)
 		(set i (int idx))
 		(push (nth (sqlite3_column_type pstm i) SQLITE_TYPES) row -1))
 	row)
 
-(def (set-error)
+(func (set-error)
 	(set result (sqlite3_errmsg db))
 	(if (= result 0) (set error-message nil) (set error-message (stringc result)) nil))
 
 ;; SQL query function
 ;; ---------------------------------------------------------------------
 
-(def (sql sql-str sql-args)
+(func (sql sql-str sql-args)
 	(set result nil done nil error-message nil)
 	(set sqarray '())
 	(set col-names '())
@@ -184,13 +184,13 @@
 ;; Module functions
 ;; ---------------------------------------------------------------------
 
-(def (colnames) col-names)
-(def (rowid) (if db (sqlite3_last_insert_rowid db)))
-(def (tables) (if db (set lst (sql "select tbl_name from sqlite_master")) (if lst (set lst (first (transpose lst))))))
-(def (columns aTable) (if (list? (sql (append "select * from " aTable " where 0;"))) col-names))
-(def (changes) (if db (sqlite3_changes db)))
-(def (timeout ms) (if db (zero? (sqlite3_busy_timeout db (int ms)))))
-(def (error) error-message)
+(func (colnames) col-names)
+(func (rowid) (if db (sqlite3_last_insert_rowid db)))
+(func (tables) (if db (set lst (sql "select tbl_name from sqlite_master")) (if lst (set lst (first (transpose lst))))))
+(func (columns aTable) (if (list? (sql (append "select * from " aTable " where 0;"))) col-names))
+(func (changes) (if db (sqlite3_changes db)))
+(func (timeout ms) (if db (zero? (sqlite3_busy_timeout db (int ms)))))
+(func (error) error-message)
 
 ;; ---------------------------------------------------------------------
 (println "Loaded: sqlite3 module")

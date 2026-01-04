@@ -109,7 +109,8 @@ PRIMITIVE primitive[] =
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
-    {"def",              p_define,           0x402}, /* :replaces define */
+    {"func",              p_define,          0x402}, /* :replaces define */
+    {"def",              p_define,           0x402}, /* :alt :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
     {"mut",              p_setmut,           0},     /* :rebel, conscious mutate operation */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
