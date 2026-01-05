@@ -110,10 +110,10 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"func",             p_define,           0x402}, /* :rebel :replaces define */
-    {"set",              p_setdef,           0x400}, /* :rebel :replaces set '/setq/setf */ 
+    {"set",              p_set,              0x400}, /* */ 
+    {"setq",             p_setdef,           0x400}, /* :rebel reimplemented :replaces setq/setf */ 
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
-    {"with",             p_with,             0x400}, /* :rebel */
 
     /* core - data - iterators */
     
