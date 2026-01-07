@@ -3228,9 +3228,10 @@ char *errorMessage[] =
     "bigint type not applicable",   /* 74 */
     "not a number or infinite",     /* 75 */
     "cannot convert NULL to string",/* 76 */
-    "quoted symbol used",           /* 77 ufko */
-    "unbound symbol used",          /* 78 ufko */
+    "quoted symbol used",                  /* 77 ufko */
+    "unbound symbol used",                 /* 78 ufko */
     "named function definition expected",  /* 79 ufko */
+    "quoted symbol expected",              /* 80 ufko */
     NULL
 };
 
@@ -4470,7 +4471,8 @@ CELL *getSymbol(CELL *params, SYMBOL * * symbol)
             return(params->next);
         }
         *symbol = nilSymbol;
-        return(errorProcArgs(ERR_SYMBOL_EXPECTED, params));
+        /* ufko: error when symbol is missing ' */
+        return(errorProcArgs(ERR_QUOTED_SYMBOL_EXPECTED, params));
     }
 
     *symbol = (SYMBOL *)cell->contents;
@@ -5295,7 +5297,7 @@ CELL *p_define(CELL *params)
     {
        return(defineOrMacro(params, CELL_FN, FALSE));
     }
-    return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED);
+    return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED_FUNC);
 }
 
 /* ufko: 
@@ -5665,6 +5667,30 @@ CELL *p_with(CELL *params)
         {
             return(errorProc(ERR_MISSING_ARGUMENT));
         }
+        pushResultFlag = TRUE;
+        if(next == nilCell)
+        {
+            return(setDefine(symbol, params, SET_SET));
+        }
+        setDefine(symbol, params, SET_SET);
+        params = next;
+    }
+}
+
+CELL *p_tie(CELL *params)
+{
+    SYMBOL *symbol;
+    CELL *next;
+
+    for(;;)
+    {
+        params = getSymbol(params, &symbol);
+        next = params->next;
+        if(params == nilCell)
+        {
+            return(errorProc(ERR_MISSING_ARGUMENT));
+        }
+
         pushResultFlag = TRUE;
         if(next == nilCell)
         {

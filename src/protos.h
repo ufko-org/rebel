@@ -467,6 +467,7 @@ CELL *p_term(CELL *params);
 CELL *p_ttest(CELL *params);
 CELL *p_throw(CELL *params);
 CELL *p_throwError(CELL *params);
+CELL *p_tie(CELL *params);
 CELL *p_time(CELL *params);
 CELL *p_timeOfDay(CELL *params);
 CELL *p_timerEvent(CELL *params);
