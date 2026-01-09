@@ -101,8 +101,7 @@ PRIMITIVE primitive[] =
 
     /* core - data - creators */
 
-    {"constant",         p_constant,         0x400},
-    {"const",            p_constant,         0x400}, /* :alt */
+    {"const",            p_constant,         0x400}, 
     {"alias",            p_constant,         0x400}, /* :alt */
     {"global",           p_global,           0},
     {"let",              p_let,              0x402},
