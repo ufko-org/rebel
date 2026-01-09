@@ -320,9 +320,7 @@ PRIMITIVE primitive[] =
 
     /* core - io - via std */
 
-    {"pprint",           p_prettyPrint,      0},
     {"print",            p_print,            0},
-    {"pr",               p_print,            0}, /* :alt */
     {"println",          p_println,          0},
     {"prn",              p_println,          0}, /* :alt */
     {"readkey",          p_readKey,          0}, 
@@ -413,6 +411,7 @@ PRIMITIVE primitive[] =
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
     {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
+    {"pprint",           p_prettyPrint,      0},
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
     {"quote",            p_quote,            0},
