@@ -398,7 +398,7 @@ PRIMITIVE primitive[] =
     {"copy",             p_copy,             0},
     {"delete",           p_deleteSymbol,     0},
     {"dump",             p_dump,             0},
-    {"dumpsymbol",       p_dumpSymbol,       0}, /* :debug not documented in original */
+    {"dumpsym",          p_dumpSymbol,       0}, /* :debug not documented in original */
     {"env",              p_env,              0},
     {"errorevent",       p_errorEvent,       0},
     {"etime",            p_time,             0}, /* :replaces time, measures elapsed eval time */
