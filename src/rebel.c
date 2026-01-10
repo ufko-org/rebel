@@ -5482,7 +5482,7 @@ SETMUT_BEGIN:
         errorProcExt(ERR_IS_NOT_REFERENCED, cell);
     }
 
-    /* Reject create/set unbound variable */
+    /* Reject mutate unbound variable */
     if(cell->contents == (UINT)nilCell)
     {
         return errorProc(ERR_SYMBOL_UNBOUND_MUT);
