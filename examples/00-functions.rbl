@@ -1,41 +1,114 @@
-; Call by reference:
-; ---------------------------------------------------------------------
+; Call by reference examples
+; =====================================================================
 
 ; 1. using default functor
 ; default functor is always passed by reference (automatically)
 ; ---------------------------------------------------------------------
+
 (set x:x 10)
-(func (f p) 
+
+(func (f p)
   (set p 5))
+
 (f x:x)
-(println x:x) ;-> 5
+(println x:x)   ;-> 5
+
 
 ; 2. using eval
 ; ---------------------------------------------------------------------
+; Symbol is passed explicitly and dereferenced manually.
+; Parameter name uses _p suffix to avoid confusion with global symbol.
+; ---------------------------------------------------------------------
+
 (set y 10)
-; use _p suffix for param name to avoid conflict 
-; with global symbol
-(func (f y_p) 
-  (set (eval y_p) 5))  
+
+(func (f y_p)
+  (set (eval y_p) 5))
+
 (f 'y)
-(println y) ;-> 5
+(println y)     ;-> 5
+
 
 ; 3. using macro
 ; nice, clean way
 ; ---------------------------------------------------------------------
-(set z 10)
-(mac (f z) 
-  (set (eval z) 5))
-(f z)
-(println z) ;-> 5
-
-; 4. using symbol as pointer
-; we intentionally reuse a parameter name (p) that 
-; conflicts with a global symbol (p) to demonstrate 
-; call-by-reference using eval
+; Runtime macro receives unevaluated argument (symbol),
+; performs the write directly.
+; Still pure runtime call-by-reference.
 ; ---------------------------------------------------------------------
-(set p 'x:x)
-(func (f p) 
-  (set (eval p) 35)) ; p points to x:x
+
+(set z 10)
+
+(mac (f z)
+  (set (eval z) 5))
+
+(f z)
+(println z)     ;-> 5
+
+
+; 4. using symbol as pointer (eval-based)
+; ---------------------------------------------------------------------
+; This example demonstrates TWO things at the same time:
+;
+; 1) Call-by-reference via symbol pointer
+; 2) Why name conflicts do NOT matter
+;
+; Step by step:
+;
+; - Global symbol p holds a SYMBOL, not a value.
+;   That symbol points to x:x.
+;
+; - The function parameter is ALSO named p.
+;   This shadows the global p, but that is irrelevant.
+;
+; - What matters is the VALUE of the parameter p,
+;   which is the symbol 'x:x.
+;
+; - eval works on the VALUE (symbol), not on the variable name.
+;
+; Therefore:
+; - local p and global p do not conflict
+; - dereferencing is explicit and intentional
+; - set writes through the pointer
+;
+; This is low-level, mechanical, but 100% explicit.
+; ---------------------------------------------------------------------
+
+(set x:x 10)
+(set p 'x:x)            ; p holds a symbol pointing to x:x
+
+(func (f p)
+  (set (eval p) 35))    ; explicit dereference + write
+
 (f p)
-(println x:x) ;-> 35
+(println x:x)           ;-> 35
+
+
+; 5. using tie (symbol alias / pointer write)
+; ---------------------------------------------------------------------
+; This is the same idea as example 4, but cleaner.
+;
+; tie combines:
+; - symbol dereference
+; - and write
+; into a single operation.
+;
+; No eval needed.
+; No guessing.
+;
+; Reading the code tells you immediately:
+; "this writes through a symbol alias".
+;
+; Still runtime.
+; Still call-by-reference.
+; Just clearer.
+; ---------------------------------------------------------------------
+
+(set x:x 10)
+(tie 'p 'x:x)           ; p becomes an alias (symbol-pointer) to x:x
+
+(func (f p)
+  (tie p 35))           ; implicit dereference + write
+
+(f p)
+(println x:x)           ;-> 35
