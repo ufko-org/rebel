@@ -72,7 +72,7 @@ void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
 char preLoad[] =
     "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
-    "(context 'Tree) (constant 'Tree:Tree) (context MAIN)"
+    "(context 'Tree) (const 'Tree:Tree) (context MAIN)"
     "(func (Class:Class) (cons (context) (args)))";
 void printHelpText(void);
 #ifdef READLINE
@@ -2874,7 +2874,7 @@ void printSymbol(SYMBOL *sPtr, UINT device)
 
     if(sPtr->flags & SYMBOL_PROTECTED)
     {
-        setStr = "(constant ";
+        setStr = "(const ";
     }
     else
     {
