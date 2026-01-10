@@ -1,0 +1,13 @@
+; Test for function "fcopy"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Copy / delete file
+; ------------------------------------------------------------
+(test "1: copy and delete file"
+  (do
+    (fcopy "run.rbl" "junk")
+    (fdel "junk")
+  )
+  true
+)

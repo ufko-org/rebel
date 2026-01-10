@@ -1,0 +1,10 @@
+; Test for function "betai"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; basic betai value
+; ------------------------------------------------------------
+(test "1: sta-betai(0.5 5 10) approx"
+  (< (abs (sub (sta-betai 0.5 5 10) 0.910217)) 1e-05)
+  true
+)

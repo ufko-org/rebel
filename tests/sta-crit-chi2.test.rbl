@@ -1,0 +1,25 @@
+; Test for function "sta-crit-chi2" (with sta-prob-chi2)
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Inversion property: sta-crit-chi2(sta-prob-chi2(x,df),df) ≈ x
+; ------------------------------------------------------------
+(test "1: inversion check df=2, x=4.605"
+  (< (abs (sub (sta-crit-chi2 (sta-prob-chi2 4.605 2) 2) 4.605)) 0.001)
+  true
+)
+
+(test "2: inversion check df=40, x=51.805"
+  (< (abs (sub (sta-crit-chi2 (sta-prob-chi2 51.805 40) 40) 51.805)) 0.001)
+  true
+)
+
+(test "3: inversion check df=2, x=9.210"
+  (< (abs (sub (sta-crit-chi2 (sta-prob-chi2 9.210 2) 2) 9.210)) 0.001)
+  true
+)
+
+(test "4: inversion check df=40, x=63.691"
+  (< (abs (sub (sta-crit-chi2 (sta-prob-chi2 63.691 40) 40) 63.691)) 0.001)
+  true
+)

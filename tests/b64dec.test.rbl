@@ -1,0 +1,30 @@
+; Test for function "b64dec"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Strings
+; ------------------------------------------------------------
+(test "1: empty string"
+  (= "" (b64dec (b64enc "")))
+  true
+)
+
+(test "2: single character"
+  (= "1" (b64dec (b64enc "1")))
+  true
+)
+
+(test "3: two characters"
+  (= "12" (b64dec (b64enc "12")))
+  true
+)
+
+(test "4: three characters"
+  (= "123" (b64dec (b64enc "123")))
+  true
+)
+
+(test "5: four characters"
+  (= "1234" (b64dec (b64enc "1234")))
+  true
+)

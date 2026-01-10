@@ -1,0 +1,23 @@
+; Test for function "fappend"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; ------------------------------------------------------------
+(test "1: append string to file"
+  (fappend "junk" "ABC")
+  3
+)
+
+(test "2: append string to file using file:// URL"
+  (fappend "file://junk" "DEF")
+  3
+)
+
+(test "3: read file and check content"
+  (= (fread "junk") "ABCDEF")
+  true
+)
+
+; Post cleanup
+; ------------------------------------------------------------
+(if (file? "junk") (fdel "junk"))

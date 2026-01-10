@@ -11,7 +11,7 @@
 ; = function that goes deep, comparing not only content but also types
 ; (test "3 test 3" (array 2 '(1 2)) '(1 2)) ;-> fail
 ; ---------------------------------------------------------------------
-; test against regexp using rx set to 1
+; test against regexp using re set to 1
 ; (test "4: regexp" 123 {\d\d\d} 1)
 ; (test "5: regexp" '(1 2 3) {\(\d \d \d\)} 1)
 ; ---------------------------------------------------------------------

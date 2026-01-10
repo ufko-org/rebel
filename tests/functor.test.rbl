@@ -1,0 +1,54 @@
+; Test for function "functor"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Basic default functor get
+; ------------------------------------------------------------
+(test "1: get default functor via context symbol"
+  (do
+    (set C:C 123)
+    (functor C))
+  123
+)
+
+; Set default functor via set and read back
+; ------------------------------------------------------------
+(test "2: set default functor value updates context"
+  (do
+    (set (functor C) 456)
+    (functor C))
+  456
+)
+
+; functor works when context is passed as a value
+; ------------------------------------------------------------
+(test "3: functor respects context stored in variable"
+  (do
+    (set C:C 789)
+    (set ctx C)
+    (functor ctx))
+  789
+)
+
+; Updating through variable updates original context functor
+; ------------------------------------------------------------
+(test "4: setting functor via context variable modifies context"
+  (do
+    (set C2:x 1)
+    (set ctx C)
+    (set C2:x 1)
+    (set (functor ctx) 999)
+    C:C)
+  999
+)
+
+; functor on new top-level context returns nil
+; ------------------------------------------------------------
+;(test "5: functor on new top-level context returns nil"
+;  (do
+;    (context MAIN)           ; create context at top-level
+;    (set C2 (context 'Bar))  ; C is context Bar
+;    (context test)           ; switch back
+;    (functor C2))
+;  nil
+;)

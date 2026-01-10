@@ -1,0 +1,13 @@
+; Test for function "pick"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Control / Choice
+; ------------------------------------------------------------
+(test "1: pick returns one of the possible values"
+  (local (x)
+    (set x (pick 1 2))
+    (or (= x 1) (= x 2))
+  )
+  true
+)

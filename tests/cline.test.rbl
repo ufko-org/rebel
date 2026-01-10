@@ -1,0 +1,26 @@
+; Test for function "cline"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Reading first line preserves cline
+; ------------------------------------------------------------
+(test "1: cline returns last readln"
+  (do
+    (set handle (open "tests-fs/execs/script.rbl" "r"))
+    (readln handle)
+    (= (cline) "#!/usr/bin/env rebel")
+  )
+  true
+)
+
+; After closing handle, cline stays last value
+; ------------------------------------------------------------
+(test "2: cline after close still holds last line"
+  (do
+    (set handle (open "tests-fs/execs/script.rbl" "r"))
+    (readln handle)
+    (close handle)
+    (= (cline) "#!/usr/bin/env rebel")
+  )
+  true
+)

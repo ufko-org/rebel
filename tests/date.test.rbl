@@ -1,0 +1,48 @@
+; Test for function "date"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Basic: all variants representing "now" must match
+; ------------------------------------------------------------
+(test "1: date variants for current time"
+  (= (date)
+     (date (time))
+     (date (apply time (timelist))))
+  true
+)
+
+; Epoch 0 must return a valid date string
+; ------------------------------------------------------------
+(test "2: date of Unix epoch is a string"
+  (string? (date 0))
+  true
+)
+
+; Epoch with offset: adding 60 minutes moves time forward by 1 hour
+; ------------------------------------------------------------
+(test "3: epoch + 60min offset moves hour by +1"
+  (let ((a (date 0 0 "%H"))
+        (b (date 0 60 "%H")))
+    (or
+      (= (int b) (+ (int a) 1))
+      (= (int b) (mod (+ (int a) 1) 24))  ; wrap past midnight
+    ))
+  true
+)
+
+; Custom format: %Y must match the numeric year from date-list
+; ------------------------------------------------------------
+(test "4: custom format %Y matches date-list year"
+  (let ((sec (time))
+        (yr1 (datelist (time) 0))          ; year
+        (yr2 (int (date (time) 0 "%Y"))))   ; formatted year
+    (= yr1 yr2))
+  true
+)
+
+; date of valid timestamp must not be empty
+; ------------------------------------------------------------
+(test "5: date returns non-empty string for valid input"
+  (not (= (date (time)) ""))
+  true
+)

@@ -1,5 +1,5 @@
 (load "testing.rbl")
-(context 'test)
+; ---------------------------------------------------------------------
 
 ; we should test some fails here and there too :D
 (test "1: Intentional fail" 1 2)

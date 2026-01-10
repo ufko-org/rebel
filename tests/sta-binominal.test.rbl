@@ -1,0 +1,10 @@
+; Test for function "sta-binomial"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; basic sta-binomial probability
+; ------------------------------------------------------------
+(test "1: sta-binomial(2 1 0.5) approx"
+  (< (sub (sta-binomial 2 1 0.5) 0.5) 1e-09)
+  true
+)

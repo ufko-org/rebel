@@ -1,0 +1,10 @@
+; Test for function "commandevent"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Test interactively in REPL
+; ------------------------------------------------------------
+(test "1: commandevent reply"
+  (do (commandevent) true)
+  true
+)

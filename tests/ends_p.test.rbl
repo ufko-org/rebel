@@ -1,0 +1,15 @@
+; tests for function "ends?"
+; ---------------------------------------------------------------------
+(load "testing.rbl")
+
+(test "1: ends? string"
+  (ends? "hello" "o")
+  true)
+
+(test "2: ends? string"
+  (ends? "hello" "lo")
+  true)
+
+(test "2: ends? string"
+  (ends? "hello" "xx")
+  nil)

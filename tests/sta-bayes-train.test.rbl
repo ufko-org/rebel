@@ -1,0 +1,46 @@
+; Test for function "sta-bayes-train"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+(context 'Lex)
+; sta-bayes-train basic
+; ------------------------------------------------------------
+(test "1: sta-bayes-train initial counts"
+  (sta-bayes-train '(F F F B B) '(F B B B B) 'Lex)
+  '(5 5)
+)
+
+; sta-bayes-query: single F
+; ------------------------------------------------------------
+(test "2: sta-bayes-query '(F) approx"
+  (< (abs (apply add (map sub (sta-bayes-query '(F) Lex) '(0.75 0.25)))) 0.001)
+  true
+)
+
+(test "3: sta-bayes-query '(F) approx with smoothing"
+  (< (abs (apply add (map sub (sta-bayes-query '(F) Lex true) '(0.75 0.25)))) 0.001)
+  true
+)
+
+; sta-bayes-query: (F F)
+; ------------------------------------------------------------
+(test "4: sta-bayes-query '(F F) approx"
+  (< (abs (apply add (map sub (sta-bayes-query '(F F) Lex) '(0.8251777681 0.1748222319)))) 0.001)
+  true
+)
+
+(test "5: sta-bayes-query '(F F) approx with smoothing"
+  (< (abs (apply add (map sub (sta-bayes-query '(F F) Lex true) '(0.9 0.1)))) 0.001)
+  true
+)
+
+; sta-bayes-query environment reset
+; ------------------------------------------------------------
+(test "6: sta-bayes-query reset Lex:* vars"
+  (do
+    (set Lex:F '(0 0))
+    (set Lex:B '(0 0))
+    (set Lex:total '(0 0))
+    true)
+  true
+)

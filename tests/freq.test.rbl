@@ -1,0 +1,32 @@
+; Test for function "freq"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Multiple items in target list
+; ------------------------------------------------------------
+(test "1: freq two numbers in list"
+  (freq '(1 2) '(2 1 2 1))
+  '(2 2)
+)
+
+(test "2: freq two symbols in list"
+  (freq '(a b) '(a a b c a b b))
+  '(3 3)
+)
+
+; Empty target
+; ------------------------------------------------------------
+(test "3: freq three symbols in empty list"
+  (freq '(a b c) '())
+  '(0 0 0)
+)
+
+; Each element appears exactly once
+; ------------------------------------------------------------
+(test "4: freq L in L"
+  (do
+    (set L '(a b c d e f))
+    (freq L L)
+  )
+  '(1 1 1 1 1 1)
+)

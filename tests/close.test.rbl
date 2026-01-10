@@ -1,0 +1,11 @@
+; Test for function "close"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; File close operations
+; ------------------------------------------------------------
+(test "1: open and close file"
+  (let (fd (open "tests-fs/simple/a.txt" "read"))
+  (close fd))
+  true
+)

@@ -1,0 +1,27 @@
+; Test for function "datelist"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; datelist and time are inverse operations
+; ------------------------------------------------------------
+(test "1: datelist roundtrip with time"
+  (let ((value (time)))
+    (= (apply time (datelist value)) value))
+  true
+)
+
+; Extracted fields must match after roundtrip with now
+; ------------------------------------------------------------
+(test "2: roundtrip specific element"
+  (let ((vlist (timelist)))
+    (= (vlist -4)
+       ((datelist (apply time vlist)) -2)))
+  true
+)
+
+; Epoch 0 has a fixed, well-known list representation
+; ------------------------------------------------------------
+(test "3: datelist for epoch 0"
+  (datelist 0)
+  '(1970 1 1 0 0 0 1 4)
+)

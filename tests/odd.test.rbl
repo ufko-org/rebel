@@ -1,0 +1,12 @@
+; test for function "odd?"
+; ---------------------------------------------------------------------
+(load "testing.rbl")
+
+;
+(test "1: is odd"
+  (odd? 2)
+  nil)
+(test "2: is odd"
+  (odd? 3)
+  true)
+

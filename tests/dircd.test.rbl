@@ -1,0 +1,15 @@
+; Test for function "dircd"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Directory operations
+; ------------------------------------------------------------
+(test "1: create, change, revert and remove directory"
+  (do
+    (dirmk "adir")
+    (dircd "adir")
+    (dircd "..")
+    (dirrm "adir")
+  )
+  true
+)

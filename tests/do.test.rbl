@@ -1,0 +1,14 @@
+; Test for function "do"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; basic do sequencing
+; ------------------------------------------------------------
+(test "1: do sets and increments"
+  (do
+    (set x 0)
+    (inc x)
+    (inc x)
+    (= x 2))
+  true
+)

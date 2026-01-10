@@ -1,0 +1,27 @@
+; Test for function "arraylist"
+; ------------------------------------------------------------
+(load "testing.rbl")
+
+; Arrays
+; ------------------------------------------------------------
+(test "1: arraylist on local array"
+  (local (a)
+    (set a (array 3 4 (seq 1 12)))
+    (and
+      (array? a)
+      (list? (arraylist a))
+    )
+  )
+  true
+)
+
+(test "2: arraylist on C:C array"
+    (do 
+      (set C:C (array 3 4 (seq 1 12)))
+      (and
+        (array? C:C)
+        (list? (arraylist C))
+        (= (arraylist C) '((1 2 3 4) (5 6 7 8) (9 10 11 12))))
+     )
+  true
+)
