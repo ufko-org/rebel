@@ -7581,15 +7581,6 @@ CELL *p_defineNew(CELL *params)
 
 CELL *isType(CELL *, int);
 
-CELL *p_isBound(CELL *params)
-{
-    SYMBOL *sPtr = (SYMBOL *)params->contents;
-
-    if(sPtr->live)
-        return(trueCell);
-
-    return(nilCell);
-}
 
 CELL *p_isNil(CELL *params)
 {
