@@ -278,7 +278,7 @@ This is for 64bit large file support (LFS),
 
 #define symbolType(A) ((CELL*)(A)->contents)->type
 
-/* RED BLACK binary balanced tree: nl-symbol.c */
+/* RED BLACK binary balanced tree: rebel-symbol.c */
 #define BLACK 0
 #define RED 1
 #define NIL_SYM &sentinel
