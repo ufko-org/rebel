@@ -286,6 +286,7 @@ CELL *p_isFile(CELL *params);
 CELL *p_isFloat(CELL *params);
 CELL *p_isInteger(CELL *params);
 CELL *p_isBigInteger(CELL *params);
+CELL *p_isBound(CELL *params);
 CELL *p_isFn(CELL *params);
 CELL *p_isLegal(CELL *params);
 CELL *p_isList(CELL *params);

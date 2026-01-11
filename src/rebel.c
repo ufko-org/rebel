@@ -5419,6 +5419,9 @@ SETDEF_BEGIN:
     cell->type = new->type;
     cell->aux = new->aux;
     cell->contents = new->contents;
+    if(symbolRef) {
+      symbolRef->live = 1;
+    }
 
     /* free cell */
     new->type = CELL_FREE;
@@ -5442,25 +5445,28 @@ SETDEF_BEGIN:
 CELL *p_setmut(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
+    SYMBOL *symbolMut = NULL;
     CELL *cell;
     CELL *new;
     CELL *stringRef;
     char *indexRefPtr;
 
 SETMUT_BEGIN:
+
+
+    /* missing value */
     if(params->next == nilCell)
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
     }
-
-    /* Reject quoted symbol as assignment target */
-    /* case 1: 'sym  (CELL_QUOTE) */
+      
+    /* Reject: 'sym  */
     if(params->type == CELL_QUOTE)
     {
         return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
     }
 
-    /* case 2: (quote sym) */
+    /* Reject: (quote sym) */
     if(params->type == CELL_EXPRESSION)
     {
         CELL *head = (CELL *)params->contents;
@@ -5472,8 +5478,16 @@ SETMUT_BEGIN:
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
     }
-    /* ~ reject */
 
+    /* Reject: unbound symbol */
+    if(params->type == CELL_SYMBOL)
+    {
+        symbolMut = (SYMBOL *)params->contents;
+        if(symbolMut->live == 0)
+        {
+            return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolMut));
+        }
+    }
 
     cell = evaluateExpression(params);
 
@@ -5481,13 +5495,6 @@ SETMUT_BEGIN:
     {
         errorProcExt(ERR_IS_NOT_REFERENCED, cell);
     }
-
-    /* Reject mutate unbound variable */
-    if(cell->contents == (UINT)nilCell)
-    {
-        return errorProc(ERR_SYMBOL_UNBOUND_MUT);
-    }
-    /* ~ reject */
 
     symbolRef = symbolCheck;
     stringRef = stringCell;
@@ -5887,6 +5894,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment(symbol->contents);
             pushEnvironment(symbol);
             symbol->contents = (UINT)copyCell(nilCell);
+            symbol->live = 1;
             localCount++;
             inits = inits->next;
         }
@@ -5937,6 +5945,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)args;
+            symbol->live = 1;
         }
 
         localCount++;
@@ -5969,6 +5978,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)list;
+            symbol->live = 1;
 
             args = list;
             list = list->next;
@@ -7570,6 +7580,16 @@ CELL *p_defineNew(CELL *params)
 /* ------------------------------ system ------------------------------ */
 
 CELL *isType(CELL *, int);
+
+CELL *p_isBound(CELL *params)
+{
+    SYMBOL *sPtr = (SYMBOL *)params->contents;
+
+    if(sPtr->live)
+        return(trueCell);
+
+    return(nilCell);
+}
 
 CELL *p_isNil(CELL *params)
 {
