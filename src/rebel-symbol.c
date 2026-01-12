@@ -623,7 +623,7 @@ CELL *p_prefix(CELL *params)
 
 SYMBOL sentinel =
 {
-    0,          /* pretty print */
+    0,          /* flags */
     BLACK,      /* color */
     0,          /* mutable */
     "NIL",      /* name */
