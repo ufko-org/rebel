@@ -78,7 +78,7 @@ Rebel can change his running shoes mid-sprint.
 gringo ~ $: rebel
 Rebel v.1.0 64-bit on BSD IPv4/6 UTF-8 libffi, options: rebel -h
 
-> (define (sum x) (+ x x))
+> (func (sum x) (+ x x))
 (fn (x) (+ x x))
 > (sum 2)
 4
@@ -94,7 +94,7 @@ true
 Rebel remembers things
 
 ```
-> (define (gen:gen) (inc 0))
+> (func (gen:gen) (inc 0))
 (fn () (inc 0))
 > (gen)
 1
