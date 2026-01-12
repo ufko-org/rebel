@@ -184,9 +184,17 @@ UINT *fnStack = NULL;
 UINT *fnStackIdx;
 
 /* internal dummy to carry FOOP object */
-SYMBOL objSymbol = {SYMBOL_GLOBAL | SYMBOL_BUILTIN,
-                    0, "container of (self)", 0, NULL, NULL, NULL, NULL
-                   };
+SYMBOL objSymbol = {
+  SYMBOL_GLOBAL | SYMBOL_BUILTIN, /* flags */
+  0,                              /* color */ 
+  0,                              /* mutable */ 
+  "container of (self)",          /* name */ 
+  0,                              /* contents */ 
+  NULL,                           /* context */ 
+  NULL,                           /* parent */ 
+  NULL,                           /* left */ 
+  NULL                            /* right */
+};
 CELL *objCell;
 
 extern PRIMITIVE primitive[];
