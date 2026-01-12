@@ -5420,7 +5420,7 @@ SETDEF_BEGIN:
     cell->aux = new->aux;
     cell->contents = new->contents;
     if(symbolRef) {
-      symbolRef->live = 1;
+      symbolRef->mutable = 1;
     }
 
     /* free cell */
@@ -5483,7 +5483,7 @@ SETMUT_BEGIN:
     if(params->type == CELL_SYMBOL)
     {
         symbolMut = (SYMBOL *)params->contents;
-        if(symbolMut->live == 0)
+        if(symbolMut->mutable == 0)
         {
             return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolMut));
         }
@@ -5894,7 +5894,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment(symbol->contents);
             pushEnvironment(symbol);
             symbol->contents = (UINT)copyCell(nilCell);
-            symbol->live = 1;
+            symbol->mutable = 1;
             localCount++;
             inits = inits->next;
         }
@@ -5945,7 +5945,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)args;
-            symbol->live = 1;
+            symbol->mutable = 1;
         }
 
         localCount++;
@@ -5978,7 +5978,7 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)list;
-            symbol->live = 1;
+            symbol->mutable = 1;
 
             args = list;
             list = list->next;
