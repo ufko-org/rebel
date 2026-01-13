@@ -4610,6 +4610,15 @@ CELL *getListHead(CELL *params, CELL * * head)
 CELL *p_lock(CELL *params)
 {
     SYMBOL *symbol;
+
+    if(params == nilCell) {
+        return(errorProc(ERR_MISSING_ARGUMENT));
+    }
+
+    if(!isSymbol(params->type)) {
+        return(errorProc(ERR_SYMBOL_EXPECTED));
+    }
+
     symbol = (SYMBOL *)params->contents;
 
     /* avoid locking constant symbol */
@@ -4618,8 +4627,12 @@ CELL *p_lock(CELL *params)
         return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbol)));
     }
 
-    symbol->mutable = 0; /* lock symbol */
-    return(trueCell);
+    if(symbol->mutable == 1) 
+    {
+        symbol->mutable = 0; /* lock symbol */
+        return(trueCell);
+    }
+    return(nilCell); /* or error - dunno */
 }
 
 CELL *p_setLocale(CELL *params)
