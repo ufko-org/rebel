@@ -215,6 +215,7 @@ CELL *p_equal(CELL *params);
 CELL *p_erf(CELL *params);
 CELL *p_errorEvent(CELL *params);
 CELL *p_lastError(CELL *params);
+CELL *p_lock(CELL *params);
 /*
 CELL * p_errorNumber(CELL * params);
 CELL * p_errorText(CELL * params);

@@ -408,6 +408,7 @@ PRIMITIVE primitive[] =
     {"functor",          p_default,          0}, /* :replaces default, returns value of default functor */
     {"history",          p_history,          0},
     {"lasterr",          p_lastError,        0},
+    {"lock",             p_lock,             0},
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
     {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
@@ -450,7 +451,9 @@ PRIMITIVE primitive[] =
     {"import",           p_importLib,        0},
     {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem */
     {"pack",             p_pack,             0},
+    #ifdef FFI
     {"struct",           p_struct,           0},
+    #endif
     {"unpack",           p_unpack,           0},
 
     /* core - predicates */

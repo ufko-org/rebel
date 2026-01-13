@@ -4606,6 +4606,22 @@ CELL *getListHead(CELL *params, CELL * * head)
 
 /* ------------------------------- core predicates ------------------------ */
 
+/* ufko: experimental - locks symbol to make it immutable on demand */
+CELL *p_lock(CELL *params)
+{
+    SYMBOL *symbol;
+    symbol = (SYMBOL *)params->contents;
+
+    /* avoid locking constant symbol */
+    if(isProtected(symbol->flags))
+    {
+        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbol)));
+    }
+
+    symbol->mutable = 0; /* lock symbol */
+    return(trueCell);
+}
+
 CELL *p_setLocale(CELL *params)
 {
     struct lconv *lc;
