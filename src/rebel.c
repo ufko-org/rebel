@@ -5490,8 +5490,6 @@ CELL *p_setmut(CELL *params)
 
 SETMUT_BEGIN:
 
-
-    /* missing value */
     if(params->next == nilCell)
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
@@ -5695,30 +5693,6 @@ SETF_BEGIN:
     symbolCheck = symbolRef;
     pushResultFlag = FALSE;
     return(cell);
-}
-
-/* based on p_set */
-CELL *p_with(CELL *params)
-{
-    SYMBOL *symbol;
-    CELL *next;
-
-    for(;;)
-    {
-        params = getSymbol(params, &symbol);
-        next = params->next;
-        if(params == nilCell)
-        {
-            return(errorProc(ERR_MISSING_ARGUMENT));
-        }
-        pushResultFlag = TRUE;
-        if(next == nilCell)
-        {
-            return(setDefine(symbol, params, SET_SET));
-        }
-        setDefine(symbol, params, SET_SET);
-        params = next;
-    }
 }
 
 CELL *p_tie(CELL *params)
