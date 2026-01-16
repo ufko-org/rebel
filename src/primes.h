@@ -181,6 +181,7 @@ PRIMITIVE primitive[] =
     {"match",            p_match,            0},
     {"member",           p_member,           0},
     {"mut",              p_setmut,           0}, /* :rebel, conscious mutate tool */
+    {"mutlock",          p_mutlock,          0}, /* :rebel, experimental */
     {"nth",              p_nth,              0},
     {"parse",            p_parse,            0},
     {"pop",              p_pop,              0x400},
@@ -408,7 +409,6 @@ PRIMITIVE primitive[] =
     {"functor",          p_default,          0}, /* :replaces default, returns value of default functor */
     {"history",          p_history,          0},
     {"lasterr",          p_lastError,        0},
-    {"lock",             p_lock,             0},
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
     {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */

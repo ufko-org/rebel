@@ -215,7 +215,6 @@ CELL *p_equal(CELL *params);
 CELL *p_erf(CELL *params);
 CELL *p_errorEvent(CELL *params);
 CELL *p_lastError(CELL *params);
-CELL *p_lock(CELL *params);
 /*
 CELL * p_errorNumber(CELL * params);
 CELL * p_errorText(CELL * params);
@@ -328,6 +327,7 @@ CELL *p_modFloat(CELL *params);
 CELL *p_modulo(CELL *params);
 CELL *p_mulFloat(CELL *params);
 CELL *p_multiply(CELL *params);
+CELL *p_mutlock(CELL *params);
 CELL *p_netAccept(CELL *params);
 CELL *p_netClose(CELL *params);
 CELL *p_netConnect(CELL *params);

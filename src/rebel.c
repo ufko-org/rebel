@@ -4606,35 +4606,6 @@ CELL *getListHead(CELL *params, CELL * * head)
 
 /* ------------------------------- core predicates ------------------------ */
 
-/* ufko: experimental - locks symbol to make it immutable on demand */
-CELL *p_lock(CELL *params)
-{
-    SYMBOL *symbol;
-
-    if(params == nilCell) {
-        return(errorProc(ERR_MISSING_ARGUMENT));
-    }
-
-    if(!isSymbol(params->type)) {
-        return(errorProc(ERR_SYMBOL_EXPECTED));
-    }
-
-    symbol = (SYMBOL *)params->contents;
-
-    /* avoid locking constant symbol */
-    if(isProtected(symbol->flags))
-    {
-        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbol)));
-    }
-
-    if(symbol->mutable == 1) 
-    {
-        symbol->mutable = 0; /* lock symbol */
-        return(trueCell);
-    }
-    return(nilCell); /* or error - dunno */
-}
-
 CELL *p_setLocale(CELL *params)
 {
     struct lconv *lc;
@@ -5600,6 +5571,35 @@ SETMUT_BEGIN:
     symbolCheck = symbolRef;
     pushResultFlag = FALSE;
     return(cell);
+}
+
+/* ufko: experimental - locks symbol to make it immutable on demand */
+CELL *p_mutlock(CELL *params)
+{
+    SYMBOL *symbol;
+
+    if(params == nilCell) {
+        return(errorProc(ERR_MISSING_ARGUMENT));
+    }
+
+    if(!isSymbol(params->type)) {
+        return(errorProc(ERR_SYMBOL_EXPECTED));
+    }
+
+    symbol = (SYMBOL *)params->contents;
+
+    /* avoid locking constant symbol */
+    if(isProtected(symbol->flags))
+    {
+        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbol)));
+    }
+
+    if(symbol->mutable == 1) 
+    {
+        symbol->mutable = 0; /* lock symbol */
+        return(trueCell);
+    }
+    return(nilCell); /* or error - dunno */
 }
 
 /* also called from setq */
