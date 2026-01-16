@@ -143,7 +143,7 @@ PRIMITIVE primitive[] =
     {"b64dec",           p_base64Dec,        0}, /* :replaces base64-dec */
     {"b64enc",           p_base64Enc,        0}, /* :replaces base64-enc */
     {"crc32",            p_crc32,            0},
-    {"encrypt",          p_encrypt,          0},
+    {"encrypt",          p_encrypt,          0}, /* OTP encryption */
     {"uuid",             p_uuid,             0},
 
     /* core - data - workers */
