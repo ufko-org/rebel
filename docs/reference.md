@@ -1452,7 +1452,7 @@ See: [join](#f-join), [extend](#f-extend), [push](#f-push)
 ## apply
 
 ```
-syntax: (apply func list [int-reduce])
+syntax: (apply function list [int-reduce])
 syntax: (apply func)
 ```
 
@@ -3576,7 +3576,7 @@ See: [fread](#f-fread)
 ## curry
 
 ```
-syntax: (curry func exp)
+syntax: (curry function exp)
 ```
 
 Description:
@@ -17100,7 +17100,7 @@ See: [series](#f-series), [map](#f-map),
 
 ```
 syntax: (series num-start num-factor num-count)
-syntax: (series exp-start func num-count)
+syntax: (series exp-start function num-count)
 ```
 
 Description:
@@ -17118,14 +17118,14 @@ If num-count is less than 1, an empty list is
 returned.
 
 In the second syntax, series generates a sequence
-by repeatedly applying func to the previous value.
+by repeatedly applying function to the previous value.
 The first element is exp-start, and each following
-element is the result of calling func with the
+element is the result of calling function with the
 previous element.
 
 The internal index variable $idx is updated for
 each generated element and can be referenced
-inside func.
+inside function.
 
 Examples:
 
@@ -17181,7 +17181,7 @@ Notes:
 - In the geometric form, values are always floats.
 - In the functional form, any data type may be
   used as the start value.
-- func is evaluated in the caller environment.
+- function is evaluated in the caller environment.
 - The $idx variable reflects the current index.
 
 Use [sequence](#f-sequence) to generate arithmetic
@@ -17389,8 +17389,8 @@ During replacement, the system variable $it is
 bound to the matched expression and may be used
 inside exp-replacement.
 
-If func-compare is specified, it is used to compare
-exp-key with list elements. Without func-compare,
+If function-compare is specified, it is used to compare
+exp-key with list elements. Without function-compare,
 default equality comparison is used.
 
 The original list is modified when passed by
@@ -17463,8 +17463,8 @@ be used inside exp-replacement.
 After completion, the system variable $count
 contains the number of replacements performed.
 
-If func-compare is specified, it is used to compare
-exp-key with list elements. Without func-compare,
+If function-compare is specified, it is used to compare
+exp-key with list elements. Without function-compare,
 default equality comparison is used.
 
 The original list is modified when passed by
@@ -17841,7 +17841,7 @@ See: [semaphore](#f-semaphore), [fork](#f-fork),
 ## signal
 
 ```
-syntax: (signal int-signal sym-event-handler | func-event-handler)
+syntax: (signal int-signal sym-event-handler | function-event-handler)
 syntax: (signal int-signal "ignore" | "default" | "reset")
 syntax: (signal int-signal)
 ```

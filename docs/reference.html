@@ -1093,7 +1093,7 @@ bytes.</li>
 <hr/>
 <p><a name="f-apply"></a></p>
 <h2 id="apply">apply</h2>
-<pre><code>syntax: (apply func list [int-reduce])
+<pre><code>syntax: (apply function list [int-reduce])
 syntax: (apply func)
 </code></pre>
 <p>Description:</p>
@@ -2724,7 +2724,7 @@ source is not considered fully reliable.</p>
 <hr/>
 <p><a name="f-curry"></a></p>
 <h2 id="curry">curry</h2>
-<pre><code>syntax: (curry func exp)
+<pre><code>syntax: (curry function exp)
 </code></pre>
 <p>Description:</p>
 <p>Creates a new single-argument function by fixing the
@@ -13098,7 +13098,7 @@ sequences.</p>
 <p><a name="f-series"></a></p>
 <h2 id="series">series</h2>
 <pre><code>syntax: (series num-start num-factor num-count)
-syntax: (series exp-start func num-count)
+syntax: (series exp-start function num-count)
 </code></pre>
 <p>Description:</p>
 <p>Generates a sequence of values derived from a
@@ -13111,13 +13111,13 @@ floating-point numbers.</p>
 <p>If num-count is less than 1, an empty list is
 returned.</p>
 <p>In the second syntax, series generates a sequence
-by repeatedly applying func to the previous value.
+by repeatedly applying function to the previous value.
 The first element is exp-start, and each following
-element is the result of calling func with the
+element is the result of calling function with the
 previous element.</p>
 <p>The internal index variable $idx is updated for
 each generated element and can be referenced
-inside func.</p>
+inside function.</p>
 <p>Examples:</p>
 <pre><code>; geometric sequences
 ;------------------------------------------------------------
@@ -13169,7 +13169,7 @@ inside func.</p>
 <li>In the geometric form, values are always floats.</li>
 <li>In the functional form, any data type may be
 used as the start value.</li>
-<li>func is evaluated in the caller environment.</li>
+<li>function is evaluated in the caller environment.</li>
 <li>The $idx variable reflects the current index.</li>
 </ul>
 <p>Use <a href="#f-sequence">sequence</a> to generate arithmetic
@@ -13333,8 +13333,8 @@ the modified list is returned.</p>
 <p>During replacement, the system variable $it is
 bound to the matched expression and may be used
 inside exp-replacement.</p>
-<p>If func-compare is specified, it is used to compare
-exp-key with list elements. Without func-compare,
+<p>If function-compare is specified, it is used to compare
+exp-key with list elements. Without function-compare,
 default equality comparison is used.</p>
 <p>The original list is modified when passed by
 reference.</p>
@@ -13391,8 +13391,8 @@ bound to the currently matched expression and may
 be used inside exp-replacement.</p>
 <p>After completion, the system variable $count
 contains the number of replacements performed.</p>
-<p>If func-compare is specified, it is used to compare
-exp-key with list elements. Without func-compare,
+<p>If function-compare is specified, it is used to compare
+exp-key with list elements. Without function-compare,
 default equality comparison is used.</p>
 <p>The original list is modified when passed by
 reference.</p>
@@ -13718,7 +13718,7 @@ temporary files.</li>
 <hr/>
 <p><a name="f-signal"></a></p>
 <h2 id="signal">signal</h2>
-<pre><code>syntax: (signal int-signal sym-event-handler | func-event-handler)
+<pre><code>syntax: (signal int-signal sym-event-handler | function-event-handler)
 syntax: (signal int-signal "ignore" | "default" | "reset")
 syntax: (signal int-signal)
 </code></pre>
