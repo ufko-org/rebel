@@ -115,7 +115,7 @@ $: .&#47;rebel
 <pre><code>gringo ~ $: rebel
 Rebel v.1.0 64-bit on BSD IPv4&#47;6 UTF-8 libffi, options: rebel -h
 
-&#62; (define (sum x) (+ x x))
+&#62; (func (sum x) (+ x x))
 (fn (x) (+ x x))
 &#62; (sum 2)
 4
@@ -128,7 +128,7 @@ true
 &#62;
 </code></pre>
 <p>Rebel remembers things</p>
-<pre><code>&#62; (define (gen:gen) (inc 0))
+<pre><code>&#62; (func (gen:gen) (inc 0))
 (fn () (inc 0))
 &#62; (gen)
 1

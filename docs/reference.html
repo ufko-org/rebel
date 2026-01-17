@@ -744,17 +744,17 @@ class. Additional arguments are passed directly to the
 method. Inside methods the <code>self</code> function is used to
 access or modify elements of the target object.</p>
 <p>Examples:</p>
-<pre><code>(define (Rectangle:area)
+<pre><code>(func (Rectangle:area)
   (mul (self 3) (self 4)))
 
-(define (Circle:area)
+(func (Circle:area)
   (mul (pow (self 3) 2) (acos 0) 2))
 
-(define (Rectangle:move dx dy)
+(func (Rectangle:move dx dy)
   (inc (self 1) dx)
   (inc (self 2) dy))
 
-(define (Circle:move p dx dy)
+(func (Circle:move p dx dy)
   (inc (self 1) dx)
   (inc (self 2) dy))
 
@@ -947,6 +947,63 @@ access functions.</li>
 </ul>
 <p>See: <a href="#f-charc">charc</a>, <a href="#f-intc">intc</a>,
 <a href="#f-longc">longc</a>, <a href="#f-floatc">floatc</a></p>
+<hr/>
+<p><a name="f-alarm"></a></p>
+<h2 id="alarm">alarm</h2>
+<pre><code>syntax: (alarm sym-event-handler | func-event-handler num-seconds [int-option])
+syntax: (alarm sym-event-handler | func-event-handler)
+syntax: (alarm)
+</code></pre>
+<p>Description:</p>
+<p>Starts or controls a one-shot <code>alarm</code> which invokes a
+user-defined event handler after a specified delay.</p>
+<p>When called with an event handler and <code>num-seconds</code>,
+<code>alarm</code> schedules the handler to be executed after
+<code>num-seconds</code> seconds have elapsed. The handler may be
+given as a symbol naming a function or as an anonymous
+function.</p>
+<p>The <code>alarm</code> is implemented using Unix interval timers
+and delivers one of the signals SIGALRM, SIGVTALRM, or
+SIGPROF depending on the selected mode.</p>
+<p>The optional <code>int-option</code> controls how time is measured:</p>
+<p>0  real (wall-clock) time (default)<br/>
+1  process CPU time<br/>
+2  profiling time (real + CPU)</p>
+<p>Seconds may be specified as floating point values,
+allowing sub-second resolution.</p>
+<p>Specifying <code>num-seconds</code> as 0 disables a running <code>alarm</code>
+and prevents it from firing.</p>
+<p>When called with only an event handler, <code>alarm</code> returns
+the elapsed time of the currently running <code>alarm</code>. This
+can be used to implement time lines or schedules.</p>
+<p>When called without arguments, <code>alarm</code> returns the
+symbol of the currently installed event handler.</p>
+<p>Examples:</p>
+<pre><code>; periodic `alarm` using re-arming
+;------------------------------------------------------------
+(define (ticker)
+  (println (date))
+  (alarm &#39;ticker 1.0))
+
+(ticker)
+;-&#62; ticker
+
+; alarm events:
+; Tue Apr 12 20:44:49 2005
+; Tue Apr 12 20:44:50 2005
+; Tue Apr 12 20:44:51 2005
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The event handler is executed asynchronously.</li>
+<li>An <code>alarm</code> handler may re-arm the <code>alarm</code> to create
+periodic behavior.</li>
+<li>An <code>alarm</code> cannot interrupt a running built-in
+function; it runs between expression evaluations.</li>
+<li>For interrupting blocking I&#47;O, polling patterns
+using <code>nselect</code> are required.</li>
+</ul>
+<p>See: <a href="#f-nselect">nselect</a></p>
 <hr/>
 <p><a name="f-and"></a></p>
 <h2 id="and">and</h2>
@@ -2025,6 +2082,172 @@ process input line by line.</p>
 <p>See: <a href="#f-readln">readln</a>, <a href="#f-writeln">writeln</a>,
 <a href="#f-argv">argv</a>, <a href="#f-startsp">starts?</a></p>
 <hr/>
+<p><a name="f-clone"></a></p>
+<h2 id="clone">clone</h2>
+<pre><code>syntax: (clone context-source sym-context-target [bool])
+syntax: (clone context-source)
+</code></pre>
+<p>Description:</p>
+<p>Copies all symbols and user-defined functions from
+<code>context-source</code> into a target context.</p>
+<p>When <code>sym-context-target</code> is provided, the
+context referenced by <code>context-source</code> is copied into
+exist, it is created with the same symbol names and
+that target context. If the target context does not
+user-defined functions as in <code>context-source</code>.</p>
+<p>If the target context already exists, symbols from
+<code>context-source</code> are merged into it. Existing symbols
+are overwritten only when the optional <code>bool</code> argument
+evaluates to anything other than <code>nil</code>. When <code>bool</code> is
+<code>nil</code> or omitted, existing symbols in the target context
+remain unchanged. This allows controlled mixins of
+context objects.</p>
+<p><code>clone</code> returns the target context. The target context
+must not be MAIN.</p>
+<p>In the second syntax form, the context referenced by
+<code>context-source</code> is copied into the current context,
+which becomes the implicit target.</p>
+<p>During copying, all symbol references that originally
+pointed into the source context are rewritten so they point
+into the target context.  As a result, all functions and
+data structures continue to work unchanged, but now operate
+entirely within the destination context.</p>
+<p>Examples:</p>
+<pre><code>(context &#39;ctx1)
+;-&#62; ctx1
+
+(context MAIN)
+;-&#62; MAIN
+
+(clone ctx1 &#39;ctx2)
+;-&#62; ctx2
+
+; force overwrite of existing symbols
+(clone ctx1 &#39;ctx3 true)
+;-&#62; ctx3
+</code></pre>
+<p>The first example creates a new context CTX2 with the
+same structure as CTX1. The source context CTX1 is not
+quoted because contexts evaluate to themselves. The
+target context CTX2 must be quoted because it does not
+exist yet.</p>
+<p>The second example merges CTX1 into an existing context
+CTX3. Because CTX3 already exists, the quote may be
+omitted. All symbols of the same name in CTX3 are
+overwritten.</p>
+<p>Contexts may also be referenced indirectly through
+variables:</p>
+<pre><code>(set ctx1:x 123)
+(set ctx2:y 999)
+
+(set src ctx1)
+(set dst ctx2)
+
+(clone src dst)
+;-&#62; ctx2
+
+ctx2:x
+;-&#62; 123
+
+ctx2:y
+;-&#62; 999
+</code></pre>
+<p>In this example, the context referenced by <code>src</code> (ctx1)
+is merged into the context referenced by <code>dst</code> (ctx2).</p>
+<p>Notes:</p>
+<ul>
+<li><code>clone</code> copies entire contexts; use <code>clonesym</code> to copy
+individual symbols only.</li>
+<li>All internal references are rewritten to point to
+the target context.</li>
+<li>Existing symbols are overwritten only when the
+optional <code>bool</code> argument evaluates to non-nil.</li>
+</ul>
+<p>See: <a href="#f-clonesym">clonesym</a>, <a href="#f-context">context</a></p>
+<hr/>
+<p><a name="f-clonesym"></a></p>
+<h2 id="clonesym">clonesym</h2>
+<pre><code>syntax: (clonesym sym-context-source [sym-context-target])
+</code></pre>
+<p>Description:</p>
+<p>Creates a new symbol by copying the definition and
+contents of <code>sym-context-source</code>. Only the referenced symbol 
+is copied; the source context itself is not duplicated.</p>
+<p>When <code>sym-context-target</code> is
+omitted, a symbol of the same name is created in the
+current context. In this case, all symbol references
+belonging to the source context are rewritten so they
+point into the current context. The current context must
+not be MAIN.</p>
+<p>When <code>sym-context-target</code> is provided, the new symbol is created in
+the context referenced by <code>sym-context-target</code>. Both the name and
+the destination context may change. Any symbol reference
+that originally pointed into the source context is
+rewritten to point into the target context. <code>clonesym</code>
+returns the newly created symbol.</p>
+<p>This mechanism allows fine-grained copying of functions,
+data structures, or context members, and enables creation
+of isolated, statically scoped functions by assigning
+each copy to its own namespace.</p>
+<p>Examples:</p>
+<pre><code>(set ctx1:var &#39;(ctx1:x ctx1:y))
+;-&#62; (ctx1:x ctx1:y)
+
+(clonesym &#39;ctx1:var &#39;ctx2:myvar)
+;-&#62; ctx2:myvar
+
+ctx2:myvar
+;-&#62; (ctx2:x ctx2:y)
+
+; clonesym into current context
+(context &#39;ctx3)
+;-&#62; ctx3
+
+(clonesym &#39;ctx1:var)
+;-&#62; var
+
+var
+;-&#62; (x y)
+</code></pre>
+<p>Creating a function with its own namespace:</p>
+<pre><code>(set temp (fn (x) (+ x x)))
+;-&#62; (fn (x) (+ x x))
+
+(clonesym &#39;temp &#39;double:double)
+;-&#62; double:double
+
+(double 10)
+;-&#62; 20
+
+double:double
+;-&#62; (fn (double:x) (+ double:x double:x))
+</code></pre>
+<p>Building a helper for statically scoped accumulators:</p>
+<pre><code>(def (def-static s body)
+  (clonesym &#39;body (sym s s)))
+
+(def-static &#39;acc (fn (x)
+  (inc sum x)))
+
+(acc 1)
+;-&#62; 1
+(acc 1)
+;-&#62; 2
+(acc 8)
+;-&#62; 10
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li><code>clonesym</code> copies one symbol only; use <code>clone</code> to copy an
+entire context.</li>
+<li>All internal references pointing to the source
+context are rewritten to the target context.</li>
+<li>Useful for constructing context-local closures or
+configuring context objects piece by piece.</li>
+</ul>
+<p>See: <a href="#f-clone">clone</a>, <a href="#f-context">context</a>, <a href="#f-sym">sym</a>,
+<a href="#f-def">def</a></p>
+<hr/>
 <p><a name="f-close"></a></p>
 <h2 id="close">close</h2>
 <pre><code>syntax: (close int-file)
@@ -2577,48 +2800,26 @@ produce &#8220;&#8220;.</p>
 </code></pre>
 <p>Examples:</p>
 <pre><code>(date)
-;-&#62; "Fri Oct 29 09:56:58 2004"
+;-&#62; "Sat Jan  3 06:46:17 2026"
 
 (date (time))
-;-&#62; "Sat May 20 11:37:15 2006"
+;-&#62; "Sat Jan  3 06:46:17 2026"
 
-(date (time) 300)
-;-&#62; "Sat May 20 16:37:19 2006"
+&#62; (date (time) 60)
+;-&#62; "Sat Jan  3 07:46:28 2026"
 
-(date 0)
-;-&#62; "Wed Dec 31 16:00:00 1969"
+(date (time) 60 "%Y-%m-%d")
+"2026-01-03"
 
-(date 0 (timelist 0 -2))
-;-&#62; "Thu Jan  1 00:00:00 1970"
-</code></pre>
-<p>Locale examples:</p>
-<pre><code>(locale "de_DE.UTF-8")
-
-(date (time) 0 "%A %-d. %B %Y")
-;-&#62; "Montag  7. März 2005"
-
-(locale "C")
-
-(date (time) 0 "%A %B %d %Y")
-;-&#62; "Monday March 07 2005"
-
-(locale "de_DE.UTF-8")
-
-(date (time) 0 "%x")
-;-&#62; "07.03.2005"
-
-(locale "C")
-
-(date (time) 0 "%x")
-;-&#62; "03&#47;07&#47;05"
+&#62; (date 0 0 "%Y-%m-%d")
+"1970-01-01"
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>Exact output depends on system locale and C library.</li>
 </ul>
 <p>See: <a href="#f-time">time</a>, <a href="#f-datelist">datelist</a>,
-<a href="#f-datestamp">datestamp</a>, <a href="#f-timeofday">timeofday</a>,
-<a href="#f-timelist">timelist</a></p>
+<a href="#f-datestamp">datestamp</a>, <a href="#f-timelist">timelist</a></p>
 <hr/>
 <p><a name="f-dateiso"></a></p>
 <h2 id="dateiso">dateiso</h2>
@@ -2631,131 +2832,94 @@ YYYY-MM-DD HH:MM:SS.</p>
 <pre><code>(dateiso)
 ;-&#62; "2026-01-02 08:51:48" 
 </code></pre>
+<p>Notes:</p>
+<ul>
+<li>The format is fixed and cannot be customized.</li>
+</ul>
 <p>See: <a href="#f-date">date</a></p>
-<p><a name="f-date-list"></a></p>
-<h2 id="date-list">date-list</h2>
-<pre><code>syntax: (date-list int-seconds [int-index])
-syntax: (date-list)
+<p><a name="f-datelist"></a></p>
+<h2 id="datelist">datelist</h2>
+<pre><code>syntax: (datelist int-seconds [int-index])
+syntax: (datelist)
 </code></pre>
 <p>Description:</p>
 <p>Converts a UTC timestamp into a list containing year,
 month, day of month, hour, minute, second, day of year,
-and day of week. The timestamp is interpreted as the
+and day of week. The <code>int-seconds</code> is interpreted as the
 number of seconds since January 1st, 1970 00:00:00 UTC.
 The weekday value ranges from 1 to 7 for Monday through
-Sunday. When called without arguments, date-list uses the
-current timestamp obtained from date-value.</p>
-<p>If int-index is supplied, only the selected element of
+Sunday. When called without arguments, <code>datelist</code> 
+uses the current timestamp obtained from <code>time</code>.</p>
+<p>If <code>int-index</code> is supplied, only the selected element of
 the list is returned. Negative indices count from the end
 of the list.</p>
-<p>date-list is the inverse of date-value.</p>
 <p>Format of the returned list:</p>
 <pre><code>(year month day hour minute second day-of-year day-of-week)
 </code></pre>
 <p>Examples:</p>
-<pre><code>(date-list 1282479244)
-;-&#62; (2010 8 22 12 14 4 234 1)
+<pre><code>(datelist)
+;-&#62; (2026 1 3 5 52 59 3 6)
 
-(date-list 1282479244 0)
-;-&#62; 2010
-
-(date-list 1282479244 -2)
-;-&#62; 234
-
-(date-value (date-list 1282479244))
-;-&#62; 1282479244
-
-(date-list 0)
+(datelist 0)
 ;-&#62; (1970 1 1 0 0 0 1 4)
-</code></pre>
-<p>See: <a href="#f-date-value">date-value</a>, <a href="#f-date">date</a>,
-<a href="#f-now">now</a>, <a href="#f-time">time</a></p>
-<hr/>
-<p><a name="f-date-parse"></a></p>
-<h2 id="date-parse">date-parse</h2>
-<pre><code>syntax: (date-parse str-date str-format)
-</code></pre>
-<p>Description:</p>
-<p>Parses a textual date according to strftime-style
-directives in str-format and returns the corresponding
-UTC timestamp as seconds since January 1st, 1970
-00:00:00. The result ranges from 0 up to 2147472000,
-which corresponds to dates before the 2038 boundary.</p>
-<p>The parsing rules match those used by date for formatting.
-This allows round-tripping between formatted strings and
-timestamps when format and locale are consistent.</p>
-<p>Examples:</p>
-<pre><code>(date-parse "2007.1.3" "%Y.%m.%d")
-;-&#62; 1167782400
 
-(date-parse "January 10, 07" "%B %d, %y")
-;-&#62; 1168387200
+(datelist (time))
+;-&#62; (2026 1 3 5 54 9 3 6)
 
-(date-list (date-parse "2010.10.18 7:00"
-                       "%Y.%m.%d %H:%M"))
-;-&#62; (2010 10 18 7 0 0 290 1)
+(datelist 1767019672)
+;-&#62; (2025 12 29 14 47 52 363 1)
+
+(datelist (time) 0)
+;-&#62; 2026
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>The function requires system support for strptime-style
-parsing and may not be available on all platforms.</li>
+<li>All values are interpreted as UTC.</li>
+<li>Supplying int-index returns a single element.</li>
 </ul>
-<p>See: <a href="#f-date">date</a>, <a href="#f-date-list">date-list</a>,
-<a href="#f-date-value">date-value</a></p>
+<p>See: <a href="#f-time">time</a>, <a href="#f-date">date</a>,
+<a href="#f-timelist">timelist</a></p>
 <hr/>
-<p><a name="f-date-value"></a></p>
-<h2 id="date-value">date-value</h2>
-<pre><code>syntax: (date-value int-year int-month int-day [int-hour int-min int-sec])
-syntax: (date-value list-date-time)
-syntax: (date-value)
+<p><a name="f-datestamp"></a></p>
+<h2 id="datestamp">datestamp</h2>
+<pre><code>syntax: (datestamp str-date str-format)
 </code></pre>
 <p>Description:</p>
-<p>Converts a given UTC date and time into the number of
-seconds since January 1st, 1970 00:00:00. The first form
-accepts separate numeric fields for year, month, and day,
-with hour, minute, and second optional. The second form
-accepts a list containing the same fields in the same
-order. Missing time fields default to zero. In the third
-form, date-value returns the timestamp for the current
-system time.</p>
-<p>The conversion always uses UTC and does not apply the
-local time zone. date-value is the inverse operation of
-date-list.</p>
+<p>Parses a textual date according to strftime-style
+directives in <code>str-format</code> and returns the corresponding
+UTC timestamp as seconds since January 1st, 1970
+00:00:00. The result ranges from 0 up to 2147472000,
+which corresponds to dates before the 2038 boundary.</p>
+<p>The format directives are the same strftime-style
+directives used by date for formatting timestamps.</p>
+<p>This allows round-tripping between formatted strings and
+timestamps when format and locale are consistent.</p>
 <p>Examples:</p>
-<pre><code>(date-value 2002 2 28)
-;-&#62; 1014854400
+<pre><code>(datestamp "2025.4.3" "%Y.%m.%d")
+;-&#62; 1743638400
 
-(date-value &#39;(2002 2 28))
-;-&#62; 1014854400
+(datestamp "October 31, 2024" "%B %d, %Y")
+;-&#62; 1730332800
 
-(date-value 1970 1 1 0 0 0)
-;-&#62; 0
-
-(date (date-value (now)))
-;-&#62; "Wed May 24 10:02:47 2006"
-
-(date (date-value))
-;-&#62; "Wed May 24 10:02:47 2006"
-
-(date)
-;-&#62; "Wed May 24 10:02:47 2006"
-
-(date-list 1014854400)
-;-&#62; (2002 2 28 0 0 0)
-
-(date-value (date-list 1014854400))
-;-&#62; 1014854400
+(datelist (datestamp "October 31, 2024" "%B %d, %Y"))
+;-&#62; (2024 10 31 0 0 0 305 4)
 </code></pre>
-<p>See: <a href="#f-date">date</a>, <a href="#f-date-list">date-list</a>,
-<a href="#f-date-parse">date-parse</a>, <a href="#f-time-of-day">time-of-day</a>,
-<a href="#f-time">time</a>, <a href="#f-now">now</a></p>
+<p>Notes:</p>
+<ul>
+<li>The function always interprets the input as UTC and
+does not apply local time zone offsets.</li>
+<li>Invalid or incomplete date strings return nil.</li>
+<li>The supported timestamp range is limited to values
+representable before the year 2038.</li>
+</ul>
+<p>See: <a href="#f-date">date</a>, <a href="#f-datelist">date-list</a>,</p>
 <hr/>
 <p><a name="f-debug"></a></p>
 <h2 id="debug-">debug [!]</h2>
 <pre><code>syntax: (debug func)
 </code></pre>
 <p>Description:</p>
-<p>Enables tracing and evaluates func. This is shorthand for
+<p>Enables tracing and evaluates <code>func</code>. This is shorthand for
 turning trace on, invoking the expression, and then
 restoring the previous trace state. While trace is
 enabled, each function call and return is printed, and
@@ -2765,11 +2929,11 @@ state and variables to be inspected during debugging.</p>
 <p>Examples:</p>
 <pre><code>; manual form
 (trace true)
-(my-func a b c)
+(func a b c)
 (trace nil)
 
 ; equivalent shortcut
-(debug (my-func a b c))
+(debug (func a b c))
 </code></pre>
 <p>See: <a href="#f-trace">trace</a></p>
 <hr/>
@@ -2778,15 +2942,15 @@ state and variables to be inspected during debugging.</p>
 <pre><code>syntax: (dec place [num])
 </code></pre>
 <p>Description:</p>
-<p>Decrements the numeric value stored in place and returns
+<p>Decrements the numeric value stored in <code>place</code> and returns
 the updated result. The operation always uses floating-
-point arithmetic. When num is omitted, the decrement is
-1.0; otherwise num specifies the amount to subtract.
+point arithmetic. When <code>num</code> is omitted, the decrement is
+1.0; otherwise <code>num</code> specifies the amount to subtract.
 Integer values are converted to floating point before the
-operation. place may be a symbol, a position inside a
+operation. <code>place</code> may be a symbol, a position inside a
 list, or any writable location yielding a number.</p>
-<p>If place evaluates to nil, it is treated as 0.0 before
-the decrement. When place references a writable structure
+<p>If <code>place</code> evaluates to <code>nil</code>, it is treated as 0.0 before
+the decrement. When <code>place</code> references a writable structure
 element, that element is updated in place.</p>
 <p>Examples:</p>
 <pre><code>(set x 10)
@@ -2794,16 +2958,19 @@ element, that element is updated in place.</p>
 
 (dec x)
 ;-&#62; 9
+
 x
 ;-&#62; 9
 
 (dec x 0.25)
 ;-&#62; 8.75
+
 x
 ;-&#62; 8.75
 
 z
 ;-&#62; nil
+
 (dec z)
 ;-&#62; -1
 
@@ -2828,92 +2995,11 @@ l
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>dec performs floating-point arithmetic.</li>
-<li>Use &#8211; for integer-mode decrement.</li>
-<li>Use inc for floating-point increment.</li>
+<li><code>dec</code> performs floating-point arithmetic.</li>
+<li>Use <code>--</code> for integer-mode decrement.</li>
+<li>Use <code>inc</code> for floating-point increment.</li>
 </ul>
-<p>See: <a href="#f-minusminus">&#8211;</a>, <a href="#f-inc">inc</a>, <a href="#f-set">set</a></p>
-<hr/>
-<p><a name="f-def-new"></a></p>
-<h2 id="def-new">def-new</h2>
-<pre><code>syntax: (def-new sym-source [sym-target])
-</code></pre>
-<p>Description:</p>
-<p>Creates a new symbol by copying the definition and
-contents of sym-source. Only the referenced symbol is
-copied, not the entire context. When sym-target is
-omitted, a symbol of the same name is created in the
-current context. In this case, all symbol references
-belonging to the source context are rewritten so they
-point into the current context. The current context must
-not be MAIN.</p>
-<p>When sym-target is provided, the new symbol is created in
-the context referenced by sym-target. Both the name and
-the destination context may change. Any symbol reference
-that originally pointed into the source context is
-rewritten to point into the target context. def-new
-returns the newly created symbol.</p>
-<p>This mechanism allows fine-grained copying of functions,
-data structures, or context members, and enables creation
-of isolated, statically scoped functions by assigning
-each copy to its own namespace.</p>
-<p>Examples:</p>
-<pre><code>(set ctx1:var &#39;(ctx1:x ctx1:y))
-;-&#62; (ctx1:x ctx1:y)
-
-(def-new &#39;ctx1:var &#39;ctx2:myvar)
-;-&#62; ctx2:myvar
-
-ctx2:myvar
-;-&#62; (ctx2:x ctx2:y)
-
-(context &#39;ctx3)
-;-&#62; ctx3
-
-(def-new &#39;ctx1:var)
-;-&#62; var
-
-var
-;-&#62; (x y)
-</code></pre>
-<p>Creating a function with its own namespace:</p>
-<pre><code>(set temp (fn (x) (+ x x)))
-;-&#62; (fn (x) (+ x x))
-
-(def-new &#39;temp &#39;double:double)
-;-&#62; double:double
-
-(double 10)
-;-&#62; 20
-
-double:double
-;-&#62; (fn (double:x) (+ double:x double:x))
-</code></pre>
-<p>Building a helper for statically scoped accumulators:</p>
-<pre><code>(define (def-static s body)
-  (def-new &#39;body (sym s s)))
-
-(def-static &#39;acc (fn (x)
-  (inc sum x)))
-
-(acc 1)
-;-&#62; 1
-(acc 1)
-;-&#62; 2
-(acc 8)
-;-&#62; 10
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>def-new copies one symbol only; use new to copy an
-entire context.</li>
-<li>All internal references pointing to the original
-context are rewritten to the target context.</li>
-<li>Useful for constructing context-local closures or
-configuring context objects piece by piece.</li>
-</ul>
-<p>See: <a href="#f-new">new</a>, <a href="#f-context">context</a>, <a href="#f-sym">sym</a>,
-<a href="#f-define">define</a></p>
+<p>See: <a href="#f-minusminus">&#8211;</a>, <a href="#f-inc">inc</a></p>
 <hr/>
 <p><a name="f-default"></a></p>
 <h2 id="default">default</h2>
@@ -4102,6 +4188,33 @@ message.</p>
 ;-&#62; nil
 </code></pre>
 <p>See: <a href="#f-last-error">last-error</a>, <a href="#f-catch">catch</a>, <a href="#f-throw-error">throw-error</a></p>
+<hr/>
+<p><a name="f-etime"></a></p>
+<h2 id="etime">etime</h2>
+<pre><code>syntax: (etime exp [int-count])
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the expression <code>exp</code> and returns the time
+spent on evaluation in floating point milliseconds.</p>
+<p>When <code>int-count</code> is specified, <code>exp</code> is evaluated
+<code>int-count</code> times and the total elapsed time is
+returned.</p>
+<p>Examples:</p>
+<pre><code>(etime (func x y z))
+;-&#62; 450.340
+
+(etime (func x y z) 10)
+;-&#62; 4420.021
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The returned value represents elapsed wall-clock
+time.</li>
+<li>When <code>int-count</code> is used, the reported time is the
+sum of all evaluations.</li>
+<li><code>etime</code> evaluates its argument normally.</li>
+</ul>
+<p>See: <a href="#f-mstime">mstime</a></p>
 <hr/>
 <p><a name="f-eval"></a></p>
 <h2 id="eval">eval</h2>
@@ -8127,6 +8240,27 @@ result is the fractional part of num-1.</p>
 <p>Use the [%](#f-percent) function when working with
 integers only.</p>
 <hr/>
+<p><a name="f-mstime"></a></p>
+<h2 id="mstime">mstime</h2>
+<pre><code>syntax: (mstime)
+</code></pre>
+<p>Description:</p>
+<p>Returns the time in milliseconds elapsed since the
+start of the current day.</p>
+<p>The value is reset at midnight and increases
+monotonically during the day.</p>
+<p>Examples:</p>
+<pre><code>(mstime)
+;-&#62; 45238765
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The returned value represents milliseconds since
+00:00:00 local time.</li>
+<li>The value wraps at midnight.</li>
+</ul>
+<p>See: <a href="#f-etime">etime</a></p>
+<hr/>
 <p><a name="f-mul"></a></p>
 <h2 id="mul">mul</h2>
 <pre><code>syntax: (mul num-1 num-2 [num-3 ... ])
@@ -9141,89 +9275,6 @@ and monitoring of open network resources.</p>
 </code></pre>
 <p>See: <a href="#f-net-listen">net-listen</a>, <a href="#f-net-connect">net-connect</a>,
 <a href="#f-net-accept">net-accept</a>, <a href="#f-net-close">net-close</a></p>
-<hr/>
-<p><a name="f-new"></a></p>
-<h2 id="new">new</h2>
-<pre><code>syntax: (new context-source sym-context-target [bool])
-syntax: (new context-source)
-</code></pre>
-<p>Description:</p>
-<p>Copies the contents of context-source into a target
-context. When sym-context-target is provided, the
-context referenced by context-source is copied into
-that target context. If the target context does not
-exist, it is created with the same symbol names and
-user-defined functions as in context-source.</p>
-<p>If the target context already exists, symbols from
-context-source are merged into it. Existing symbols
-are overwritten only when the optional bool argument
-evaluates to anything other than nil. When bool is
-nil or omitted, existing symbols in the target context
-remain unchanged. This allows controlled mixins of
-context objects.</p>
-<p>new returns the target context. The target context
-must not be MAIN.</p>
-<p>In the second syntax form, the context referenced by
-context-source is copied into the current context,
-which becomes the implicit target.</p>
-<p>During copying, all symbol references that originally
-pointed into the source context are rewritten so they
-point into the target context. As a result, all
-functions and data structures continue to work
-unchanged, but now operate entirely within the
-destination context.</p>
-<p>Examples:</p>
-<pre><code>(context &#39;ctx1)
-;-&#62; ctx1
-
-(context MAIN)
-;-&#62; MAIN
-
-(new ctx1 &#39;ctx2)
-;-&#62; ctx2
-
-; force overwrite of existing symbols
-(new ctx1 &#39;ctx3 true)
-;-&#62; ctx3
-</code></pre>
-<p>The first example creates a new context CTX2 with the
-same structure as CTX1. The source context CTX1 is not
-quoted because contexts evaluate to themselves. The
-target context CTX2 must be quoted because it does not
-exist yet.</p>
-<p>The second example merges CTX1 into an existing context
-CTX3. Because CTX3 already exists, the quote may be
-omitted. All symbols of the same name in CTX3 are
-overwritten.</p>
-<p>Contexts may also be referenced indirectly through
-variables:</p>
-<pre><code>(set ctx1:x 123)
-(set ctx2:y 999)
-
-(set src ctx1)
-(set dst ctx2)
-
-(new src dst)
-;-&#62; ctx2
-
-ctx2:x
-;-&#62; 123
-
-ctx2:y
-;-&#62; 999
-</code></pre>
-<p>In this example, the context referenced by src (ctx1)
-is merged into the context referenced by dst (ctx2).</p>
-<p>Notes:</p>
-<ul>
-<li>new copies entire contexts; use def-new to copy
-individual symbols.</li>
-<li>All internal references are rewritten to point to
-the target context.</li>
-<li>Existing symbols are overwritten only when the
-optional bool argument evaluates to non-nil.</li>
-</ul>
-<p>See: <a href="#f-def-new">def-new</a>, <a href="#f-context">context</a></p>
 <hr/>
 <p><a name="f-nilp"></a></p>
 <h2 id="nil">nil?</h2>
@@ -15281,115 +15332,38 @@ or catch forms that handle error exceptions.</li>
 <hr/>
 <p><a name="f-time"></a></p>
 <h2 id="time">time</h2>
-<pre><code>syntax: (time exp [int-count])
+<pre><code>syntax: (time int-year int-month int-day [int-hour int-min int-sec])
+syntax: (time list-date-time)
+syntax: (time)
 </code></pre>
 <p>Description:</p>
-<p>Evaluates the expression exp and returns the time
-spent on evaluation in floating point milliseconds.</p>
-<p>When int-count is specified, exp is evaluated
-int-count times and the total elapsed time is
-returned.</p>
-<p>The precision of the returned value depends on the
-platform. Fractional milliseconds may or may not be
-available.</p>
+<p>Converts a given UTC date and time into the number of
+seconds since January 1st, 1970 00:00:00. The first form
+accepts separate numeric fields for year, month, and day,
+with hour, minute, and second optional. </p>
+<p>The second form accepts a list containing the same fields in
+the same order.  Missing time fields default to zero.  </p>
+<p>In the third form, <code>time</code> returns the timestamp for the
+current system time.</p>
+<p>The conversion always uses UTC and does not apply the
+local time zone. </p>
 <p>Examples:</p>
-<pre><code>(time (myprog x y z))
-;-&#62; 450.340
+<pre><code>(time 2025 7 16)
+;-&#62; 1752624000
 
-(time (myprog x y z) 10)
-;-&#62; 4420.021
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>The returned value represents elapsed wall-clock
-time.</li>
-<li>When int-count is used, the reported time is the
-sum of all evaluations.</li>
-<li>time evaluates its argument normally.</li>
-</ul>
-<p>See: <a href="#f-date">date</a>, <a href="#f-date-value">date-value</a>,
-     <a href="#f-time-of-day">time-of-day</a>, <a href="#f-now">now</a></p>
-<hr/>
-<p><a name="f-time-of-day"></a></p>
-<h2 id="time-of-day">time-of-day</h2>
-<pre><code>syntax: (time-of-day)
-</code></pre>
-<p>Description:</p>
-<p>Returns the time in milliseconds elapsed since the
-start of the current day.</p>
-<p>The value is reset at midnight and increases
-monotonically during the day.</p>
-<p>Examples:</p>
-<pre><code>(time-of-day)
-;-&#62; 45238765
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>The returned value represents milliseconds since
-00:00:00 local time.</li>
-<li>Useful for measuring elapsed time within a day.</li>
-<li>The value wraps at midnight.</li>
-</ul>
-<p>See: <a href="#f-date">date</a>, <a href="#f-date-value">date-value</a>,
-     <a href="#f-time">time</a>, <a href="#f-now">now</a></p>
-<hr/>
-<p><a name="f-timer"></a></p>
-<h2 id="timer">timer</h2>
-<pre><code>syntax: (timer sym-event-handler | func-event-handler num-seconds [int-option])
-syntax: (timer sym-event-handler | func-event-handler)
-syntax: (timer)
-</code></pre>
-<p>Description:</p>
-<p>Starts or controls a one-shot timer which invokes a
-user-defined event handler after a specified delay.</p>
-<p>When called with an event handler and num-seconds,
-timer schedules the handler to be executed after
-num-seconds seconds have elapsed. The handler may be
-given as a symbol naming a function or as an anonymous
-function.</p>
-<p>The timer is implemented using Unix interval timers
-and delivers one of the signals SIGALRM, SIGVTALRM, or
-SIGPROF depending on the selected mode.</p>
-<p>The optional int-option controls how time is measured:</p>
-<p>0  real (wall-clock) time (default)<br/>
-1  process CPU time<br/>
-2  profiling time (real + CPU)</p>
-<p>Seconds may be specified as floating point values,
-allowing sub-second resolution.</p>
-<p>Specifying num-seconds as 0 disables a running timer
-and prevents it from firing.</p>
-<p>When called with only an event handler, timer returns
-the elapsed time of the currently running timer. This
-can be used to implement time lines or schedules.</p>
-<p>When called without arguments, timer returns the
-symbol of the currently installed event handler.</p>
-<p>Examples:</p>
-<pre><code>; periodic timer using re-arming
-;------------------------------------------------------------
-(define (ticker)
-  (println (date))
-  (timer &#39;ticker 1.0))
+(time &#39;(2025 7 16))
+;-&#62; 1752624000
 
-(ticker)
-;-&#62; ticker
+(time 1970 1 1 0 0 0)
+;-&#62; 0
 
-; timer events:
-; Tue Apr 12 20:44:49 2005
-; Tue Apr 12 20:44:50 2005
-; Tue Apr 12 20:44:51 2005
+(datelist (time))
+;-&#62; (2026 1 3 6 41 26 3 6)
 </code></pre>
-<p>Notes:</p>
-<ul>
-<li>The event handler is executed asynchronously.</li>
-<li>A timer handler may re-arm the timer to create
-periodic behavior.</li>
-<li>A timer cannot interrupt a running built-in
-function; it runs between expression evaluations.</li>
-<li>For interrupting blocking I&#47;O, polling patterns
-using net-select are required.</li>
-</ul>
-<p>See: <a href="#f-time">time</a>, <a href="#f-date">date</a>,
-     <a href="#f-net-select">net-select</a></p>
+<p>See: <a href="#f-date">date</a>, 
+<a href="#f-datelist">datelist</a>,
+<a href="#f-datestamp">datestamp</a>, 
+<a href="#f-timelist">timelist</a></p>
 <hr/>
 <p><a name="f-title-case"></a></p>
 <h2 id="title-case-utf8">title-case [utf8]</h2>
