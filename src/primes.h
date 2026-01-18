@@ -147,68 +147,68 @@ PRIMITIVE primitive[] =
 
     /* core - data - workers */
 
-    {"append",           p_append,           0}, /* [l,s,a] */
-    {"apply",            p_apply,            0}, /* [l] */
-    {"assoc",            p_assoc,            0}, /* [l] */
+    {"append",           p_append,           0},     /* [l,s,a] */
+    {"apply",            p_apply,            0},     /* [l] */
+    {"assoc",            p_assoc,            0},     /* [l] */
     {"bind",             p_bind,             0x400}, /* [l] */ 
-    {"cap",              p_intersect,        0}, /* [l] :replaces intersect */
-    {"chop",             p_chop,             0}, /* [l,s] */
-    {"clean",            p_clean,            0}, /* [l] */
-    {"collect",          p_collect,          0}, /* [] */
-    {"cons",             p_cons,             0}, /* [l] */
-    {"curry",            p_curry,            0}, /* [] */
-    {"freq",             p_count,            0}, /* [l] :replaces count */
-    {"diff",             p_difference,       0}, /* [l] :replaces difference */
-    {"dup",              p_dup,              0}, /* [any] */
-    {"next",             p_exists,           0}, /* [l] :replaces exists */
-    {"expand",           p_expand,           0}, /* [l] */
-    {"explode",          p_explode,          0}, /* [l,s] */
+    {"cap",              p_intersect,        0},     /* [l] :replaces intersect */
+    {"chop",             p_chop,             0},     /* [l,s] */
+    {"clean",            p_clean,            0},     /* [l] */
+    {"collect",          p_collect,          0},     /* [] */
+    {"cons",             p_cons,             0},     /* [l] */
+    {"curry",            p_curry,            0},     /* [] */
+    {"freq",             p_count,            0},     /* [l] :replaces count */
+    {"diff",             p_difference,       0},     /* [l] :replaces difference */
+    {"dup",              p_dup,              0},     /* [any] */
+    {"next",             p_exists,           0},     /* [l] :replaces exists */
+    {"expand",           p_expand,           0},     /* [l] */
+    {"explode",          p_explode,          0},     /* [l,s] */
     {"extend",           p_extend,           0x400}, /* [l,s] */
-    {"filter",           p_filter,           0}, /* [l] */
-    {"find",             p_find,             0}, /* [l,s] */
-    {"findall",          p_findAll,          0}, /* [l,s] */
-    {"first",            p_first,            0}, /* [l,s,a] */
-    {"flat",             p_flat,             0}, /* [l] */
-    {"fmt",              p_format,           0}, /* [s] :replaces format */
-    {"index",            p_index,            0}, /* [l] */
-    {"join",             p_join,             0}, /* [l] */
-    {"last",             p_last,             0}, /* [l,s,a] */
-    {"lcase",            p_lower,            0}, /* [s] :replaces lower-case */
-    {"len",              p_length,           0}, /* [any] :replaces length */
-    {"lookup",           p_lookup,           0}, /* [l] */
-    {"map",              p_map,              0}, /* [l] */
-    {"match",            p_match,            0}, /* [l] */
-    {"member",           p_member,           0},
-    {"mut",              p_setmut,           0}, /* :rebel, conscious mutate tool */
-    {"mutlock",          p_mutlock,          0}, /* :rebel, experimental */
-    {"nth",              p_nth,              0},
-    {"parse",            p_parse,            0},
-    {"pop",              p_pop,              0x400},
-    {"popassoc",         p_popAssoc,         0x400},
-    {"push",             p_push,             0x400},
-    {"ref",              p_ref,              0},
-    {"refall",           p_refAll,           0},
-    {"refset",           p_setRef,           0x400}, /* :replaces set-ref */
-    {"refsetall",        p_setRefAll,        0x400}, /* :replaces set-ref-all */
-    {"replace",          p_replace,          0x400},
-    {"rest",             p_rest,             0},
-    {"rev",              p_reverse,          0x400}, /* :replaces reverse */
-    {"rot",              p_rotate,           0x400}, /* :replaces rotate */
-    {"rx",               p_regex,            0}, /* :replaces regex */
-    {"rxcomp",           p_regexComp,        0}, /* :replaces regex-comp */
-    {"sel",              p_select,           0}, /* :replaces select */
-    {"slice",            p_slice,            0},
-    {"sort",             p_sort,             0x400},
-    {"swap",             p_swap,             0},
-    {"tcase",            p_title,            0}, /* :replaces title-case */
-    {"throw",            p_throw,            0},
-    {"trim",             p_trim,             0},
-    {"ucase",            p_upper,            0}, /* :replaces upper-case */
-    {"unify",            p_unify,            0},
-    {"union",            p_union,            0},
-    {"uniq",             p_unique,           0}, /* :replaces unique */
+    {"filter",           p_filter,           0},     /* [l] */
+    {"find",             p_find,             0},     /* [l,s] */
+    {"findall",          p_findAll,          0},     /* [l,s] */
+    {"first",            p_first,            0},     /* [l,s,a] */
+    {"flat",             p_flat,             0},     /* [l] */
+    {"fmt",              p_format,           0},     /* [s] :replaces format */
+    {"index",            p_index,            0},     /* [l] */
+    {"join",             p_join,             0},     /* [l] */
+    {"last",             p_last,             0},     /* [l,s,a] */
+    {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
+    {"len",              p_length,           0},     /* [any] :replaces length */
+    {"lookup",           p_lookup,           0},     /* [l] */
+    {"map",              p_map,              0},     /* [l] */
+    {"match",            p_match,            0},     /* [l] */
+    {"member",           p_member,           0},     /* [] */
+    {"mut",              p_setmut,           0},     /* [] :rebel, conscious mutate tool */
+    {"mutlock",          p_mutlock,          0},     /* [] :rebel, experimental */
+    {"nth",              p_nth,              0},     /* [] */
+    {"parse",            p_parse,            0},     /* [] */
+    {"pop",              p_pop,              0x400}, /* [] */
+    {"popassoc",         p_popAssoc,         0x400}, /* [] */
+    {"push",             p_push,             0x400}, /* [] */
+    {"ref",              p_ref,              0},     /* [] */
+    {"refall",           p_refAll,           0},     /* [] */
+    {"refset",           p_setRef,           0x400}, /* [] :replaces set-ref */
+    {"refsetall",        p_setRefAll,        0x400}, /* [] :replaces set-ref-all */
+    {"replace",          p_replace,          0x400}, /* [] */
+    {"rest",             p_rest,             0},     /* [] */
+    {"rev",              p_reverse,          0x400}, /* [] :replaces reverse */
+    {"rot",              p_rotate,           0x400}, /* [] :replaces rotate */
+    {"rx",               p_regex,            0},     /* [] :replaces regex */
+    {"rxcomp",           p_regexComp,        0},     /* [] :replaces regex-comp */
+    {"sel",              p_select,           0},     /* [] :replaces select */
+    {"slice",            p_slice,            0},     /* [] */
+    {"sort",             p_sort,             0x400}, /* [] */
+    {"swap",             p_swap,             0},     /* [] */
+    {"tcase",            p_title,            0},     /* [] :replaces title-case */
+    {"throw",            p_throw,            0},     /* [] */
+    {"trim",             p_trim,             0},     /* [] */
+    {"ucase",            p_upper,            0},     /* [] :replaces upper-case */
+    {"unify",            p_unify,            0},     /* [] */
+    {"union",            p_union,            0},     /* [] */
+    {"uniq",             p_unique,           0},     /* [] :replaces unique */
     #ifdef SUPPORT_UTF8
-    {"utf8len",          p_utf8len,          0},
+    {"utf8len",          p_utf8len,          0},     /* [] */
     #endif
 
     /* core - math - int */
