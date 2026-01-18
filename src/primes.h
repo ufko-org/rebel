@@ -60,11 +60,11 @@
 
     Function name patterns, if possible:
 
-       noun          - string            (conversion operation) 
-       action        - rotate            (generic operation)
-       nounaction    - stringrotate      (specific operation)
-       actionnoun    - rotatestring      (worst case)
-       value         - crc32             (computed value / algorithm name)
+       noun          - string/str            (conversion operation) 
+       action        - rotate/rot            (generic operation)
+       nounaction    - stringrotate/strrot   (specific operation)
+       actionnoun    - rotatestring/rotstr   (worst case)
+       value         - crc32                 (computed value / algo name)
 
     Special form names:
 
@@ -86,7 +86,6 @@
     constant -> const, alias
     =        -> eq, is
     true?    -> ok
-    nil?     -> ko
     null?    -> no
 
     primes.h is the authoritative source.
@@ -116,10 +115,10 @@ PRIMITIVE primitive[] =
 
     /* core - data - iterators */
     
-    {"doargs",           p_doargs,           2},
-    {"dolist",           p_dolist,           2},
-    {"dostring",         p_dostring,         2},
-    {"dotree",           p_dotree,           2},
+    {"doargs",           p_doargs,           2}, /* can be done with dolist */
+    {"dolist",           p_dolist,           2}, /* see: loop as an :alt */
+    {"dostring",         p_dostring,         2}, /* can be done with dolist */
+    {"dotree",           p_dotree,           2}, /* can be done with dolist */
 
     /* core - data - sequencers */
 
@@ -148,37 +147,37 @@ PRIMITIVE primitive[] =
 
     /* core - data - workers */
 
-    {"append",           p_append,           0},
-    {"apply",            p_apply,            0},
-    {"assoc",            p_assoc,            0},
-    {"bind",             p_bind,             0x400},
-    {"cap",              p_intersect,        0}, /* :replaces intersect */
-    {"chop",             p_chop,             0},
-    {"clean",            p_clean,            0},
-    {"collect",          p_collect,          0},
-    {"cons",             p_cons,             0},
-    {"curry",            p_curry,            0},
-    {"freq",             p_count,            0}, /* :replaces count */
-    {"diff",             p_difference,       0}, /* :replaces difference */
-    {"dup",              p_dup,              0},
-    {"next",             p_exists,           0}, /* :replaces exists */
-    {"expand",           p_expand,           0},
-    {"explode",          p_explode,          0},
-    {"extend",           p_extend,           0x400},
-    {"filter",           p_filter,           0},
-    {"find",             p_find,             0},
-    {"findall",          p_findAll,          0},
-    {"first",            p_first,            0},
-    {"flat",             p_flat,             0},
-    {"fmt",              p_format,           0}, /* :replaces format */
-    {"index",            p_index,            0},
-    {"join",             p_join,             0},
-    {"last",             p_last,             0},
-    {"lcase",            p_lower,            0}, /* :replaces lower-case */
-    {"len",              p_length,           0}, /* :replaces length */
-    {"lookup",           p_lookup,           0},
-    {"map",              p_map,              0},
-    {"match",            p_match,            0},
+    {"append",           p_append,           0}, /* [l,s,a] */
+    {"apply",            p_apply,            0}, /* [l] */
+    {"assoc",            p_assoc,            0}, /* [l] */
+    {"bind",             p_bind,             0x400}, /* [l] */ 
+    {"cap",              p_intersect,        0}, /* [l] :replaces intersect */
+    {"chop",             p_chop,             0}, /* [l,s] */
+    {"clean",            p_clean,            0}, /* [l] */
+    {"collect",          p_collect,          0}, /* [] */
+    {"cons",             p_cons,             0}, /* [l] */
+    {"curry",            p_curry,            0}, /* [] */
+    {"freq",             p_count,            0}, /* [l] :replaces count */
+    {"diff",             p_difference,       0}, /* [l] :replaces difference */
+    {"dup",              p_dup,              0}, /* [any] */
+    {"next",             p_exists,           0}, /* [l] :replaces exists */
+    {"expand",           p_expand,           0}, /* [l] */
+    {"explode",          p_explode,          0}, /* [l,s] */
+    {"extend",           p_extend,           0x400}, /* [l,s] */
+    {"filter",           p_filter,           0}, /* [l] */
+    {"find",             p_find,             0}, /* [l,s] */
+    {"findall",          p_findAll,          0}, /* [l,s] */
+    {"first",            p_first,            0}, /* [l,s,a] */
+    {"flat",             p_flat,             0}, /* [l] */
+    {"fmt",              p_format,           0}, /* [s] :replaces format */
+    {"index",            p_index,            0}, /* [l] */
+    {"join",             p_join,             0}, /* [l] */
+    {"last",             p_last,             0}, /* [l,s,a] */
+    {"lcase",            p_lower,            0}, /* [s] :replaces lower-case */
+    {"len",              p_length,           0}, /* [any] :replaces length */
+    {"lookup",           p_lookup,           0}, /* [l] */
+    {"map",              p_map,              0}, /* [l] */
+    {"match",            p_match,            0}, /* [l] */
     {"member",           p_member,           0},
     {"mut",              p_setmut,           0}, /* :rebel, conscious mutate tool */
     {"mutlock",          p_mutlock,          0}, /* :rebel, experimental */
