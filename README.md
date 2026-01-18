@@ -83,7 +83,7 @@ Rebel can change his running shoes mid-sprint.
 
 ```
 gringo ~ $: rebel
-Rebel v.1.0 64-bit on BSD IPv4/6 UTF-8 libffi, options: rebel -h
+Rebel on BSD IPv4/6 UTF-8 FFI. Options: rebel -h
 
 > (func (sum x) (+ x x))
 (fn (x) (+ x x))
