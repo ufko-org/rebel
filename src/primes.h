@@ -201,7 +201,6 @@ PRIMITIVE primitive[] =
     {"sort",             p_sort,             0x400}, /* [] */
     {"swap",             p_swap,             0},     /* [] */
     {"tcase",            p_title,            0},     /* [] :replaces title-case */
-    {"throw",            p_throw,            0},     /* [] */
     {"trim",             p_trim,             0},     /* [] */
     {"ucase",            p_upper,            0},     /* [] :replaces upper-case */
     {"unify",            p_unify,            0},     /* [] */
@@ -211,7 +210,7 @@ PRIMITIVE primitive[] =
     {"utf8len",          p_utf8len,          0},     /* [] */
     #endif
 
-    /* core - math - int */
+    /* core - math - integers */
 
     {"+",                p_add,              0},
     {"-",                p_subtract,         0},
@@ -221,7 +220,7 @@ PRIMITIVE primitive[] =
     {"++",               p_incrementI,       0x400},
     {"--",               p_decrementI,       0x400},
 
-    /* core - math - float */
+    /* core - math - floats */
 
     {"add",              p_addFloat,         0},
     {"sub",              p_subFloat,         0},
@@ -231,7 +230,7 @@ PRIMITIVE primitive[] =
     {"inc",              p_incrementF,       0x400},
     {"dec",              p_decrementF,       0x400},
 
-    /* core - math - float extended */
+    /* core - math - floats extended */
 
     {"abs",              p_abs,              0},
     {"acos",             p_acos,             0},
@@ -266,6 +265,7 @@ PRIMITIVE primitive[] =
 
     {"do",               p_evalBlock,        1}, /* :replaces begin */
     {"case",             p_case,             2},
+    {"catch",            p_catch,            0},
     {"cond",             p_condition,        1},
     {"dotimes",          p_dotimes,          2},
     {"dountil",          p_doUntil,          2},
@@ -273,6 +273,7 @@ PRIMITIVE primitive[] =
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"ifnot",            p_ifNot,            2}, /* :rebel reimplemented as a full countepart of if with 2 branches */
+    {"throw",            p_throw,            0}, 
     {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
     {"when",             p_when,             2}, 
@@ -296,7 +297,6 @@ PRIMITIVE primitive[] =
     {"ge",               p_greaterEqual,     0}, /* :alt */
     {"=",                p_equal,            0},
     {"eq",               p_equal,            0}, /* :alt */
-    {"is",               p_equal,            0}, /* :alt */
     {"!=",               p_notEqual,         0},
     {"ne",               p_notEqual,         0}, /* :alt */
 
@@ -390,7 +390,6 @@ PRIMITIVE primitive[] =
     {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
-    {"catch",            p_catch,            0},
     {"clone",            p_new,              0}, /* :replaces new, this is obviously cloning op */
     {"clonesym",         p_defineNew,        0}, /* :replaces def-new -||- */
     {"commandevent",     p_commandEvent,     0},
@@ -490,11 +489,12 @@ PRIMITIVE primitive[] =
     {"true?",            p_isTrue,           0},
     {"zero?",            p_isZero,           0},
 
-    /* core - flow - boosters, intent markers */
+    /* core - flow - boosters */
 
+    {"is",               p_equal,            0}, /* :alt for = */
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
-    {"loop",             p_dolist,           2}, /* :alt, dolist over list or value converted to list*/
+    {"loop",             p_dolist,           2}, /* :alt, loop over list or value converted to list*/
 
     /* core - date and time */
 
