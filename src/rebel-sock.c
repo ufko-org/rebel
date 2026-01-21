@@ -2607,7 +2607,4 @@ unsigned short pseudo_chks(
 }
 #endif /* NO_NET_PACKET */
 
-/* ------------------ socket->filestream stuff for windows ------------------------*/
-
-
 /* eof */
