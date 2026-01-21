@@ -490,7 +490,6 @@ CELL *p_uuid(CELL *params);
 CELL *p_waitpid(CELL *params);
 CELL *p_when(CELL *params);
 CELL *p_while(CELL *params);
-CELL *p_with(CELL *params);
 CELL *p_writeBuffer(CELL *params);
 CELL *p_writeChar(CELL *params);
 CELL *p_writeFile(CELL *params);
