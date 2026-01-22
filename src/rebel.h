@@ -28,7 +28,7 @@
    Undefining DEBUGGER does not affected simple tracing with (trace <device-no>)
 */
 
-#define KMEANS
+/* ufko: define KMEANS */
 #define DEBUGGER
 #define XML_SUPPORT
 

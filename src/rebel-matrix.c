@@ -630,7 +630,7 @@ void lubksb(double * * a, int n, int *indx, double *b)
 
 /* ------------ KMEANS clustering ------------------------------- */
 
-#ifdef KMEANS
+/* ufko: ifdef KMEANS */
 #define DOUBLE_MAX 1.0e308 /* approximate for IEEE 754 */
 
 /* (kmeans-train data k context [centroidsi [criterium]])
@@ -919,7 +919,7 @@ CELL *p_kmeansQuery(CELL *params)
     return(result);
 }
 
-#endif
+/* ufko: endif */
 
 /* ------------ make a matrix from list or array expr ----------- */
 
