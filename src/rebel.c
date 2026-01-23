@@ -77,8 +77,7 @@ char preLoad[] =
     "(func (Class:Class) (cons (context) (args)))";
 */
 char preLoad[] =
-    "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
-    "(func (Class:Class) (cons (context) (args)))";
+    "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
