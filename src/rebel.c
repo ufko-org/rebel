@@ -70,9 +70,14 @@ char banner2[]= ". Options: rebel -h";
 
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
+/*
 char preLoad[] =
     "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
     "(context 'Tree) (const 'Tree:Tree) (context MAIN)"
+    "(func (Class:Class) (cons (context) (args)))";
+*/
+char preLoad[] =
+    "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
     "(func (Class:Class) (cons (context) (args)))";
 void printHelpText(void);
 #ifdef READLINE
