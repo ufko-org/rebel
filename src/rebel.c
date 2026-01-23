@@ -5343,6 +5343,8 @@ CELL *p_setdef(CELL *params)
     char *indexRefPtr;
 
 SETDEF_BEGIN:
+
+    /* reject implicit nil value for symbol */
     if(params->next == nilCell)
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
