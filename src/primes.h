@@ -169,7 +169,7 @@ PRIMITIVE primitive[] =
     {"findall",          p_findAll,          0},     /* [l,s] */
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
-    {"fmt",              p_format,           0},     /* [s] :replaces format */
+    {"format",           p_format,           0},     /* [s] */
     {"index",            p_index,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */

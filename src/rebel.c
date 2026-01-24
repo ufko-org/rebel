@@ -1354,7 +1354,7 @@ void initialize(void)
     questionSymbol = translateCreateSymbol("?", CELL_NIL, mainContext, TRUE);
     atSymbol = translateCreateSymbol("@", CELL_NIL, mainContext, TRUE);
     argsSymbol = translateCreateSymbol("$args", CELL_NIL, mainContext, TRUE);
-    mainArgsSymbol = translateCreateSymbol("$main-args", CELL_NIL, mainContext, TRUE);
+    mainArgsSymbol = translateCreateSymbol("$argv", CELL_NIL, mainContext, TRUE);
     listIdxSymbol = translateCreateSymbol("$idx", CELL_NIL, mainContext, TRUE);
     itSymbol = translateCreateSymbol("$it", CELL_NIL, mainContext, TRUE);
     countSymbol = translateCreateSymbol("$count", CELL_NIL, mainContext, TRUE);
