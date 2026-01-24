@@ -7140,8 +7140,90 @@ CELL *p_device(CELL *params)
     return(stuffInteger(printDevice));
 }
 
-
+/* ufko: priority load: 1. user provided path, 2. cwd, 3. REBELDIR if set */
 CELL *p_load(CELL *params)
+{
+    char *fileName;
+    CELL *result = nilCell;
+    CELL *next;
+    SYMBOL *context;
+    int count = 0;
+
+    /* get last parameter */
+    if((next = params) == nilCell)
+    {
+        errorProc(ERR_MISSING_ARGUMENT);
+    }
+    while(next->next != nilCell)
+    {
+        count++;
+        next = next->next;
+    }
+
+    next = evaluateExpression(next);
+    if(next->type == CELL_STRING)
+    {
+        count++;
+        context = mainContext;
+    }
+    else
+    {
+        if(count == 0)
+        {
+            errorProcExt(ERR_STRING_EXPECTED, next);
+        }
+        if((context = getCreateContext(next, FALSE)) == NULL)
+        {
+            errorProcExt(ERR_SYMBOL_OR_CONTEXT_EXPECTED, next);
+        }
+        next = NULL;
+    }
+
+    while(count--)
+    {
+        /* if last arg was a string, avoid double evaluation */
+        if(count == 0 && next != NULL)
+        {
+            getStringSize(next, &fileName, NULL, FALSE);
+        }
+        else
+        {
+            params = getString(params, &fileName);
+        }
+
+        result = loadFile(fileName, 0, 0, context);
+
+        /* 1. as-is */
+        if(result == NULL)
+        {
+            char path[PATH_MAX];
+
+            /* 2. ./file */
+            snprintf(path, sizeof(path), "./%s", fileName);
+            result = loadFile(path, 0, 0, context);
+
+            /* 3. $REBELDIR/file */
+            if(result == NULL)
+            {
+                char *root = getenv("REBELDIR");
+                if(root != NULL)
+                {
+                    snprintf(path, sizeof(path), "%s/%s", root, fileName);
+                    result = loadFile(path, 0, 0, context);
+                }
+            }
+        }
+
+        if(result == NULL)
+        {
+            return(errorProcExt2(ERR_ACCESSING_FILE, stuffString(fileName)));
+        }
+    }
+
+    return(result);
+}
+
+CELL *p_load_orig(CELL *params)
 {
     char *fileName;
     CELL *result = nilCell;
@@ -7201,7 +7283,6 @@ CELL *p_load(CELL *params)
 
     return(result);
 }
-
 
 void saveContext(SYMBOL *sPtr, UINT device)
 {
