@@ -140,7 +140,7 @@ SYMBOL *lookupSymbol(char *token, SYMBOL *context)
     return(findInsertSymbol(token, LOOKUP_ONLY));
 }
 
-
+/* ufko: context as hash symbols prefix creator */
 SYMBOL *makeSafeSymbol(CELL *cell, SYMBOL *context, int flag)
 {
     char *token;
