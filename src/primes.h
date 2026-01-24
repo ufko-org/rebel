@@ -165,8 +165,8 @@ PRIMITIVE primitive[] =
     {"explode",          p_explode,          0},     /* [l,s] */
     {"extend",           p_extend,           0x400}, /* [l,s] */
     {"filter",           p_filter,           0},     /* [l] */
-    {"find",             p_find,             0},     /* [l,s] */
-    {"findall",          p_findAll,          0},     /* [l,s] */
+    {"pos",              p_find,             0},     /* [l,s] :replaces find */
+    {"find",             p_findAll,          0},     /* [l,s] :replaces findall */
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
