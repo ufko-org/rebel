@@ -78,9 +78,10 @@ char preLoad[] =
 char preLoad[] =
     "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
     "(mac (hash) (context (args 0) (args 0))) (const (global 'hash))";
-*/
 char preLoad[] =
     "(const (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))";
+*/
+char preLoad[] = "";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
