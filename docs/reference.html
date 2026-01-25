@@ -88,7 +88,7 @@ int-idx)</code> enables programmatic access when the index is
 not known in advance.</p>
 <p>Examples:</p>
 <pre><code>(set txt "http:&#47;&#47;example.org:80")
-(find "http:&#47;&#47;(.*):(.*)" txt 0)  ; → 0
+(pos "http:&#47;&#47;(.*):(.*)" txt 0)  ; → 0
 
 $0     ; → "http:&#47;&#47;example.org:80"
 $1     ; → "example.org"
@@ -919,7 +919,7 @@ symbol of the currently installed event handler.</p>
 <p>Examples:</p>
 <pre><code>; periodic alarm using re-arming
 ;------------------------------------------------------------
-(define (ticker)
+(func (ticker)
   (println (date))
   (alarm &#39;ticker 1.0))
 
@@ -1035,22 +1035,22 @@ bytes.</li>
 syntax: (apply function)
 </code></pre>
 <p>Description:</p>
-<p>Invokes <code>func</code> using the elements of <code>list</code> as its arguments.
-The function in <code>func</code> may be a primitive, a user-defined
-function, or a <code>fn</code> expression. Only functions that
-evaluate all of their arguments may be used; special
-forms that evaluate selectively (such as <code>dotimes</code> or
-<code>case</code>) will fail when used with <code>apply</code>.</p>
-<p>In the second syntax form, apply simply calls <code>function</code>
-without any arguments.</p>
+<p>Invokes <code>function</code> using the elements of <code>list</code> as its
+arguments.  The function in <code>func</code> may be a primitive,
+a user-defined function, or a <code>fn</code> expression.  Only
+functions that evaluate all of their arguments may be
+used; special forms that evaluate selectively (such as
+<code>dotimes</code> or <code>case</code>) will fail when used with <code>apply</code>.</p>
+<p>In the second syntax form, apply simply calls
+<code>function</code> without any arguments.</p>
 <p>When <code>int-reduce</code> is supplied, it specifies how many
-arguments <code>function</code> consumes. The function is then applied
-repeatedly in left-associative order: the result of each
-application becomes the first argument of the next
-application, and the remaining arguments are taken
-successively from list. This mechanism allows
-a two-argument function to be extended into a variadic
-one.</p>
+arguments <code>function</code> consumes.  The function is then
+applied repeatedly in left-associative order: the
+result of each application becomes the first argument
+of the next application, and the remaining arguments
+are taken successively from list.  This mechanism
+allows a two-argument function to be extended into a
+variadic one.</p>
 <p>Examples:</p>
 <pre><code>(apply + &#39;(1 2 3 4))
 ; → 10
@@ -1067,7 +1067,7 @@ one.</p>
 
 ; reduce mode example
 
-(def (gcd_ a b)
+(func (gcd_ a b)
   (let (r (% b a))
     (if (= r 0) a (gcd_ r a))))
 
@@ -1080,9 +1080,9 @@ one.</p>
 <p>Notes:</p>
 <ul>
 <li>Only works with functions that evaluate all arguments.</li>
-<li>Special forms (<code>dotimes</code>, <code>case</code>, etc.) cannot be used.</li>
-<li><code>int-reduce</code> applies <code>function</code> repeatedly in left-associative
-order.</li>
+<li>Special forms (<code>dolist</code>, <code>case</code>, etc.) cannot be used.</li>
+<li><code>int-reduce</code> applies <code>function</code> repeatedly in
+left-associative order.</li>
 </ul>
 <p>See: <a href="#f-map">map</a>, <a href="#f-fn">fn</a></p>
 <hr/>
@@ -1092,17 +1092,18 @@ order.</li>
 syntax: (args int-idx-1 [int-idx-2 ...])
 </code></pre>
 <p>Description:</p>
-<p>Returns all unbound arguments of the currently executing
-function or macro.  Only arguments not already matched to
-formal parameters remain in this list.  The function is
-useful for defining functions or macros that accept a
-variable number of parameters.  For macros, <code>args</code> avoids
-accidental variable capture because the returned values
-belong strictly to the caller’s context.</p>
-<p>When called with one or more indices, <code>args</code> returns the
-corresponding elements from the unbound argument list.
-Indices may be nested-access indices, allowing traversal
-inside structured data such as lists.</p>
+<p>Returns all unbound arguments of the currently
+executing function or macro.  Only arguments not
+already matched to formal parameters remain in this
+list.  The function is useful for defining functions or
+macros that accept a variable number of parameters.
+For macros, <code>args</code> avoids accidental variable capture
+because the returned values belong strictly to the
+caller’s context.</p>
+<p>When called with one or more indices, <code>args</code> returns
+the corresponding elements from the unbound argument
+list.  Indices may be nested-access indices, allowing
+traversal inside structured data such as lists.</p>
 <p>Examples:</p>
 <pre><code>(mac (print-line)
   (dolist (x (args))
@@ -1110,14 +1111,14 @@ inside structured data such as lists.</p>
 (print-line "hello" "World")
 ; prints each argument on its own line
 
-(mac (foo)
+(mac (m)
   (print (args 2) (args 1) (args 0)))
-(foo x y z)
+(m x y z)
 ; → zyx
 
-(def (bar)
+(func (f)
   (args 0 2 -1))
-(bar &#39;(1 2 (3 4)))
+(f &#39;(1 2 (3 4)))
 ; → 4
 
 ; bound vs unbound arguments
@@ -1147,21 +1148,22 @@ environment.</li>
 <pre><code>syntax: (array int-n1 [int-n2 ...] [list-init])
 </code></pre>
 <p>Description:</p>
-<p>Creates an array with <code>int-n1</code> elements. Additional integer
-dimensions define a multidimensional array, supporting up
-to sixteen dimensions. When <code>list-init</code> is supplied, its
-elements initialize the array. If <code>list-init</code> has fewer
-elements than required, its contents repeat until all
-array positions are filled. Elements may be of any type.</p>
+<p>Creates an array with <code>int-n1</code> elements.  Additional
+integer dimensions define a multidimensional array,
+supporting up to sixteen dimensions.  When <code>list-init</code>
+is supplied, its elements initialize the array.  If
+<code>list-init</code> has fewer elements than required, its
+contents repeat until all array positions are filled.
+Elements may be of any type.</p>
 <p>Multidimensional arrays are stored as arrays of arrays.
 Arrays provide efficient random indexing compared to
-lists. Most list operations work on arrays, but not all;
-details depend on the specific function. Replacing whole
-rows requires care to ensure the replacement itself is an
-array and not a list.</p>
+lists.  Most list operations work on arrays, but not
+all; details depend on the specific function.
+Replacing whole rows requires care to ensure the
+replacement itself is an array and not a list.</p>
 <p>Arrays can be converted to lists using <code>arraylist</code>, and
-lists can be converted back by flattening them with <code>flat</code>
-before constructing a new array.</p>
+lists can be converted back by flattening them with
+<code>flat</code> before constructing a new array.</p>
 <p>Serialization using <code>save</code> or <code>source</code> preserves array
 structure by writing the necessary array expression.</p>
 <p>Examples:</p>

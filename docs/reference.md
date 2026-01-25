@@ -84,7 +84,7 @@ Examples:
 
 ```
 (set txt "http://example.org:80")
-(find "http://(.*):(.*)" txt 0)  ; → 0
+(pos "http://(.*):(.*)" txt 0)  ; → 0
 
 $0     ; → "http://example.org:80"
 $1     ; → "example.org"
@@ -1235,7 +1235,7 @@ Examples:
 ```
 ; periodic alarm using re-arming
 ;------------------------------------------------------------
-(define (ticker)
+(func (ticker)
   (println (date))
   (alarm 'ticker 1.0))
 
@@ -1384,24 +1384,24 @@ syntax: (apply function)
 
 Description:
 
-Invokes `func` using the elements of `list` as its arguments.
-The function in `func` may be a primitive, a user-defined
-function, or a `fn` expression. Only functions that
-evaluate all of their arguments may be used; special
-forms that evaluate selectively (such as `dotimes` or
-`case`) will fail when used with `apply`.
+Invokes `function` using the elements of `list` as its
+arguments.  The function in `func` may be a primitive,
+a user-defined function, or a `fn` expression.  Only
+functions that evaluate all of their arguments may be
+used; special forms that evaluate selectively (such as
+`dotimes` or `case`) will fail when used with `apply`.
 
-In the second syntax form, apply simply calls `function`
-without any arguments.
+In the second syntax form, apply simply calls
+`function` without any arguments.
 
 When `int-reduce` is supplied, it specifies how many
-arguments `function` consumes. The function is then applied
-repeatedly in left-associative order: the result of each
-application becomes the first argument of the next
-application, and the remaining arguments are taken
-successively from list. This mechanism allows
-a two-argument function to be extended into a variadic
-one.
+arguments `function` consumes.  The function is then
+applied repeatedly in left-associative order: the
+result of each application becomes the first argument
+of the next application, and the remaining arguments
+are taken successively from list.  This mechanism
+allows a two-argument function to be extended into a
+variadic one.
 
 Examples:
 
@@ -1421,7 +1421,7 @@ Examples:
 
 ; reduce mode example
 
-(def (gcd_ a b)
+(func (gcd_ a b)
   (let (r (% b a))
     (if (= r 0) a (gcd_ r a))))
 
@@ -1435,9 +1435,9 @@ Examples:
 Notes:
 
 - Only works with functions that evaluate all arguments.
-- Special forms (`dotimes`, `case`, etc.) cannot be used.
-- `int-reduce` applies `function` repeatedly in left-associative
-  order.
+- Special forms (`dolist`, `case`, etc.) cannot be used.
+- `int-reduce` applies `function` repeatedly in
+  left-associative order.
 
 See: [map](#f-map), [fn](#f-fn)
 
@@ -1454,18 +1454,19 @@ syntax: (args int-idx-1 [int-idx-2 ...])
 
 Description:
 
-Returns all unbound arguments of the currently executing
-function or macro.  Only arguments not already matched to
-formal parameters remain in this list.  The function is
-useful for defining functions or macros that accept a
-variable number of parameters.  For macros, `args` avoids
-accidental variable capture because the returned values
-belong strictly to the caller’s context.
+Returns all unbound arguments of the currently
+executing function or macro.  Only arguments not
+already matched to formal parameters remain in this
+list.  The function is useful for defining functions or
+macros that accept a variable number of parameters.
+For macros, `args` avoids accidental variable capture
+because the returned values belong strictly to the
+caller’s context.
 
-When called with one or more indices, `args` returns the
-corresponding elements from the unbound argument list.
-Indices may be nested-access indices, allowing traversal
-inside structured data such as lists.
+When called with one or more indices, `args` returns
+the corresponding elements from the unbound argument
+list.  Indices may be nested-access indices, allowing
+traversal inside structured data such as lists.
 
 Examples:
 
@@ -1476,14 +1477,14 @@ Examples:
 (print-line "hello" "World")
 ; prints each argument on its own line
 
-(mac (foo)
+(mac (m)
   (print (args 2) (args 1) (args 0)))
-(foo x y z)
+(m x y z)
 ; → zyx
 
-(def (bar)
+(func (f)
   (args 0 2 -1))
-(bar '(1 2 (3 4)))
+(f '(1 2 (3 4)))
 ; → 4
 
 ; bound vs unbound arguments
@@ -1521,23 +1522,24 @@ syntax: (array int-n1 [int-n2 ...] [list-init])
 
 Description:
 
-Creates an array with `int-n1` elements. Additional integer
-dimensions define a multidimensional array, supporting up
-to sixteen dimensions. When `list-init` is supplied, its
-elements initialize the array. If `list-init` has fewer
-elements than required, its contents repeat until all
-array positions are filled. Elements may be of any type.
+Creates an array with `int-n1` elements.  Additional
+integer dimensions define a multidimensional array,
+supporting up to sixteen dimensions.  When `list-init`
+is supplied, its elements initialize the array.  If
+`list-init` has fewer elements than required, its
+contents repeat until all array positions are filled.
+Elements may be of any type.
 
 Multidimensional arrays are stored as arrays of arrays.
 Arrays provide efficient random indexing compared to
-lists. Most list operations work on arrays, but not all;
-details depend on the specific function. Replacing whole
-rows requires care to ensure the replacement itself is an
-array and not a list.
+lists.  Most list operations work on arrays, but not
+all; details depend on the specific function.
+Replacing whole rows requires care to ensure the
+replacement itself is an array and not a list.
 
 Arrays can be converted to lists using `arraylist`, and
-lists can be converted back by flattening them with `flat`
-before constructing a new array.
+lists can be converted back by flattening them with
+`flat` before constructing a new array.
 
 Serialization using `save` or `source` preserves array
 structure by writing the necessary array expression.
