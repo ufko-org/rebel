@@ -1949,11 +1949,9 @@ Examples:
 Notes:
 
 - Domain: 
-  ```
   |x| < 1.  
   |x| > 1 → NaN  
   |x| = 1 → ±inf
-  ```
 - Result is expressed in radians.
 
 See: [tanh](#f-tanh), [asinh](#f-asinh), [acosh](#f-acosh)
@@ -2001,7 +1999,6 @@ Notes:
 See: [list?](#f-listp), [symbol?](#f-symbolp)
 
 ---
-
 
 
 <a name="f-b64dec"></a>
@@ -2417,7 +2414,7 @@ normal program flow and must be handled without aborting
 the surrounding computation.
 
 In the second syntax `catch` returns the normal value of
-`exp`, or—if a `throw` is executed during evaluation—the
+`exp`, or if a `throw` is executed during evaluation—the
 argument passed to `throw`. All intermediate evaluation
 frames are discarded and control jumps directly to the
 `catch` expression. This form is commonly used for
@@ -2442,12 +2439,12 @@ Examples:
 (catch (f p))  → 123       ;; condition true
 (catch (f p))  → 456       ;; condition false
 
-(catch (function1 3 4) 'result)  → nil
+(catch (f1 3 4) 'result)  → nil
 result  
-→ "ERR: invalid function in function catch : (function1 3 4)"
+→ "ERR: invalid function (symbol) in function catch : (f1 3 4)"
 
-(constant 'function +)
-(catch (function 3 4) 'result)  → true
+(constant 'f1 +)
+(catch (f1 3 4) 'result)  → true
 result                      → 7
 
 (catch (dotimes (x 100) 
