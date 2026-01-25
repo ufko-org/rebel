@@ -1341,17 +1341,18 @@ syntax: (assoc list-exp-key list-alist)
 </code></pre>
 <p>Description:</p>
 <p>Searches an association list for an entry whose first
-element matches the given key. In the first form, <code>exp-key</code>
-is a single key expression. The function scans each
-member-list of <code>list-alist</code>; when the first element equals
-<code>exp-key</code>, that member-list is returned. If no match is
-found, the result is <code>nil</code>.</p>
-<p>In the second form, <code>list-exp-key</code> is a list of keys used
-to traverse nested association lists. Each key selects a
-sublist, allowing lookup inside multilevel structures.</p>
-<p>When <code>list-alist</code> is a context symbol, assoc operates on
-its default functor, enabling large association lists to
-be referenced without copying.</p>
+element matches the given key.  In the first form,
+<code>exp-key</code> is a single key expression.  The function
+scans each member-list of <code>list-alist</code>; when the first
+element equals <code>exp-key</code>, that member-list is returned.
+If no match is found, the result is <code>nil</code>.</p>
+<p>In the second form, <code>list-exp-key</code> is a list of keys
+used to traverse nested association lists.  Each key
+selects a sublist, allowing lookup inside multilevel
+structures.</p>
+<p>When <code>list-alist</code> is a context symbol, assoc operates
+on its default functor, enabling large association
+lists to be referenced without copying.</p>
 <p>assoc may be combined with set to modify association
 lists in place.</p>
 <p>Examples:</p>
@@ -1476,9 +1477,11 @@ returns positive or negative infinity, respectively.</p>
 <p>Notes:</p>
 <ul>
 <li>Domain: 
-|x| &#60; 1.<br/>
-|x| &#62; 1 → NaN<br/>
-|x| = 1 → ±inf</li>
+<code>
+|x| &#60; 1.  
+|x| &#62; 1 → NaN  
+|x| = 1 → ±inf
+</code></li>
 <li>Result is expressed in radians.</li>
 </ul>
 <p>See: <a href="#f-tanh">tanh</a>, <a href="#f-asinh">asinh</a>, <a href="#f-acosh">acosh</a></p>

@@ -1773,19 +1773,20 @@ syntax: (assoc list-exp-key list-alist)
 Description:
 
 Searches an association list for an entry whose first
-element matches the given key. In the first form, `exp-key`
-is a single key expression. The function scans each
-member-list of `list-alist`; when the first element equals
-`exp-key`, that member-list is returned. If no match is
-found, the result is `nil`.
+element matches the given key.  In the first form,
+`exp-key` is a single key expression.  The function
+scans each member-list of `list-alist`; when the first
+element equals `exp-key`, that member-list is returned.
+If no match is found, the result is `nil`.
 
-In the second form, `list-exp-key` is a list of keys used
-to traverse nested association lists. Each key selects a
-sublist, allowing lookup inside multilevel structures.
+In the second form, `list-exp-key` is a list of keys
+used to traverse nested association lists.  Each key
+selects a sublist, allowing lookup inside multilevel
+structures.
 
-When `list-alist` is a context symbol, assoc operates on
-its default functor, enabling large association lists to
-be referenced without copying.
+When `list-alist` is a context symbol, assoc operates
+on its default functor, enabling large association
+lists to be referenced without copying.
 
 assoc may be combined with set to modify association
 lists in place.
@@ -1948,9 +1949,11 @@ Examples:
 Notes:
 
 - Domain: 
+  ```
   |x| < 1.  
   |x| > 1 → NaN  
   |x| = 1 → ±inf
+  ```
 - Result is expressed in radians.
 
 See: [tanh](#f-tanh), [asinh](#f-asinh), [acosh](#f-acosh)
