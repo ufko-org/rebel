@@ -385,7 +385,9 @@ PRIMITIVE primitive[] =
     /* core - internals */
 
     {"$",                p_systemSymbol,     0},
-    {":",                p_colon,            0},
+    /* 
+    {":",                p_colon,            0}, 
+    */
 
     {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
     {"args",             p_args,             0},
@@ -418,7 +420,9 @@ PRIMITIVE primitive[] =
     {"readexpr",         p_readExpr,         0},
     {"reset",            p_reset,            0},
     {"save",             p_save,             0},
+    /*
     {"self",             p_self,             0},
+    */
     {"silent",           p_silent,           0},
     {"sleep",            p_sleep,            0},
     {"source",           p_symbolSource,     0},

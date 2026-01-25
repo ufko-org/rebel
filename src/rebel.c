@@ -8433,13 +8433,27 @@ CELL *p_default(CELL *params)
 }
 
 
+CELL *p_systemSymbol(CELL *params)
+{
+    UINT idx;
+
+    getInteger(params, &idx);
+
+    if(idx > 15)
+    {
+        return(nilCell);
+    }
+
+    return(copyCell((CELL *)sysSymbol[idx]->contents));
+}
+
 /* FOOP fuctions */
 
 /* filled in colon, only used internally and by obj function */
 /* need stack for objSymbol.contents */
 /* what happens to stack when using catch/throw */
 
-CELL *p_colon(CELL *params)
+CELL *p_colon_orig(CELL *params)
 {
     SYMBOL *contextSymbol = NULL;
     SYMBOL *methodSymbol;
@@ -8535,7 +8549,7 @@ CELL *p_colon(CELL *params)
     return(cell);
 }
 
-CELL *p_self(CELL *params)
+CELL *p_self_orig(CELL *params)
 {
     CELL *result;
 
@@ -8558,21 +8572,5 @@ CELL *p_self(CELL *params)
 
     return(result);
 }
-
-
-CELL *p_systemSymbol(CELL *params)
-{
-    UINT idx;
-
-    getInteger(params, &idx);
-
-    if(idx > 15)
-    {
-        return(nilCell);
-    }
-
-    return(copyCell((CELL *)sysSymbol[idx]->contents));
-}
-
 
 /* end of file */
