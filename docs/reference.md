@@ -102,7 +102,7 @@ Notes:
 - Access via `($ int-idx)` is equivalent to referencing
   the variables `$0`–`$15` directly.
 
-See: [find](#f-find), [findall](#f-findall),
+See: [pos](#f-pos), [find](#f-find),
 [rx](#f-rx), [replace](#f-replace), [parse](#f-parse)
 
 ---
@@ -301,22 +301,22 @@ Description:
 
 Increments the value stored at `place` using integer
 arithmetic. When no `num` argument is supplied, the value
-is increased by 1. When one or more arguments are given,
+is increased by `1`. When one or more arguments are given,
 each value is truncated toward zero before being added
 to the running total.
 
 If `place` refers to a symbol containing `nil`, it is
-treated as if it contained 0. When `place` refers to a
+treated as if it contained `0`. When `place` refers to a
 list position, the element at that position is updated
 in place. If `place` is an expression that yields a
 number, the incremented result is returned but not
 stored.
 
 All calculations use integer limits. Values exceeding
-9,223,372,036,854,775,807 wrap around to negative
+`9,223,372,036,854,775,807` wrap around to negative
 numbers. Values smaller than
--9,223,372,036,854,775,808 wrap around to positive
-numbers. Arguments evaluating to NaN are treated as 0.
+`-9,223,372,036,854,775,808` wrap around to positive
+numbers. Arguments evaluating to NaN are treated as `0`.
 
 Examples:
 
@@ -336,7 +336,7 @@ lst                    ; → (1 4 3)
 Notes:
 
 - Floating point arguments are truncated toward zero.
-- `nil` is treated as 0 when used as a place.
+- `nil` is treated as `0` when used as a `place`.
 - Wrap-around occurs on integer overflow or underflow.
 - For floating point incrementing, use `inc`.
 
@@ -361,16 +361,16 @@ each value is truncated toward zero before being
 subtracted from the running result.
 
 If `place` refers to a symbol containing `nil`, it behaves
-as if it contained 0. When `place` selects an element in a
+as if it contained `0`. When `place` selects an element in a
 list, that element is updated in place. If `place` is an
 expression that merely yields a number, the decremented
 result is returned but not stored.
 
 All operations use the full integer range. Values that
-exceed 9,223,372,036,854,775,807 wrap around to negative
-numbers. Values below -9,223,372,036,854,775,808 wrap
+exceed `9,223,372,036,854,775,807` wrap around to negative
+numbers. Values below `-9,223,372,036,854,775,808` wrap
 around to positive numbers. Arguments evaluating to NaN
-are treated as 0.
+are treated as `0`.
 
 Examples:
 
@@ -414,7 +414,7 @@ satisfies the `<` relation. As soon as one comparison
 fails, the function returns nil.
 
 With a single argument, the operator compares the value
-against 0. This checks whether the number is negative.
+against `0`. This checks whether the number is negative.
 
 All data types can be compared. Lists are compared
 element by element; earlier elements have higher
@@ -443,11 +443,11 @@ Examples:
 
 Notes:
 
-- One argument means comparison against 0.
+- One argument means comparison against `0`.
 - Lists compare recursively by element order.
 - Mixed types use a fixed precedence:
-  nil < true < number < string < symbol < primitive
-  < quoted list < list < fn < fn-macro.
+  `nil < true < number < string < symbol < primitive
+  < quoted list < list < fn < fn-macro`.
 
 See: [>](#f-gt), [=](#f-eq), [<=](#f-le),
 [>=](#f-ge), [!=](#f-ne)
@@ -497,11 +497,11 @@ Examples:
 
 Notes:
 
-- One argument compares the value against 0.
+- One argument compares the value against `0`.
 - List comparison is recursive and length-sensitive.
 - Mixed types follow type precedence:
-  nil < true < number < string < symbol < primitive
-  < quoted list < list < fn < fn-macro.
+  `nil < true < number < string < symbol < primitive
+  < quoted list < list < fn < fn-macro`.
 
 See: [<](#f-lt), [=](#f-eq), [<=](#f-le),
 [>=](#f-ge), [!=](#f-ne)
@@ -524,7 +524,7 @@ returns true. If any pair does not match, the function
 returns `nil`.
 
 When called with a single argument, the value is
-compared against 0, which allows checking for zero.
+compared against `0`, which allows checking for zero.
 
 Equality applies to all data types. Numbers are compared
 as integers after truncation toward zero. Strings,
@@ -551,7 +551,7 @@ Examples:
 
 Notes:
 
-- One argument means comparison against 0.
+- One argument means comparison against `0`.
 - Lists must match in both structure and length.
 - Numeric values are truncated toward zero.
 - Mixed-type equality applies only when types become
@@ -578,7 +578,7 @@ every comparison succeeds. When any comparison fails, the
 function returns nil immediately.
 
 With a single argument, the operator compares the value
-against 0, allowing a check for “less than or equal to
+against `0`, allowing a check for “less than or equal to
 zero.”
 
 All data types may be compared. Lists compare
@@ -605,7 +605,7 @@ Examples:
 
 Notes:
 
-- One argument means comparison with 0.
+- One argument means comparison with `0`.
 - List comparison is recursive and length-sensitive.
 - Floating point values are truncated toward zero.
 - Type precedence determines ordering for mixed types.
@@ -631,7 +631,7 @@ comparison succeeds. If any comparison fails, evaluation
 stops and `nil` is returned.
 
 With a single argument, the operator compares the value
-against 0. This makes it possible to test whether a
+against `0`. This makes it possible to test whether a
 number is non-negative.
 
 All data types may be compared. Lists compare
@@ -645,7 +645,7 @@ arguments are truncated toward zero.
 Examples:
 
 ```
-(>= duba aba)                    ; → true
+(>= abcd ab)                     ; → true
 (>= 9 3 3 -1)                    ; → true
 (>= '(1 2 3) '(1 2))             ; → true
 (>= "z" "z" "a")                 ; → true
@@ -659,7 +659,7 @@ Examples:
 
 Notes:
 
-- One argument means comparison with 0.
+- One argument means comparison with `0`.
 - Lists compare by structure and then length.
 - Floating point values are truncated toward zero.
 - Type precedence defines ordering for mixed types.
@@ -712,7 +712,7 @@ Examples:
 
 Notes:
 
-- One argument means comparison with 0.
+- One argument means comparison with `0`.
 - Inequality fails if any pair is equal.
 - Floating point values are truncated toward zero.
 - List inequality considers both structure and length.
@@ -953,79 +953,6 @@ See: [&](#f-andbit), [|](#f-orbit), [^](#f-xorbit)
 ---
 
 
-<a name="f-colon"></a>
-## :
-
-```
-syntax: (: sym-function list-object [args ...])
-```
-
-Description:
-
-Acts as an operator that resolves a method name inside a
-class context and applies it to an object. In Rebel, an
-object is a list whose first element is the symbol of
-its class context. The class context defines the methods
-applicable to instances of that class. The colon operator
-constructs a context-qualified symbol by combining the
-class name found in the object with `sym-function`, then
-invokes that method with the object and any additional
-arguments.
-
-No space is required between the colon and the method
-name. The operator enables polymorphism by selecting the
-correct method implementation based on the object’s
-class. Additional arguments are passed directly to the
-method. Inside methods the `self` function is used to
-access or modify elements of the target object.
-
-Examples:
-
-```
-(func (Rectangle:area)
-  (mul (self 3) (self 4)))
-
-(func (Circle:area)
-  (mul (pow (self 3) 2) (acos 0) 2))
-
-(func (Rectangle:move dx dy)
-  (inc (self 1) dx)
-  (inc (self 2) dy))
-
-(func (Circle:move p dx dy)
-  (inc (self 1) dx)
-  (inc (self 2) dy))
-
-(set r '(Rectangle 5 5 10 20))    ; x y width height
-(set c '(Circle 1 2 10))          ; x y radius
-
-(:area r)                          ; → 200
-(:area c)                          ; → 314.1592654
-
-(map (curry :area) (list r c))     ; → (200 314.1592654)
-
-(:move r 2 3)
-r                                  ; → (Rectangle 7 8 10 20)
-
-(:move c 4 5)
-c                                  ; → (Circle 5 7 10)
-```
-
-Notes:
-
-- The object’s first element determines which namespace
-  supplies the method.
-- Methods operate on the object via `self`.
-- No whitespace is required between `:` and the method
-  name.
-- The operator provides simple polymorphism based on the
-  object’s class context.
-
-See: [self](#f-self), [curry](#f-curry)
-
----
-
-
 <a name="f-abort"></a>
 ## abort
 
@@ -1055,7 +982,6 @@ Examples:
 
 ```
 (abort 2245)        ; → true   ; abort one child
-
 (abort)             ; → true   ; abort all spawned children
 ```
 
@@ -1164,7 +1090,7 @@ Examples:
 
 Notes:
 
-- Domain is [1, +infinity). Values < 1 yield NaN.
+- Domain is `[1, +infinity)`. Values `< 1` yield NaN.
 - Uses floating point arithmetic.
 
 See: [cosh](#f-cosh), [asinh](#f-asinh), [atanh](#f-atanh)
@@ -1307,7 +1233,7 @@ symbol of the currently installed event handler.
 Examples:
 
 ```
-; periodic `alarm` using re-arming
+; periodic alarm using re-arming
 ;------------------------------------------------------------
 (define (ticker)
   (println (date))
@@ -1368,7 +1294,7 @@ Examples:
 
 Notes:
 
-- Stops evaluation at the first `nil` or ().
+- Stops evaluation at the first `nil` or `()`.
 - No arguments return `true`.
 - Returns the last evaluated non-nil value when all
   expressions succeed.
@@ -1417,10 +1343,10 @@ Examples:
 (append lst '("here" "I am"))
 ; → ("hello" "world" "here" "I am")
 
-(set A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (seq 1 6)))
 ; → ((1 2) (3 4) (5 6))
 
-(set B (array 2 2 (sequence 7 10)))
+(set B (array 2 2 (seq 7 10)))
 ; → ((7 8) (9 10))
 
 (append A B)
@@ -1453,7 +1379,7 @@ See: [join](#f-join), [extend](#f-extend), [push](#f-push)
 
 ```
 syntax: (apply function list [int-reduce])
-syntax: (apply func)
+syntax: (apply function)
 ```
 
 Description:
@@ -1465,11 +1391,11 @@ evaluate all of their arguments may be used; special
 forms that evaluate selectively (such as `dotimes` or
 `case`) will fail when used with `apply`.
 
-In the second syntax form, apply simply calls `func`
+In the second syntax form, apply simply calls `function`
 without any arguments.
 
 When `int-reduce` is supplied, it specifies how many
-arguments `func` consumes. The function is then applied
+arguments `function` consumes. The function is then applied
 repeatedly in left-associative order: the result of each
 application becomes the first argument of the next
 application, and the remaining arguments are taken
@@ -1510,7 +1436,7 @@ Notes:
 
 - Only works with functions that evaluate all arguments.
 - Special forms (`dotimes`, `case`, etc.) cannot be used.
-- `int-reduce` applies `func` repeatedly in left-associative
+- `int-reduce` applies `function` repeatedly in left-associative
   order.
 
 See: [map](#f-map), [fn](#f-fn)
@@ -1529,12 +1455,12 @@ syntax: (args int-idx-1 [int-idx-2 ...])
 Description:
 
 Returns all unbound arguments of the currently executing
-function or macro. Only arguments not already matched to
-formal parameters remain in this list. The function is
+function or macro.  Only arguments not already matched to
+formal parameters remain in this list.  The function is
 useful for defining functions or macros that accept a
-variable number of parameters. For hygienic macros,
-`args` avoids accidental variable capture because the
-returned values belong strictly to the caller’s context.
+variable number of parameters.  For macros, `args` avoids
+accidental variable capture because the returned values
+belong strictly to the caller’s context.
 
 When called with one or more indices, `args` returns the
 corresponding elements from the unbound argument list.
@@ -1561,7 +1487,7 @@ Examples:
 ; → 4
 
 ; bound vs unbound arguments
-(def (f a b)
+(func (f a b)
   (args))
 
 (f 1 2)
@@ -1581,7 +1507,7 @@ Notes:
   environment.
 - Safe to use as a parameter to functions.
 
-See: [def](#f-def), [mac](#f-mac)
+See: [func](#f-func), [mac](#f-mac)
 
 ---
 
@@ -1647,7 +1573,7 @@ a
 (nth 1 a)
 ; → (a b c d)
 
-; array indexing and slicing
+; array indexing and slicing 
 (a 1)
 ; → (a b c d)
 
@@ -1781,7 +1707,7 @@ Description:
 
 Computes the arcsine of `num-radians` and returns the
 result as a floating point value in radians. The input
-must lie within the domain [-1, 1]. Values outside this
+must lie within the domain `[-1, 1]`. Values outside this
 range return NaN. The output is the angle whose sine
 equals the argument.
 
@@ -1794,7 +1720,7 @@ Examples:
 
 Notes:
 
-- Domain: [-1, 1]. Outside values produce NaN.
+- Domain: `[-1, 1]`. Outside values produce NaN.
 - Result is expressed in radians.
 
 See: [sin](#f-sin), [acos](#f-acos), [atan](#f-atan)
@@ -1902,7 +1828,7 @@ db
         (address (country "Brazil") (city "Recife")))
 ))
 
-(def (get-city db id)
+(func (get-city db id)
   (last (assoc (list id 'address 'city) db)))
 
 (get-city people 'u001)
@@ -2004,8 +1930,8 @@ Description:
 
 Computes the inverse hyperbolic tangent of `num-radians`.
 The result is the value whose hyperbolic tangent equals
-the input. The valid domain is (-1, 1). Inputs with an
-absolute value greater than 1 produce NaN. An-value ±1
+the input. The valid domain is `[-1, 1]`. Inputs with an
+absolute value greater than 1 produce NaN. An-value `±1`
 returns positive or negative infinity, respectively.
 
 Examples:
@@ -2019,7 +1945,8 @@ Examples:
 
 Notes:
 
-- Domain: |x| < 1.  
+- Domain: 
+  |x| < 1.  
   |x| > 1 → NaN  
   |x| = 1 → ±inf
 - Result is expressed in radians.
@@ -2254,14 +2181,12 @@ b  ; → "hello"
 
 a  ; → 7
 
-
 ; using bind with unify
 (bind (unify '(p X Y a) '(p Y X X)))
 ; → a
 
 X  ; → a
 Y  ; → a
-
 
 ; destructuring example
 (set structure '((one "two") 3 (four (x y z))))
@@ -2390,7 +2315,7 @@ Examples:
 
 ```
 ;; Simple syntax using slot 0
-(def (hello)
+(func (hello)
   ;; External C code calling the slot pointer
   ;; will print this string.
   "hello world")
@@ -2401,7 +2326,7 @@ Examples:
 ;; execute (hello).
 
 ;; Extended syntax with typed parameters
-(def (sum a b)
+(func (sum a b)
   (+ a b))
 
 (set ps (callback 'sum "int" "int" "int"))
@@ -2446,7 +2371,7 @@ executed and serves as a default branch.
 Examples:
 
 ```
-(def (translate n)
+(func (translate n)
   (case n
     (1 "one")
     (2 "two")
@@ -2503,21 +2428,21 @@ Examples:
 (catch (dotimes (x 1000) 
   (if (= x 500) (throw x))))  → 500
 
-(def (foo x)
+(func (f x)
    …
   (if condition (throw 123))
     …
   456)
 
-(catch (foo p))  → 123       ;; condition true
-(catch (foo p))  → 456       ;; condition false
+(catch (f p))  → 123       ;; condition true
+(catch (f p))  → 456       ;; condition false
 
-(catch (func 3 4) 'result)  → nil
+(catch (function1 3 4) 'result)  → nil
 result  
-→ "ERR: invalid function in function catch : (func 3 4)"
+→ "ERR: invalid function in function catch : (function1 3 4)"
 
-(constant 'func +)
-(catch (func 3 4) 'result)  → true
+(constant 'function +)
+(catch (function 3 4) 'result)  → true
 result                      → 7
 
 (catch (dotimes (x 100) 

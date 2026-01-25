@@ -105,7 +105,7 @@ the system variables.</li>
 <li>Access via <code>($ int-idx)</code> is equivalent to referencing
 the variables <code>$0</code>–<code>$15</code> directly.</li>
 </ul>
-<p>See: <a href="#f-find">find</a>, <a href="#f-findall">findall</a>,
+<p>See: <a href="#f-pos">pos</a>, <a href="#f-find">find</a>,
 <a href="#f-rx">rx</a>, <a href="#f-replace">replace</a>, <a href="#f-parse">parse</a></p>
 <hr/>
 <p><a name="f-plus"></a></p>
@@ -242,20 +242,20 @@ function instead, which preserves fractional behavior.</p>
 <p>Description:</p>
 <p>Increments the value stored at <code>place</code> using integer
 arithmetic. When no <code>num</code> argument is supplied, the value
-is increased by 1. When one or more arguments are given,
+is increased by <code>1</code>. When one or more arguments are given,
 each value is truncated toward zero before being added
 to the running total.</p>
 <p>If <code>place</code> refers to a symbol containing <code>nil</code>, it is
-treated as if it contained 0. When <code>place</code> refers to a
+treated as if it contained <code>0</code>. When <code>place</code> refers to a
 list position, the element at that position is updated
 in place. If <code>place</code> is an expression that yields a
 number, the incremented result is returned but not
 stored.</p>
 <p>All calculations use integer limits. Values exceeding
-9,223,372,036,854,775,807 wrap around to negative
+<code>9,223,372,036,854,775,807</code> wrap around to negative
 numbers. Values smaller than
--9,223,372,036,854,775,808 wrap around to positive
-numbers. Arguments evaluating to NaN are treated as 0.</p>
+<code>-9,223,372,036,854,775,808</code> wrap around to positive
+numbers. Arguments evaluating to NaN are treated as <code>0</code>.</p>
 <p>Examples:</p>
 <pre><code>(set n 1)
 (++ n)                 ; → 2
@@ -271,7 +271,7 @@ lst                    ; → (1 4 3)
 <p>Notes:</p>
 <ul>
 <li>Floating point arguments are truncated toward zero.</li>
-<li><code>nil</code> is treated as 0 when used as a place.</li>
+<li><code>nil</code> is treated as <code>0</code> when used as a <code>place</code>.</li>
 <li>Wrap-around occurs on integer overflow or underflow.</li>
 <li>For floating point incrementing, use <code>inc</code>.</li>
 </ul>
@@ -288,15 +288,15 @@ is decreased by 1. When additional arguments are given,
 each value is truncated toward zero before being
 subtracted from the running result.</p>
 <p>If <code>place</code> refers to a symbol containing <code>nil</code>, it behaves
-as if it contained 0. When <code>place</code> selects an element in a
+as if it contained <code>0</code>. When <code>place</code> selects an element in a
 list, that element is updated in place. If <code>place</code> is an
 expression that merely yields a number, the decremented
 result is returned but not stored.</p>
 <p>All operations use the full integer range. Values that
-exceed 9,223,372,036,854,775,807 wrap around to negative
-numbers. Values below -9,223,372,036,854,775,808 wrap
+exceed <code>9,223,372,036,854,775,807</code> wrap around to negative
+numbers. Values below <code>-9,223,372,036,854,775,808</code> wrap
 around to positive numbers. Arguments evaluating to NaN
-are treated as 0.</p>
+are treated as <code>0</code>.</p>
 <p>Examples:</p>
 <pre><code>(set n 1)
 (-- n)                 ; → 0
@@ -328,7 +328,7 @@ sequence. The result is true only if every comparison
 satisfies the <code>&#60;</code> relation. As soon as one comparison
 fails, the function returns nil.</p>
 <p>With a single argument, the operator compares the value
-against 0. This checks whether the number is negative.</p>
+against <code>0</code>. This checks whether the number is negative.</p>
 <p>All data types can be compared. Lists are compared
 element by element; earlier elements have higher
 significance. When lists share all elements but differ
@@ -352,11 +352,11 @@ toward zero for bigint comparison rules.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument means comparison against 0.</li>
+<li>One argument means comparison against <code>0</code>.</li>
 <li>Lists compare recursively by element order.</li>
 <li>Mixed types use a fixed precedence:
-nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
-&#60; quoted list &#60; list &#60; fn &#60; fn-macro.</li>
+<code>nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
+&#60; quoted list &#60; list &#60; fn &#60; fn-macro</code>.</li>
 </ul>
 <p>See: <a href="#f-gt">&#62;</a>, <a href="#f-eq">=</a>, <a href="#f-le">&#60;=</a>,
 <a href="#f-ge">&#62;=</a>, <a href="#f-ne">!=</a></p>
@@ -393,11 +393,11 @@ integer comparison.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument compares the value against 0.</li>
+<li>One argument compares the value against <code>0</code>.</li>
 <li>List comparison is recursive and length-sensitive.</li>
 <li>Mixed types follow type precedence:
-nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
-&#60; quoted list &#60; list &#60; fn &#60; fn-macro.</li>
+<code>nil &#60; true &#60; number &#60; string &#60; symbol &#60; primitive
+&#60; quoted list &#60; list &#60; fn &#60; fn-macro</code>.</li>
 </ul>
 <p>See: <a href="#f-lt">&#60;</a>, <a href="#f-eq">=</a>, <a href="#f-le">&#60;=</a>,
 <a href="#f-ge">&#62;=</a>, <a href="#f-ne">!=</a></p>
@@ -412,7 +412,7 @@ equality. The result is true only when each comparison
 returns true. If any pair does not match, the function
 returns <code>nil</code>.</p>
 <p>When called with a single argument, the value is
-compared against 0, which allows checking for zero.</p>
+compared against <code>0</code>, which allows checking for zero.</p>
 <p>Equality applies to all data types. Numbers are compared
 as integers after truncation toward zero. Strings,
 symbols, and atoms compare by value. Lists are compared
@@ -434,7 +434,7 @@ the types must match after conversion rules.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument means comparison against 0.</li>
+<li>One argument means comparison against <code>0</code>.</li>
 <li>Lists must match in both structure and length.</li>
 <li>Numeric values are truncated toward zero.</li>
 <li>Mixed-type equality applies only when types become
@@ -453,7 +453,7 @@ pair using the <code>&#60;=</code> relation. The result is true only if
 every comparison succeeds. When any comparison fails, the
 function returns nil immediately.</p>
 <p>With a single argument, the operator compares the value
-against 0, allowing a check for “less than or equal to
+against <code>0</code>, allowing a check for “less than or equal to
 zero.”</p>
 <p>All data types may be compared. Lists compare
 element-by-element; earlier elements have higher
@@ -475,7 +475,7 @@ with floating point inputs truncated toward zero.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument means comparison with 0.</li>
+<li>One argument means comparison with <code>0</code>.</li>
 <li>List comparison is recursive and length-sensitive.</li>
 <li>Floating point values are truncated toward zero.</li>
 <li>Type precedence determines ordering for mixed types.</li>
@@ -493,7 +493,7 @@ the <code>&#62;=</code> relation. The result is true only when every
 comparison succeeds. If any comparison fails, evaluation
 stops and <code>nil</code> is returned.</p>
 <p>With a single argument, the operator compares the value
-against 0. This makes it possible to test whether a
+against <code>0</code>. This makes it possible to test whether a
 number is non-negative.</p>
 <p>All data types may be compared. Lists compare
 recursively: earlier elements have higher significance,
@@ -503,7 +503,7 @@ comparisons follow a fixed precedence. Numeric
 comparisons follow integer rules, and floating point
 arguments are truncated toward zero.</p>
 <p>Examples:</p>
-<pre><code>(&#62;= duba aba)                    ; → true
+<pre><code>(&#62;= abcd ab)                     ; → true
 (&#62;= 9 3 3 -1)                    ; → true
 (&#62;= &#39;(1 2 3) &#39;(1 2))             ; → true
 (&#62;= "z" "z" "a")                 ; → true
@@ -516,7 +516,7 @@ arguments are truncated toward zero.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument means comparison with 0.</li>
+<li>One argument means comparison with <code>0</code>.</li>
 <li>Lists compare by structure and then length.</li>
 <li>Floating point values are truncated toward zero.</li>
 <li>Type precedence defines ordering for mixed types.</li>
@@ -556,7 +556,7 @@ comparisons follow the general type precedence rules.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>One argument means comparison with 0.</li>
+<li>One argument means comparison with <code>0</code>.</li>
 <li>Inequality fails if any pair is equal.</li>
 <li>Floating point values are truncated toward zero.</li>
 <li>List inequality considers both structure and length.</li>
@@ -723,67 +723,6 @@ width.</li>
 </ul>
 <p>See: <a href="#f-andbit">&#38;</a>, <a href="#f-orbit">|</a>, [^](#f-xorbit)</p>
 <hr/>
-<p><a name="f-colon"></a></p>
-<h2 id="section-13">:</h2>
-<pre><code>syntax: (: sym-function list-object [args ...])
-</code></pre>
-<p>Description:</p>
-<p>Acts as an operator that resolves a method name inside a
-class context and applies it to an object. In Rebel, an
-object is a list whose first element is the symbol of
-its class context. The class context defines the methods
-applicable to instances of that class. The colon operator
-constructs a context-qualified symbol by combining the
-class name found in the object with <code>sym-function</code>, then
-invokes that method with the object and any additional
-arguments.</p>
-<p>No space is required between the colon and the method
-name. The operator enables polymorphism by selecting the
-correct method implementation based on the object’s
-class. Additional arguments are passed directly to the
-method. Inside methods the <code>self</code> function is used to
-access or modify elements of the target object.</p>
-<p>Examples:</p>
-<pre><code>(func (Rectangle:area)
-  (mul (self 3) (self 4)))
-
-(func (Circle:area)
-  (mul (pow (self 3) 2) (acos 0) 2))
-
-(func (Rectangle:move dx dy)
-  (inc (self 1) dx)
-  (inc (self 2) dy))
-
-(func (Circle:move p dx dy)
-  (inc (self 1) dx)
-  (inc (self 2) dy))
-
-(set r &#39;(Rectangle 5 5 10 20))    ; x y width height
-(set c &#39;(Circle 1 2 10))          ; x y radius
-
-(:area r)                          ; → 200
-(:area c)                          ; → 314.1592654
-
-(map (curry :area) (list r c))     ; → (200 314.1592654)
-
-(:move r 2 3)
-r                                  ; → (Rectangle 7 8 10 20)
-
-(:move c 4 5)
-c                                  ; → (Circle 5 7 10)
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>The object’s first element determines which namespace
-supplies the method.</li>
-<li>Methods operate on the object via <code>self</code>.</li>
-<li>No whitespace is required between <code>:</code> and the method
-name.</li>
-<li>The operator provides simple polymorphism based on the
-object’s class context.</li>
-</ul>
-<p>See: <a href="#f-self">self</a>, <a href="#f-curry">curry</a></p>
-<hr/>
 <p><a name="f-abort"></a></p>
 <h2 id="abort">abort</h2>
 <pre><code>syntax: (abort int-pid)
@@ -804,7 +743,6 @@ coordination interface used for structured parallel
 execution.</p>
 <p>Examples:</p>
 <pre><code>(abort 2245)        ; → true   ; abort one child
-
 (abort)             ; → true   ; abort all spawned children
 </code></pre>
 <p>Notes:</p>
@@ -879,7 +817,7 @@ expressed in radians.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Domain is [1, +infinity). Values &#60; 1 yield NaN.</li>
+<li>Domain is <code>[1, +infinity)</code>. Values <code>&#60; 1</code> yield NaN.</li>
 <li>Uses floating point arithmetic.</li>
 </ul>
 <p>See: <a href="#f-cosh">cosh</a>, <a href="#f-asinh">asinh</a>, <a href="#f-atanh">atanh</a></p>
@@ -979,7 +917,7 @@ can be used to implement time lines or schedules.</p>
 <p>When called without arguments, <code>alarm</code> returns the
 symbol of the currently installed event handler.</p>
 <p>Examples:</p>
-<pre><code>; periodic `alarm` using re-arming
+<pre><code>; periodic alarm using re-arming
 ;------------------------------------------------------------
 (define (ticker)
   (println (date))
@@ -1028,7 +966,7 @@ non-nil and not ().</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Stops evaluation at the first <code>nil</code> or ().</li>
+<li>Stops evaluation at the first <code>nil</code> or <code>()</code>.</li>
 <li>No arguments return <code>true</code>.</li>
 <li>Returns the last evaluated non-nil value when all
 expressions succeed.</li>
@@ -1065,10 +1003,10 @@ or <code>push</code>.</p>
 (append lst &#39;("here" "I am"))
 ; → ("hello" "world" "here" "I am")
 
-(set A (array 3 2 (sequence 1 6)))
+(set A (array 3 2 (seq 1 6)))
 ; → ((1 2) (3 4) (5 6))
 
-(set B (array 2 2 (sequence 7 10)))
+(set B (array 2 2 (seq 7 10)))
 ; → ((7 8) (9 10))
 
 (append A B)
@@ -1094,7 +1032,7 @@ bytes.</li>
 <p><a name="f-apply"></a></p>
 <h2 id="apply">apply</h2>
 <pre><code>syntax: (apply function list [int-reduce])
-syntax: (apply func)
+syntax: (apply function)
 </code></pre>
 <p>Description:</p>
 <p>Invokes <code>func</code> using the elements of <code>list</code> as its arguments.
@@ -1103,10 +1041,10 @@ function, or a <code>fn</code> expression. Only functions that
 evaluate all of their arguments may be used; special
 forms that evaluate selectively (such as <code>dotimes</code> or
 <code>case</code>) will fail when used with <code>apply</code>.</p>
-<p>In the second syntax form, apply simply calls <code>func</code>
+<p>In the second syntax form, apply simply calls <code>function</code>
 without any arguments.</p>
 <p>When <code>int-reduce</code> is supplied, it specifies how many
-arguments <code>func</code> consumes. The function is then applied
+arguments <code>function</code> consumes. The function is then applied
 repeatedly in left-associative order: the result of each
 application becomes the first argument of the next
 application, and the remaining arguments are taken
@@ -1143,7 +1081,7 @@ one.</p>
 <ul>
 <li>Only works with functions that evaluate all arguments.</li>
 <li>Special forms (<code>dotimes</code>, <code>case</code>, etc.) cannot be used.</li>
-<li><code>int-reduce</code> applies <code>func</code> repeatedly in left-associative
+<li><code>int-reduce</code> applies <code>function</code> repeatedly in left-associative
 order.</li>
 </ul>
 <p>See: <a href="#f-map">map</a>, <a href="#f-fn">fn</a></p>
@@ -1155,12 +1093,12 @@ syntax: (args int-idx-1 [int-idx-2 ...])
 </code></pre>
 <p>Description:</p>
 <p>Returns all unbound arguments of the currently executing
-function or macro. Only arguments not already matched to
-formal parameters remain in this list. The function is
+function or macro.  Only arguments not already matched to
+formal parameters remain in this list.  The function is
 useful for defining functions or macros that accept a
-variable number of parameters. For hygienic macros,
-<code>args</code> avoids accidental variable capture because the
-returned values belong strictly to the caller’s context.</p>
+variable number of parameters.  For macros, <code>args</code> avoids
+accidental variable capture because the returned values
+belong strictly to the caller’s context.</p>
 <p>When called with one or more indices, <code>args</code> returns the
 corresponding elements from the unbound argument list.
 Indices may be nested-access indices, allowing traversal
@@ -1183,7 +1121,7 @@ inside structured data such as lists.</p>
 ; → 4
 
 ; bound vs unbound arguments
-(def (f a b)
+(func (f a b)
   (args))
 
 (f 1 2)
@@ -1202,7 +1140,7 @@ would not be evaluated in the target macro’s
 environment.</li>
 <li>Safe to use as a parameter to functions.</li>
 </ul>
-<p>See: <a href="#f-def">def</a>, <a href="#f-mac">mac</a></p>
+<p>See: <a href="#f-func">func</a>, <a href="#f-mac">mac</a></p>
 <hr/>
 <p><a name="f-array"></a></p>
 <h2 id="array">array</h2>
@@ -1255,7 +1193,7 @@ a
 (nth 1 a)
 ; → (a b c d)
 
-; array indexing and slicing
+; array indexing and slicing 
 (a 1)
 ; → (a b c d)
 
@@ -1359,7 +1297,7 @@ arrays.</li>
 <p>Description:</p>
 <p>Computes the arcsine of <code>num-radians</code> and returns the
 result as a floating point value in radians. The input
-must lie within the domain [-1, 1]. Values outside this
+must lie within the domain <code>[-1, 1]</code>. Values outside this
 range return NaN. The output is the angle whose sine
 equals the argument.</p>
 <p>Examples:</p>
@@ -1368,7 +1306,7 @@ equals the argument.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Domain: [-1, 1]. Outside values produce NaN.</li>
+<li>Domain: <code>[-1, 1]</code>. Outside values produce NaN.</li>
 <li>Result is expressed in radians.</li>
 </ul>
 <p>See: <a href="#f-sin">sin</a>, <a href="#f-acos">acos</a>, <a href="#f-atan">atan</a></p>
@@ -1452,7 +1390,7 @@ db
         (address (country "Brazil") (city "Recife")))
 ))
 
-(def (get-city db id)
+(func (get-city db id)
   (last (assoc (list id &#39;address &#39;city) db)))
 
 (get-city people &#39;u001)
@@ -1524,8 +1462,8 @@ and Y.</li>
 <p>Description:</p>
 <p>Computes the inverse hyperbolic tangent of <code>num-radians</code>.
 The result is the value whose hyperbolic tangent equals
-the input. The valid domain is (-1, 1). Inputs with an
-absolute value greater than 1 produce NaN. An-value ±1
+the input. The valid domain is <code>[-1, 1]</code>. Inputs with an
+absolute value greater than 1 produce NaN. An-value <code>±1</code>
 returns positive or negative infinity, respectively.</p>
 <p>Examples:</p>
 <pre><code>(atanh 0.5)              ; → 0.5493061443
@@ -1535,7 +1473,8 @@ returns positive or negative infinity, respectively.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Domain: |x| &#60; 1.<br/>
+<li>Domain: 
+|x| &#60; 1.<br/>
 |x| &#62; 1 → NaN<br/>
 |x| = 1 → ±inf</li>
 <li>Result is expressed in radians.</li>
@@ -1709,14 +1648,12 @@ b  ; → "hello"
 
 a  ; → 7
 
-
 ; using bind with unify
 (bind (unify &#39;(p X Y a) &#39;(p Y X X)))
 ; → a
 
 X  ; → a
 Y  ; → a
-
 
 ; destructuring example
 (set structure &#39;((one "two") 3 (four (x y z))))
@@ -1817,7 +1754,7 @@ used when precise type information is needed, or when
 a large number of callback functions must be created.</p>
 <p>Examples:</p>
 <pre><code>;; Simple syntax using slot 0
-(def (hello)
+(func (hello)
   ;; External C code calling the slot pointer
   ;; will print this string.
   "hello world")
@@ -1828,7 +1765,7 @@ a large number of callback functions must be created.</p>
 ;; execute (hello).
 
 ;; Extended syntax with typed parameters
-(def (sum a b)
+(func (sum a b)
   (+ a b))
 
 (set ps (callback &#39;sum "int" "int" "int"))
@@ -1862,7 +1799,7 @@ result of the case expression. If none of the clause
 values match <code>exp-switch</code>, the body of the last clause is
 executed and serves as a default branch.</p>
 <p>Examples:</p>
-<pre><code>(def (translate n)
+<pre><code>(func (translate n)
   (case n
     (1 "one")
     (2 "two")
@@ -1906,21 +1843,21 @@ the dynamic extent of exp.</p>
 <pre><code>(catch (dotimes (x 1000) 
   (if (= x 500) (throw x))))  → 500
 
-(def (foo x)
+(func (f x)
    …
   (if condition (throw 123))
     …
   456)
 
-(catch (foo p))  → 123       ;; condition true
-(catch (foo p))  → 456       ;; condition false
+(catch (f p))  → 123       ;; condition true
+(catch (f p))  → 456       ;; condition false
 
-(catch (func 3 4) &#39;result)  → nil
+(catch (function1 3 4) &#39;result)  → nil
 result  
-→ "ERR: invalid function in function catch : (func 3 4)"
+→ "ERR: invalid function in function catch : (function1 3 4)"
 
-(constant &#39;func +)
-(catch (func 3 4) &#39;result)  → true
+(constant &#39;function +)
+(catch (function 3 4) &#39;result)  → true
 result                      → 7
 
 (catch (dotimes (x 100) 
