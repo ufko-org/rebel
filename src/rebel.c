@@ -3191,7 +3191,7 @@ char *errorMessage[] =
     "array, list or string expected", /* 21 */
     "fn expected",                  /* 22 */
     "fn-macro expected",            /* 23 */
-    "invalid function",             /* 24 */
+    "invalid function (symbol)",    /* 24 ufko: */
     "invalid fn expression",        /* 25 */
     "invalid macro expression",     /* 26 */
     "invalid let parameter list",   /* 27 */
@@ -3244,10 +3244,10 @@ char *errorMessage[] =
     "bigint type not applicable",   /* 74 */
     "not a number or infinite",     /* 75 */
     "cannot convert NULL to string",/* 76 */
-    "quoted symbol used",                  /* 77 ufko */
-    "unbound symbol used",                 /* 78 ufko */
-    "named function definition expected",  /* 79 ufko */
-    "quoted symbol expected",              /* 80 ufko */
+    "quoted symbol used",                  /* 77 ufko: */
+    "unbound symbol used",                 /* 78 ufko: */
+    "named function definition expected",  /* 79 ufko: */
+    "quoted symbol expected",              /* 80 ufko: */
     NULL
 };
 
