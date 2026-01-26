@@ -7306,16 +7306,19 @@ syntax: (func (sym-name [sym-1 ...]) body-1 [body-2 ...])
 
 Description:
 
-`func` creates a named function.  `sym-name` becomes a
-function that accepts the given parameters and
-evaluates the body expressions.
+`func` creates a named function in the current context
+and returns the created function value.  The returned
+value is equivalent to an anonymous function created
+with `fn`.
+
+`sym-name` becomes a function that accepts the
+specified parameters and evaluates the body expressions
+in order.  The value of the last body expression is
+returned.
 
 Extra arguments passed to a function are available
-through the system symbol $args or via the function
+through the system symbol `$args` or via the function
 `(args)`.
-
-The function returns the value of the last body
-expression.
 
 Examples:
 

@@ -5628,14 +5628,17 @@ numbers, symbols, and strings.</p>
 <pre><code>syntax: (func (sym-name [sym-1 ...]) body-1 [body-2 ...])
 </code></pre>
 <p>Description:</p>
-<p><code>func</code> creates a named function.  <code>sym-name</code> becomes a
-function that accepts the given parameters and
-evaluates the body expressions.</p>
+<p><code>func</code> creates a named function in the current context
+and returns the created function value.  The returned
+value is equivalent to an anonymous function created
+with <code>fn</code>.</p>
+<p><code>sym-name</code> becomes a function that accepts the
+specified parameters and evaluates the body expressions
+in order.  The value of the last body expression is
+returned.</p>
 <p>Extra arguments passed to a function are available
-through the system symbol $args or via the function
+through the system symbol <code>$args</code> or via the function
 <code>(args)</code>.</p>
-<p>The function returns the value of the last body
-expression.</p>
 <p>Examples:</p>
 <pre><code>; basic named function
 (func (increment x) (+ x 1))
