@@ -267,7 +267,7 @@ PRIMITIVE primitive[] =
     {"case",             p_case,             2},
     {"catch",            p_catch,            0},
     {"cond",             p_condition,        1},
-    {"dotimes",          p_dotimes,          2},
+    {"repeat",           p_dotimes,          2}, /* :replaces dotimes */
     {"dountil",          p_doUntil,          2},
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
