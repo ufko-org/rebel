@@ -162,7 +162,7 @@ PRIMITIVE primitive[] =
     {"dup",              p_dup,              0},     /* [any] */
     {"next",             p_exists,           0},     /* [l] :replaces exists */
     {"expand",           p_expand,           0},     /* [l] */
-    {"explode",          p_explode,          0},     /* [l,s] */
+    {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
     {"extend",           p_extend,           0x400}, /* [l,s] */
     {"filter",           p_filter,           0},     /* [l] */
     {"pos",              p_find,             0},     /* [l,s] :replaces find */
