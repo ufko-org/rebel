@@ -67,6 +67,7 @@ a {
   text-decoration: none;
 }
 /* dark mode */
+/*
 @media (prefers-color-scheme: dark) {
 	body {
 		background-color: #111;
@@ -85,4 +86,5 @@ a {
 		background-color: #444;
 	}
 }
+*/
 
