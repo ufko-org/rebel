@@ -34,7 +34,7 @@
 (test "6: sum of first 100 floats"
   (local (l)
     (set l '())
-    (dotimes (x 100)
+    (repeat (x 100)
       (push (float x) l))  ; convert integers to float
     (apply add l)
   )

@@ -17,6 +17,6 @@
 )
 
 (test "3: catch with throw inside loop"
-  (= (catch (dotimes (x 100) (if (= x 7) (throw x)))) 7)
+  (= (catch (repeat (x 100) (if (= x 7) (throw x)))) 7)
   true
 )

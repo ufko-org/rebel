@@ -18,8 +18,8 @@
   '(a b c)
 )
 
-(test "3: copy and replace character in string with find-all"
-  (findall "12" "12345" (replace "1" (copy $0) "N"))
+(test "3: copy and replace character in string with find"
+  (find "12" "12345" (replace "1" (copy $0) "N"))
   '("N2")
 )
 
