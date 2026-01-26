@@ -2568,7 +2568,7 @@ syntax: (context? exp str-sym)
 </code></pre>
 <p>Description:</p>
 <p>Predicate for testing context values. In the first
-syntax, <code>context?</code> returns true only when exp evaluates to
+syntax, <code>context?</code> returns true only when <code>exp</code> evaluates to
 a context; otherwise it returns <code>nil</code>.</p>
 <p>In the second syntax, <code>exp</code> must evaluate to a context.
 The function then checks whether a symbol named <code>str-sym</code>
@@ -2584,6 +2584,7 @@ present and <code>nil</code> when it is absent.</p>
 
 ;; implicit context creation and referencing
 (set data:msg "hello")
+(context? data)        → true
 (set ctx data)
 (context? ctx)         → true
 
@@ -2609,13 +2610,13 @@ syntax: (copy int-addr [bool-flag])
 <p>Creates a new independent value from the evaluation of
 <code>exp</code>. Some functions modify their arguments in place,
 changing the original list, array, or string. Wrapping
-the argument with copy forces these functions to operate
+the argument with <code>copy</code> forces these functions to operate
 on a duplicate, leaving the source data unchanged. The
 returned value is the modified duplicate, while the
 original stays intact.</p>
 <p>A second form exists for low-level interop. When
 <code>bool-flag</code> is true, <code>int-addr</code> is treated as a pointer to a
-Rebel expression stored in memory. copy retrieves a full
+Rebel expression stored in memory. <code>copy</code> retrieves a full
 duplicate of that expression. This mode is useful for
 bridging external C routines that construct Rebel data in
 native memory and expose only an address. The duplicate
@@ -2646,7 +2647,7 @@ str ;-&#62; "rebel-lang"
 <p>Computes the cosine of <code>num-radians</code> and returns the
 floating-point result. The argument is interpreted as an
 angle in radians. The function accepts any real number
-and produces a value in the range -1 to 1.</p>
+and produces a value in the range <code>-1 to 1</code>.</p>
 <p>Examples:</p>
 <pre><code>(cos 1) ;-&#62; 0.5403023059
 
@@ -2661,7 +2662,7 @@ and produces a value in the range -1 to 1.</p>
 </code></pre>
 <p>Description:</p>
 <p>Computes the hyperbolic cosine of <code>num-radians</code>. The
-mathematical definition is (exp x + exp -x) &#47; 2. The
+mathematical definition is <code>(exp x + exp -x) &#47; 2</code>. The
 result is always positive and grows rapidly for large
 inputs. Extremely large arguments may overflow and return
 inf.</p>
@@ -2700,9 +2701,9 @@ source is not considered fully reliable.</p>
 <pre><code>syntax: (curry function exp)
 </code></pre>
 <p>Description:</p>
-<p>Creates a new single-argument function by fixing the
+<p>Creates a new single-argument <code>function</code> by fixing the
 first argument of a two-argument function. <code>curry</code> does not
-evaluate <code>func</code> or <code>exp</code> when it is called. Instead, both are
+evaluate <code>function</code> or <code>exp</code> when it is called. Instead, both are
 captured and evaluated later when the resulting function
 is invoked. The transformation turns a function <code>f(x,y)</code>
 into a new function <code>g(y)</code> that behaves like <code>f(exp, y)</code>.</p>
@@ -2848,7 +2849,7 @@ of the list.</p>
 <p>Notes:</p>
 <ul>
 <li>All values are interpreted as UTC.</li>
-<li>Supplying int-index returns a single element.</li>
+<li>Supplying <code>int-index</code> returns a single element.</li>
 </ul>
 <p>See: <a href="#f-time">time</a>, <a href="#f-date">date</a>,
 <a href="#f-timelist">timelist</a></p>
@@ -2861,10 +2862,10 @@ of the list.</p>
 <p>Parses a textual date according to strftime-style
 directives in <code>str-format</code> and returns the corresponding
 UTC timestamp as seconds since January 1st, 1970
-00:00:00. The result ranges from 0 up to 2147472000,
+00:00:00. The result ranges from <code>0</code> up to <code>2147472000</code>,
 which corresponds to dates before the 2038 boundary.</p>
 <p>The format directives are the same strftime-style
-directives used by date for formatting timestamps.</p>
+directives used by <code>date</code> for formatting timestamps.</p>
 <p>This allows round-tripping between formatted strings and
 timestamps when format and locale are consistent.</p>
 <p>Examples:</p>
@@ -2889,24 +2890,25 @@ representable before the year 2038.</li>
 <hr/>
 <p><a name="f-debug"></a></p>
 <h2 id="debug-">debug [!]</h2>
-<pre><code>syntax: (debug func)
+<pre><code>syntax: (debug function)
 </code></pre>
 <p>Description:</p>
-<p>Enables tracing and evaluates <code>func</code>. This is shorthand for
-turning trace on, invoking the expression, and then
-restoring the previous trace state. While trace is
-enabled, each function call and return is printed, and
-errors do not abort execution. Instead, the function that
-encounters an exception returns 0 or nil, allowing program
-state and variables to be inspected during debugging.</p>
+<p>Enables tracing and evaluates <code>function</code>.  This is
+shorthand for turning trace on, invoking the
+expression, and then restoring the previous trace
+state.  While trace is enabled, each function call and
+return is printed, and errors do not abort execution.
+Instead, the function that encounters an exception
+returns <code>0</code> or <code>nil</code>, allowing program state and
+variables to be inspected during debugging.</p>
 <p>Examples:</p>
 <pre><code>; manual form
 (trace true)
-(func a b c)
+(function a b c)
 (trace nil)
 
 ; equivalent shortcut
-(debug (func a b c))
+(debug (function a b c))
 </code></pre>
 <p>See: <a href="#f-trace">trace</a></p>
 <hr/>

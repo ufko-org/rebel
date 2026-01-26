@@ -3364,7 +3364,7 @@ syntax: (context? exp str-sym)
 Description:
 
 Predicate for testing context values. In the first
-syntax, `context?` returns true only when exp evaluates to
+syntax, `context?` returns true only when `exp` evaluates to
 a context; otherwise it returns `nil`.
 
 In the second syntax, `exp` must evaluate to a context.
@@ -3384,6 +3384,7 @@ Examples:
 
 ;; implicit context creation and referencing
 (set data:msg "hello")
+(context? data)        → true
 (set ctx data)
 (context? ctx)         → true
 
@@ -3417,14 +3418,14 @@ Description:
 Creates a new independent value from the evaluation of
 `exp`. Some functions modify their arguments in place,
 changing the original list, array, or string. Wrapping
-the argument with copy forces these functions to operate
+the argument with `copy` forces these functions to operate
 on a duplicate, leaving the source data unchanged. The
 returned value is the modified duplicate, while the
 original stays intact.
 
 A second form exists for low-level interop. When
 `bool-flag` is true, `int-addr` is treated as a pointer to a
-Rebel expression stored in memory. copy retrieves a full
+Rebel expression stored in memory. `copy` retrieves a full
 duplicate of that expression. This mode is useful for
 bridging external C routines that construct Rebel data in
 native memory and expose only an address. The duplicate
@@ -3466,7 +3467,7 @@ Description:
 Computes the cosine of `num-radians` and returns the
 floating-point result. The argument is interpreted as an
 angle in radians. The function accepts any real number
-and produces a value in the range -1 to 1.
+and produces a value in the range `-1 to 1`.
 
 Examples:
 
@@ -3492,7 +3493,7 @@ syntax: (cosh num-radians)
 Description:
 
 Computes the hyperbolic cosine of `num-radians`. The
-mathematical definition is (exp x + exp -x) / 2. The
+mathematical definition is `(exp x + exp -x) / 2`. The
 result is always positive and grows rapidly for large
 inputs. Extremely large arguments may overflow and return
 inf.
@@ -3554,9 +3555,9 @@ syntax: (curry function exp)
 
 Description:
 
-Creates a new single-argument function by fixing the
+Creates a new single-argument `function` by fixing the
 first argument of a two-argument function. `curry` does not
-evaluate `func` or `exp` when it is called. Instead, both are
+evaluate `function` or `exp` when it is called. Instead, both are
 captured and evaluated later when the resulting function
 is invoked. The transformation turns a function `f(x,y)`
 into a new function `g(y)` that behaves like `f(exp, y)`.
@@ -3746,7 +3747,7 @@ Examples:
 Notes:
 
 - All values are interpreted as UTC.
-- Supplying int-index returns a single element.
+- Supplying `int-index` returns a single element.
 
 See: [time](#f-time), [date](#f-date),
 [timelist](#f-timelist)
@@ -3766,11 +3767,11 @@ Description:
 Parses a textual date according to strftime-style
 directives in `str-format` and returns the corresponding
 UTC timestamp as seconds since January 1st, 1970
-00:00:00. The result ranges from 0 up to 2147472000,
+00:00:00. The result ranges from `0` up to `2147472000`,
 which corresponds to dates before the 2038 boundary.
 
 The format directives are the same strftime-style
-directives used by date for formatting timestamps.
+directives used by `date` for formatting timestamps.
 
 This allows round-tripping between formatted strings and
 timestamps when format and locale are consistent.
@@ -3805,29 +3806,30 @@ See: [date](#f-date), [date-list](#f-datelist),
 ## debug [!]
 
 ```
-syntax: (debug func)
+syntax: (debug function)
 ```
 
 Description:
 
-Enables tracing and evaluates `func`. This is shorthand for
-turning trace on, invoking the expression, and then
-restoring the previous trace state. While trace is
-enabled, each function call and return is printed, and
-errors do not abort execution. Instead, the function that
-encounters an exception returns 0 or nil, allowing program
-state and variables to be inspected during debugging.
+Enables tracing and evaluates `function`.  This is
+shorthand for turning trace on, invoking the
+expression, and then restoring the previous trace
+state.  While trace is enabled, each function call and
+return is printed, and errors do not abort execution.
+Instead, the function that encounters an exception
+returns `0` or `nil`, allowing program state and
+variables to be inspected during debugging.
 
 Examples:
 
 ```
 ; manual form
 (trace true)
-(func a b c)
+(function a b c)
 (trace nil)
 
 ; equivalent shortcut
-(debug (func a b c))
+(debug (function a b c))
 ```
 
 See: [trace](#f-trace)
