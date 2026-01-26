@@ -116,7 +116,7 @@ PRIMITIVE primitive[] =
     /* core - data - iterators */
     
     {"doargs",           p_doargs,           2}, /* can be done with dolist */
-    {"dolist",           p_dolist,           2}, /* see: loop as an :alt */
+    {"dolist",           p_dolist,           2}, /* see: loop */
     {"dostring",         p_dostring,         2}, /* can be done with dolist */
     {"dotree",           p_dotree,           2}, /* can be done with dolist */
 
@@ -498,7 +498,7 @@ PRIMITIVE primitive[] =
     {"is",               p_equal,            0}, /* :alt for = */
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
-    {"loop",             p_dolist,           2}, /* :alt, loop over list or value converted to list*/
+    {"loop",             p_loop,             2}, /* :rebel, loop over list or value converted to list*/
 
     /* core - date and time */
 
