@@ -1389,7 +1389,7 @@ arguments.  The function in `func` may be a primitive,
 a user-defined function, or a `fn` expression.  Only
 functions that evaluate all of their arguments may be
 used; special forms that evaluate selectively (such as
-`dotimes` or `case`) will fail when used with `apply`.
+`dolist` or `case`) will fail when used with `apply`.
 
 In the second syntax form, apply simply calls
 `function` without any arguments.
@@ -2352,6 +2352,51 @@ See: [import](#f-import), [intc](#f-intc), [longc](#f-longc),
 ---
 
 
+<a name="f-cap"></a>
+## cap
+
+```
+syntax: (cap list-A list-B)
+syntax: (cap list-A list-B bool)
+```
+
+Description:
+
+Computes the intersection of list-A and list-B. In the
+first form, the result contains one copy of each value
+that appears in both lists, preserving the order in
+which those values first occur in `list-A`. Duplicates in
+either input list are ignored in this mode.
+
+In the second form, when `bool` evaluates to true (any
+non-nil value), duplicates from `list-A` are preserved.
+Every element of `list-A` that is also present in `list-B`
+is included in the result in its original order, and no
+deduplication occurs.
+
+Membership tests follow standard list element equality.
+
+Examples:
+
+```
+(cap '(3 0 1 3 2 3 4 2 1) '(1 4 2 5))
+;-> (2 4 1)
+
+(cap '(3 0 1 3 2 3 4 2 1) '(1 4 2 5) true)
+;-> (1 2 4 2 1)
+```
+
+Notes:
+
+- First form removes duplicates.
+- Second form preserves duplicates from `list-A`.
+- Order of results always follows `list-A`.
+
+See: [diff](#f-diff), [uniq](#f-uniq), [union](#f-union)
+
+---
+
+
 <a name="f-case"></a>
 ## case
 
@@ -2427,7 +2472,7 @@ the dynamic extent of exp.
 Examples:
 
 ```
-(catch (dotimes (x 1000) 
+(catch (repeat (x 1000) 
   (if (= x 500) (throw x))))  → 500
 
 (func (f x)
@@ -2443,11 +2488,11 @@ Examples:
 result  
 → "ERR: invalid function (symbol) in function catch : (f1 3 4)"
 
-(constant 'f1 +)
+(alias 'f1 +)
 (catch (f1 3 4) 'result)  → true
 result                      → 7
 
-(catch (dotimes (x 100) 
+(catch (repeat (x 100) 
   (if (= x 50) (throw "fin"))) 'result)  → true
 result  → "fin"
 ```
@@ -2500,7 +2545,7 @@ Extracts a character from a string or constructs a
 single-character string from an integer code. When the
 first argument is a string, `char` selects the character
 at `int-index` and returns its numeric code. If
-`int-index` is omitted, index 0 is used. Negative indexes
+`int-index` is omitted, index `0` is used. Negative indexes
 address positions from the end of the string. On UTF-8
 enabled builds the index normally refers to logical
 UTF-8 characters. When the optional `true` flag is
@@ -2510,7 +2555,7 @@ the index refers to an 8-bit byte offset.
 An empty string yields `nil`. Both `(char 0)` and 
 `(char nil)` return the single byte string "\000".
 
-When the first argument is an integer, char returns a
+When the first argument is an integer, `char` returns a
 string containing the character with that code. On
 UTF-8 enabled builds the integer is interpreted as a
 Unicode code point and a UTF-8 encoded character is
@@ -2536,7 +2581,7 @@ Examples:
 (char (& (char "生") (char "死"))) → 愛
 ```
 
-See: [set](#f-set), [slice](#f-slice), [length](#f-length)
+See: [set](#f-set), [slice](#f-slice), [len](#f-len)
 
 ---
 
@@ -2613,7 +2658,7 @@ Examples:
 
 (filter symbol? '(1 2 d 4 f g 5 h))  → (d f g h)
 
-(def (big? x) (> x 5))        → (fn (x) (> x 5))
+(func (big? x) (> x 5))        → (fn (x) (> x 5))
 
 (clean big? '(1 10 3 6 4 5 11))  → (1 3 4 5)
 
@@ -2683,22 +2728,22 @@ Description:
 Copies all symbols and user-defined functions from
 `context-source` into a target context.
 
-When `sym-context-target` is provided, the
-context referenced by `context-source` is copied into
-exist, it is created with the same symbol names and
-that target context. If the target context does not
-user-defined functions as in `context-source`.
+When `sym-context-target` is provided, the context
+referenced by `context-source` is copied into the
+target context.  If the target context does not exist,
+it is created with the same symbol names and
+user-defined functions as in context-source.
 
 If the target context already exists, symbols from
-`context-source` are merged into it. Existing symbols
+`context-source` are merged into it.  Existing symbols
 are overwritten only when the optional `bool` argument
-evaluates to anything other than `nil`. When `bool` is
-`nil` or omitted, existing symbols in the target context
-remain unchanged. This allows controlled mixins of
+evaluates to anything other than nil.  When `bool` is nil
+or omitted, existing symbols in the target context
+remain unchanged.  This allows controlled mixins of
 context objects.
 
 `clone` returns the target context. The target context
-must not be MAIN.
+must not be `MAIN`.
 
 In the second syntax form, the context referenced by
 `context-source` is copied into the current context,
@@ -2723,19 +2768,21 @@ Examples:
 ;-> ctx2
 
 ; force overwrite of existing symbols
+(context 'ctx3)
+;-> ctx3
 (clone ctx1 'ctx3 true)
 ;-> ctx3
 ```
 
-The first example creates a new context CTX2 with the
-same structure as CTX1. The source context CTX1 is not
+The first example creates a new context `ctx2` with the
+same structure as `ctx1`. The source context `ctx1` is not
 quoted because contexts evaluate to themselves. The
-target context CTX2 must be quoted because it does not
+target context `ctx2` must be quoted because it does not
 exist yet.
 
-The second example merges CTX1 into an existing context
-CTX3. Because CTX3 already exists, the quote may be
-omitted. All symbols of the same name in CTX3 are
+The second example merges `ctx1 into an existing context
+`ctx3`. Because `ctx3` already exists, the quote may be
+omitted. All symbols of the same name in `ctx3` are
 overwritten.
 
 Contexts may also be referenced indirectly through
@@ -2788,18 +2835,18 @@ Creates a new symbol by copying the definition and
 contents of `sym-context-source`. Only the referenced symbol 
 is copied; the source context itself is not duplicated.
 
-When `sym-context-target` is
-omitted, a symbol of the same name is created in the
-current context. In this case, all symbol references
-belonging to the source context are rewritten so they
-point into the current context. The current context must
-not be MAIN.
+When `sym-context-target` is omitted, a symbol of the
+same name is created in the current context.  In this
+case, all symbol references belonging to the source
+context are rewritten so they point into the current
+context.  The current context must not be MAIN.
 
-When `sym-context-target` is provided, the new symbol is created in
-the context referenced by `sym-context-target`. Both the name and
-the destination context may change. Any symbol reference
+When `sym-context-target` is provided, the new symbol
+is created in the context referenced by
+`sym-context-target`.  Both the name and the
+destination context may change.  Any symbol reference
 that originally pointed into the source context is
-rewritten to point into the target context. `clonesym`
+rewritten to point into the target context.  `clonesym`
 returns the newly created symbol.
 
 This mechanism allows fine-grained copying of functions,
@@ -2849,10 +2896,10 @@ double:double
 Building a helper for statically scoped accumulators:
 
 ```
-(def (def-static s body)
+(func (func-static s body)
   (clonesym 'body (sym s s)))
 
-(def-static 'acc (fn (x)
+(func-static 'acc (fn (x)
   (inc sum x)))
 
 (acc 1)
@@ -2873,7 +2920,7 @@ Notes:
   configuring context objects piece by piece.
 
 See: [clone](#f-clone), [context](#f-context), [sym](#f-sym),
-[def](#f-def)
+[func](#f-func)
 
 ---
 
@@ -2893,7 +2940,7 @@ obtained from an `open` operation or from `device`. When
 the `close` operation succeeds, the function returns
 `true`; if the handle is invalid or the operation fails,
 `nil` is returned. Closing the device handle resets it to
-0, restoring the screen device as the active output
+`0`, restoring the screen device as the active output
 target.
 
 Examples:
@@ -2941,7 +2988,7 @@ Examples:
 → (1 2 3 4 5 6)
 ```
 
-See: [while](#f-while), [dotimes](#f-dotimes),
+See: [while](#f-while), [repeat](#f-repeat),
 [for](#f-for)
 
 ---
@@ -2966,7 +3013,7 @@ prints a prompt without evaluating any expression.
 Passing `nil` removes the currently installed handler.
 
 The handler may be a symbol naming a function or a
-fn expression. In interactive mode the handler can
+`fn` expression. In interactive mode the handler can
 rewrite, filter or suppress input lines before they
 reach the evaluator, allowing full customization of
 REPL input behavior. In http mode (enabled with the
@@ -3076,7 +3123,7 @@ extra parentheses around each pair.
 Examples:
 
 ```
-(def (classify x)
+(func (classify x)
   (cond
     ((< x 0) "negative")
     ((< x 10) "small")
@@ -3144,61 +3191,60 @@ See: [first](#f-first), [rest](#f-rest), [last](#f-last)
 ---
 
 
-<a name="f-constant"></a>
-## constant [!] / const / alias
+<a name="f-const"></a>
+## const [!] / alias
 
 ```
-syntax: (constant sym-1 exp-1 [sym-2 exp-2] ...)
+syntax: (const sym-1 exp-1 [sym-2 exp-2] ...)
 ```
 
 Description:
 
 Assigns values to symbols and marks those symbols as
-protected. A protected symbol cannot be modified by `set`,
-`def` or `mac`; any attempt to overwrite it
-raises an error. A protected symbol can only be changed
-by calling constant again. Only symbols in the current
-context may be protected, preventing accidental changes
-to names defined in other contexts. The last initializer
-expression is optional.
+protected.  A protected symbol cannot be modified.  any
+attempt to overwrite it raises an error.  A protected
+symbol can only be changed by calling `const` again.
+Only symbols in the current context may be protected,
+preventing accidental changes to names defined in other
+contexts.  The last initializer expression is optional.
 
-Symbols created with `set`, `def` or `mac` can be
-protected retroactively by using `constant` on them. Since
+Symbols created with `set`, `func` or `mac` can be
+protected retroactively by using `const` on them. Since
 a function definition is internally just an assignment
 of a `fn` value to a `symbol`, protecting a function name
 behaves the same way as protecting a variable.
 
-The final value assigned by `constant` is returned as the
+The final value assigned by `const` is returned as the
 result of the call.
 
 Examples:
 
 ```
-(constant 'var 123)  → 123
+(const 'var 123)  → 123
 (set var 999)
 ERR: symbol is protected in function set: var
 
-(def (double x) (+ x x))
+(func (double x) (+ x x))
 
-(constant 'double)
+(const 'double)
 
 ;; equivalent to
 
-(constant 'double (fn (x) (+ x x)))
+(const 'double (fn (x) (+ x x)))
 
-(constant 'squareroot sqrt)  → sqrt <406C2E>
-(constant '+ add)            → add <4068A6>
+(const 'squareroot sqrt)  → sqrt <406C2E>
+(const '+ add)            → add <4068A6>
 ```
 
 Notes:
 
-- Protected symbols can only be reassigned by `constant`.
+- Protected symbols can only be reassigned by `const`.
 - Only symbols in the current context may be protected.
-- Renaming built-in functions using `constant` incurs no
+- Renaming built-in functions using `const` incurs no
   performance penalty. The displayed hexadecimal address
   is the internal pointer to the function.
 
-See: [set](#f-set), [def](#f-def), [mac](#f-mac)
+See: [set](#f-set), [def](#f-func), [mac](#f-mac)
 
 ---
 
@@ -3215,7 +3261,7 @@ Description:
 
 Switches the current namespace to `sym-context`. Any
 symbols created by evaluating expressions, loading
-source files or using `evalstring` are placed into the
+source files or using `evalstr` are placed into the
 active context. When the context does not yet exist, it
 is created. Calling `context` without arguments returns
 the currently active context. Because context symbols
@@ -3247,7 +3293,7 @@ Examples:
 ;; create and switch to GRAPH
 (context 'GRAPH)
 
-(def (draw x y) (+ x y))
+(func (draw x y) (+ x y))
 (set value 123)
 
 (symbols) → (draw value)
@@ -3294,7 +3340,7 @@ Cfg:level → 3
 Notes:
 
 - Contexts are created implicitly when referenced using
-  the prefix form (ctx:symbol).
+  the prefix form (context:symbol).
 - Two contexts may contain symbols with the same name
   without interfering with each other.
 - If a plain symbol already exists, referring to it as a
@@ -4294,7 +4340,7 @@ Examples:
 ;-> true
 
 ; kill a forked background worker
-(set pid (fork (dotimes (i 1000)
+(set pid (fork (repeat (i 1000)
                  (println i)
                  (sleep 10))))
 ;-> <pid>
@@ -4644,7 +4690,7 @@ expressions where only a single expression is normally
 allowed. It is commonly used inside conditional forms.
 
 Many built-in control structures such as `cond`, `def`,
-`doargs`, `dolist`, `dostring`, `dotimes`, `when`, and `while`
+`doargs`, `dolist`, `dostring`, `when`, and `while`
 already accept multiple expressions in their bodies, but
 `do` is useful in forms like if, where only one `body`
 expression is permitted.
@@ -4877,7 +4923,7 @@ Notes:
 - exp-break is evaluated before each iteration.
 - $idx increments on each step and cannot be modified.
 
-See: [dotimes](#f-dotimes), [for](#f-for),
+See: [repeat](#f-repeat), [for](#f-for),
 [map](#f-map)
 
 ---
@@ -4935,61 +4981,8 @@ Notes:
 - Code points may exceed 255.
 - $idx starts at zero and increments each iteration.
 
-See: [dolist](#f-dolist), [dotimes](#f-dotimes),
+See: [dolist](#f-dolist), [repeat](#f-repeat),
 [char](#f-char), [explode](#f-explode)
-
----
-
-
-<a name="f-dotimes"></a>
-## dotimes
-
-```
-syntax: (dotimes (sym-var int-count [exp-break]) body)
-```
-
-Description:
-
-Executes body int-count times. Before each iteration,
-sym-var is bound to the current loop index, starting at 0
-and ending at int-count - 1. The binding is local to the
-loop and follows dynamic scoping rules. The return value
-is the last evaluation of body.
-
-If exp-break is present, it is evaluated before each
-iteration step. When exp-break evaluates to a non-nil
-value, the loop terminates immediately and returns that
-value.
-
-After dotimes finishes, sym-var reverts to its previous
-value.
-
-Examples:
-
-```
-(dotimes (i 10)
-  (print i))
-;-> 9
-; console output:
-;   0123456789
-
-; early exit example:
-(dotimes (i 10 (= i 3))
-  (print i))
-;-> true
-; console output:
-;   012
-```
-
-Notes:
-
-- sym-var is always an integer.
-- exp-break is checked before body is evaluated.
-- The final return value is either the last body result or
-  the value of exp-break on early termination.
-
-See: [dolist](#f-dolist), [for](#f-for),
-[while](#f-while)
 
 ---
 
@@ -6031,7 +6024,7 @@ Examples:
 
 ; small prime generator
 (define (primes n , p)
-  (dotimes (e n)
+  (repeat (e n)
     (if (= (length (factor e)) 1)
         (push e p -1)))
   p)
@@ -7104,9 +7097,9 @@ Notes:
   sym still moves toward num-to by the given step.
 - exp-break is tested before body, allowing clean early exit.
 - for is suitable for numeric iteration; for iterating lists
-  see dotimes, dolist, or dotree.
+  see dolist.
 
-See: [sequence](#f-sequence), [dotimes](#f-dotimes),
+See: [sequence](#f-sequence), [repeat](#f-repeat),
 [dolist](#f-dolist), [dotree](#f-dotree)
 
 ---
@@ -7223,7 +7216,7 @@ x
 (define (demo)
   (set pid
        (fork
-         (dotimes (i 1000)
+         (repeat (i 1000)
            (println i)
            (sleep 20))))
   (sleep 100)
@@ -8718,50 +8711,6 @@ See: [int](#f-int), [float](#f-float), [number?](#f-numberp)
 
 ---
 
-
-<a name="f-intersect"></a>
-## intersect
-
-```
-syntax: (intersect list-A list-B)
-syntax: (intersect list-A list-B bool)
-```
-
-Description:
-
-Computes the intersection of list-A and list-B. In the
-first form, the result contains one copy of each value
-that appears in both lists, preserving the order in
-which those values first occur in list-A. Duplicates in
-either input list are ignored in this mode.
-
-In the second form, when bool evaluates to true (any
-non-nil value), duplicates from list-A are preserved.
-Every element of list-A that is also present in list-B
-is included in the result in its original order, and no
-deduplication occurs.
-
-Membership tests follow standard list element equality.
-
-Examples:
-
-```
-(intersect '(3 0 1 3 2 3 4 2 1) '(1 4 2 5))
-;-> (2 4 1)
-
-(intersect '(3 0 1 3 2 3 4 2 1) '(1 4 2 5) true)
-;-> (1 2 4 2 1)
-```
-
-Notes:
-
-- First form removes duplicates.
-- Second form preserves duplicates from list-A.
-- Order of results always follows list-A.
-
-See: [difference](#f-difference), [unique](#f-unique), [union](#f-union)
-
----
 
 
 <a name="f-invert"></a>
@@ -13114,7 +13063,7 @@ Examples:
 ```
 (pick 'a 'b 'c 'd 'e)       ; → one of: a b c d e
 
-(dotimes (i 10)
+(repeat (i 10)
   (print (pick 3 5 7)))     ; → 35777535755
 ```
 
@@ -14534,7 +14483,7 @@ rand returns a list of int-N random integers.
 Examples:
 
 ```
-(dotimes (x 100)
+(repeat (x 100)
   (print (rand 2)))
 ;-> 11100000110100111100111101...
 
@@ -15762,6 +15711,59 @@ Notes:
 ---
 
 
+<a name="f-repeat"></a>
+## repeat
+
+```
+syntax: (repeat (sym-var int-count [exp-break]) body)
+```
+
+Description:
+
+Executes body int-count times. Before each iteration,
+`sym-var` is bound to the current loop index, starting at `0`
+and ending at `int-count - 1`. The binding is local to the
+loop and follows dynamic scoping rules. The return value
+is the last evaluation of body.
+
+If `exp-break` is present, it is evaluated before each
+iteration step. When `exp-break` evaluates to a non-nil
+value, the loop terminates immediately and returns that
+value.
+
+After `repeat` finishes, `sym-var` reverts to its previous
+value.
+
+Examples:
+
+```
+(repeat (i 10)
+  (print i))
+;-> 9
+; console output:
+;   0123456789
+
+; early exit example:
+(repeat (i 10 (= i 3))
+  (print i))
+;-> true
+; console output:
+;   012
+```
+
+Notes:
+
+- `sym-var` is always an integer.
+- `exp-break` is checked before body is evaluated.
+- The final return value is either the last body result or
+  the value of `exp-break` on early termination.
+
+See: [dolist](#f-dolist), [for](#f-for),
+[while](#f-while)
+
+---
+
+
 <a name="f-replace"></a>
 ## replace
 
@@ -16841,7 +16843,7 @@ Example with a child process:
 ```
 (define (counter n)
   (println "counter started")
-  (dotimes (x n)
+  (repeat (x n)
     (semaphore sid -1)
     (println x)))
 
@@ -16938,7 +16940,7 @@ msg
   (while true
     (until (send ppid (rand 100)))))
 
-(dotimes (i 5)
+(repeat (i 5)
   (spawn 'result (child) true))
 
 (for (i 1 3)
@@ -19749,7 +19751,7 @@ Examples:
 ; basic throw and catch
 ;------------------------------------------------------------
 (define (throw-test)
-  (dotimes (x 1000)
+  (repeat (x 1000)
     (if (= x 500) (throw "interrupted"))))
 
 (catch (throw-test) 'result)

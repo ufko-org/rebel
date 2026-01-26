@@ -1040,7 +1040,7 @@ arguments.  The function in <code>func</code> may be a primitive,
 a user-defined function, or a <code>fn</code> expression.  Only
 functions that evaluate all of their arguments may be
 used; special forms that evaluate selectively (such as
-<code>dotimes</code> or <code>case</code>) will fail when used with <code>apply</code>.</p>
+<code>dolist</code> or <code>case</code>) will fail when used with <code>apply</code>.</p>
 <p>In the second syntax form, apply simply calls
 <code>function</code> without any arguments.</p>
 <p>When <code>int-reduce</code> is supplied, it specifies how many
@@ -1788,6 +1788,38 @@ pointer for reuse.</li>
 <p>See: <a href="#f-import">import</a>, <a href="#f-intc">intc</a>, <a href="#f-longc">longc</a>,
 <a href="#f-pack">pack</a>, <a href="#f-unpack">unpack</a></p>
 <hr/>
+<p><a name="f-cap"></a></p>
+<h2 id="cap">cap</h2>
+<pre><code>syntax: (cap list-A list-B)
+syntax: (cap list-A list-B bool)
+</code></pre>
+<p>Description:</p>
+<p>Computes the intersection of list-A and list-B. In the
+first form, the result contains one copy of each value
+that appears in both lists, preserving the order in
+which those values first occur in <code>list-A</code>. Duplicates in
+either input list are ignored in this mode.</p>
+<p>In the second form, when <code>bool</code> evaluates to true (any
+non-nil value), duplicates from <code>list-A</code> are preserved.
+Every element of <code>list-A</code> that is also present in <code>list-B</code>
+is included in the result in its original order, and no
+deduplication occurs.</p>
+<p>Membership tests follow standard list element equality.</p>
+<p>Examples:</p>
+<pre><code>(cap &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5))
+;-&#62; (2 4 1)
+
+(cap &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5) true)
+;-&#62; (1 2 4 2 1)
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>First form removes duplicates.</li>
+<li>Second form preserves duplicates from <code>list-A</code>.</li>
+<li>Order of results always follows <code>list-A</code>.</li>
+</ul>
+<p>See: <a href="#f-diff">diff</a>, <a href="#f-uniq">uniq</a>, <a href="#f-union">union</a></p>
+<hr/>
 <p><a name="f-case"></a></p>
 <h2 id="case">case</h2>
 <pre><code>syntax: (case exp-switch (exp-1 body-1) [(exp-2 body-2) ... ])
@@ -1843,7 +1875,7 @@ return from functions or expression blocks.</p>
 <p>Both forms install a temporary handler active only for
 the dynamic extent of exp.</p>
 <p>Examples:</p>
-<pre><code>(catch (dotimes (x 1000) 
+<pre><code>(catch (repeat (x 1000) 
   (if (= x 500) (throw x))))  → 500
 
 (func (f x)
@@ -1859,11 +1891,11 @@ the dynamic extent of exp.</p>
 result  
 → "ERR: invalid function (symbol) in function catch : (f1 3 4)"
 
-(constant &#39;f1 +)
+(alias &#39;f1 +)
 (catch (f1 3 4) &#39;result)  → true
 result                      → 7
 
-(catch (dotimes (x 100) 
+(catch (repeat (x 100) 
   (if (= x 50) (throw "fin"))) &#39;result)  → true
 result  → "fin"
 </code></pre>
@@ -1897,7 +1929,7 @@ syntax: (char int)
 single-character string from an integer code. When the
 first argument is a string, <code>char</code> selects the character
 at <code>int-index</code> and returns its numeric code. If
-<code>int-index</code> is omitted, index 0 is used. Negative indexes
+<code>int-index</code> is omitted, index <code>0</code> is used. Negative indexes
 address positions from the end of the string. On UTF-8
 enabled builds the index normally refers to logical
 UTF-8 characters. When the optional <code>true</code> flag is
@@ -1905,7 +1937,7 @@ supplied, the string is treated as a raw byte array and
 the index refers to an 8-bit byte offset.</p>
 <p>An empty string yields <code>nil</code>. Both <code>(char 0)</code> and 
 <code>(char nil)</code> return the single byte string &#8220;\000&#8221;.</p>
-<p>When the first argument is an integer, char returns a
+<p>When the first argument is an integer, <code>char</code> returns a
 string containing the character with that code. On
 UTF-8 enabled builds the integer is interpreted as a
 Unicode code point and a UTF-8 encoded character is
@@ -1927,7 +1959,7 @@ returned.</p>
 
 (char (&#38; (char "生") (char "死"))) → 愛
 </code></pre>
-<p>See: <a href="#f-set">set</a>, <a href="#f-slice">slice</a>, <a href="#f-length">length</a></p>
+<p>See: <a href="#f-set">set</a>, <a href="#f-slice">slice</a>, <a href="#f-len">len</a></p>
 <hr/>
 <p><a name="f-chop"></a></p>
 <h2 id="chop-utf8">chop [utf8]</h2>
@@ -1982,7 +2014,7 @@ of elements is preserved in the returned list.</p>
 
 (filter symbol? &#39;(1 2 d 4 f g 5 h))  → (d f g h)
 
-(def (big? x) (&#62; x 5))        → (fn (x) (&#62; x 5))
+(func (big? x) (&#62; x 5))        → (fn (x) (&#62; x 5))
 
 (clean big? &#39;(1 10 3 6 4 5 11))  → (1 3 4 5)
 
@@ -2030,20 +2062,20 @@ syntax: (clone context-source)
 <p>Description:</p>
 <p>Copies all symbols and user-defined functions from
 <code>context-source</code> into a target context.</p>
-<p>When <code>sym-context-target</code> is provided, the
-context referenced by <code>context-source</code> is copied into
-exist, it is created with the same symbol names and
-that target context. If the target context does not
-user-defined functions as in <code>context-source</code>.</p>
+<p>When <code>sym-context-target</code> is provided, the context
+referenced by <code>context-source</code> is copied into the
+target context.  If the target context does not exist,
+it is created with the same symbol names and
+user-defined functions as in context-source.</p>
 <p>If the target context already exists, symbols from
-<code>context-source</code> are merged into it. Existing symbols
+<code>context-source</code> are merged into it.  Existing symbols
 are overwritten only when the optional <code>bool</code> argument
-evaluates to anything other than <code>nil</code>. When <code>bool</code> is
-<code>nil</code> or omitted, existing symbols in the target context
-remain unchanged. This allows controlled mixins of
+evaluates to anything other than nil.  When <code>bool</code> is nil
+or omitted, existing symbols in the target context
+remain unchanged.  This allows controlled mixins of
 context objects.</p>
 <p><code>clone</code> returns the target context. The target context
-must not be MAIN.</p>
+must not be <code>MAIN</code>.</p>
 <p>In the second syntax form, the context referenced by
 <code>context-source</code> is copied into the current context,
 which becomes the implicit target.</p>
@@ -2063,17 +2095,19 @@ entirely within the destination context.</p>
 ;-&#62; ctx2
 
 ; force overwrite of existing symbols
+(context &#39;ctx3)
+;-&#62; ctx3
 (clone ctx1 &#39;ctx3 true)
 ;-&#62; ctx3
 </code></pre>
-<p>The first example creates a new context CTX2 with the
-same structure as CTX1. The source context CTX1 is not
+<p>The first example creates a new context <code>ctx2</code> with the
+same structure as <code>ctx1</code>. The source context <code>ctx1</code> is not
 quoted because contexts evaluate to themselves. The
-target context CTX2 must be quoted because it does not
+target context <code>ctx2</code> must be quoted because it does not
 exist yet.</p>
-<p>The second example merges CTX1 into an existing context
-CTX3. Because CTX3 already exists, the quote may be
-omitted. All symbols of the same name in CTX3 are
+<p>The second example merges <code>ctx1 into an existing context
+</code>ctx3<code>. Because</code>ctx3<code>already exists, the quote may be
+omitted. All symbols of the same name in</code>ctx3` are
 overwritten.</p>
 <p>Contexts may also be referenced indirectly through
 variables:</p>
@@ -2113,17 +2147,17 @@ optional <code>bool</code> argument evaluates to non-nil.</li>
 <p>Creates a new symbol by copying the definition and
 contents of <code>sym-context-source</code>. Only the referenced symbol 
 is copied; the source context itself is not duplicated.</p>
-<p>When <code>sym-context-target</code> is
-omitted, a symbol of the same name is created in the
-current context. In this case, all symbol references
-belonging to the source context are rewritten so they
-point into the current context. The current context must
-not be MAIN.</p>
-<p>When <code>sym-context-target</code> is provided, the new symbol is created in
-the context referenced by <code>sym-context-target</code>. Both the name and
-the destination context may change. Any symbol reference
+<p>When <code>sym-context-target</code> is omitted, a symbol of the
+same name is created in the current context.  In this
+case, all symbol references belonging to the source
+context are rewritten so they point into the current
+context.  The current context must not be MAIN.</p>
+<p>When <code>sym-context-target</code> is provided, the new symbol
+is created in the context referenced by
+<code>sym-context-target</code>.  Both the name and the
+destination context may change.  Any symbol reference
 that originally pointed into the source context is
-rewritten to point into the target context. <code>clonesym</code>
+rewritten to point into the target context.  <code>clonesym</code>
 returns the newly created symbol.</p>
 <p>This mechanism allows fine-grained copying of functions,
 data structures, or context members, and enables creation
@@ -2163,10 +2197,10 @@ double:double
 ;-&#62; (fn (double:x) (+ double:x double:x))
 </code></pre>
 <p>Building a helper for statically scoped accumulators:</p>
-<pre><code>(def (def-static s body)
+<pre><code>(func (func-static s body)
   (clonesym &#39;body (sym s s)))
 
-(def-static &#39;acc (fn (x)
+(func-static &#39;acc (fn (x)
   (inc sum x)))
 
 (acc 1)
@@ -2186,7 +2220,7 @@ context are rewritten to the target context.</li>
 configuring context objects piece by piece.</li>
 </ul>
 <p>See: <a href="#f-clone">clone</a>, <a href="#f-context">context</a>, <a href="#f-sym">sym</a>,
-<a href="#f-def">def</a></p>
+<a href="#f-func">func</a></p>
 <hr/>
 <p><a name="f-close"></a></p>
 <h2 id="close">close</h2>
@@ -2199,7 +2233,7 @@ obtained from an <code>open</code> operation or from <code>device</code>. When
 the <code>close</code> operation succeeds, the function returns
 <code>true</code>; if the handle is invalid or the operation fails,
 <code>nil</code> is returned. Closing the device handle resets it to
-0, restoring the screen device as the active output
+<code>0</code>, restoring the screen device as the active output
 target.</p>
 <p>Examples:</p>
 <pre><code>(close (device))  → true
@@ -2232,7 +2266,7 @@ returned.</p>
 (collect (if (&#60;= (inc x) 10) x) 6)
 → (1 2 3 4 5 6)
 </code></pre>
-<p>See: <a href="#f-while">while</a>, <a href="#f-dotimes">dotimes</a>,
+<p>See: <a href="#f-while">while</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-for">for</a></p>
 <hr/>
 <p><a name="f-commandevent"></a></p>
@@ -2249,7 +2283,7 @@ executed by the interpreter. Returning the empty string
 prints a prompt without evaluating any expression.
 Passing <code>nil</code> removes the currently installed handler.</p>
 <p>The handler may be a symbol naming a function or a
-fn expression. In interactive mode the handler can
+<code>fn</code> expression. In interactive mode the handler can
 rewrite, filter or suppress input lines before they
 reach the evaluator, allowing full customization of
 REPL input behavior. In http mode (enabled with the
@@ -2341,7 +2375,7 @@ multiple branches. If used with several condition&#47;body
 pairs, the function if behaves similarly but requires no
 extra parentheses around each pair.</p>
 <p>Examples:</p>
-<pre><code>(def (classify x)
+<pre><code>(func (classify x)
   (cond
     ((&#60; x 0) "negative")
     ((&#60; x 10) "small")
@@ -2392,51 +2426,50 @@ elements, <code>first</code> and <code>last</code> form the corresponding pair.<
 </code></pre>
 <p>See: <a href="#f-first">first</a>, <a href="#f-rest">rest</a>, <a href="#f-last">last</a></p>
 <hr/>
-<p><a name="f-constant"></a></p>
-<h2 id="constant-const-alias">constant [!] &#47; const &#47; alias</h2>
-<pre><code>syntax: (constant sym-1 exp-1 [sym-2 exp-2] ...)
+<p><a name="f-const"></a></p>
+<h2 id="const-alias">const [!] &#47; alias</h2>
+<pre><code>syntax: (const sym-1 exp-1 [sym-2 exp-2] ...)
 </code></pre>
 <p>Description:</p>
 <p>Assigns values to symbols and marks those symbols as
-protected. A protected symbol cannot be modified by <code>set</code>,
-<code>def</code> or <code>mac</code>; any attempt to overwrite it
-raises an error. A protected symbol can only be changed
-by calling constant again. Only symbols in the current
-context may be protected, preventing accidental changes
-to names defined in other contexts. The last initializer
-expression is optional.</p>
-<p>Symbols created with <code>set</code>, <code>def</code> or <code>mac</code> can be
-protected retroactively by using <code>constant</code> on them. Since
+protected.  A protected symbol cannot be modified.  any
+attempt to overwrite it raises an error.  A protected
+symbol can only be changed by calling <code>const</code> again.
+Only symbols in the current context may be protected,
+preventing accidental changes to names defined in other
+contexts.  The last initializer expression is optional.</p>
+<p>Symbols created with <code>set</code>, <code>func</code> or <code>mac</code> can be
+protected retroactively by using <code>const</code> on them. Since
 a function definition is internally just an assignment
 of a <code>fn</code> value to a <code>symbol</code>, protecting a function name
 behaves the same way as protecting a variable.</p>
-<p>The final value assigned by <code>constant</code> is returned as the
+<p>The final value assigned by <code>const</code> is returned as the
 result of the call.</p>
 <p>Examples:</p>
-<pre><code>(constant &#39;var 123)  → 123
+<pre><code>(const &#39;var 123)  → 123
 (set var 999)
 ERR: symbol is protected in function set: var
 
-(def (double x) (+ x x))
+(func (double x) (+ x x))
 
-(constant &#39;double)
+(const &#39;double)
 
 ;; equivalent to
 
-(constant &#39;double (fn (x) (+ x x)))
+(const &#39;double (fn (x) (+ x x)))
 
-(constant &#39;squareroot sqrt)  → sqrt &#60;406C2E&#62;
-(constant &#39;+ add)            → add &#60;4068A6&#62;
+(const &#39;squareroot sqrt)  → sqrt &#60;406C2E&#62;
+(const &#39;+ add)            → add &#60;4068A6&#62;
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Protected symbols can only be reassigned by <code>constant</code>.</li>
+<li>Protected symbols can only be reassigned by <code>const</code>.</li>
 <li>Only symbols in the current context may be protected.</li>
-<li>Renaming built-in functions using <code>constant</code> incurs no
+<li>Renaming built-in functions using <code>const</code> incurs no
 performance penalty. The displayed hexadecimal address
 is the internal pointer to the function.</li>
 </ul>
-<p>See: <a href="#f-set">set</a>, <a href="#f-def">def</a>, <a href="#f-mac">mac</a></p>
+<p>See: <a href="#f-set">set</a>, <a href="#f-func">def</a>, <a href="#f-mac">mac</a></p>
 <hr/>
 <p><a name="f-context"></a></p>
 <h2 id="context">context</h2>
@@ -2446,7 +2479,7 @@ syntax: (context sym-context str | sym [exp-value])
 <p>Description:</p>
 <p>Switches the current namespace to <code>sym-context</code>. Any
 symbols created by evaluating expressions, loading
-source files or using <code>evalstring</code> are placed into the
+source files or using <code>evalstr</code> are placed into the
 active context. When the context does not yet exist, it
 is created. Calling <code>context</code> without arguments returns
 the currently active context. Because context symbols
@@ -2472,7 +2505,7 @@ a general hash mechanism.</p>
 <pre><code>;; create and switch to GRAPH
 (context &#39;GRAPH)
 
-(def (draw x y) (+ x y))
+(func (draw x y) (+ x y))
 (set value 123)
 
 (symbols) → (draw value)
@@ -2518,7 +2551,7 @@ Cfg:level → 3
 <p>Notes:</p>
 <ul>
 <li>Contexts are created implicitly when referenced using
-the prefix form (ctx:symbol).</li>
+the prefix form (context:symbol).</li>
 <li>Two contexts may contain symbols with the same name
 without interfering with each other.</li>
 <li>If a plain symbol already exists, referring to it as a
@@ -3283,7 +3316,7 @@ permissions.</p>
 ;-&#62; true
 
 ; kill a forked background worker
-(set pid (fork (dotimes (i 1000)
+(set pid (fork (repeat (i 1000)
                  (println i)
                  (sleep 10))))
 ;-&#62; &#60;pid&#62;
@@ -3542,7 +3575,7 @@ the value of the last one. <code>do</code> is used to group multiple
 expressions where only a single expression is normally
 allowed. It is commonly used inside conditional forms.</p>
 <p>Many built-in control structures such as <code>cond</code>, <code>def</code>,
-<code>doargs</code>, <code>dolist</code>, <code>dostring</code>, <code>dotimes</code>, <code>when</code>, and <code>while</code>
+<code>doargs</code>, <code>dolist</code>, <code>dostring</code>, <code>when</code>, and <code>while</code>
 already accept multiple expressions in their bodies, but
 <code>do</code> is useful in forms like if, where only one <code>body</code>
 expression is permitted.</p>
@@ -3721,7 +3754,7 @@ x
 <li>exp-break is evaluated before each iteration.</li>
 <li>$idx increments on each step and cannot be modified.</li>
 </ul>
-<p>See: <a href="#f-dotimes">dotimes</a>, <a href="#f-for">for</a>,
+<p>See: <a href="#f-repeat">repeat</a>, <a href="#f-for">for</a>,
 <a href="#f-map">map</a></p>
 <hr/>
 <p><a name="f-dostring"></a></p>
@@ -3766,48 +3799,8 @@ character index.</p>
 <li>Code points may exceed 255.</li>
 <li>$idx starts at zero and increments each iteration.</li>
 </ul>
-<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-dotimes">dotimes</a>,
+<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-char">char</a>, <a href="#f-explode">explode</a></p>
-<hr/>
-<p><a name="f-dotimes"></a></p>
-<h2 id="dotimes">dotimes</h2>
-<pre><code>syntax: (dotimes (sym-var int-count [exp-break]) body)
-</code></pre>
-<p>Description:</p>
-<p>Executes body int-count times. Before each iteration,
-sym-var is bound to the current loop index, starting at 0
-and ending at int-count - 1. The binding is local to the
-loop and follows dynamic scoping rules. The return value
-is the last evaluation of body.</p>
-<p>If exp-break is present, it is evaluated before each
-iteration step. When exp-break evaluates to a non-nil
-value, the loop terminates immediately and returns that
-value.</p>
-<p>After dotimes finishes, sym-var reverts to its previous
-value.</p>
-<p>Examples:</p>
-<pre><code>(dotimes (i 10)
-  (print i))
-;-&#62; 9
-; console output:
-;   0123456789
-
-; early exit example:
-(dotimes (i 10 (= i 3))
-  (print i))
-;-&#62; true
-; console output:
-;   012
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>sym-var is always an integer.</li>
-<li>exp-break is checked before body is evaluated.</li>
-<li>The final return value is either the last body result or
-the value of exp-break on early termination.</li>
-</ul>
-<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-for">for</a>,
-<a href="#f-while">while</a></p>
 <hr/>
 <p><a name="f-dotree"></a></p>
 <h2 id="dotree">dotree</h2>
@@ -4617,7 +4610,7 @@ than 2 return nil. For floats larger than the maximum
 
 ; small prime generator
 (define (primes n , p)
-  (dotimes (e n)
+  (repeat (e n)
     (if (= (length (factor e)) 1)
         (push e p -1)))
   p)
@@ -5474,9 +5467,9 @@ lst
 sym still moves toward num-to by the given step.</li>
 <li>exp-break is tested before body, allowing clean early exit.</li>
 <li>for is suitable for numeric iteration; for iterating lists
-see dotimes, dolist, or dotree.</li>
+see dolist.</li>
 </ul>
-<p>See: <a href="#f-sequence">sequence</a>, <a href="#f-dotimes">dotimes</a>,
+<p>See: <a href="#f-sequence">sequence</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-dolist">dolist</a>, <a href="#f-dotree">dotree</a></p>
 <hr/>
 <p><a name="f-for-all"></a></p>
@@ -5571,7 +5564,7 @@ x
 (define (demo)
   (set pid
        (fork
-         (dotimes (i 1000)
+         (repeat (i 1000)
            (println i)
            (sleep 20))))
   (sleep 100)
@@ -6753,38 +6746,6 @@ integers unless explicitly converted.</p>
 explicitly converted.</li>
 </ul>
 <p>See: <a href="#f-int">int</a>, <a href="#f-float">float</a>, <a href="#f-numberp">number?</a></p>
-<hr/>
-<p><a name="f-intersect"></a></p>
-<h2 id="intersect">intersect</h2>
-<pre><code>syntax: (intersect list-A list-B)
-syntax: (intersect list-A list-B bool)
-</code></pre>
-<p>Description:</p>
-<p>Computes the intersection of list-A and list-B. In the
-first form, the result contains one copy of each value
-that appears in both lists, preserving the order in
-which those values first occur in list-A. Duplicates in
-either input list are ignored in this mode.</p>
-<p>In the second form, when bool evaluates to true (any
-non-nil value), duplicates from list-A are preserved.
-Every element of list-A that is also present in list-B
-is included in the result in its original order, and no
-deduplication occurs.</p>
-<p>Membership tests follow standard list element equality.</p>
-<p>Examples:</p>
-<pre><code>(intersect &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5))
-;-&#62; (2 4 1)
-
-(intersect &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5) true)
-;-&#62; (1 2 4 2 1)
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>First form removes duplicates.</li>
-<li>Second form preserves duplicates from list-A.</li>
-<li>Order of results always follows list-A.</li>
-</ul>
-<p>See: <a href="#f-difference">difference</a>, <a href="#f-unique">unique</a>, <a href="#f-union">union</a></p>
 <hr/>
 <p><a name="f-invert"></a></p>
 <h2 id="invert">invert</h2>
@@ -10022,7 +9983,7 @@ sequence repeatable, initialize the generator with seed.</p>
 <p>Examples:</p>
 <pre><code>(pick &#39;a &#39;b &#39;c &#39;d &#39;e)       ; → one of: a b c d e
 
-(dotimes (i 10)
+(repeat (i 10)
   (print (pick 3 5 7)))     ; → 35777535755
 </code></pre>
 <p>Notes:</p>
@@ -11088,7 +11049,7 @@ value.</p>
 <p>When the optional int-N parameter is specified,
 rand returns a list of int-N random integers.</p>
 <p>Examples:</p>
-<pre><code>(dotimes (x 100)
+<pre><code>(repeat (x 100)
   (print (rand 2)))
 ;-&#62; 11100000110100111100111101...
 
@@ -12016,6 +11977,46 @@ On failure, rename-file returns nil.</p>
 <li>nil indicates that the rename operation failed.</li>
 </ul>
 <hr/>
+<p><a name="f-repeat"></a></p>
+<h2 id="repeat">repeat</h2>
+<pre><code>syntax: (repeat (sym-var int-count [exp-break]) body)
+</code></pre>
+<p>Description:</p>
+<p>Executes body int-count times. Before each iteration,
+<code>sym-var</code> is bound to the current loop index, starting at <code>0</code>
+and ending at <code>int-count - 1</code>. The binding is local to the
+loop and follows dynamic scoping rules. The return value
+is the last evaluation of body.</p>
+<p>If <code>exp-break</code> is present, it is evaluated before each
+iteration step. When <code>exp-break</code> evaluates to a non-nil
+value, the loop terminates immediately and returns that
+value.</p>
+<p>After <code>repeat</code> finishes, <code>sym-var</code> reverts to its previous
+value.</p>
+<p>Examples:</p>
+<pre><code>(repeat (i 10)
+  (print i))
+;-&#62; 9
+; console output:
+;   0123456789
+
+; early exit example:
+(repeat (i 10 (= i 3))
+  (print i))
+;-&#62; true
+; console output:
+;   012
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li><code>sym-var</code> is always an integer.</li>
+<li><code>exp-break</code> is checked before body is evaluated.</li>
+<li>The final return value is either the last body result or
+the value of <code>exp-break</code> on early termination.</li>
+</ul>
+<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-for">for</a>,
+<a href="#f-while">while</a></p>
+<hr/>
 <p><a name="f-replace"></a></p>
 <h2 id="replace">replace</h2>
 <pre><code>syntax: (replace exp-key list exp-replacement [func-compare])
@@ -12892,7 +12893,7 @@ to retrieve the underlying system error.</p>
 <p>Example with a child process:</p>
 <pre><code>(define (counter n)
   (println "counter started")
-  (dotimes (x n)
+  (repeat (x n)
     (semaphore sid -1)
     (println x)))
 
@@ -12971,7 +12972,7 @@ msg
   (while true
     (until (send ppid (rand 100)))))
 
-(dotimes (i 5)
+(repeat (i 5)
   (spawn &#39;result (child) true))
 
 (for (i 1 3)
@@ -15197,7 +15198,7 @@ controlled, non-error flow transfer mechanism.</p>
 <pre><code>; basic throw and catch
 ;------------------------------------------------------------
 (define (throw-test)
-  (dotimes (x 1000)
+  (repeat (x 1000)
     (if (= x 500) (throw "interrupted"))))
 
 (catch (throw-test) &#39;result)
