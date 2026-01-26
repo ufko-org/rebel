@@ -2976,107 +2976,6 @@ l
 </ul>
 <p>See: <a href="#f-minusminus">&#8211;</a>, <a href="#f-inc">inc</a></p>
 <hr/>
-<p><a name="f-default"></a></p>
-<h2 id="default">default</h2>
-<pre><code>syntax: (default context)
-</code></pre>
-<p>Description:</p>
-<p>Returns the value stored in the default functor of the
-given context. The default functor is the symbol whose
-name is identical to the context name. Many expressions
-implicitly fall back to the default functor when a bare
-context name appears; default provides explicit access to
-that value.</p>
-<p>Examples:</p>
-<pre><code>(define ctx:ctx 123)
-;-&#62; 123
-
-(default ctx)
-;-&#62; 123
-
-(setf (default ctx) 456)
-;-&#62; 456
-
-(set c ctx)
-;-&#62; ctx
-
-(default c)
-;-&#62; 456
-
-ctx:ctx
-;-&#62; 456
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>The default functor is the symbol whose name matches
-the context name.</li>
-<li>Reading or writing the default functor is useful when
-an expression does not automatically resolve to it.</li>
-<li>Writable via setf.</li>
-</ul>
-<p>See: <a href="#f-context">context</a>, <a href="#f-define">define</a>,
-<a href="#f-setf">setf</a></p>
-<hr/>
-<p><a name="f-define"></a></p>
-<h2 id="define">define</h2>
-<pre><code>syntax: (define (sym-name [sym-1 ...]) body-1 [body-2 ...])
-syntax: (define sym-name exp-value)
-</code></pre>
-<p>Description:</p>
-<p>Defines a named function. The parameter rules and function
-semantics are identical to those of fn. For anonymous
-functions, see <a href="#f-fn">fn</a>.</p>
-<p>In the first syntax, sym-name becomes a function that
-accepts the given parameters and evaluates the body
-expressions. In the second syntax, sym-name is assigned
-exp-value, which is typically a function value created by
-fn.</p>
-<p>Extra arguments passed to a defined function are available
-through the system symbol $args or via the function (args).</p>
-<p>The function returns the value of the last body expression.</p>
-<p>Examples:</p>
-<pre><code>; basic named function
-(define (inc x) (+ x 1))
-(inc 10)
-;-&#62; 11
-
-; multiple parameters
-(define (add3 a b c) (+ a b c))
-(add3 1 2 3)
-;-&#62; 6
-
-; default parameters
-(define (scale x (f 2)) (* x f))
-(scale 10)
-;-&#62; 20
-(scale 10 5)
-;-&#62; 50
-
-; defining using fn explicitly
-(define add2 (fn (x y) (+ x y)))
-(add2 3 4)
-;-&#62; 7
-
-; variable arity using $args
-(define (sum-all) (apply + $args))
-(sum-all 1 2 3 4 5)
-;-&#62; 15
-
-; same using (args)
-(define (sum2) (apply + (args)))
-(sum2 1 2 3 4 5)
-;-&#62; 15
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>define creates a named function in the current context.</li>
-<li>Extra arguments are available as $args or via (args).</li>
-<li>Parameters follow dynamic scoping rules.</li>
-<li>For anonymous functions, see <a href="#f-fn">fn</a>.</li>
-<li>For macro definitions, use <a href="#f-define-macro">define-macro</a>.</li>
-</ul>
-<p>See: <a href="#f-fn">fn</a>, <a href="#f-apply">apply</a>, <a href="#f-define-macro">define-macro</a></p>
-<hr/>
 <p><a name="f-define-macro"></a></p>
 <h2 id="define-macro">define-macro</h2>
 <pre><code>syntax: (define-macro (sym-name [sym-param-1 ...]) body)
@@ -5723,6 +5622,100 @@ numbers, symbols, and strings.</p>
 </code></pre>
 <p>See: <a href="#f-uniq">uniq</a>, <a href="#f-explode">explode</a>,
 <a href="#f-fread">fread</a></p>
+<hr/>
+<p><a name="f-func"></a></p>
+<h2 id="func">func</h2>
+<pre><code>syntax: (func (sym-name [sym-1 ...]) body-1 [body-2 ...])
+</code></pre>
+<p>Description:</p>
+<p><code>func</code> creates a named function.  <code>sym-name</code> becomes a
+function that accepts the given parameters and
+evaluates the body expressions.</p>
+<p>Extra arguments passed to a function are available
+through the system symbol $args or via the function
+<code>(args)</code>.</p>
+<p>The function returns the value of the last body
+expression.</p>
+<p>Examples:</p>
+<pre><code>; basic named function
+(func (increment x) (+ x 1))
+(increment 10)
+;-&#62; 11
+
+; multiple parameters
+(func (add3 a b c) (+ a b c))
+(add3 1 2 3)
+;-&#62; 6
+
+; default parameters
+(func (scale x (f 2)) (* x f))
+(scale 10)
+;-&#62; 20
+(scale 10 5)
+;-&#62; 50
+
+; variable arity using $args
+(func (sum-all) (apply + $args))
+(sum-all 1 2 3 4 5)
+;-&#62; 15
+
+; same using (args)
+(func (sum2) (apply + (args)))
+(sum2 1 2 3 4 5)
+;-&#62; 15
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li><code>func</code> creates a named function in the current context.</li>
+<li>Extra arguments are available as $args or via (args).</li>
+<li>Parameters follow dynamic scoping rules.</li>
+<li>For anonymous functions, see <a href="#f-fn">fn</a>.</li>
+<li>For macro definitions, use <a href="#f-mac">mac</a> or 
+<a href="#f-macex">macex</a>.</li>
+</ul>
+<p>See: <a href="#f-fn">fn</a>, <a href="#f-apply">apply</a>, <a href="#f-mac">mac</a>, 
+     <a href="#f-macex">macex</a></p>
+<hr/>
+<p><a name="f-functor"></a></p>
+<h2 id="functor">functor</h2>
+<pre><code>syntax: (functor context)
+</code></pre>
+<p>Description:</p>
+<p>Returns the value stored in the default functor of the
+given <code>context</code>. The default functor is the symbol whose
+name is identical to the context name. Many expressions
+implicitly fall back to the default functor when a bare
+context name appears; <code>functor</code> provides explicit access to
+that value.</p>
+<p>Examples:</p>
+<pre><code>(set ctx:ctx 123)
+;-&#62; 123
+
+(functor ctx)
+;-&#62; 123
+
+(set (functor ctx) 456)
+;-&#62; 456
+
+(set c ctx)
+;-&#62; ctx
+
+(functor c)
+;-&#62; 456
+
+ctx:ctx
+;-&#62; 456
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The default functor is the symbol whose name matches
+the context name.</li>
+<li>Reading or writing the default functor is useful when
+an expression does not automatically resolve to it.</li>
+<li>Writable via <code>set</code> or <code>func</code></li>
+</ul>
+<p>See: <a href="#f-context">context</a>, <a href="#f-func">func</a>,
+<a href="#f-set">set</a></p>
 <hr/>
 <p><a name="f-fv"></a></p>
 <h2 id="fv">fv</h2>

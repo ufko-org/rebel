@@ -3912,133 +3912,6 @@ See: [--](#f-minusminus), [inc](#f-inc)
 ---
 
 
-
-<a name="f-default"></a>
-## default
-
-```
-syntax: (default context)
-```
-
-Description:
-
-Returns the value stored in the default functor of the
-given context. The default functor is the symbol whose
-name is identical to the context name. Many expressions
-implicitly fall back to the default functor when a bare
-context name appears; default provides explicit access to
-that value.
-
-Examples:
-
-```
-(define ctx:ctx 123)
-;-> 123
-
-(default ctx)
-;-> 123
-
-(setf (default ctx) 456)
-;-> 456
-
-(set c ctx)
-;-> ctx
-
-(default c)
-;-> 456
-
-ctx:ctx
-;-> 456
-```
-
-Notes:
-
-- The default functor is the symbol whose name matches
-  the context name.
-- Reading or writing the default functor is useful when
-  an expression does not automatically resolve to it.
-- Writable via setf.
-
-See: [context](#f-context), [define](#f-define),
-[setf](#f-setf)
-
----
-
-
-<a name="f-define"></a>
-## define
-
-```
-syntax: (define (sym-name [sym-1 ...]) body-1 [body-2 ...])
-syntax: (define sym-name exp-value)
-```
-
-Description:
-
-Defines a named function. The parameter rules and function
-semantics are identical to those of fn. For anonymous
-functions, see [fn](#f-fn).
-
-In the first syntax, sym-name becomes a function that
-accepts the given parameters and evaluates the body
-expressions. In the second syntax, sym-name is assigned
-exp-value, which is typically a function value created by
-fn.
-
-Extra arguments passed to a defined function are available
-through the system symbol $args or via the function (args).
-
-The function returns the value of the last body expression.
-
-Examples:
-
-```
-; basic named function
-(define (inc x) (+ x 1))
-(inc 10)
-;-> 11
-
-; multiple parameters
-(define (add3 a b c) (+ a b c))
-(add3 1 2 3)
-;-> 6
-
-; default parameters
-(define (scale x (f 2)) (* x f))
-(scale 10)
-;-> 20
-(scale 10 5)
-;-> 50
-
-; defining using fn explicitly
-(define add2 (fn (x y) (+ x y)))
-(add2 3 4)
-;-> 7
-
-; variable arity using $args
-(define (sum-all) (apply + $args))
-(sum-all 1 2 3 4 5)
-;-> 15
-
-; same using (args)
-(define (sum2) (apply + (args)))
-(sum2 1 2 3 4 5)
-;-> 15
-```
-
-Notes:
-
-- define creates a named function in the current context.
-- Extra arguments are available as $args or via (args).
-- Parameters follow dynamic scoping rules.
-- For anonymous functions, see [fn](#f-fn).
-- For macro definitions, use [define-macro](#f-define-macro).
-
-See: [fn](#f-fn), [apply](#f-apply), [define-macro](#f-define-macro)
-
----
-
-
 <a name="f-define-macro"></a>
 ## define-macro
 
@@ -7420,6 +7293,124 @@ Examples:
 
 See: [uniq](#f-uniq), [explode](#f-explode),
 [fread](#f-fread)
+
+---
+
+
+<a name="f-func"></a>
+## func
+
+```
+syntax: (func (sym-name [sym-1 ...]) body-1 [body-2 ...])
+```
+
+Description:
+
+`func` creates a named function.  `sym-name` becomes a
+function that accepts the given parameters and
+evaluates the body expressions.
+
+Extra arguments passed to a function are available
+through the system symbol $args or via the function
+`(args)`.
+
+The function returns the value of the last body
+expression.
+
+Examples:
+
+```
+; basic named function
+(func (increment x) (+ x 1))
+(increment 10)
+;-> 11
+
+; multiple parameters
+(func (add3 a b c) (+ a b c))
+(add3 1 2 3)
+;-> 6
+
+; default parameters
+(func (scale x (f 2)) (* x f))
+(scale 10)
+;-> 20
+(scale 10 5)
+;-> 50
+
+; variable arity using $args
+(func (sum-all) (apply + $args))
+(sum-all 1 2 3 4 5)
+;-> 15
+
+; same using (args)
+(func (sum2) (apply + (args)))
+(sum2 1 2 3 4 5)
+;-> 15
+```
+
+Notes:
+
+- `func` creates a named function in the current context.
+- Extra arguments are available as $args or via (args).
+- Parameters follow dynamic scoping rules.
+- For anonymous functions, see [fn](#f-fn).
+- For macro definitions, use [mac](#f-mac) or 
+  [macex](#f-macex).
+
+See: [fn](#f-fn), [apply](#f-apply), [mac](#f-mac), 
+     [macex](#f-macex)
+
+---
+
+
+<a name="f-functor"></a>
+## functor
+
+```
+syntax: (functor context)
+```
+
+Description:
+
+Returns the value stored in the default functor of the
+given `context`. The default functor is the symbol whose
+name is identical to the context name. Many expressions
+implicitly fall back to the default functor when a bare
+context name appears; `functor` provides explicit access to
+that value.
+
+Examples:
+
+```
+(set ctx:ctx 123)
+;-> 123
+
+(functor ctx)
+;-> 123
+
+(set (functor ctx) 456)
+;-> 456
+
+(set c ctx)
+;-> ctx
+
+(functor c)
+;-> 456
+
+ctx:ctx
+;-> 456
+```
+
+Notes:
+
+- The default functor is the symbol whose name matches
+  the context name.
+- Reading or writing the default functor is useful when
+  an expression does not automatically resolve to it.
+- Writable via `set` or `func`
+
+See: [context](#f-context), [func](#f-func),
+[set](#f-set)
 
 ---
 
