@@ -21505,10 +21505,10 @@ See: [number?](#f-numberp), [true?](#f-truep),
 
 
 <a name="f-fin-fv"></a>
-## fv
+## fin-fv
 
 ```
-syntax: (fv num-rate num-nper num-pmt num-pv [int-type])
+syntax: (fin-fv num-rate num-nper num-pmt num-pv [int-type])
 ```
 
 Description:
