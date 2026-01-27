@@ -5720,95 +5720,6 @@ an expression does not automatically resolve to it.</li>
 <p>See: <a href="#f-context">context</a>, <a href="#f-func">func</a>,
 <a href="#f-set">set</a></p>
 <hr/>
-<p><a name="f-fv"></a></p>
-<h2 id="fv">fv</h2>
-<pre><code>syntax: (fv num-rate num-nper num-pmt num-pv [int-type])
-</code></pre>
-<p>Description:</p>
-<p>Computes the future value of a payment stream defined by
-a constant interest rate, periodic fixed payments, and an
-initial principal amount. num-rate is the interest rate
-per period. num-nper is the number of periods. num-pmt is
-the payment applied each period. num-pv is the principal
-value at the beginning of the schedule.</p>
-<p>When int-type is omitted or 0, payments occur at the end
-of each period. When int-type is 1, payments occur at the
-beginning of each period. The returned value represents
-the balance after all interest and payments have been
-applied.</p>
-<p>Examples:</p>
-<pre><code>; end-of-period payment
-(fv (div 0.07 12) 240 775.30 -100000)
-;-&#62; -0.5544645052
-
-; beginning-of-period payment
-(fv (div 0.07 12) 240 775.30 -100000 1)
-;-&#62; 54.093...
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>num-rate must be expressed as the rate per period</li>
-<li>int-type controls timing of payments</li>
-<li>signs of num-pv and num-pmt define cash direction</li>
-</ul>
-<p>See: <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>, <a href="#f-npv">npv</a>,
-<a href="#f-pmt">pmt</a>, <a href="#f-pv">pv</a></p>
-<hr/>
-<p><a name="f-gammai"></a></p>
-<h2 id="gammai">gammai</h2>
-<pre><code>syntax: (gammai num-a num-b)
-</code></pre>
-<p>Description:</p>
-<p>Evaluates the normalized incomplete Gamma function for the
-parameters num-a and num-b. The result is a floating-point
-value in the range from 0 to 1. This function is commonly
-used in probability calculations involving Chi-squared
-distributions and related statistical measures.</p>
-<p>The probability that a Chi-squared statistic exceeds a
-given value can be expressed using gammai as:</p>
-<pre><code>Q(chi2 | df) = Q(df&#47;2, chi2&#47;2) = gammai(df&#47;2, chi2&#47;2)
-</code></pre>
-<p>Examples:</p>
-<pre><code>(gammai 4 5)
-;-&#62; 0.7349740847
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>Arguments must be positive real numbers.</li>
-<li>The result corresponds to the upper-tail probability of
-the Gamma distribution.</li>
-</ul>
-<p>See: <a href="#f-prob-chi2">prob-chi2</a></p>
-<hr/>
-<p><a name="f-gammaln"></a></p>
-<h2 id="gammaln">gammaln</h2>
-<pre><code>syntax: (gammaln num-x)
-</code></pre>
-<p>Description:</p>
-<p>Computes the natural logarithm of the Gamma function for
-num-x. The Gamma function generalizes factorials to real
-numbers, and gammaln provides a numerically stable way to
-evaluate log(gamma(x)) for a wide domain of inputs.</p>
-<p>The relationship n! = gamma(n + 1) allows gammaln to be
-used for factorial computations by exponentiating the
-returned logarithmic value.</p>
-<p>The log Gamma function is also related to the Beta
-function. The Beta function can be written in terms of
-gammaln as:</p>
-<pre><code>Beta(z, w) = Exp(gammaln(z) + gammaln(w) - gammaln(z + w))
-</code></pre>
-<p>Examples:</p>
-<pre><code>(exp (gammaln 6))
-;-&#62; 120
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>gammaln avoids overflow that may occur when evaluating
-gamma(x) directly.</li>
-<li>Input num-x must be positive for most practical uses.</li>
-</ul>
-<p>See: <a href="#f-gammai">gammai</a></p>
-<hr/>
 <p><a name="f-gcd"></a></p>
 <h2 id="gcd">gcd</h2>
 <pre><code>syntax: (gcd int-1 [int-2 ...])
@@ -16636,6 +16547,40 @@ as zero.</li>
      <a href="#f-nilp">nil?</a></p>
 <hr/>
 <!-- ------------ NON CORE abc order ------------ -->
+<p><a name="f-fin-fv"></a></p>
+<h2 id="fv">fv</h2>
+<pre><code>syntax: (fv num-rate num-nper num-pmt num-pv [int-type])
+</code></pre>
+<p>Description:</p>
+<p>Computes the future value of a payment stream defined by
+a constant interest rate, periodic fixed payments, and an
+initial principal amount. num-rate is the interest rate
+per period. num-nper is the number of periods. num-pmt is
+the payment applied each period. num-pv is the principal
+value at the beginning of the schedule.</p>
+<p>When int-type is omitted or 0, payments occur at the end
+of each period. When int-type is 1, payments occur at the
+beginning of each period. The returned value represents
+the balance after all interest and payments have been
+applied.</p>
+<p>Examples:</p>
+<pre><code>; end-of-period payment
+(fin-fv (div 0.07 12) 240 775.30 -100000)
+;-&#62; -0.5544645052
+
+; beginning-of-period payment
+(fin-fv (div 0.07 12) 240 775.30 -100000 1)
+;-&#62; 54.093...
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>num-rate must be expressed as the rate per period</li>
+<li>int-type controls timing of payments</li>
+<li>signs of num-pv and num-pmt define cash direction</li>
+</ul>
+<p>See: <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>, <a href="#f-npv">npv</a>,
+<a href="#f-pmt">pmt</a>, <a href="#f-pv">pv</a></p>
+<hr/>
 <p><a name="f-sta-bayes-query"></a></p>
 <h2 id="sta-bayes-query">sta-bayes-query</h2>
 <pre><code>syntax: (sta-bayes-query list-L context-D [bool-chain [bool-probs]])
@@ -17063,6 +17008,61 @@ on normal theory.</p>
 ;-&#62; 3.090232372
 </code></pre>
 <p>See: <a href="#f-sta-prob-z">sta-prob-z</a></p>
+<hr/>
+<p><a name="f-sta-gammai"></a></p>
+<h2 id="gammai">gammai</h2>
+<pre><code>syntax: (gammai num-a num-b)
+</code></pre>
+<p>Description:</p>
+<p>Evaluates the normalized incomplete Gamma function for the
+parameters num-a and num-b. The result is a floating-point
+value in the range from 0 to 1. This function is commonly
+used in probability calculations involving Chi-squared
+distributions and related statistical measures.</p>
+<p>The probability that a Chi-squared statistic exceeds a
+given value can be expressed using gammai as:</p>
+<pre><code>Q(chi2 | df) = Q(df&#47;2, chi2&#47;2) = gammai(df&#47;2, chi2&#47;2)
+</code></pre>
+<p>Examples:</p>
+<pre><code>(gammai 4 5)
+;-&#62; 0.7349740847
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Arguments must be positive real numbers.</li>
+<li>The result corresponds to the upper-tail probability of
+the Gamma distribution.</li>
+</ul>
+<p>See: <a href="#f-prob-chi2">prob-chi2</a></p>
+<hr/>
+<p><a name="f-sta-gammaln"></a></p>
+<h2 id="gammaln">gammaln</h2>
+<pre><code>syntax: (gammaln num-x)
+</code></pre>
+<p>Description:</p>
+<p>Computes the natural logarithm of the Gamma function for
+num-x. The Gamma function generalizes factorials to real
+numbers, and gammaln provides a numerically stable way to
+evaluate log(gamma(x)) for a wide domain of inputs.</p>
+<p>The relationship n! = gamma(n + 1) allows gammaln to be
+used for factorial computations by exponentiating the
+returned logarithmic value.</p>
+<p>The log Gamma function is also related to the Beta
+function. The Beta function can be written in terms of
+gammaln as:</p>
+<pre><code>Beta(z, w) = Exp(gammaln(z) + gammaln(w) - gammaln(z + w))
+</code></pre>
+<p>Examples:</p>
+<pre><code>(exp (gammaln 6))
+;-&#62; 120
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>gammaln avoids overflow that may occur when evaluating
+gamma(x) directly.</li>
+<li>Input num-x must be positive for most practical uses.</li>
+</ul>
+<p>See: <a href="#f-gammai">gammai</a></p>
 <hr/>
 
 </body>

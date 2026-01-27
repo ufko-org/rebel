@@ -7418,136 +7418,6 @@ See: [context](#f-context), [func](#f-func),
 ---
 
 
-<a name="f-fv"></a>
-## fv
-
-```
-syntax: (fv num-rate num-nper num-pmt num-pv [int-type])
-```
-
-Description:
-
-Computes the future value of a payment stream defined by
-a constant interest rate, periodic fixed payments, and an
-initial principal amount. num-rate is the interest rate
-per period. num-nper is the number of periods. num-pmt is
-the payment applied each period. num-pv is the principal
-value at the beginning of the schedule.
-
-When int-type is omitted or 0, payments occur at the end
-of each period. When int-type is 1, payments occur at the
-beginning of each period. The returned value represents
-the balance after all interest and payments have been
-applied.
-
-Examples:
-
-```
-; end-of-period payment
-(fv (div 0.07 12) 240 775.30 -100000)
-;-> -0.5544645052
-
-; beginning-of-period payment
-(fv (div 0.07 12) 240 775.30 -100000 1)
-;-> 54.093...
-```
-
-Notes:
-
-- num-rate must be expressed as the rate per period
-- int-type controls timing of payments
-- signs of num-pv and num-pmt define cash direction
-
-See: [irr](#f-irr), [nper](#f-nper), [npv](#f-npv),
-[pmt](#f-pmt), [pv](#f-pv)
-
----
-
-
-<a name="f-gammai"></a>
-## gammai
-
-```
-syntax: (gammai num-a num-b)
-```
-
-Description:
-
-Evaluates the normalized incomplete Gamma function for the
-parameters num-a and num-b. The result is a floating-point
-value in the range from 0 to 1. This function is commonly
-used in probability calculations involving Chi-squared
-distributions and related statistical measures.
-
-The probability that a Chi-squared statistic exceeds a
-given value can be expressed using gammai as:
-
-```
-Q(chi2 | df) = Q(df/2, chi2/2) = gammai(df/2, chi2/2)
-```
-
-Examples:
-
-```
-(gammai 4 5)
-;-> 0.7349740847
-```
-
-Notes:
-
-- Arguments must be positive real numbers.
-- The result corresponds to the upper-tail probability of
-  the Gamma distribution.
-
-See: [prob-chi2](#f-prob-chi2)
-
----
-
-
-<a name="f-gammaln"></a>
-## gammaln
-
-```
-syntax: (gammaln num-x)
-```
-
-Description:
-
-Computes the natural logarithm of the Gamma function for
-num-x. The Gamma function generalizes factorials to real
-numbers, and gammaln provides a numerically stable way to
-evaluate log(gamma(x)) for a wide domain of inputs.
-
-The relationship n! = gamma(n + 1) allows gammaln to be
-used for factorial computations by exponentiating the
-returned logarithmic value.
-
-The log Gamma function is also related to the Beta
-function. The Beta function can be written in terms of
-gammaln as:
-
-```
-Beta(z, w) = Exp(gammaln(z) + gammaln(w) - gammaln(z + w))
-```
-
-Examples:
-
-```
-(exp (gammaln 6))
-;-> 120
-```
-
-Notes:
-
-- gammaln avoids overflow that may occur when evaluating
-  gamma(x) directly.
-- Input num-x must be positive for most practical uses.
-
-See: [gammai](#f-gammai)
-
----
-
-
 <a name="f-gcd"></a>
 ## gcd
 
@@ -21634,6 +21504,52 @@ See: [number?](#f-numberp), [true?](#f-truep),
 <!-- ------------ NON CORE abc order ------------ -->
 
 
+<a name="f-fin-fv"></a>
+## fv
+
+```
+syntax: (fv num-rate num-nper num-pmt num-pv [int-type])
+```
+
+Description:
+
+Computes the future value of a payment stream defined by
+a constant interest rate, periodic fixed payments, and an
+initial principal amount. num-rate is the interest rate
+per period. num-nper is the number of periods. num-pmt is
+the payment applied each period. num-pv is the principal
+value at the beginning of the schedule.
+
+When int-type is omitted or 0, payments occur at the end
+of each period. When int-type is 1, payments occur at the
+beginning of each period. The returned value represents
+the balance after all interest and payments have been
+applied.
+
+Examples:
+
+```
+; end-of-period payment
+(fin-fv (div 0.07 12) 240 775.30 -100000)
+;-> -0.5544645052
+
+; beginning-of-period payment
+(fin-fv (div 0.07 12) 240 775.30 -100000 1)
+;-> 54.093...
+```
+
+Notes:
+
+- num-rate must be expressed as the rate per period
+- int-type controls timing of payments
+- signs of num-pv and num-pmt define cash direction
+
+See: [irr](#f-irr), [nper](#f-nper), [npv](#f-npv),
+[pmt](#f-pmt), [pv](#f-pv)
+
+---
+
+
 <a name="f-sta-bayes-query"></a>
 ## sta-bayes-query
 
@@ -22238,6 +22154,90 @@ Examples:
 ```
 
 See: [sta-prob-z](#f-sta-prob-z)
+
+---
+
+
+<a name="f-sta-gammai"></a>
+## gammai
+
+```
+syntax: (gammai num-a num-b)
+```
+
+Description:
+
+Evaluates the normalized incomplete Gamma function for the
+parameters num-a and num-b. The result is a floating-point
+value in the range from 0 to 1. This function is commonly
+used in probability calculations involving Chi-squared
+distributions and related statistical measures.
+
+The probability that a Chi-squared statistic exceeds a
+given value can be expressed using gammai as:
+
+```
+Q(chi2 | df) = Q(df/2, chi2/2) = gammai(df/2, chi2/2)
+```
+
+Examples:
+
+```
+(gammai 4 5)
+;-> 0.7349740847
+```
+
+Notes:
+
+- Arguments must be positive real numbers.
+- The result corresponds to the upper-tail probability of
+  the Gamma distribution.
+
+See: [prob-chi2](#f-prob-chi2)
+
+---
+
+
+<a name="f-sta-gammaln"></a>
+## gammaln
+
+```
+syntax: (gammaln num-x)
+```
+
+Description:
+
+Computes the natural logarithm of the Gamma function for
+num-x. The Gamma function generalizes factorials to real
+numbers, and gammaln provides a numerically stable way to
+evaluate log(gamma(x)) for a wide domain of inputs.
+
+The relationship n! = gamma(n + 1) allows gammaln to be
+used for factorial computations by exponentiating the
+returned logarithmic value.
+
+The log Gamma function is also related to the Beta
+function. The Beta function can be written in terms of
+gammaln as:
+
+```
+Beta(z, w) = Exp(gammaln(z) + gammaln(w) - gammaln(z + w))
+```
+
+Examples:
+
+```
+(exp (gammaln 6))
+;-> 120
+```
+
+Notes:
+
+- gammaln avoids overflow that may occur when evaluating
+  gamma(x) directly.
+- Input num-x must be positive for most practical uses.
+
+See: [gammai](#f-gammai)
 
 ---
 
