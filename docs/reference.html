@@ -16554,12 +16554,12 @@ as zero.</li>
 <p>Description:</p>
 <p>Computes the future value of a payment stream defined by
 a constant interest rate, periodic fixed payments, and an
-initial principal amount. num-rate is the interest rate
-per period. num-nper is the number of periods. num-pmt is
-the payment applied each period. num-pv is the principal
+initial principal amount. <code>num-rate</code> is the interest rate
+per period. <code>num-nper</code> is the number of periods. <code>num-pmt</code> is
+the payment applied each period. <code>num-pv</code> is the principal
 value at the beginning of the schedule.</p>
-<p>When int-type is omitted or 0, payments occur at the end
-of each period. When int-type is 1, payments occur at the
+<p>When <code>int-type</code> is omitted or <code>0</code>, payments occur at the end
+of each period. When <code>int-type</code> is <code>1</code>, payments occur at the
 beginning of each period. The returned value represents
 the balance after all interest and payments have been
 applied.</p>
@@ -16574,12 +16574,13 @@ applied.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>num-rate must be expressed as the rate per period</li>
-<li>int-type controls timing of payments</li>
-<li>signs of num-pv and num-pmt define cash direction</li>
+<li><code>num-rate</code> must be expressed as the rate per period</li>
+<li><code>int-type</code> controls timing of payments</li>
+<li>signs of <code>num-pv</code> and <code>num-pmt</code> define cash direction</li>
 </ul>
-<p>See: <a href="#f-irr">irr</a>, <a href="#f-nper">nper</a>, <a href="#f-npv">npv</a>,
-<a href="#f-pmt">pmt</a>, <a href="#f-pv">pv</a></p>
+<p>See: <a href="#f-fin-irr">fin-irr</a>, <a href="#f-fih-nper">fin-nper</a>, 
+     <a href="#f-fin-npv">fin-npv</a>, <a href="#f-fin-pmt">fin-pmt</a>, 
+     <a href="#f-fin-pv">fin-pv</a></p>
 <hr/>
 <p><a name="f-sta-bayes-query"></a></p>
 <h2 id="sta-bayes-query">sta-bayes-query</h2>

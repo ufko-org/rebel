@@ -21515,13 +21515,13 @@ Description:
 
 Computes the future value of a payment stream defined by
 a constant interest rate, periodic fixed payments, and an
-initial principal amount. num-rate is the interest rate
-per period. num-nper is the number of periods. num-pmt is
-the payment applied each period. num-pv is the principal
+initial principal amount. `num-rate` is the interest rate
+per period. `num-nper` is the number of periods. `num-pmt` is
+the payment applied each period. `num-pv` is the principal
 value at the beginning of the schedule.
 
-When int-type is omitted or 0, payments occur at the end
-of each period. When int-type is 1, payments occur at the
+When `int-type` is omitted or `0`, payments occur at the end
+of each period. When `int-type` is `1`, payments occur at the
 beginning of each period. The returned value represents
 the balance after all interest and payments have been
 applied.
@@ -21540,12 +21540,13 @@ Examples:
 
 Notes:
 
-- num-rate must be expressed as the rate per period
-- int-type controls timing of payments
-- signs of num-pv and num-pmt define cash direction
+- `num-rate` must be expressed as the rate per period
+- `int-type` controls timing of payments
+- signs of `num-pv` and `num-pmt` define cash direction
 
-See: [irr](#f-irr), [nper](#f-nper), [npv](#f-npv),
-[pmt](#f-pmt), [pv](#f-pv)
+See: [fin-irr](#f-fin-irr), [fin-nper](#f-fih-nper), 
+     [fin-npv](#f-fin-npv), [fin-pmt](#f-fin-pmt), 
+     [fin-pv](#f-fin-pv)
 
 ---
 
