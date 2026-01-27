@@ -31,3 +31,4 @@ convenience at the cost of clarity.  The goal is to provide
 a predictable core that encourages disciplined thinking and
 precise programming.
 
+Rebel does not require validation from any community or individual.
