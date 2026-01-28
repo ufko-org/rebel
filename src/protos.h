@@ -115,6 +115,7 @@ CELL *p_acos(CELL *params);
 CELL *p_add(CELL *params);
 CELL *p_addFloat(CELL *params);
 CELL *p_address(CELL *params);
+CELL *p_adhoc(CELL *params); /* ufko: for testing only */
 CELL *p_amb(CELL *params);
 CELL *p_and(CELL *params);
 CELL *p_any(CELL *params);

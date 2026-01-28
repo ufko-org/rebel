@@ -3130,6 +3130,11 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
     }
 }
 
+/* ufko: for adhoc testing only */
+CELL *p_adhoc(CELL *params)
+{
+  return(nilCell);
+}
 
 CELL *p_prettyPrint(CELL *params)
 {
@@ -5352,11 +5357,12 @@ CELL *p_setdef(CELL *params)
 
 SETDEF_BEGIN:
 
-    /* reject implicit nil value for symbol */
+    /* reject implicit nil value for symbol - turned off for now 
     if(params->next == nilCell)
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
     }
+    */
 
     /* reject quoted symbol as assignment target */
 
@@ -5401,7 +5407,6 @@ SETDEF_BEGIN:
 
     params = params->next;
     params = params->next;
-
 
     if(stringRef && indexRefPtr)
     {
