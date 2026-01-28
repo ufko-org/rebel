@@ -118,10 +118,9 @@ PRIMITIVE primitive[] =
     {"doargs",           p_doargs,           2}, 
     {"dolist",           p_dolist,           2}, 
     {"dostring",         p_dostring,         2}, 
-    {"dotree",           p_dotree,           2}, 
 
     {"loop",             p_loop,             2}, /* :rebel, loop over list or value converted to list*/
-    {"ls",               p_dotree,           2}, /* :alt, lists context symbols */
+    {"ls",               p_dotree,           2}, /* :replaces dotree, lists context symbols */
 
     /* core - data - sequencers */
 
