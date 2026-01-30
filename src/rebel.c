@@ -2529,7 +2529,7 @@ void varPrintf(UINT device, char *format, ...)
 
     va_start(argptr,format);
 
-    /* defined in nl-filesys.c if not in libc */
+    /* defined in rebel-filesys.c if not in libc */
     vasprintf(&buffer, format, argptr);
 
     prettyPrintLength += strlen(buffer);
