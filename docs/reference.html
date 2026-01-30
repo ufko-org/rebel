@@ -3703,17 +3703,18 @@ character index.</p>
 <p>See: <a href="#f-dolist">dolist</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-char">char</a>, <a href="#f-explode">explode</a></p>
 <hr/>
-<p><a name="f-dotree"></a></p>
-<h2 id="dotree">dotree</h2>
-<pre><code>syntax: (dotree (sym sym-context [bool]) body)
+<p><a name="f-ls"></a></p>
+<h2 id="ls">ls</h2>
+<pre><code>syntax: (ls (sym sym-context [bool]) body)
 </code></pre>
 <p>Description:</p>
-<p>Iterates over all symbols stored in sym-context. Symbols
-are visited in sorted order. Before each iteration, sym is
-bound to the next symbol. The binding is local to the
-loop and follows dynamic scoping rules. The return value
-is the last evaluation of body.</p>
-<p>If bool evaluates to non-nil, only symbols whose names
+<p><code>ls</code> loops over all symbols stored in <code>sym-context</code>.
+Symbols are visited in sorted order.  Before each
+iteration, <code>sym</code> is bound to the next symbol.  The
+binding is local to the loop and follows dynamic
+scoping rules.  The return value is the last evaluation
+of <code>body</code>.</p>
+<p>If <code>bool</code> evaluates to non-nil, only symbols whose names
 begin with an underscore (_) are included. This is useful
 when a context contains internal keys or auxiliary data
 under underscore-prefixed names.</p>
@@ -3721,20 +3722,20 @@ under underscore-prefixed names.</p>
 current symbol index.</p>
 <p>Examples:</p>
 <pre><code>; iterate through all symbols in a context
-(dotree (s ctx)
+(ls (s ctx)
   (print s " "))
 
 ; iterate only over symbols beginning with "_"
-(dotree (s ctx true)
+(ls (s ctx true)
   (print s " "))
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Symbol visitation order is lexicographic.</li>
-<li>sym is local to the loop.</li>
-<li>$idx increments on each step.</li>
-<li>dotree avoids the memory overhead of creating a list
-using symbols.</li>
+<li>Symbols order is lexicographic.</li>
+<li><code>sym</code> is local to the loop.</li>
+<li><code>$idx</code> increments on each step.</li>
+<li><code>ls</code> avoids the memory overhead of creating a list
+using the <code>symbols</code> function.</li>
 </ul>
 <p>See: <a href="#f-symbols">symbols</a>, <a href="#f-dolist">dolist</a>,
 <a href="#f-doargs">doargs</a></p>

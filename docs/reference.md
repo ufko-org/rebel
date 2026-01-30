@@ -4862,22 +4862,23 @@ See: [dolist](#f-dolist), [repeat](#f-repeat),
 ---
 
 
-<a name="f-dotree"></a>
-## dotree
+<a name="f-ls"></a>
+## ls
 
 ```
-syntax: (dotree (sym sym-context [bool]) body)
+syntax: (ls (sym sym-context [bool]) body)
 ```
 
 Description:
 
-Iterates over all symbols stored in sym-context. Symbols
-are visited in sorted order. Before each iteration, sym is
-bound to the next symbol. The binding is local to the
-loop and follows dynamic scoping rules. The return value
-is the last evaluation of body.
+`ls` loops over all symbols stored in `sym-context`.
+Symbols are visited in sorted order.  Before each
+iteration, `sym` is bound to the next symbol.  The
+binding is local to the loop and follows dynamic
+scoping rules.  The return value is the last evaluation
+of `body`.
 
-If bool evaluates to non-nil, only symbols whose names
+If `bool` evaluates to non-nil, only symbols whose names
 begin with an underscore (_) are included. This is useful
 when a context contains internal keys or auxiliary data
 under underscore-prefixed names.
@@ -4889,21 +4890,21 @@ Examples:
 
 ```
 ; iterate through all symbols in a context
-(dotree (s ctx)
+(ls (s ctx)
   (print s " "))
 
 ; iterate only over symbols beginning with "_"
-(dotree (s ctx true)
+(ls (s ctx true)
   (print s " "))
 ```
 
 Notes:
 
-- Symbol visitation order is lexicographic.
-- sym is local to the loop.
-- $idx increments on each step.
-- dotree avoids the memory overhead of creating a list
-  using symbols.
+- Symbols order is lexicographic.
+- `sym` is local to the loop.
+- `$idx` increments on each step.
+- `ls` avoids the memory overhead of creating a list
+  using the `symbols` function.
 
 See: [symbols](#f-symbols), [dolist](#f-dolist),
 [doargs](#f-doargs)
