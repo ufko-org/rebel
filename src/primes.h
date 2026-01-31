@@ -151,24 +151,24 @@ PRIMITIVE primitive[] =
     {"assoc",            p_assoc,            0},     /* [l] */
     {"bind",             p_bind,             0x400}, /* [l] */ 
     {"cap",              p_intersect,        0},     /* [l] :replaces intersect */
+    {"check",            p_exists,           0},     /* [l] :replaces exists */
     {"chop",             p_chop,             0},     /* [l,s] */
+    {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
     {"clean",            p_clean,            0},     /* [l] */
     {"collect",          p_collect,          0},     /* [] */
     {"cons",             p_cons,             0},     /* [l] */
     {"curry",            p_curry,            0},     /* [] */
-    {"freq",             p_count,            0},     /* [l] :replaces count */
+    {"cut",              p_member,           0},     /* [l,s,a] */
     {"diff",             p_difference,       0},     /* [l] :replaces difference */
     {"dup",              p_dup,              0},     /* [any] */
-    {"next",             p_exists,           0},     /* [l] :replaces exists */
     {"expand",           p_expand,           0},     /* [l] */
-    {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
     {"extend",           p_extend,           0x400}, /* [l,s] */
     {"filter",           p_filter,           0},     /* [l] */
-    {"pos",              p_find,             0},     /* [l,s] :replaces find */
     {"find",             p_findAll,          0},     /* [l,s] :replaces findall */
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
+    {"freq",             p_count,            0},     /* [l] :replaces count */
     {"index",            p_index,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
@@ -177,12 +177,12 @@ PRIMITIVE primitive[] =
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
-    {"member",           p_member,           0},     /* [] */
     {"mut",              p_setmut,           0},     /* [] :rebel, conscious mutate tool */
     {"nth",              p_nth,              0},     /* [] */
     {"parse",            p_parse,            0},     /* [] */
     {"pop",              p_pop,              0x400}, /* [] */
     {"popassoc",         p_popAssoc,         0x400}, /* [] */
+    {"pos",              p_find,             0},     /* [l,s] :replaces find */
     {"push",             p_push,             0x400}, /* [] */
     {"ref",              p_ref,              0},     /* [] */
     {"refall",           p_refAll,           0},     /* [] */
@@ -204,6 +204,7 @@ PRIMITIVE primitive[] =
     {"unify",            p_unify,            0},     /* [] */
     {"union",            p_union,            0},     /* [] */
     {"uniq",             p_unique,           0},     /* [] :replaces unique */
+
     #ifdef SUPPORT_UTF8
     {"utf8len",          p_utf8len,          0},     /* [] */
     #endif
