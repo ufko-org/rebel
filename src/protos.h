@@ -311,7 +311,6 @@ CELL *p_load(CELL *params);
 CELL *p_local(CELL *params);
 CELL *p_log(CELL *params);
 CELL *p_lookup(CELL *params);
-CELL *p_loop(CELL *params);
 CELL *p_lower(CELL *params);
 CELL *p_macro(CELL *params);
 CELL *p_mainArgs(CELL *params);

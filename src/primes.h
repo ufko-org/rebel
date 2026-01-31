@@ -114,9 +114,9 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
-    {"dolist",           p_dolist,           2}, 
-    {"dostring",         p_dostring,         2},
-    {"doargs",           p_doargs,           2},
+    {"foreach",          p_dolist,           2}, 
+    {"forchar",          p_dostring,         2},
+    {"forargs",          p_doargs,           2},
     {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
 
     /* core - data - sequencers */
@@ -179,7 +179,6 @@ PRIMITIVE primitive[] =
     {"match",            p_match,            0},     /* [l] */
     {"member",           p_member,           0},     /* [] */
     {"mut",              p_setmut,           0},     /* [] :rebel, conscious mutate tool */
-    {"mutlock",          p_mutlock,          0},     /* [] :rebel, experimental */
     {"nth",              p_nth,              0},     /* [] */
     {"parse",            p_parse,            0},     /* [] */
     {"pop",              p_pop,              0x400}, /* [] */

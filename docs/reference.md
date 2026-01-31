@@ -4734,43 +4734,43 @@ See: [args](#f-args)
 ---
 
 
-<a name="f-dolist"></a>
-## dolist
+<a name="f-foreach"></a>
+## foreach
 
 ```
-syntax: (dolist (sym list-1 [exp-break]) body)
+syntax: (foreach (sym list-1|array-1 [exp-break]) body)
 ```
 
 Description:
 
-Iterates over each element of list-1 (a list or array).
-Before each iteration, sym is bound to the current element.
+Iterates over each element of `list-1` or `array-1`.
+Before each iteration, `sym` is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of dolist is the last value
-produced by body, unless an early exit occurs.
+scoping rules. The return value of ``dolist is the last value
+produced by `body`, unless an early exit occurs.
 
-If exp-break is present, it is evaluated before each
-iteration step. When exp-break evaluates to a non-nil
+If `exp-break` is present, it is evaluated before each
+iteration step. When `exp-break` evaluates to a non-nil
 value, the loop terminates immediately and returns that
 value.
 
-During iteration, the system variable $idx contains the
-current index (starting at 0).
+During iteration, the system variable `$idx` contains the
+current index (starting at `0`).
 
 Examples:
 
 ```
 (set x 123)
 
-(dolist (i '(a b c d e f g))
-  (print i))
+(dolist (x '(a b c d e f g))
+  (print x))
 ;-> g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals 'e
-(dolist (i '(a b c d e f g) (= i 'e))
-  (print i))
+(dolist (x '(a b c d e f g) (= i 'e))
+  (print x))
 ;-> true
 ; console output:
 ;   abcd
@@ -4780,8 +4780,8 @@ x
 ;-> 123
 
 ; show index and value
-(dolist (i '(a b d e f g))
-  (println $idx ":" i))
+(dolist (x '(a b d e f g))
+  (println $idx ":" x))
 ;-> g
 ; console output:
 ;   0:a
@@ -4794,9 +4794,9 @@ x
 
 Notes:
 
-- sym is local to the loop.
-- exp-break is evaluated before each iteration.
-- $idx increments on each step and cannot be modified.
+- `sym` is local to the loop.
+- `exp-break` is evaluated before each iteration.
+- `$idx` increments on each step and cannot be modified.
 
 See: [repeat](#f-repeat), [for](#f-for),
 [map](#f-map)

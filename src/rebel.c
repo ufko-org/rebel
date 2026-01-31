@@ -6835,11 +6835,6 @@ CELL *p_for(CELL *params)
 #define DOARGS 2
 #define DOSTRING 3
 
-CELL *p_loop(CELL *params)
-{
-    return(dolist(params, DOLIST));
-}
-
 CELL *p_dolist(CELL *params)
 {
     return(dolist(params, DOLIST));
