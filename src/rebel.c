@@ -3133,7 +3133,7 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
-  return(nilCell);
+    return(nilCell);
 }
 
 CELL *p_prettyPrint(CELL *params)
@@ -6834,6 +6834,51 @@ CELL *p_for(CELL *params)
 #define DOTREE 1
 #define DOARGS 2
 #define DOSTRING 3
+
+CELL *p_loop(CELL *params)
+{
+    CELL *bind;
+    CELL *value;
+    SYMBOL *sPtr;
+    CELL *sVal;
+
+    bind = (CELL *)params->contents;        /* (m V) */
+    if (!bind || !bind->next)
+        return(nilCell);
+
+    value = (CELL *)bind->next;     /* V */
+
+    if (value->type == CELL_EXPRESSION)
+    {
+        puts("expression");
+        return(nilCell);
+    }
+    if (isList(value->type) || value->type == CELL_QUOTE)
+        return(dolist(params, DOLIST));
+
+    if (value->type == CELL_STRING)
+        return(dolist(params, DOSTRING));
+
+    if (value->type == CELL_SYMBOL)
+    {
+        sPtr = (SYMBOL *)value->contents;
+        sVal = (CELL *)sPtr->contents;
+        if (isList(sVal->type) || sVal->type == CELL_ARRAY)
+        {
+            return(dolist(params, DOLIST));
+        }
+        if(sVal->type == CELL_STRING) 
+        {
+           return(dolist(params, DOSTRING));
+        }
+        if(sVal->type == CELL_CONTEXT)
+        {
+          return(dolist(params,DOTREE));
+        }
+    }
+
+    return(errorProcExt(ERR_ARRAY_LIST_OR_STRING_EXPECTED, params));
+}
 
 CELL *p_dolist(CELL *params)
 {

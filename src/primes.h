@@ -114,6 +114,7 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
+    {"loop",             p_loop,             2}, /* [l,s,a] :experimental */
     {"foreach",          p_dolist,           2}, /* [l,a] */
     {"forchar",          p_dostring,         2}, /* [s] */
     {"forargs",          p_doargs,           2}, /* [l] */
@@ -123,7 +124,7 @@ PRIMITIVE primitive[] =
 
     {"array",            p_array,            0},
     {"list",             p_list,             0},
-    {"seq",              p_sequence,         0}, /* :replaces sequence */
+    {"sequence",         p_sequence,         0}, 
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
@@ -150,7 +151,7 @@ PRIMITIVE primitive[] =
     {"apply",            p_apply,            0},     /* [l] */
     {"assoc",            p_assoc,            0},     /* [l] */
     {"bind",             p_bind,             0x400}, /* [l] */ 
-    {"cap",              p_intersect,        0},     /* [l] :replaces intersect */
+    {"intersect",        p_intersect,        0},     /* [l] */
     {"check",            p_exists,           0},     /* [l] :replaces exists */
     {"chop",             p_chop,             0},     /* [l,s] */
     {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
@@ -168,13 +169,12 @@ PRIMITIVE primitive[] =
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
-    {"freq",             p_count,            0},     /* [l] :replaces count */
+    {"count",            p_count,            0},     /* [l] */
     {"index",            p_index,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
     {"length",           p_length,           0},     /* [any] */
-    {"size",             p_length,           0},     /* [any] :alt */
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
@@ -191,11 +191,11 @@ PRIMITIVE primitive[] =
     {"refsetall",        p_setRefAll,        0x400}, /* [] :replaces set-ref-all */
     {"replace",          p_replace,          0x400}, /* [] */
     {"rest",             p_rest,             0},     /* [] */
-    {"rev",              p_reverse,          0x400}, /* [] :replaces reverse */
-    {"rot",              p_rotate,           0x400}, /* [] :replaces rotate */
+    {"reverse",          p_reverse,          0x400}, /* [] */
+    {"rotate",           p_rotate,           0x400}, /* [] */
     {"rx",               p_regex,            0},     /* [] :replaces regex */
     {"rxcomp",           p_regexComp,        0},     /* [] :replaces regex-comp */
-    {"sel",              p_select,           0},     /* [] :replaces select */
+    {"select",           p_select,           0},     /* [] */
     {"slice",            p_slice,            0},     /* [] */
     {"sort",             p_sort,             0x400}, /* [] */
     {"swap",             p_swap,             0},     /* [] */
@@ -204,10 +204,10 @@ PRIMITIVE primitive[] =
     {"ucase",            p_upper,            0},     /* [] :replaces upper-case */
     {"unify",            p_unify,            0},     /* [] */
     {"union",            p_union,            0},     /* [] */
-    {"uniq",             p_unique,           0},     /* [] :replaces unique */
+    {"unique",           p_unique,           0},     /* [] */
 
     #ifdef SUPPORT_UTF8
-    {"utf8len",          p_utf8len,          0},     /* [s] */
+    {"length8",          p_utf8len,          0},     /* [s] */
     #endif
 
     /* core - math - integers */
@@ -384,7 +384,7 @@ PRIMITIVE primitive[] =
     /* core - internals */
 
     {"$",                p_systemSymbol,     0},
-    {"adhoc",            p_adhoc,            0}, /* :experiments */
+    {"adhoc",            p_adhoc,            0}, /* :experimental */
     {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
@@ -503,36 +503,36 @@ PRIMITIVE primitive[] =
 
     /* core - network */
 
-    {"nclose",           p_netClose,         0}, /* :replaces net- with n in all cases */
-    {"nservice",         p_netService,       0},
-    {"nconnect",         p_netConnect,       0},
-    {"naccept",          p_netAccept,        0},
-    {"nlocal",           p_netLocal,         0},
-    {"npeer",            p_netPeer,          0},
-    {"nipv",             p_netIpv,           0},
-    {"nlookup",          p_netLookup,        0},
-    {"nrecv",            p_netReceive,       0x400},
-    {"nrecvfrom",        p_netReceiveFrom,   0},
-    {"nrecvudp",         p_netReceiveUDP,    0},
-    {"nsend",            p_netSend,          0},
-    {"nsendto",          p_netSendTo,        0},
-    {"nsendudp",         p_netSendUDP,       0},
-    {"nlisten",          p_netListen,        0},
-    {"npacket",          p_netPacket,        0},
-    {"nping",            p_netPing,          0},
-    {"npeek",            p_netPeek,          0},
-    {"nselect",          p_netSelect,        0},
-    {"nsessions",        p_netSessions,      0},
-    {"neval",            p_netEval,          0},
-    {"ninterface",       p_netInterface,     0},
-    {"nlasterr",         p_netLastError,     0},
+    {"netclose",           p_netClose,         0}, 
+    {"netservice",         p_netService,       0},
+    {"netconnect",         p_netConnect,       0},
+    {"netaccept",          p_netAccept,        0},
+    {"netlocal",           p_netLocal,         0},
+    {"netpeer",            p_netPeer,          0},
+    {"netipv",             p_netIpv,           0},
+    {"netlookup",          p_netLookup,        0},
+    {"netrecv",            p_netReceive,       0x400},
+    {"netrecvfrom",        p_netReceiveFrom,   0},
+    {"netrecvudp",         p_netReceiveUDP,    0},
+    {"netsend",            p_netSend,          0},
+    {"netsendto",          p_netSendTo,        0},
+    {"netsendudp",         p_netSendUDP,       0},
+    {"netlisten",          p_netListen,        0},
+    {"netpacket",          p_netPacket,        0},
+    {"netping",            p_netPing,          0},
+    {"netpeek",            p_netPeek,          0},
+    {"netselect",          p_netSelect,        0},
+    {"netsessions",        p_netSessions,      0},
+    {"neteval",            p_netEval,          0},
+    {"netinterface",       p_netInterface,     0},
+    {"netlasterr",         p_netLastError,     0},
 
     /* core - http */
 
-    {"hget",             p_getUrl,           0}, /* :replaces get-url */
-    {"hput",             p_putUrl,           0}, /* :replaces put-url */
-    {"hpost",            p_postUrl,          0}, /* :replaces post-url */
-    {"hdel",             p_deleteUrl,        0}, /* :replaces delete-url */
+    {"urlget",             p_getUrl,           0}, /* :replaces get-url */
+    {"urlput",             p_putUrl,           0}, /* :replaces put-url */
+    {"urlpost",            p_postUrl,          0}, /* :replaces post-url */
+    {"urldel",             p_deleteUrl,        0}, /* :replaces delete-url */
 
   
     /* NON-CORE - science domain specific -------------------------- */

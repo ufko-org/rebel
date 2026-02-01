@@ -200,6 +200,7 @@ CELL *p_directory(CELL *params);
 CELL *p_divFloat(CELL *params);
 CELL *p_divide(CELL *params);
 CELL *p_doargs(CELL *params);
+CELL *p_loop(CELL *params);
 CELL *p_dolist(CELL *params);
 CELL *p_dostring(CELL *params);
 CELL *p_dotimes(CELL *params);
