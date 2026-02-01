@@ -1,20 +1,20 @@
-; Tests for function "rev"
+; Tests for function "reverse"
 ; ---------------------------------------------------------------------
 (load "testing.rbl")
 
 (test "1: reverse int list"
   (let (lst '(1 2 3 4))
-    (rev (copy lst)))
+    (reverse (copy lst)))
   '(4 3 2 1))
 
 (test "2: reverse string list"
   (let (lst '("a" "b" "c"))
-    (rev (copy lst)))
+    (reverse (copy lst)))
   '("c" "b" "a"))
 
 (test "3: reverse symbol list"
   (let (lst '(x y z))
-    (rev (copy lst)))
+    (reverse (copy lst)))
   '(z y x))
 
 

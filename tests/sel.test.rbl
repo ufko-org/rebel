@@ -1,4 +1,4 @@
-; Test for function "sel"
+; Test for function "select"
 ; ------------------------------------------------------------
 (load "testing.rbl")
 
@@ -9,29 +9,29 @@
 ; Select / collect operations
 ; ------------------------------------------------------------
 (test "1: select from empty indices"
-  (= (sel l '()) '())
+  (= (select l '()) '())
   true
 )
 
 (test "2: select with repeated indices"
-  (= (sel l 0 9 9 0 1 8 8 1) '(0 9 9 0 1 8 8 1))
+  (= (select l 0 9 9 0 1 8 8 1) '(0 9 9 0 1 8 8 1))
   true
 )
 
 (test "3: select from string by indices"
-  (= (sel "2001-09-20" 5 6 8 9 0 1 2 3) "09202001")
+  (= (select "2001-09-20" 5 6 8 9 0 1 2 3) "09202001")
   true
 )
 
 (test "4: select using variables as indices"
   (do 
     (set a 0 b 1 c 2)
-    (= (sel '(w x y z) a b c) '(w x y))
+    (= (select '(w x y z) a b c) '(w x y))
   )
   true
 )
 
 (test "5: select with incremented variables"
-  (= (sel '(w x y z) (inc a) (inc b) (inc c)) '(x y z))
+  (= (select '(w x y z) (inc a) (inc b) (inc c)) '(x y z))
   true
 )

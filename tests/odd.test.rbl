@@ -1,4 +1,4 @@
-; test for function "odd?"
+; Tests for function "odd?"
 ; ---------------------------------------------------------------------
 (load "testing.rbl")
 

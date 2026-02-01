@@ -1,20 +1,20 @@
-; Tests for function "rot"
+; Tests for function "rotate"
 ; ---------------------------------------------------------------------
 (load "testing.rbl")
 
 (test "1: rotate int list"
   (let (lst '(1 2 3 4))
-    (rot (copy lst)))
+    (rotate (copy lst)))
   '(4 1 2 3))
 
 (test "2: rotate string list"
   (let (lst '("a" "b" "c"))
-    (rot (copy lst)))
+    (rotate (copy lst)))
   '("c" "a" "b"))
 
 (test "3: rotate symbol list"
   (let (lst '(x y z))
-    (rot (copy lst)))
+    (rotate (copy lst)))
   '(z x y))
 
 

@@ -24,6 +24,6 @@
 )
 
 (test "4: copy and rotate string"
-  (rot (copy "abcdefg"))
+  (rotate (copy "abcdefg"))
   "gabcdef"
 )

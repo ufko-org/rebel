@@ -49,10 +49,10 @@
 ; Arrays
 ; ------------------------------------------------------------
 (test "9: append two arrays"
-  (let ((A (array 3 2 (seq 1 6)))
-        (B (array 2 2 (seq 7 10))))
+  (let ((A (array 3 2 (sequence 1 6)))
+        (B (array 2 2 (sequence 7 10))))
     (append A B))
-  (array 5 2 (seq 1 10))
+  (array 5 2 (sequence 1 10))
 )
 
 ; Fn / default functor

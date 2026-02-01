@@ -24,7 +24,7 @@
 ; Mapping char over sequence
 ; ------------------------------------------------------------
 (test "4: map char over 65..67"
-  (= (map char (seq 65 67)) '("A" "B" "C"))
+  (= (map char (sequence 65 67)) '("A" "B" "C"))
   true
 )
 

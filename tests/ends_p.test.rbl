@@ -1,4 +1,4 @@
-; tests for function "ends?"
+; Tests for function "ends?"
 ; ---------------------------------------------------------------------
 (load "testing.rbl")
 

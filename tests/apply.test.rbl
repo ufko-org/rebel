@@ -1,4 +1,4 @@
-; Test for function "apply"
+; Tests for function "apply"
 ; ------------------------------------------------------------
 (load "testing.rbl")
 
@@ -41,12 +41,12 @@
 ; Large sums
 ; ------------------------------------------------------------
 (test "6: apply + over array and sequences"
-  (apply + (array 100 (seq 1 100)))
-  (apply + (seq 1 100))
+  (apply + (array 100 (sequence 1 100)))
+  (apply + (sequence 1 100))
 )
 
 (test "7: apply + over 0..100 array"
-  (apply + (0 100 (array 100 (seq 1 100))))
-  (apply + (seq 1 100))
+  (apply + (0 100 (array 100 (sequence 1 100))))
+  (apply + (sequence 1 100))
 )
 
