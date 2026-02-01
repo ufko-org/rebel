@@ -114,9 +114,9 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
-    {"foreach",          p_dolist,           2}, 
-    {"forchar",          p_dostring,         2},
-    {"forargs",          p_doargs,           2},
+    {"foreach",          p_dolist,           2}, /* [l,a] */
+    {"forchar",          p_dostring,         2}, /* [s] */
+    {"forargs",          p_doargs,           2}, /* [l] */
     {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
 
     /* core - data - sequencers */
@@ -173,7 +173,8 @@ PRIMITIVE primitive[] =
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
-    {"len",              p_length,           0},     /* [any] :replaces length */
+    {"length",           p_length,           0},     /* [any] */
+    {"size",             p_length,           0},     /* [any] :alt */
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
@@ -206,7 +207,7 @@ PRIMITIVE primitive[] =
     {"uniq",             p_unique,           0},     /* [] :replaces unique */
 
     #ifdef SUPPORT_UTF8
-    {"utf8len",          p_utf8len,          0},     /* [] */
+    {"utf8len",          p_utf8len,          0},     /* [s] */
     #endif
 
     /* core - math - integers */
@@ -271,7 +272,6 @@ PRIMITIVE primitive[] =
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
-    {"ifnot",            p_ifNot,            2}, /* :rebel reimplemented as a full countepart of if with 2 branches */
     {"throw",            p_throw,            0}, 
     {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
@@ -384,11 +384,7 @@ PRIMITIVE primitive[] =
     /* core - internals */
 
     {"$",                p_systemSymbol,     0},
-    /* 
-    {":",                p_colon,            0}, 
-    */
-
-    {"adhoc",            p_adhoc,            0},
+    {"adhoc",            p_adhoc,            0}, /* :experiments */
     {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
     {"args",             p_args,             0},
     {"argv",             p_mainArgs,         0},
@@ -420,9 +416,6 @@ PRIMITIVE primitive[] =
     {"readexpr",         p_readExpr,         0},
     {"reset",            p_reset,            0},
     {"save",             p_save,             0},
-    /*
-    {"self",             p_self,             0},
-    */
     {"silent",           p_silent,           0},
     {"sleep",            p_sleep,            0},
     {"source",           p_symbolSource,     0},
@@ -437,7 +430,7 @@ PRIMITIVE primitive[] =
 
     #ifdef DEBUGGER
     {"debug",            p_debug,            0},
-    {"tracemark",        p_traceHighlight,   0}, /* :replaces trace-highlight */
+    {"tracemarks",       p_traceHighlight,   0}, /* :replaces trace-highlight */
     #endif
 
     /* core - C */
@@ -497,7 +490,7 @@ PRIMITIVE primitive[] =
 
     {"is",               p_equal,            0}, /* :alt for = */
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
-    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases */
+    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases. covers nil?,null?,empty?,zero?,nan? */
 
     /* core - date and time */
 
