@@ -319,8 +319,10 @@ PRIMITIVE primitive[] =
 
     /* core - io - via std */
 
-    {"print",            p_print,            0},
-    {"println",          p_println,          0},
+    {"put",              p_print,            0},
+    {"print",            p_print,            0}, /* :alt */
+    {"puts",             p_println,          0},
+    {"println",          p_println,          0}, /* :alt */
     {"prn",              p_println,          0}, /* :alt */
     {"readkey",          p_readKey,          0}, 
 
