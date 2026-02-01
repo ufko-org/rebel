@@ -5,7 +5,7 @@
 
 # load and run test files
 (set test-files (sort (dir "." {\.test\.rbl})))
-(dolist (test-file test-files)
+(foreach (test-file test-files)
   (println)
   (println "File: " test-file)
   (println (dup "-" 60))
