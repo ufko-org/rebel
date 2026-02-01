@@ -4679,30 +4679,30 @@ See: [while](#f-while), [until](#f-until),
 ---
 
 
-<a name="f-doargs"></a>
-## doargs
+<a name="f-forargs"></a>
+## forargs
 
 ```
-syntax: (doargs (sym [exp-break]) body)
+syntax: (forargs (sym [exp-break]) body)
 ```
 
 Description:
 
 Iterates over all arguments passed to the current
-user-defined function or macro. The variable in sym is
+user-defined function or macro. The variable in `sym` is
 bound to each argument in sequence. Iteration stops when
-all arguments are processed or when exp-break evaluates to
+all arguments are processed or when `exp-break` evaluates to
 a non-nil value. The return value is the final result of
-evaluating body.
+evaluating `body`.
 
-During iteration, the system iterator symbol $idx is
+During iteration, the system iterator symbol `$idx` is
 updated.
 
 Examples:
 
 ```
-(define (f)
-  (doargs (i) (println i)))
+(func (f)
+  (forargs (i) (println i)))
 
 (f 1 2 3 4)
 ;-> prints:
@@ -4712,8 +4712,8 @@ Examples:
 ;   4
 
 ; stop early when an argument equals 'x
-(define-macro (g)
-  (doargs (i (= i 'x))
+(mac (g)
+  (forargs (i (= i 'x))
     (println i)))
 
 (g a b x c d)
@@ -4725,9 +4725,10 @@ Examples:
 
 Notes:
 
-- exp-break is checked before each iteration step.
-- $idx increments on each processed argument.
-- Use args when the full argument list is required at once.
+- `exp-break` is checked before each iteration step.
+- `$idx` increments on each processed argument.
+- Use `args` function or `$args` variable when the 
+  full argument list is required at once.
 
 See: [args](#f-args)
 
@@ -4746,7 +4747,7 @@ Description:
 Iterates over each element of `list-1` or `array-1`.
 Before each iteration, `sym` is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of ``dolist is the last value
+scoping rules. The return value of `foreach` is the last value
 produced by `body`, unless an early exit occurs.
 
 If `exp-break` is present, it is evaluated before each
@@ -4762,14 +4763,14 @@ Examples:
 ```
 (set x 123)
 
-(dolist (x '(a b c d e f g))
+(foreach (x '(a b c d e f g))
   (print x))
 ;-> g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals 'e
-(dolist (x '(a b c d e f g) (= i 'e))
+(foreach (x '(a b c d e f g) (= x 'e))
   (print x))
 ;-> true
 ; console output:
@@ -4780,7 +4781,7 @@ x
 ;-> 123
 
 ; show index and value
-(dolist (x '(a b d e f g))
+(foreach (x '(a b d e f g))
   (println $idx ":" x))
 ;-> g
 ; console output:
@@ -4804,27 +4805,27 @@ See: [repeat](#f-repeat), [for](#f-for),
 ---
 
 
-<a name="f-dostring"></a>
-## dostring
+<a name="f-forchar"></a>
+## forchar 
 
 ```
-syntax: (dostring (sym string-1 [exp-break]) body)
+syntax: (forchar (sym string-1 [exp-break]) body)
 ```
 
 Description:
 
-Iterates over each character in string-1. Before every
-iteration, sym is bound to the character’s integer code
+Iterates over each character in `string-1`. Before every
+iteration, `sym` is bound to the character’s integer code
 point. The binding follows dynamic scoping rules and is
 local to the loop.
 
-If exp-break is present, it is evaluated before each
-iteration step. When exp-break becomes non-nil, the loop
+If `exp-break` is present, it is evaluated before each
+iteration step. When `exp-break` becomes non-nil, the loop
 terminates immediately and returns its value. Otherwise,
-body is evaluated and the loop continues.
+`body` is evaluated and the loop continues.
 
-The return value is the last evaluation of body. During
-execution, the system iterator $idx contains the current
+The return value is the last evaluation of `body`. During
+execution, the system iterator `$idx` contains the current
 character index.
 
 Examples:
@@ -4832,7 +4833,7 @@ Examples:
 ```
 ; ASCII
 (set str "abcdefg")
-(dostring (c str)
+(forchar (c str)
   (println c " " (char c)))
 ;-> prints:
 ;   97 a
@@ -4845,7 +4846,7 @@ Examples:
 
 ; UTF-8
 (set txt "我能吞下玻璃而不伤身体。")
-(dostring (c txt)
+(forchar (c txt)
   (println c " " (char c)))
 ;-> prints codepoint and character for each element
 ```
@@ -4854,9 +4855,9 @@ Notes:
 
 - Characters are iterated as full UTF-8 code points.
 - Code points may exceed 255.
-- $idx starts at zero and increments each iteration.
+- `$idx` starts at zero and increments each iteration.
 
-See: [dolist](#f-dolist), [repeat](#f-repeat),
+See: [foreach](#f-foreach), [repeat](#f-repeat),
 [char](#f-char), [explode](#f-explode)
 
 ---
@@ -4883,7 +4884,7 @@ begin with an underscore (_) are included. This is useful
 when a context contains internal keys or auxiliary data
 under underscore-prefixed names.
 
-During iteration, the system variable $idx contains the
+During iteration, the system variable `$idx` contains the
 current symbol index.
 
 Examples:
@@ -4906,8 +4907,8 @@ Notes:
 - `ls` avoids the memory overhead of creating a list
   using the `symbols` function.
 
-See: [symbols](#f-symbols), [dolist](#f-dolist),
-[doargs](#f-doargs)
+See: [symbols](#f-symbols), [foreach](#f-foreach),
+[forargs](#f-forargs)
 
 ---
 

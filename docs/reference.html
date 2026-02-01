@@ -3558,22 +3558,22 @@ updated.</p>
 <p>See: <a href="#f-while">while</a>, <a href="#f-until">until</a>,
 <a href="#f-dountil">do-until</a></p>
 <hr/>
-<p><a name="f-doargs"></a></p>
-<h2 id="doargs">doargs</h2>
-<pre><code>syntax: (doargs (sym [exp-break]) body)
+<p><a name="f-forargs"></a></p>
+<h2 id="forargs">forargs</h2>
+<pre><code>syntax: (forargs (sym [exp-break]) body)
 </code></pre>
 <p>Description:</p>
 <p>Iterates over all arguments passed to the current
-user-defined function or macro. The variable in sym is
+user-defined function or macro. The variable in <code>sym</code> is
 bound to each argument in sequence. Iteration stops when
-all arguments are processed or when exp-break evaluates to
+all arguments are processed or when <code>exp-break</code> evaluates to
 a non-nil value. The return value is the final result of
-evaluating body.</p>
-<p>During iteration, the system iterator symbol $idx is
+evaluating <code>body</code>.</p>
+<p>During iteration, the system iterator symbol <code>$idx</code> is
 updated.</p>
 <p>Examples:</p>
-<pre><code>(define (f)
-  (doargs (i) (println i)))
+<pre><code>(func (f)
+  (forargs (i) (println i)))
 
 (f 1 2 3 4)
 ;-&#62; prints:
@@ -3583,8 +3583,8 @@ updated.</p>
 ;   4
 
 ; stop early when an argument equals &#39;x
-(define-macro (g)
-  (doargs (i (= i &#39;x))
+(mac (g)
+  (forargs (i (= i &#39;x))
     (println i)))
 
 (g a b x c d)
@@ -3595,40 +3595,41 @@ updated.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>exp-break is checked before each iteration step.</li>
-<li>$idx increments on each processed argument.</li>
-<li>Use args when the full argument list is required at once.</li>
+<li><code>exp-break</code> is checked before each iteration step.</li>
+<li><code>$idx</code> increments on each processed argument.</li>
+<li>Use <code>args</code> function or <code>$args</code> variable when the 
+full argument list is required at once.</li>
 </ul>
 <p>See: <a href="#f-args">args</a></p>
 <hr/>
-<p><a name="f-dolist"></a></p>
-<h2 id="dolist">dolist</h2>
-<pre><code>syntax: (dolist (sym list-1 [exp-break]) body)
+<p><a name="f-foreach"></a></p>
+<h2 id="foreach">foreach</h2>
+<pre><code>syntax: (foreach (sym list-1|array-1 [exp-break]) body)
 </code></pre>
 <p>Description:</p>
-<p>Iterates over each element of list-1 (a list or array).
-Before each iteration, sym is bound to the current element.
+<p>Iterates over each element of <code>list-1</code> or <code>array-1</code>.
+Before each iteration, <code>sym</code> is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of dolist is the last value
-produced by body, unless an early exit occurs.</p>
-<p>If exp-break is present, it is evaluated before each
-iteration step. When exp-break evaluates to a non-nil
+scoping rules. The return value of <code>foreach</code> is the last value
+produced by <code>body</code>, unless an early exit occurs.</p>
+<p>If <code>exp-break</code> is present, it is evaluated before each
+iteration step. When <code>exp-break</code> evaluates to a non-nil
 value, the loop terminates immediately and returns that
 value.</p>
-<p>During iteration, the system variable $idx contains the
-current index (starting at 0).</p>
+<p>During iteration, the system variable <code>$idx</code> contains the
+current index (starting at <code>0</code>).</p>
 <p>Examples:</p>
 <pre><code>(set x 123)
 
-(dolist (i &#39;(a b c d e f g))
-  (print i))
+(foreach (x &#39;(a b c d e f g))
+  (print x))
 ;-&#62; g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals &#39;e
-(dolist (i &#39;(a b c d e f g) (= i &#39;e))
-  (print i))
+(foreach (x &#39;(a b c d e f g) (= x &#39;e))
+  (print x))
 ;-&#62; true
 ; console output:
 ;   abcd
@@ -3638,8 +3639,8 @@ x
 ;-&#62; 123
 
 ; show index and value
-(dolist (i &#39;(a b d e f g))
-  (println $idx ":" i))
+(foreach (x &#39;(a b d e f g))
+  (println $idx ":" x))
 ;-&#62; g
 ; console output:
 ;   0:a
@@ -3651,33 +3652,33 @@ x
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>sym is local to the loop.</li>
-<li>exp-break is evaluated before each iteration.</li>
-<li>$idx increments on each step and cannot be modified.</li>
+<li><code>sym</code> is local to the loop.</li>
+<li><code>exp-break</code> is evaluated before each iteration.</li>
+<li><code>$idx</code> increments on each step and cannot be modified.</li>
 </ul>
 <p>See: <a href="#f-repeat">repeat</a>, <a href="#f-for">for</a>,
 <a href="#f-map">map</a></p>
 <hr/>
-<p><a name="f-dostring"></a></p>
-<h2 id="dostring">dostring</h2>
-<pre><code>syntax: (dostring (sym string-1 [exp-break]) body)
+<p><a name="f-forchar"></a></p>
+<h2 id="forchar">forchar</h2>
+<pre><code>syntax: (forchar (sym string-1 [exp-break]) body)
 </code></pre>
 <p>Description:</p>
-<p>Iterates over each character in string-1. Before every
-iteration, sym is bound to the character’s integer code
+<p>Iterates over each character in <code>string-1</code>. Before every
+iteration, <code>sym</code> is bound to the character’s integer code
 point. The binding follows dynamic scoping rules and is
 local to the loop.</p>
-<p>If exp-break is present, it is evaluated before each
-iteration step. When exp-break becomes non-nil, the loop
+<p>If <code>exp-break</code> is present, it is evaluated before each
+iteration step. When <code>exp-break</code> becomes non-nil, the loop
 terminates immediately and returns its value. Otherwise,
-body is evaluated and the loop continues.</p>
-<p>The return value is the last evaluation of body. During
-execution, the system iterator $idx contains the current
+<code>body</code> is evaluated and the loop continues.</p>
+<p>The return value is the last evaluation of <code>body</code>. During
+execution, the system iterator <code>$idx</code> contains the current
 character index.</p>
 <p>Examples:</p>
 <pre><code>; ASCII
 (set str "abcdefg")
-(dostring (c str)
+(forchar (c str)
   (println c " " (char c)))
 ;-&#62; prints:
 ;   97 a
@@ -3690,7 +3691,7 @@ character index.</p>
 
 ; UTF-8
 (set txt "我能吞下玻璃而不伤身体。")
-(dostring (c txt)
+(forchar (c txt)
   (println c " " (char c)))
 ;-&#62; prints codepoint and character for each element
 </code></pre>
@@ -3698,9 +3699,9 @@ character index.</p>
 <ul>
 <li>Characters are iterated as full UTF-8 code points.</li>
 <li>Code points may exceed 255.</li>
-<li>$idx starts at zero and increments each iteration.</li>
+<li><code>$idx</code> starts at zero and increments each iteration.</li>
 </ul>
-<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-repeat">repeat</a>,
+<p>See: <a href="#f-foreach">foreach</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-char">char</a>, <a href="#f-explode">explode</a></p>
 <hr/>
 <p><a name="f-ls"></a></p>
@@ -3718,7 +3719,7 @@ of <code>body</code>.</p>
 begin with an underscore (_) are included. This is useful
 when a context contains internal keys or auxiliary data
 under underscore-prefixed names.</p>
-<p>During iteration, the system variable $idx contains the
+<p>During iteration, the system variable <code>$idx</code> contains the
 current symbol index.</p>
 <p>Examples:</p>
 <pre><code>; iterate through all symbols in a context
@@ -3737,8 +3738,8 @@ current symbol index.</p>
 <li><code>ls</code> avoids the memory overhead of creating a list
 using the <code>symbols</code> function.</li>
 </ul>
-<p>See: <a href="#f-symbols">symbols</a>, <a href="#f-dolist">dolist</a>,
-<a href="#f-doargs">doargs</a></p>
+<p>See: <a href="#f-symbols">symbols</a>, <a href="#f-foreach">foreach</a>,
+<a href="#f-forargs">forargs</a></p>
 <hr/>
 <p><a name="f-dump"></a></p>
 <h2 id="dump">dump</h2>
