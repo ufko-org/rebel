@@ -4688,7 +4688,7 @@ syntax: (forargs (sym [exp-break]) body)
 
 Description:
 
-Iterates over all arguments passed to the current
+Iterates over *unbound* arguments passed to the current
 user-defined function or macro. The variable in `sym` is
 bound to each argument in sequence. Iteration stops when
 all arguments are processed or when `exp-break` evaluates to
@@ -4701,26 +4701,36 @@ updated.
 Examples:
 
 ```
+; all arguments are unbound
 (func (f)
-  (forargs (i) (println i)))
+  (forargs (arg) (println arg)))
 
 (f 1 2 3 4)
 ;-> prints:
-;   1
-;   2
-;   3
-;   4
+1
+2
+3
+4
+
+; first two arguments are bound
+(func (f a b)
+  (forargs (arg) (println arg)))
+
+(f 1 2 3 4)
+;-> prints:
+3
+4
 
 ; stop early when an argument equals 'x
 (mac (g)
-  (forargs (i (= i 'x))
-    (println i)))
+  (forargs (arg (= arg 'x))
+    (println arg)))
 
 (g a b x c d)
 ;-> prints:
-;   a
-;   b
-;   true
+a
+b
+true
 ```
 
 Notes:
@@ -4735,11 +4745,11 @@ See: [args](#f-args)
 ---
 
 
-<a name="f-foreach"></a>
-## foreach
+<a name="f-forlist"></a>
+## forlist
 
 ```
-syntax: (foreach (sym list-1|array-1 [exp-break]) body)
+syntax: (forlist (sym list-1|array-1 [exp-break]) body)
 ```
 
 Description:
@@ -4747,7 +4757,7 @@ Description:
 Iterates over each element of `list-1` or `array-1`.
 Before each iteration, `sym` is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of `foreach` is the last value
+scoping rules. The return value of `forlist` is the last value
 produced by `body`, unless an early exit occurs.
 
 If `exp-break` is present, it is evaluated before each
@@ -4763,14 +4773,14 @@ Examples:
 ```
 (set x 123)
 
-(foreach (x '(a b c d e f g))
+(forlist (x '(a b c d e f g))
   (print x))
 ;-> g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals 'e
-(foreach (x '(a b c d e f g) (= x 'e))
+(forlist (x '(a b c d e f g) (= x 'e))
   (print x))
 ;-> true
 ; console output:
@@ -4781,7 +4791,7 @@ x
 ;-> 123
 
 ; show index and value
-(foreach (x '(a b d e f g))
+(forlist (x '(a b d e f g))
   (println $idx ":" x))
 ;-> g
 ; console output:
@@ -4857,7 +4867,7 @@ Notes:
 - Code points may exceed 255.
 - `$idx` starts at zero and increments each iteration.
 
-See: [foreach](#f-foreach), [repeat](#f-repeat),
+See: [forlist](#f-forlist), [repeat](#f-repeat),
 [char](#f-char), [explode](#f-explode)
 
 ---
@@ -4907,7 +4917,7 @@ Notes:
 - `ls` avoids the memory overhead of creating a list
   using the `symbols` function.
 
-See: [symbols](#f-symbols), [foreach](#f-foreach),
+See: [symbols](#f-symbols), [forlist](#f-forlist),
 [forargs](#f-forargs)
 
 ---
@@ -6128,13 +6138,13 @@ syntax: (file? str-path-name bool)
 
 Description:
 
-Checks whether str-path-name exists in the filesystem.  
+Checks whether str-path-name exists in the filesystem.
 Returns true for both regular files and directories.
 
 When bool is true, the path must be a **regular file**.
-If it is a directory, the result is nil.  
-When the path exists and is a regular file, the function
-returns str-path-name.
+If it is a directory, the result is nil.  When the path
+exists and is a regular file, the function returns
+str-path-name.
 
 Examples:
 
