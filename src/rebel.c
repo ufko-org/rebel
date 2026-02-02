@@ -78,6 +78,7 @@ char preLoad[] =
 */
 char preLoad[] = 
     "(func (len xs) (length xs)) (global 'len)"
+    "(func (len8 xs) (length8 xs)) (global 'len8)"
     "(func (printf fmt) (put (format fmt (expand (args))))) (global 'printf)";
 void printHelpText(void);
 #ifdef READLINE

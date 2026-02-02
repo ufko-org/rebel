@@ -114,8 +114,7 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
-    {"loop",             p_loop,             2}, /* [l,s,a] :experimental */
-    {"foreach",          p_dolist,           2}, /* [l,a] */
+    {"forlist",          p_dolist,           2}, /* [l,a] */
     {"forchar",          p_dostring,         2}, /* [s] */
     {"forargs",          p_doargs,           2}, /* [l] */
     {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
