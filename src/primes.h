@@ -114,10 +114,11 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
+    {"as",               p_loop,             2}, /* [any] */
     {"forlist",          p_dolist,           2}, /* [l,a] */
     {"forchar",          p_dostring,         2}, /* [s] */
     {"forargs",          p_doargs,           2}, /* [l] */
-    {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
+    {"ls",               p_dotree,           2}, /* :replaces dotree, "list symbols" in context */
 
     /* core - data - sequencers */
 
@@ -365,7 +366,6 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",                p_system,           0},
-    {"run",              p_system,           0}, /* :alt */
     {"kill",             p_destroyProcess,   0}, /* :replaces destroy-process */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},

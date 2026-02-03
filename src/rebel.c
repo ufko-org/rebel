@@ -70,16 +70,11 @@ char banner2[]= ". Options: rebel -h";
 
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
-/* ufko:
-char preLoad[] =
-    "(set (global 'module) (fn ($x) (load (append (env {REBELDIR}) {/modules/} $x))))"
-    "(context 'Tree) (const 'Tree:Tree) (context MAIN)"
-    "(func (Class:Class) (cons (context) (args)))";
-*/
 char preLoad[] = 
-    "(func (len xs) (length xs)) (global 'len)"
-    "(func (len8 xs) (length8 xs)) (global 'len8)"
-    "(func (printf fmt) (put (format fmt (expand (args))))) (global 'printf)";
+    "(func (len) (length (args 0))) (global 'len)"
+    "(func (len8) (length8 (args 0))) (global 'len8)"
+    "(func (printf) (put (format (args 0) (expand (rest (args)))))) (global 'printf)"
+    "(set $preload '(len len8 printf)) (const (global '$preload))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
@@ -6827,55 +6822,31 @@ CELL *p_for(CELL *params)
     return(loop(params, 1));
 }
 
-
 #define DOLIST 0
 #define DOTREE 1
 #define DOARGS 2
 #define DOSTRING 3
 
+/* ufko: pragmatic loop dispatcher */
 CELL *p_loop(CELL *params)
 {
-    CELL *bind;
+    CELL *pair;
     CELL *value;
-    SYMBOL *sPtr;
-    CELL *sVal;
 
-    bind = (CELL *)params->contents;        /* (m V) */
-    if (!bind || !bind->next)
-        return(nilCell);
+    pair = (CELL *)params->contents;       /* (x xs) */
+    value = evaluateExpression(value);     /* xs' value */
 
-    value = (CELL *)bind->next;     /* V */
-
-    if (value->type == CELL_EXPRESSION)
-    {
-        puts("expression");
-        return(nilCell);
-    }
-    if (isList(value->type) || value->type == CELL_QUOTE)
+    if (isList(value->type) || value->type == CELL_ARRAY)
         return(dolist(params, DOLIST));
 
-    if (value->type == CELL_STRING)
+    else if (value->type == CELL_STRING)
         return(dolist(params, DOSTRING));
 
-    if (value->type == CELL_SYMBOL)
-    {
-        sPtr = (SYMBOL *)value->contents;
-        sVal = (CELL *)sPtr->contents;
-        if (isList(sVal->type) || sVal->type == CELL_ARRAY)
-        {
-            return(dolist(params, DOLIST));
-        }
-        if(sVal->type == CELL_STRING) 
-        {
-           return(dolist(params, DOSTRING));
-        }
-        if(sVal->type == CELL_CONTEXT)
-        {
-          return(dolist(params,DOTREE));
-        }
-    }
+    else if (value->type == CELL_CONTEXT)
+        return(dolist(params, DOTREE));
 
-    return(errorProcExt(ERR_ARRAY_LIST_OR_STRING_EXPECTED, params));
+    else
+        return(dolist(params, DOARGS));
 }
 
 CELL *p_dolist(CELL *params)
