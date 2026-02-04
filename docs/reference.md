@@ -4679,11 +4679,11 @@ See: [while](#f-while), [until](#f-until),
 ---
 
 
-<a name="f-forargs"></a>
-## forargs
+<a name="f-doargs"></a>
+## doargs
 
 ```
-syntax: (forargs (sym [exp-break]) body)
+syntax: (doargs (sym [exp-break]) body)
 ```
 
 Description:
@@ -4703,7 +4703,7 @@ Examples:
 ```
 ; all arguments are unbound
 (func (f)
-  (forargs (arg) (println arg)))
+  (doargs (arg) (println arg)))
 
 (f 1 2 3 4)
 ;-> prints:
@@ -4714,7 +4714,7 @@ Examples:
 
 ; first two arguments are bound
 (func (f a b)
-  (forargs (arg) (println arg)))
+  (doargs (arg) (println arg)))
 
 (f 1 2 3 4)
 ;-> prints:
@@ -4723,7 +4723,7 @@ Examples:
 
 ; stop early when an argument equals 'x
 (mac (g)
-  (forargs (arg (= arg 'x))
+  (doargs (arg (= arg 'x))
     (println arg)))
 
 (g a b x c d)
@@ -4745,11 +4745,11 @@ See: [args](#f-args)
 ---
 
 
-<a name="f-forlist"></a>
-## forlist
+<a name="f-dolist"></a>
+## dolist
 
 ```
-syntax: (forlist (sym list-1|array-1 [exp-break]) body)
+syntax: (dolist (sym list-1|array-1 [exp-break]) body)
 ```
 
 Description:
@@ -4757,7 +4757,7 @@ Description:
 Iterates over each element of `list-1` or `array-1`.
 Before each iteration, `sym` is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of `forlist` is the last value
+scoping rules. The return value of `dolist` is the last value
 produced by `body`, unless an early exit occurs.
 
 If `exp-break` is present, it is evaluated before each
@@ -4773,14 +4773,14 @@ Examples:
 ```
 (set x 123)
 
-(forlist (x '(a b c d e f g))
+(dolist (x '(a b c d e f g))
   (print x))
 ;-> g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals 'e
-(forlist (x '(a b c d e f g) (= x 'e))
+(dolist (x '(a b c d e f g) (= x 'e))
   (print x))
 ;-> true
 ; console output:
@@ -4791,7 +4791,7 @@ x
 ;-> 123
 
 ; show index and value
-(forlist (x '(a b d e f g))
+(dolist (x '(a b d e f g))
   (println $idx ":" x))
 ;-> g
 ; console output:
@@ -4815,11 +4815,11 @@ See: [repeat](#f-repeat), [for](#f-for),
 ---
 
 
-<a name="f-forchar"></a>
-## forchar 
+<a name="f-dostring"></a>
+## dostring 
 
 ```
-syntax: (forchar (sym string-1 [exp-break]) body)
+syntax: (dostring (sym string-1 [exp-break]) body)
 ```
 
 Description:
@@ -4843,7 +4843,7 @@ Examples:
 ```
 ; ASCII
 (set str "abcdefg")
-(forchar (c str)
+(dostring (c str)
   (println c " " (char c)))
 ;-> prints:
 ;   97 a
@@ -4856,7 +4856,7 @@ Examples:
 
 ; UTF-8
 (set txt "我能吞下玻璃而不伤身体。")
-(forchar (c txt)
+(dostring (c txt)
   (println c " " (char c)))
 ;-> prints codepoint and character for each element
 ```
@@ -4867,7 +4867,7 @@ Notes:
 - Code points may exceed 255.
 - `$idx` starts at zero and increments each iteration.
 
-See: [forlist](#f-forlist), [repeat](#f-repeat),
+See: [dolist](#f-dolist), [repeat](#f-repeat),
 [char](#f-char), [explode](#f-explode)
 
 ---
@@ -4917,8 +4917,8 @@ Notes:
 - `ls` avoids the memory overhead of creating a list
   using the `symbols` function.
 
-See: [symbols](#f-symbols), [forlist](#f-forlist),
-[forargs](#f-forargs)
+See: [symbols](#f-symbols), [dolist](#f-dolist),
+[doargs](#f-doargs)
 
 ---
 
@@ -4935,7 +4935,7 @@ Description:
 
 Displays the raw binary fields of a cell. Without an
 argument, dump prints information about all allocated
-cells to the console. When exp is supplied, it is
+cells to the console. When `exp` is supplied, it is
 evaluated and the internal representation of the resulting
 cell is returned as a list of integers.
 
@@ -4975,7 +4975,7 @@ Notes:
 - Use with care; changing internal structures can cause
   instability.
 
-See: [cpymem](#f-cpymem)
+See: [memcpy](#f-memcpy)
 
 ---
 
@@ -4990,9 +4990,9 @@ syntax: (empty? str)
 
 Description:
 
-Tests whether exp is an empty list or whether str is an
-empty string. Returns true when the argument contains no
-elements; otherwise returns nil.
+Tests whether `exp` is an empty list or whether `str` is an
+empty string. Returns `true` when the argument contains no
+elements; otherwise returns `nil`.
 
 Examples:
 
@@ -5014,7 +5014,7 @@ Examples:
 Notes:
 
 - Works on lists and strings.
-- Symbols evaluating to nil are not considered empty lists.
+- Symbols evaluating to `nil` are not considered empty lists.
 
 See: [nil?](#f-nilp), [list?](#f-listp), [string?](#f-stringp)
 
@@ -5030,8 +5030,8 @@ syntax: (encrypt str-source str-pad)
 
 Description:
 
-Applies a one-time pad (OTP) transformation to str-source
-using the pad string in str-pad. The operation is
+Applies a one-time pad (OTP) transformation to `str-source`
+using the pad string in `str-pad`. The operation is
 symmetric: applying the same pad to the encrypted output
 restores the original data.
 

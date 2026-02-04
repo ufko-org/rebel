@@ -3558,9 +3558,9 @@ updated.</p>
 <p>See: <a href="#f-while">while</a>, <a href="#f-until">until</a>,
 <a href="#f-dountil">do-until</a></p>
 <hr/>
-<p><a name="f-forargs"></a></p>
-<h2 id="forargs">forargs</h2>
-<pre><code>syntax: (forargs (sym [exp-break]) body)
+<p><a name="f-doargs"></a></p>
+<h2 id="doargs">doargs</h2>
+<pre><code>syntax: (doargs (sym [exp-break]) body)
 </code></pre>
 <p>Description:</p>
 <p>Iterates over <em>unbound</em> arguments passed to the current
@@ -3574,7 +3574,7 @@ updated.</p>
 <p>Examples:</p>
 <pre><code>; all arguments are unbound
 (func (f)
-  (forargs (arg) (println arg)))
+  (doargs (arg) (println arg)))
 
 (f 1 2 3 4)
 ;-&#62; prints:
@@ -3585,7 +3585,7 @@ updated.</p>
 
 ; first two arguments are bound
 (func (f a b)
-  (forargs (arg) (println arg)))
+  (doargs (arg) (println arg)))
 
 (f 1 2 3 4)
 ;-&#62; prints:
@@ -3594,7 +3594,7 @@ updated.</p>
 
 ; stop early when an argument equals &#39;x
 (mac (g)
-  (forargs (arg (= arg &#39;x))
+  (doargs (arg (= arg &#39;x))
     (println arg)))
 
 (g a b x c d)
@@ -3612,15 +3612,15 @@ full argument list is required at once.</li>
 </ul>
 <p>See: <a href="#f-args">args</a></p>
 <hr/>
-<p><a name="f-forlist"></a></p>
-<h2 id="forlist">forlist</h2>
-<pre><code>syntax: (forlist (sym list-1|array-1 [exp-break]) body)
+<p><a name="f-dolist"></a></p>
+<h2 id="dolist">dolist</h2>
+<pre><code>syntax: (dolist (sym list-1|array-1 [exp-break]) body)
 </code></pre>
 <p>Description:</p>
 <p>Iterates over each element of <code>list-1</code> or <code>array-1</code>.
 Before each iteration, <code>sym</code> is bound to the current element.
 The binding is local to the loop and follows dynamic
-scoping rules. The return value of <code>forlist</code> is the last value
+scoping rules. The return value of <code>dolist</code> is the last value
 produced by <code>body</code>, unless an early exit occurs.</p>
 <p>If <code>exp-break</code> is present, it is evaluated before each
 iteration step. When <code>exp-break</code> evaluates to a non-nil
@@ -3631,14 +3631,14 @@ current index (starting at <code>0</code>).</p>
 <p>Examples:</p>
 <pre><code>(set x 123)
 
-(forlist (x &#39;(a b c d e f g))
+(dolist (x &#39;(a b c d e f g))
   (print x))
 ;-&#62; g
 ; console output:
 ;   abcdefg
 
 ; early exit when element equals &#39;e
-(forlist (x &#39;(a b c d e f g) (= x &#39;e))
+(dolist (x &#39;(a b c d e f g) (= x &#39;e))
   (print x))
 ;-&#62; true
 ; console output:
@@ -3649,7 +3649,7 @@ x
 ;-&#62; 123
 
 ; show index and value
-(forlist (x &#39;(a b d e f g))
+(dolist (x &#39;(a b d e f g))
   (println $idx ":" x))
 ;-&#62; g
 ; console output:
@@ -3669,9 +3669,9 @@ x
 <p>See: <a href="#f-repeat">repeat</a>, <a href="#f-for">for</a>,
 <a href="#f-map">map</a></p>
 <hr/>
-<p><a name="f-forchar"></a></p>
-<h2 id="forchar">forchar</h2>
-<pre><code>syntax: (forchar (sym string-1 [exp-break]) body)
+<p><a name="f-dostring"></a></p>
+<h2 id="dostring">dostring</h2>
+<pre><code>syntax: (dostring (sym string-1 [exp-break]) body)
 </code></pre>
 <p>Description:</p>
 <p>Iterates over each character in <code>string-1</code>. Before every
@@ -3688,7 +3688,7 @@ character index.</p>
 <p>Examples:</p>
 <pre><code>; ASCII
 (set str "abcdefg")
-(forchar (c str)
+(dostring (c str)
   (println c " " (char c)))
 ;-&#62; prints:
 ;   97 a
@@ -3701,7 +3701,7 @@ character index.</p>
 
 ; UTF-8
 (set txt "我能吞下玻璃而不伤身体。")
-(forchar (c txt)
+(dostring (c txt)
   (println c " " (char c)))
 ;-&#62; prints codepoint and character for each element
 </code></pre>
@@ -3711,7 +3711,7 @@ character index.</p>
 <li>Code points may exceed 255.</li>
 <li><code>$idx</code> starts at zero and increments each iteration.</li>
 </ul>
-<p>See: <a href="#f-forlist">forlist</a>, <a href="#f-repeat">repeat</a>,
+<p>See: <a href="#f-dolist">dolist</a>, <a href="#f-repeat">repeat</a>,
 <a href="#f-char">char</a>, <a href="#f-explode">explode</a></p>
 <hr/>
 <p><a name="f-ls"></a></p>
@@ -3748,8 +3748,8 @@ current symbol index.</p>
 <li><code>ls</code> avoids the memory overhead of creating a list
 using the <code>symbols</code> function.</li>
 </ul>
-<p>See: <a href="#f-symbols">symbols</a>, <a href="#f-forlist">forlist</a>,
-<a href="#f-forargs">forargs</a></p>
+<p>See: <a href="#f-symbols">symbols</a>, <a href="#f-dolist">dolist</a>,
+<a href="#f-doargs">doargs</a></p>
 <hr/>
 <p><a name="f-dump"></a></p>
 <h2 id="dump">dump</h2>
@@ -3759,7 +3759,7 @@ syntax: (dump exp)
 <p>Description:</p>
 <p>Displays the raw binary fields of a cell. Without an
 argument, dump prints information about all allocated
-cells to the console. When exp is supplied, it is
+cells to the console. When <code>exp</code> is supplied, it is
 evaluated and the internal representation of the resulting
 cell is returned as a list of integers.</p>
 <p>Each position in the list corresponds to a specific field
@@ -3792,7 +3792,7 @@ internal cell fields.</li>
 <li>Use with care; changing internal structures can cause
 instability.</li>
 </ul>
-<p>See: <a href="#f-cpymem">cpymem</a></p>
+<p>See: <a href="#f-memcpy">memcpy</a></p>
 <hr/>
 <p><a name="f-emptyp"></a></p>
 <h2 id="empty">empty?</h2>
@@ -3800,9 +3800,9 @@ instability.</li>
 syntax: (empty? str)
 </code></pre>
 <p>Description:</p>
-<p>Tests whether exp is an empty list or whether str is an
-empty string. Returns true when the argument contains no
-elements; otherwise returns nil.</p>
+<p>Tests whether <code>exp</code> is an empty list or whether <code>str</code> is an
+empty string. Returns <code>true</code> when the argument contains no
+elements; otherwise returns <code>nil</code>.</p>
 <p>Examples:</p>
 <pre><code>(set lst &#39;())
 (empty? lst)
@@ -3820,7 +3820,7 @@ elements; otherwise returns nil.</p>
 <p>Notes:</p>
 <ul>
 <li>Works on lists and strings.</li>
-<li>Symbols evaluating to nil are not considered empty lists.</li>
+<li>Symbols evaluating to <code>nil</code> are not considered empty lists.</li>
 </ul>
 <p>See: <a href="#f-nilp">nil?</a>, <a href="#f-listp">list?</a>, <a href="#f-stringp">string?</a></p>
 <hr/>
@@ -3829,8 +3829,8 @@ elements; otherwise returns nil.</p>
 <pre><code>syntax: (encrypt str-source str-pad)
 </code></pre>
 <p>Description:</p>
-<p>Applies a one-time pad (OTP) transformation to str-source
-using the pad string in str-pad. The operation is
+<p>Applies a one-time pad (OTP) transformation to <code>str-source</code>
+using the pad string in <code>str-pad</code>. The operation is
 symmetric: applying the same pad to the encrypted output
 restores the original data.</p>
 <p>Security depends entirely on the pad: it must be random,
