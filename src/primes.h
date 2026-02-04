@@ -114,7 +114,7 @@ PRIMITIVE primitive[] =
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
-    {"as",               p_loop,             2}, /* [any] */
+    {"as",               p_loop,             2}, /* [l,s,a,c] */
     {"forlist",          p_dolist,           2}, /* [l,a] */
     {"forchar",          p_dostring,         2}, /* [s] */
     {"forargs",          p_doargs,           2}, /* [l] */
@@ -124,7 +124,7 @@ PRIMITIVE primitive[] =
 
     {"array",            p_array,            0},
     {"list",             p_list,             0},
-    {"sequence",         p_sequence,         0}, 
+    {"range",            p_sequence,         0}, 
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
