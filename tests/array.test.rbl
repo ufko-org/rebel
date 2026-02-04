@@ -5,13 +5,13 @@
 ; Arrays
 ; ------------------------------------------------------------
 (test "1: convert array to list"
-  (arraylist (array 3 2 (sequence 1 6)))
+  (arraylist (array 3 2 (range 1 6)))
   '((1 2) (3 4) (5 6))
 )
 
 (test "2: nth element access and bounds checking"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (and
       (= (arraylist (nth 0 A)) '(1 2))
       (= (nth '(0 0) A) 1)
@@ -26,7 +26,7 @@
 
 (test "3: nth of row returns sub-array"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (= (nth 0 A) (array 2 '(1 2)))
   )
   true
@@ -34,7 +34,7 @@
 
 (test "4: comparison of array rows"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (and
       (< (nth 0 A) (nth 1 A))
       (> (nth 2 A) (nth 1 A))
@@ -45,7 +45,7 @@
 
 (test "5: set elements in array"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (set (A 1 0) 1)
     (= (nth '(1 0) A) 1)
   )
@@ -54,7 +54,7 @@
 
 (test "6: set multiple elements and check array-list"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (set (A 1 0) 1)
     (set (A 1 1) 1)
     (= (arraylist A) '((1 2) (1 1) (5 6)))
@@ -64,7 +64,7 @@
 
 (test "7: comparison after set"
   (local (A)
-    (set A (array 3 2 (sequence 1 6)))
+    (set A (array 3 2 (range 1 6)))
     (set (A 1 0) 1)
     (set (A 1 1) 1)
     (< (nth 1 A) (nth 0 A))

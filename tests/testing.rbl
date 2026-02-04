@@ -33,22 +33,22 @@
     (if (= expr want)
       (do
         (++ test:pass)
-        (prn (format "Test: %s\n\tpass: %s" 
+        (println (format "Test: %s\n\tpass: %s" 
           name (string expr))))
       (do
         (++ test:fail)
-        (prn (format "Test: %s\n\tfail: want: %s got: %s" 
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
           name (string want) (string expr))))))
 
   (if (= re 1)
     (if (rx (string want) (string expr))
       (do
         (++ test:pass)
-        (prn (format "Test: %s\n\tpass: %s" 
+        (println (format "Test: %s\n\tpass: %s" 
           name (string expr))))
       (do
         (++ test:fail)
-        (prn (format "Test: %s\n\tfail: want: %s got: %s" 
+        (println (format "Test: %s\n\tfail: want: %s got: %s" 
           name (string want) (string expr))))))
 
 )

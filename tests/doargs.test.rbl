@@ -1,14 +1,14 @@
-; Test for function "forargs"
+; Test for function "doargs"
 ; ------------------------------------------------------------
 (load "testing.rbl")
 
 ; Iteration / Control
 ; ------------------------------------------------------------
-(test "1: forargs iterates over all arguments"
+(test "1: doargs iterates over all arguments"
   (local (res)
     (set res '())
     (func (foo)
-      (forargs (i)
+      (doargs (i)
         (push i res -1)
       )
     )
@@ -18,11 +18,11 @@
   '(1 2 3 4)
 )
 
-(test "2: forargs stops at break expression"
+(test "2: doargs stops at break expression"
   (local (res)
     (set res '())
     (func (foo)
-      (forargs (i (> i 2))   ; break when i > 2 is true
+      (doargs (i (> i 2))   ; break when i > 2 is true
         (push i res -1)
       )
     )
