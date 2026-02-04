@@ -6834,7 +6834,7 @@ CELL *p_loop(CELL *params)
     CELL *value;
 
     pair = (CELL *)params->contents;       /* (x xs) */
-    value = evaluateExpression(value);     /* xs' value */
+    value = evaluateExpression(pair->next);     /* xs' value */
 
     if (isList(value->type) || value->type == CELL_ARRAY)
         return(dolist(params, DOLIST));
