@@ -6833,14 +6833,19 @@ CELL *p_loop(CELL *params)
     CELL *pair;
     CELL *value;
 
-    pair = (CELL *)params->contents;       /* (x xs) */
-    value = evaluateExpression(pair->next);     /* xs' value */
+    pair = (CELL *)params->contents;        /* (x xs) */
+    value = evaluateExpression(pair->next); /* xs' value */
 
-    if (isList(value->type) || value->type == CELL_ARRAY)
+    /* micro-opt: assumed usage frequency order; 
+       array tested separately, not with list */
+    if (isList(value->type))
         return(dolist(params, DOLIST));
 
     else if (value->type == CELL_STRING)
         return(dolist(params, DOSTRING));
+
+    else if (value->type == CELL_ARRAY)
+        return(dolist(params, DOLIST));
 
     else if (value->type == CELL_CONTEXT)
         return(dolist(params, DOTREE));
