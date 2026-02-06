@@ -73,7 +73,7 @@ char linkOffset[] = "&&&&@@@@";
 char preLoad[] = 
     "(func (len) (length (args 0))) (global 'len)"
     "(func (len8) (length8 (args 0))) (global 'len8)"
-    "(func (printf) (put (format (args 0) (expand (rest (args)))))) (global 'printf)"
+    "(func (printf) (print (format (args 0) (expand (rest (args)))))) (global 'printf)"
     "(set $preload '(len len8 printf)) (const (global '$preload))";
 void printHelpText(void);
 #ifdef READLINE
@@ -606,7 +606,7 @@ int main(int argc, char *argv[])
     {
         if(strcmp(argv[idx], "-q") == 0)
         {
-            /*
+            /* ufko:
              * Top-priority switch: all other options are ignored.
              * Its arguments are files to execute.
              * Executes files and exits immediately, even if the files
