@@ -100,7 +100,7 @@ PRIMITIVE primitive[] =
 
     /* core - data - creators */
 
-    {"const",         p_constant,         0x400}, 
+    {"const",            p_constant,         0x400}, 
     {"alias",            p_constant,         0x400}, /* :alt */
     {"global",           p_global,           0},
     {"let",              p_let,              0x402},
@@ -115,9 +115,9 @@ PRIMITIVE primitive[] =
 
     /* core - data - iterators */
 
-    {"loop",             p_loop,             2}, /* [l,s,a,c] */
-    {"dolist",           p_dolist,           2}, /* [l,a] */
-    {"dostring",         p_dostring,         2}, /* [s] */
+    {"loop",             p_loop,             2}, /* [l,s,a,c] :rebel */
+    {"dolist",          p_dolist,            2}, /* [l,a] */
+    {"dostring",          p_dostring,        2}, /* [s] */
     {"doargs",           p_doargs,           2}, /* [l] */
     {"ls",               p_dotree,           2}, /* :replaces dotree, "list symbols" in context */
 
