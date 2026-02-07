@@ -7905,95 +7905,97 @@ See: [put-url](#f-put-url), [post-url](#f-post-url),
 ---
 
 
-<a name="f-global"></a>
-## global
+<a name="f-shared"></a>
+## shared
 
 ```
-syntax: (global sym-1 [sym-2 ...])
+syntax: (shared sym-1 [sym-2 ...])
 ```
 
 Description:
 
-Marks one or more symbols as globally accessible outside
-the MAIN context. Only symbols defined in MAIN can be
-made global, and the call to global must also be executed
-from MAIN. The function returns the last symbol processed.
+Marks one or more symbols as shared.  Shared symbols
+are accessible without prefix from other contexts.
+Only symbols defined in `MAIN` can be made shared, and
+the call to `shared` must also be executed from `MAIN`.
+The function returns the last symbol processed.
 
-A symbol made global becomes visible in all other
+A symbol made shared becomes visible in all other
 contexts and can be referenced or called without prefixing
-it with MAIN:. This mechanism is typically used for
-exporting functions or constants from the MAIN namespace.
+it with `MAIN:`. This mechanism is typically used for
+sharing functions or constants from the `MAIN` context.
 
 Examples:
 
 ```
-; making several MAIN symbols global
+; making several MAIN symbols shared
 ;-----------------------------------------------------------
-(global 'a 'x 'y 'z)
+(shared 'a 'x 'y 'z)
 ;-> z
 
-; exporting a function and protecting it
+; sharing a function and protecting it
 ;-----------------------------------------------------------
-(define (f x) (+ x 1))
-(constant (global 'f))
+(func (f x) (+ x 1))
+(const (shared 'f))
 ```
 
 Notes:
 
-- Only symbols belonging to MAIN can be marked global.
-- The call to global must be executed in MAIN.
+- Only symbols belonging to `MAIN` can be marked shared.
+- The call to `shared` must be executed in `MAIN`.
 - Returns the last symbol passed to the function.
 
-See: [constant](#f-constant), [context](#f-context),
-[define](#f-define)
+See: [const](#f-const), [context](#f-context),
+[func](#f-func)
 
 ---
 
-
-<a name="f-globalp"></a>
-## global?
+<a name="f-sharedp"></a>
+## shared?
 
 ```
-syntax: (global? sym)
+syntax: (shared? sym)
 ```
 
 Description:
 
-Checks whether the symbol in sym is marked as global.
-Built-in functions, context symbols, and any symbol
-declared global using the global function are considered
-global. Returns true or nil.
+Checks whether the symbol in `sym` is shared.
+A symbol is considered shared if it is visible without
+a context prefix from other contexts. This includes
+built-in symbols and symbols explicitly marked shared
+using the `shared` function.
+Returns true or nil.
 
 Examples:
 
 ```
-; built-in functions are always global
+; built-in functions are always shared
 ;-----------------------------------------------------------
-(global? 'print)
+(shared? 'print)
 ;-> true
 
-; marking a symbol as global
+; marking a symbol as shared
 ;-----------------------------------------------------------
 (set val 123)
-(global 'val)
-(global? 'val)
+(shared 'val)
+(shared? 'val)
 ;-> true
 
-; exporting and protecting a symbol
+; sharing and protecting a symbol
 ;-----------------------------------------------------------
 (set step 10)
-(constant (global 'step))
-(global? 'step)
+(const (shared 'step))
+(shared? 'step)
 ;-> true
 ```
 
 Notes:
 
-- Returns true for all built-in functions.
-- Returns true for symbols exported via global.
-- Returns nil for non-global MAIN symbols.
+- Returns `true` for all built-in functions.
+- Returns `true` for symbols shared via `shared`.
+- Returns nil for non-shared MAIN symbols.
 
-See: [global](#f-global), [constant](#f-constant),
+See: [shared](#f-shared), [const](#f-const),
 [context](#f-context)
 
 ---

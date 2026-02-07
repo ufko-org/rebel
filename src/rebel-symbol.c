@@ -169,13 +169,16 @@ SYMBOL *makeSafeSymbol(CELL *cell, SYMBOL *context, int flag)
 }
 
 
-/*
-   if forceFlag is TRUE then
-       create the symbol, if not found in the context
-       specified in that context
-   else
-       if not found try to inherit from MAIN as a global
-       or primitive, else create it in context specified
+/* ufko:
+   Resolve or create a symbol named by `token` in the given context.
+
+   If forceFlag is TRUE:
+     - create the symbol in the specified context if it does not exist.
+
+   If forceFlag is FALSE:
+     - look up the symbol in the specified context;
+     - if not found, reuse a shared symbol from MAIN if available;
+     - otherwise create a new symbol in the specified context.
 */
 
 
@@ -202,8 +205,8 @@ SYMBOL *translateCreateSymbol
             {
                 root = (SYMBOL *)((CELL *)mainContext->contents)->aux;
                 sPtr = findInsertSymbol(token, LOOKUP_ONLY);
-                /* since 7.2.7 only inherit primitives and other globals */
-                if(sPtr != NULL && !(sPtr->flags & SYMBOL_GLOBAL))
+                /* ufko: only inherit built-ins and shared symbols from MAIN */
+                if(sPtr != NULL && !(sPtr->flags & SYMBOL_SHARED))
                 {
                     if(symbolType(sPtr) != CELL_CONTEXT
                             || (SYMBOL *)((CELL *)sPtr->contents)->contents != sPtr)
@@ -244,7 +247,7 @@ SYMBOL *translateCreateSymbol
             cell->type = CELL_CONTEXT;
             cell->contents = (UINT)sPtr;
             cell->aux = 0;
-            sPtr->flags |= (SYMBOL_PROTECTED | SYMBOL_GLOBAL);
+            sPtr->flags |= (SYMBOL_PROTECTED | SYMBOL_SHARED);
         }
     }
     else
@@ -463,7 +466,7 @@ void makeContextFromSymbol(SYMBOL *symbol, SYMBOL *treePtr)
     contextCell->aux = (UINT)treePtr;
     symbol->contents = (UINT)contextCell;
     symbol->context = mainContext;
-    symbol->flags |= (SYMBOL_PROTECTED | SYMBOL_GLOBAL);
+    symbol->flags |= (SYMBOL_PROTECTED | SYMBOL_SHARED);
 }
 
 /* only used when S in (delete 'S) is not a context */

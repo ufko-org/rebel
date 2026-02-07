@@ -71,10 +71,10 @@ char banner2[]= ". Options: rebel -h";
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
 char preLoad[] = 
-    "(func (len) (length (args 0))) (global 'len)"
-    "(func (len8) (length8 (args 0))) (global 'len8)"
-    "(func (printf) (print (format (args 0) (expand (rest (args)))))) (global 'printf)"
-    "(set $preload '(len len8 printf)) (const (global '$preload))";
+    "(func (len) (length (args 0))) (shared 'len)"
+    "(func (len8) (length8 (args 0))) (shared 'len8)"
+    "(func (printf) (print (format (args 0) (expand (rest (args)))))) (shared 'printf)"
+    "(set $preload '(len len8 printf)) (const (shared '$preload))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
@@ -186,7 +186,7 @@ UINT *fnStackIdx;
 
 /* internal dummy to carry FOOP object */
 SYMBOL objSymbol = {
-  SYMBOL_GLOBAL | SYMBOL_BUILTIN, /* flags */
+  SYMBOL_SHARED | SYMBOL_BUILTIN, /* flags */
   0,                              /* color */ 
   0,                              /* mutable */ 
   "container of (self)",          /* name */ 
@@ -1332,7 +1332,7 @@ void initialize(void)
         symbol = translateCreateSymbol(
                      primitive[i].name, CELL_PRIMITIVE, mainContext, TRUE);
         symbol->contents = (UINT)pCell;
-        symbol->flags = primitive[i].flags | SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+        symbol->flags = primitive[i].flags | SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
         pCell->contents = (UINT)primitive[i].function;
         pCell->aux = (UINT)symbol->name;
     }
@@ -1356,28 +1356,28 @@ void initialize(void)
     expandSymbol = translateCreateSymbol("expand", CELL_NIL, mainContext, TRUE);
 
     symbol = translateCreateSymbol("ostype", CELL_STRING, mainContext, TRUE);
-    symbol->flags = SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    symbol->flags = SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
     symbol->contents = (UINT)stuffString(OSTYPE);
 
     for(i = 0; i < MAX_REGEX_EXP; i++)
     {
         snprintf(symName, 8, "$%d", i);
         sysSymbol[i] = translateCreateSymbol(symName, CELL_NIL, mainContext, TRUE);
-        sysSymbol[i]->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN;
+        sysSymbol[i]->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN;
     }
 
     currentFunc = errorEvent = timerEvent = promptEvent = commandEvent = transferEvent = readerEvent = nilSymbol;
 
-    trueSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    nilSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    questionSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    atSymbol->flags |=  SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    argsSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    mainArgsSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    listIdxSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    itSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    countSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
-    sysxSymbol->flags |= SYMBOL_GLOBAL | SYMBOL_BUILTIN;
+    trueSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    nilSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    questionSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    atSymbol->flags |=  SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    argsSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    mainArgsSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    listIdxSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    itSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    countSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN | SYMBOL_PROTECTED;
+    sysxSymbol->flags |= SYMBOL_SHARED | SYMBOL_BUILTIN;
 
     countCell = stuffInteger(0);
     countSymbol->contents = (UINT)countCell ;
@@ -2622,19 +2622,19 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
         case CELL_CONTEXT:
             sPtr = (SYMBOL *)cell->contents;
             if(sPtr->context != currentContext
-                    /* if not global or global overwritten in current context */
-                    && (!(sPtr->flags & SYMBOL_GLOBAL) || (lookupSymbol(sPtr->name, currentContext)))
+                    /* ufko: if symbol is not shared, or a local symbol shadows a shared one */
+                    && (!(sPtr->flags & SYMBOL_SHARED) || (lookupSymbol(sPtr->name, currentContext)))
                     && (symbolType(sPtr) != CELL_CONTEXT ||
                         (SYMBOL *)((CELL *)sPtr->contents)->contents != sPtr)) /* context var */
             {
                 varPrintf(device,"%s:%s", (char *)((SYMBOL *)sPtr->context)->name, sPtr->name);
                 break;
             }
-            /* overwriting global in MAIN */
+            /* ufko: if local symbol shadows a shared symbol from MAIN */
             if(sPtr->context == currentContext
                     && currentContext != mainContext
                     && ((sp = lookupSymbol(sPtr->name, mainContext)) != NULL)
-                    && (sp->flags & SYMBOL_GLOBAL) )
+                    && (sp->flags & SYMBOL_SHARED) )
             {
                 varPrintf(device,"%s:%s", currentContext->name, sPtr->name);
                 break;
@@ -2955,7 +2955,7 @@ void printSymbol(SYMBOL *sPtr, UINT device)
                 printExpression((CELL *)sPtr->contents, device);
                 varPrintf(device, ")");
             }
-            else if (isGlobal(sPtr->flags))
+            else if (isShared(sPtr->flags))
             {
                 printFn(sPtr, device);
                 varPrintf(device, "%s%s", LINE_FEED, LINE_FEED);
@@ -3076,7 +3076,7 @@ void printSymbolName(UINT device, SYMBOL *sPtr)
 
         else if(currentContext != mainContext
                 && ((sp = lookupSymbol(sPtr->name, mainContext)) != NULL)
-                && (sp->flags &  SYMBOL_GLOBAL) )
+                && (sp->flags &  SYMBOL_SHARED) )
         {
             varPrintf(device, "%s:%s", currentContext->name, sPtr->name);
         }
@@ -3093,9 +3093,9 @@ void printSymbolName(UINT device, SYMBOL *sPtr)
 
 void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 {
-    if(isGlobal(sPtr->flags))
+    if(isShared(sPtr->flags))
     {
-        varPrintf(device, "(global '");
+        varPrintf(device, "(shared '");
         printSymbolName(device, sPtr);
         if(symbolType(sPtr) == CELL_FN || symbolType(sPtr) == CELL_FN_MACRO)
         {
@@ -3130,10 +3130,11 @@ CELL *p_adhoc(CELL *params)
     if(params->type == CELL_SYMBOL)
     {
         sym = (SYMBOL *)params->contents;
-        if(sym->mutable == 1)
+        if(isShared(sym->flags))
         {
-            printf("%s\n", sym->name);
-            return(trueCell);
+        }
+        else
+        {
         }
    }
     
@@ -3704,7 +3705,7 @@ GETNEXT:
             {
                 newCell->contents = (UINT)translateCreateSymbol(
                                         token, CELL_NIL, mainContext, TRUE);
-                ((SYMBOL *)newCell->contents)->flags |= SYMBOL_GLOBAL;
+                ((SYMBOL *)newCell->contents)->flags |= SYMBOL_SHARED;
             }
             else
                 newCell->contents = (UINT)translateCreateSymbol(
@@ -4523,7 +4524,7 @@ CELL *getCreateSymbol(CELL *params, SYMBOL * * symbol, char *name)
             return(params->next);
         }
         *symbol = translateCreateSymbol(name, CELL_NIL, mainContext, TRUE);
-        (*symbol)->flags |= SYMBOL_PROTECTED | SYMBOL_GLOBAL;
+        (*symbol)->flags |= SYMBOL_PROTECTED | SYMBOL_SHARED;
         cellForDelete = (CELL *)(*symbol)->contents;
         if(isNil(cell))
         {
@@ -5842,7 +5843,7 @@ CELL *setDefine(SYMBOL *symbol, CELL *params, int type)
 }
 
 
-CELL *p_global(CELL *params)
+CELL *p_shared(CELL *params)
 {
     SYMBOL *sPtr;
 
@@ -5855,7 +5856,7 @@ CELL *p_global(CELL *params)
         }
         else
         {
-            sPtr->flags |= SYMBOL_GLOBAL;
+            sPtr->flags |= SYMBOL_SHARED;
         }
     }
     while (params != nilCell);
@@ -7906,10 +7907,10 @@ CELL *p_isPrimitive(CELL *params)
 }
 
 
-CELL *p_isGlobal(CELL *params)
+CELL *p_isShared(CELL *params)
 {
     params = evaluateExpression(params);
-    if(isSymbol(params->type) && isGlobal(((SYMBOL *)params->contents)->flags))
+    if(isSymbol(params->type) && isShared(((SYMBOL *)params->contents)->flags))
     {
         return(trueCell);
     }

@@ -6122,75 +6122,78 @@ is required, use a proxy configured in the system.</p>
 <p>See: <a href="#f-put-url">put-url</a>, <a href="#f-post-url">post-url</a>,
 <a href="#f-address">address</a>, <a href="#f-get-string">get-string</a></p>
 <hr/>
-<p><a name="f-global"></a></p>
-<h2 id="global">global</h2>
-<pre><code>syntax: (global sym-1 [sym-2 ...])
+<p><a name="f-shared"></a></p>
+<h2 id="shared">shared</h2>
+<pre><code>syntax: (shared sym-1 [sym-2 ...])
 </code></pre>
 <p>Description:</p>
-<p>Marks one or more symbols as globally accessible outside
-the MAIN context. Only symbols defined in MAIN can be
-made global, and the call to global must also be executed
-from MAIN. The function returns the last symbol processed.</p>
-<p>A symbol made global becomes visible in all other
+<p>Marks one or more symbols as shared.  Shared symbols
+are accessible without prefix from other contexts.
+Only symbols defined in <code>MAIN</code> can be made shared, and
+the call to <code>shared</code> must also be executed from <code>MAIN</code>.
+The function returns the last symbol processed.</p>
+<p>A symbol made shared becomes visible in all other
 contexts and can be referenced or called without prefixing
-it with MAIN:. This mechanism is typically used for
-exporting functions or constants from the MAIN namespace.</p>
+it with <code>MAIN:</code>. This mechanism is typically used for
+sharing functions or constants from the <code>MAIN</code> context.</p>
 <p>Examples:</p>
-<pre><code>; making several MAIN symbols global
+<pre><code>; making several MAIN symbols shared
 ;-----------------------------------------------------------
-(global &#39;a &#39;x &#39;y &#39;z)
+(shared &#39;a &#39;x &#39;y &#39;z)
 ;-&#62; z
 
-; exporting a function and protecting it
+; sharing a function and protecting it
 ;-----------------------------------------------------------
-(define (f x) (+ x 1))
-(constant (global &#39;f))
+(func (f x) (+ x 1))
+(const (shared &#39;f))
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Only symbols belonging to MAIN can be marked global.</li>
-<li>The call to global must be executed in MAIN.</li>
+<li>Only symbols belonging to <code>MAIN</code> can be marked shared.</li>
+<li>The call to <code>shared</code> must be executed in <code>MAIN</code>.</li>
 <li>Returns the last symbol passed to the function.</li>
 </ul>
-<p>See: <a href="#f-constant">constant</a>, <a href="#f-context">context</a>,
-<a href="#f-define">define</a></p>
+<p>See: <a href="#f-const">const</a>, <a href="#f-context">context</a>,
+<a href="#f-func">func</a></p>
 <hr/>
-<p><a name="f-globalp"></a></p>
-<h2 id="global-1">global?</h2>
-<pre><code>syntax: (global? sym)
+<p><a name="f-sharedp"></a></p>
+<h2 id="shared-1">shared?</h2>
+<pre><code>syntax: (shared? sym)
 </code></pre>
 <p>Description:</p>
-<p>Checks whether the symbol in sym is marked as global.
-Built-in functions, context symbols, and any symbol
-declared global using the global function are considered
-global. Returns true or nil.</p>
+<p>Checks whether the symbol in <code>sym</code> is shared.
+A symbol is considered shared if it is visible without
+a context prefix from other contexts. This includes
+built-in symbols and symbols explicitly marked shared
+using the <code>shared</code> function.
+Returns true or nil.</p>
 <p>Examples:</p>
-<pre><code>; built-in functions are always global
+<pre><code>; built-in functions are always shared
 ;-----------------------------------------------------------
-(global? &#39;print)
+(shared? &#39;print)
 ;-&#62; true
 
-; marking a symbol as global
+; marking a symbol as shared
 ;-----------------------------------------------------------
 (set val 123)
-(global &#39;val)
-(global? &#39;val)
+(shared &#39;val)
+(shared? &#39;val)
 ;-&#62; true
 
-; exporting and protecting a symbol
+; sharing and protecting a symbol
 ;-----------------------------------------------------------
 (set step 10)
-(constant (global &#39;step))
-(global? &#39;step)
+(const (shared &#39;step))
+(shared? &#39;step)
 ;-&#62; true
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Returns true for all built-in functions.</li>
-<li>Returns true for symbols exported via global.</li>
-<li>Returns nil for non-global MAIN symbols.</li>
+<li>Returns <code>true</code> for all built-in functions.</li>
+<li>Returns <code>true</code> for symbols shared via <code>shared</code>.</li>
+<li>Returns nil for non-shared MAIN symbols.</li>
 </ul>
-<p>See: <a href="#f-global">global</a>, <a href="#f-constant">constant</a>,
+<p>See: <a href="#f-shared">shared</a>, <a href="#f-const">const</a>,
 <a href="#f-context">context</a></p>
 <hr/>
 <p><a name="f-history"></a></p>

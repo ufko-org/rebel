@@ -205,7 +205,7 @@ This is for 64bit large file support (LFS),
 /* symbol flags types and masks */
 #define PRINT_TYPE_MASK 0x0F
 #define SYMBOL_PROTECTED 0x10
-#define SYMBOL_GLOBAL 0x20
+#define SYMBOL_SHARED 0x20
 #define SYMBOL_BUILTIN 0x40
 #define SYMBOL_FFI 0x100
 #define SYMBOL_MACRO 0x200
@@ -266,7 +266,7 @@ This is for 64bit large file support (LFS),
 /* symbol classes */
 #define isProtected(A) ((A) & (SYMBOL_PROTECTED | SYMBOL_MACRO))
 #define isBuiltin(A) ((A) & SYMBOL_BUILTIN)
-#define isGlobal(A) ((A) & SYMBOL_GLOBAL)
+#define isShared(A) ((A) & SYMBOL_SHARED)
 #define isFFIsymbol(A) ((A) & SYMBOL_FFI)
 
 #define isDigit(A) isdigit((int)(A))
