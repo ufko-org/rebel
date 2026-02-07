@@ -146,10 +146,13 @@ CELL *p_length(CELL *params)
 {
     size_t length;
     SYMBOL *symbol;
+    CELL *flagp;
+    CELL *cond = nilCell;
     int *bigintPtr;
     int *result;
     int len;
 
+    flagp = params; /* ufko: save params copy to move to flag */
     params = evaluateExpression(params);
     length = 0;
     switch(params->type)
@@ -202,7 +205,11 @@ CELL *p_length(CELL *params)
             break;
     }
 
-    return(stuffInteger(length));
+    cond = (getFlag(flagp->next) == 1) ? trueCell : nilCell;
+    if(cond == nilCell)
+      return(stuffInteger(length));
+   return(stuffInteger(length - 1));
+
 }
 
 

@@ -3126,6 +3126,7 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
+    /*
     SYMBOL *sym;
     if(params->type == CELL_SYMBOL)
     {
@@ -3137,8 +3138,8 @@ CELL *p_adhoc(CELL *params)
         {
         }
    }
-    
-    return(nilCell);
+   */
+   return(nilCell);
 }
 
 CELL *p_prettyPrint(CELL *params)
@@ -5355,7 +5356,9 @@ CELL *p_macro(CELL *params)
 CELL *p_setdef(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
+    /* SYMBOL *testSym; */ 
     CELL *cell;
+    CELL *head;
     CELL *new;
     CELL *stringRef;
     char *indexRefPtr;
@@ -5369,18 +5372,16 @@ SETDEF_BEGIN:
     }
     */
 
-    /* reject quoted symbol as assignment target */
-
-    /* case 1: 'sym  (CELL_QUOTE) */
+    /* reject: 'sym */
     if(params->type == CELL_QUOTE)
     {
         return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
     }
 
-    /* case 2: (quote sym) */
+    /* reject: (quote sym) */
     if(params->type == CELL_EXPRESSION)
     {
-        CELL *head = (CELL *)params->contents;
+        head = (CELL *)params->contents;
 
         if(head &&
            head->type == CELL_SYMBOL &&
@@ -5389,6 +5390,17 @@ SETDEF_BEGIN:
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
     }
+    /* reject: rebind
+    if(params->type == CELL_SYMBOL)
+    {
+        testSym = (SYMBOL *)params->contents;
+        if (testSym->mutable == 1)
+        {
+            printf("Can't rebind bro, use mut :P :D\n");
+            return(nilCell);
+        }
+    }
+    */
 
     cell = evaluateExpression(params);
 

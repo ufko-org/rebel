@@ -116,10 +116,13 @@ PRIMITIVE primitive[] =
     /* core - data - iterators */
 
     {"loop",             p_loop,             2}, /* [l,s,a,c] :rebel */
-    {"dolist",          p_dolist,            2}, /* [l,a] */
-    {"dostring",          p_dostring,        2}, /* [s] */
+    {"dolist",           p_dolist,           2}, /* [l,a] */
+    {"forl",             p_dolist,           2}, /* [l,a] */
+    {"dostring",         p_dostring,         2}, /* [s] */
+    {"fors",             p_dostring,         2}, /* [s] */
     {"doargs",           p_doargs,           2}, /* [l] */
-    {"ls",               p_dotree,           2}, /* :replaces dotree, "list symbols" in context */
+    {"forf",             p_doargs,           2}, /* [l] */
+    {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
 
     /* core - data - sequencers */
 
@@ -175,7 +178,7 @@ PRIMITIVE primitive[] =
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
-    {"length",           p_length,           0},     /* [any] */
+    {"len",              p_length,           0},     /* [any] */
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
@@ -208,7 +211,7 @@ PRIMITIVE primitive[] =
     {"unique",           p_unique,           0},     /* [] */
 
     #ifdef SUPPORT_UTF8
-    {"length8",          p_utf8len,          0},     /* [s] */
+    {"len8",             p_utf8len,          0},     /* [s] */
     #endif
 
     /* core - math - integers */
