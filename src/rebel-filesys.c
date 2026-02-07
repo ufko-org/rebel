@@ -2106,7 +2106,7 @@ int semaphore(UINT sem_id, int value, int type)
 
 /* since 10.1.0 also can share object > pagesize
    objects are stored in the tmp directory of OS
-   as a file starting with nls-
+   as a file starting with rbl-
 */
 
 CELL *p_share(CELL *params)
@@ -2318,7 +2318,7 @@ CELL *readWriteSharedExpression(UINT *address, CELL *params)
         checkDeleteShareFile(address);
         memset((char *)(address + 2), 0, pagesize - 2 * sizeof(INT));
         strncpy((char *)(address + 2), tempDir, PATH_MAX - 2 * sizeof(INT));
-        strncat((char *)(address + 2), "/nls-", 6);
+        strncat((char *)(address + 2), "/rbl-", 6);
         size = strlen((char *)(address + 2));
         getUUID((char *)(address + 2) + size, 0);
         writeFile((char *)(address + 2), strStream.buffer, strStream.position, "w");
@@ -2332,7 +2332,7 @@ CELL *readWriteSharedExpression(UINT *address, CELL *params)
 void checkDeleteShareFile(UINT *address)
 {
     if(     (*address == (CELL_STRING | SHARED_MEM_EVAL_MASK)) &&
-            (strncmp((char *)(address + 2), "/tmp/nls-", 9) == 0) &&
+            (strncmp((char *)(address + 2), "/tmp/rbl-", 9) == 0) &&
             (strlen((char *)(address + 2)) == 45) )
     {
         unlink((char *)(address + 2));
