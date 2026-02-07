@@ -71,10 +71,8 @@ char banner2[]= ". Options: rebel -h";
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
 char preLoad[] = 
-    "(func (len) (length (args 0))) (shared 'len)"
-    "(func (len8) (length8 (args 0))) (shared 'len8)"
     "(func (printf) (print (format (args 0) (expand (rest (args)))))) (shared 'printf)"
-    "(set $preload '(len len8 printf)) (const (shared '$preload))";
+    "(set $preload '(printf)) (const (shared '$preload))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
