@@ -102,7 +102,7 @@ PRIMITIVE primitive[] =
 
     {"const",            p_constant,         0x400}, 
     {"alias",            p_constant,         0x400}, /* :alt */
-    {"global",           p_global,           0},
+    {"shared",           p_global,           0},     /* :replaces global */
     {"let",              p_let,              0x402},
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
@@ -467,7 +467,7 @@ PRIMITIVE primitive[] =
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
     {"fn?",              p_isFn,             0},
-    {"global?",          p_isGlobal,         0},
+    {"shared?",          p_isGlobal,         0}, /* :replaces global? */
     {"inf?",             p_isinf,            0},
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
     {"legal?",           p_isLegal,          0},
