@@ -3126,6 +3126,17 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
+    SYMBOL *sym;
+    if(params->type == CELL_SYMBOL)
+    {
+        sym = (SYMBOL *)params->contents;
+        if(sym->mutable == 1)
+        {
+            printf("%s\n", sym->name);
+            return(trueCell);
+        }
+   }
+    
     return(nilCell);
 }
 
@@ -5499,7 +5510,8 @@ SETMUT_BEGIN:
         symbolMut = (SYMBOL *)params->contents;
         if(symbolMut->mutable == 0)
         {
-            return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolMut));
+            /* return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolMut)); */
+            return(nilCell);
         }
     }
 
