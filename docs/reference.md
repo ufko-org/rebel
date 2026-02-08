@@ -14,7 +14,7 @@ provided that this notice is preserved.
 ---
 
 <a name="f-bang"></a>
-## ! / run
+## ! 
 
 ```
 syntax: (! str-shell-command)
@@ -3192,7 +3192,7 @@ See: [first](#f-first), [rest](#f-rest), [last](#f-last)
 
 
 <a name="f-const"></a>
-## const [!] / alias
+## const / alias [!]
 
 ```
 syntax: (const sym-1 exp-1 [sym-2 exp-2] ...)
@@ -3254,7 +3254,7 @@ See: [set](#f-set), [def](#f-func), [mac](#f-mac)
 
 ```
 syntax: (context [sym-context])
-syntax: (context sym-context str | sym [exp-value])
+syntax: (context sym-context str|sym [exp-value])
 ```
 
 Description:
@@ -3525,9 +3525,9 @@ Description:
 
 Computes a 32-bit CRC (Cyclic Redundancy Check) value for
 the bytes contained in `str-data`. The calculation starts
-with an initial CRC of 0xffffffff and processes each byte
-using the standard polynomial method published by w3.org.
-The result is an unsigned 32-bit integer suitable for
+with an initial CRC of `0xffffffff` and processes each byte
+using the standard polynomial method published by `w3.org`.
+The result is an unsigned `32-bit` integer suitable for
 basic integrity checks.
 
 CRC values are typically used to detect corruption in
@@ -3793,7 +3793,7 @@ Notes:
 
 - The function always interprets the input as UTC and
   does not apply local time zone offsets.
-- Invalid or incomplete date strings return nil.
+- Invalid or incomplete date strings return `nil`.
 - The supported timestamp range is limited to values
   representable before the year 2038.
 
@@ -3912,12 +3912,12 @@ See: [--](#f-minusminus), [inc](#f-inc)
 ---
 
 
-<a name="f-define-macro"></a>
-## define-macro
+<a name="f-mac></a>
+## mac
 
 ```
-syntax: (define-macro (sym-name [sym-param-1 ...]) body)
-syntax: (define-macro (sym-name [(sym-param-1 exp-default) ...]) body)
+syntax: (mac (sym-name [sym-param-1 ...]) body)
+syntax: (mac (sym-name [(sym-param-1 exp-default) ...]) body)
 ```
 
 Description:
@@ -3938,7 +3938,7 @@ Examples:
 ```
 ; 1) simple macro: (inc2 x) → (+ x 2)
 
-(define-macro (inc2 x)
+(mac (inc2 x)
   (+ (eval x) 2))
 
 (inc2 10)
@@ -3948,7 +3948,7 @@ Examples:
 ; 2) custom conditional form
 ;    (if-zero x a b) → (if (= x 0) a b)
 
-(define-macro (if-zero x a b)
+(mac (if-zero x a b)
   (if (= (eval x) 0)
       (eval a)
       (eval b)))
@@ -3961,10 +3961,10 @@ Examples:
 
 
 ; 3) macro that defines a new function
-;    (make-fn name (p1) body) → (define (name p1) body)
+;    (make-fn name (p1) body) → (func (name p1) body)
 
-(define-macro (make-fn name params body)
-  (define (name params) (eval body)))
+(mac (make-fn name params body)
+  (func (name params) (eval body)))
 
 (make-fn triple (x) (* x 3))
 (triple 10)
@@ -3974,7 +3974,7 @@ Examples:
 ; 4) macro with a default argument
 ;    (add2 x) → (+ x 2)
 
-(define-macro (add2 (x 0))
+(mac (add2 (x 0))
   (+ (eval x) 2))
 
 (add2 10)
@@ -3987,14 +3987,14 @@ Examples:
 Notes:
 
 - Macro arguments are not evaluated automatically.
-- The macro controls evaluation explicitly using *eval*.
+- The macro controls evaluation explicitly using `eval`.
 - A macro may return evaluated results or unevaluated syntax.
 - Runtime macros allow creation of custom control forms.
 - A macro with default parameters may receive fewer arguments
   than declared; unspecified parameters take their default
   values.
 
-See: [fn-macro](#f-fn-macro), [macro](#f-macro), [fn](#f-fn)
+See: [fn-macro](#f-fn-macro), [macex](#f-macex), [fn](#f-fn)
 
 ---
 
@@ -4011,23 +4011,23 @@ Description:
 
 Removes a symbol from the symbol table or deletes all
 symbols belonging to a context. After deletion, any
-external references to the removed symbol become nil.
+external references to the removed symbol become `nil`.
 When deleting a context, all symbols inside the context
 are removed and the context name is converted into a
 normal symbol containing nil. A second delete can remove
 the context symbol itself.
 
-If bool evaluates to true, deletion is allowed only when
-the symbol has no external references. If bool evaluates
-to nil, deletion is unconditional and reference checks are
+If `bool` evaluates to `true`, deletion is allowed only when
+the `symbol` has no external references. If `bool` evaluates
+to `nil`, deletion is unconditional and reference checks are
 skipped. This unconditional mode must be used with care:
 if a deleted symbol is still referenced somewhere, the
-missing update to nil can lead to crashes or inconsistent
+missing update to `nil` can lead to crashes or inconsistent
 program state.
 
-Protected symbols, built-in functions, nil, and true
-cannot be deleted. delete returns true on successful
-deletion, or nil if deletion was refused.
+Protected symbols, built-in functions, `nil`, and `true`
+cannot be deleted. `delete` returns `true` on successful
+deletion, or `nil` if deletion was refused.
 
 Examples:
 
@@ -4076,42 +4076,42 @@ Notes:
 - After deleting a context, the context name survives as a
   normal symbol holding nil.
 
-See: [constant](#f-constant), [context](#f-context),
+See: [const](#f-const), [context](#f-context),
 [symbol?](#f-symbolp)
 
 ---
 
 
-<a name="f-delete-file"></a>
-## delete-file
+<a name="f-fdel"></a>
+## fdel
 
 ```
-syntax: (delete-file str-file-name)
+syntax: (fdel str-file-name)
 ```
 
 Description:
 
-Removes the file specified by str-file-name. Returns true
-when the file is successfully deleted, or nil if the
+Removes the file specified by `str-file-name`. Returns `true`
+when the file is successfully deleted, or `nil` if the
 operation fails. When deleting a local file, error details
-can be retrieved using sys-error. When deleting a URL
-resource, net-error provides additional information.
+can be retrieved using `syslasterr`. When deleting a URL
+resource, `netlasterr` provides additional information.
 
 The file name may refer to a local path or to a URL using
 the file:// or http:// schemes. When a URL is used,
-additional parameters may be supported; see delete-url for
+additional parameters may be supported; see `urldel` for
 details.
 
 Examples:
 
 ```
-(delete-file "temp.txt")
+(fdel "temp.txt")
 ;-> true or nil
 
-(delete-file "http://example.com/sample.txt")
+(fdel "http://example.com/sample.txt")
 ;-> true or nil
 
-(delete-file "file://notes.txt")
+(fdel "file://notes.txt")
 ;-> true or nil
 ```
 
@@ -4119,44 +4119,44 @@ Notes:
 
 - For URL deletions, behavior depends on the underlying
   protocol handler.
-- Use sys-error or net-error for diagnostics.
+- Use syslasterr or netlasterr for diagnostics.
 
-See: [delete-url](#f-delete-url), [sys-error](#f-sys-error),
-[net-error](#f-net-error)
+See: [urldel](#f-urldel), [syslasterr](#f-syslasterr),
+[netlasterr](#f-netlasterr)
 
 ---
 
 
-<a name="f-delete-url"></a>
-## delete-url
+<a name="f-urldel"></a>
+## urldel
 
 ```
-syntax: (delete-url str-url)
+syntax: (urldel str-url)
 ```
 
 Description:
 
 Sends an HTTP DELETE request to the resource specified by
-str-url. The remote server must support the DELETE method
+`str-url`. The remote server must support the DELETE method
 and allow deletion of the target resource; otherwise the
-call returns nil or an error string. Optional parameters
+call returns `nil` or an error string. Optional parameters
 such as timeouts or custom headers may be supplied in the
-same way as with get-url.
+same way as with `urlget`.
 
-If str-url begins with file://, a file on the local
+If `str-url` begins with file://, a file on the local
 filesystem is removed instead. This behavior matches
-delete-file when a URL is given.
+`fdel` when a URL is given.
 
 Examples:
 
 ```
-(delete-url "http://example.com/data.txt")
+(urldel "http://example.com/data.txt")
 ;-> true or nil
 
-(delete-url "http://example.org:8080/page.html" 5000)
+(urldel "http://example.org:8080/page.html" 5000)
 ;-> true or nil
 
-(delete-url "file:///home/user/remove.txt")
+(urldel "file:///home/user/remove.txt")
 ;-> true or nil
 ```
 
@@ -4164,42 +4164,42 @@ Notes:
 
 - Remote deletion depends on server configuration and
   permissions.
-- Additional options follow the same rules as get-url.
+- Additional options follow the same rules as `urlget`.
 - Rebel-style server nodes accept DELETE requests
   unless started with -http-safe.
 
-See: [delete-file](#f-delete-file), [get-url](#f-get-url),
-[net-error](#f-net-error)
+See: [fdel](#f-fdel), [urlget](#f-urlget),
+[netlasterr](#f-netlasterr)
 
 ---
 
 
-<a name="f-destroy"></a>
-## destroy [!]
+<a name="f-kill"></a>
+## kill [!]
 
 ```
-syntax: (destroy int-pid)
-syntax: (destroy int-pid int-signal)
+syntax: (kill int-pid)
+syntax: (kill int-pid int-signal)
 ```
 
 Description:
 
 Sends a termination signal to the process identified by
-int-pid. When only int-pid is given, destroy sends a
-default fatal signal equivalent to SIGKILL. When
-int-signal is supplied, the specified Unix signal is sent
-instead. The function returns true on success or nil on
+`int-pid`. When only `int-pid` is given, `kill` sends a
+default fatal signal equivalent to `SIGKILL`. When
+`int-signal` is supplied, the specified Unix signal is sent
+instead. The function returns `true` on success or `nil` on
 failure.
 
-Process IDs are typically obtained from fork or process.
-destroy operates exactly like the Unix kill utility and
+Process IDs are typically obtained from `fork` or `process`.
+`kill` operates exactly like the Unix kill utility and
 obeys all standard semantics of process groups and user
 permissions.
 
 **CAUTION:**  
-- If int-pid is 0, the signal is sent to all processes in
+- If `int-pid` is `0`, the signal is sent to all processes in
   the caller’s process group.  
-- If int-pid is -1, the signal is sent to all processes
+- If `int-pid` is -1, the signal is sent to all processes
   owned by the current user.  
 - Using these special values can terminate large numbers
   of processes and should be used with extreme care.
@@ -4211,7 +4211,7 @@ Examples:
 (set pid (process "/usr/bin/bc" in out))
 ;-> <pid>
 
-(destroy pid)
+(kill pid)
 ;-> true
 
 ; kill a forked background worker
@@ -4221,17 +4221,17 @@ Examples:
 ;-> <pid>
 
 (sleep 100)
-(destroy pid)
+(kill pid)
 ;-> true
 ```
 
 Notes:
 
 - Signals follow standard Unix behavior.
-- destroy can terminate process groups when specific PID
-  values (0 or -1) are used.
+- `kill` can terminate process groups when specific PID
+  values `(0 or -1)` are used.
 
-See: [process](#f-process), [fork](#f-fork), [wait-pid](#f-wait-pid)
+See: [process](#f-process), [fork](#f-fork), [waitpid](#f-waitpid)
 
 ---
 
@@ -4240,20 +4240,20 @@ See: [process](#f-process), [fork](#f-fork), [wait-pid](#f-wait-pid)
 ## det
 
 ```
-syntax: (det matrix [float-pivot])
+syntax: (mat-det matrix [float-pivot])
 ```
 
 Description:
 
-Computes the determinant of a square matrix. The matrix
+Computes the determinant of a square `matrix`. The matrix
 may be given as a nested list or as an array. If the
 matrix is singular and no pivot override is supplied, det
 returns nil.
 
-The optional float-pivot argument specifies a substitute
+The optional `float-pivot` argument specifies a substitute
 value for zero pivots during LU decomposition. This is
 useful when working with singular or near-singular
-matrices. A value of 0.0 forces all zero pivots to be
+matrices. A value of `0.0` forces all zero pivots to be
 treated as exact zeros; very small values allow controlled
 fallback behavior and prevent premature singularity
 detection.
@@ -4266,32 +4266,34 @@ Examples:
           (1 -2 0)))
 ;-> ((-1 1 1) (1 4 -5) (1 -2 0))
 
-(det A)
+(mat-det A)
 ;-> -1
 
 ; singular matrices
-(det '((2 -1)
+(mat-det '((2 -1)
        (4 -2)))
 ;-> nil
 
-(det '((2 -1)
+(mat-det '((2 -1)
        (4 -2)) 0)
 ;-> -0
 
-(det '((2 -1)
+(mat-det '((2 -1)
        (4 -2)) 1e-20)
 ;-> -4e-20
 ```
 
 Notes:
 
-- float-pivot influences LU decomposition when zero
+- `float-pivot` influences LU decomposition when zero
   pivots occur.
-- When omitted, singular matrices produce nil.
+- When omitted, singular matrices produce `nil`.
 - Arrays may be used instead of nested lists.
 
-See: [invert](#f-invert), [mat](#f-mat), [multiply](#f-multiply),
-[transpose](#f-transpose)
+See: [mat-invert](#f-mat-invert),
+[mat-apply](#f-matapply),
+[mat-multiply](#f-mat-multiply),
+[mat-transpose](#f-mat-transpose)
 
 ---
 
@@ -4307,19 +4309,21 @@ Description:
 
 Sets or retrieves the current I/O device. When called
 without arguments, the function returns the handle of the
-currently active device. When int-io-handle is supplied,
+currently active device. When `int-io-handle` is supplied,
 it becomes the new target for input and output.
 
-The value 0 selects the default standard streams:
+The value `0` selects the default standard streams:
 
+```
 - 0 — stdin  
 - 1 — stdout  
 - 2 — stderr  
+```
 
 A device handle may also be a file descriptor previously
 returned by open. When a file descriptor is active, all
 high-level I/O functions (print, println, write,
-write-line, read-char, read-line) operate on that file
+writeln, readc, readln) operate on that file
 instead of the console.
 
 Any valid open handle can be used as the active I/O
@@ -4341,46 +4345,46 @@ Examples:
 Notes:
 
 - Closing the current device automatically resets the
-  device to 0.
+  device to `0`.
 - All standard I/O functions respect the currently active
   device handle.
 
 See: [open](#f-open), [close](#f-close),
-[print](#f-print), [read-line](#f-read-line)
+[print](#f-print), [readln](#f-readln)
 
 ---
 
 
-<a name="f-difference"></a>
-## difference
+<a name="f-diff></a>
+## diff
 
 ```
-syntax: (difference list-1 list-2)
-syntax: (difference list-1 list-2 bool)
+syntax: (diff list-1 list-2)
+syntax: (diff list-1 list-2 bool)
 ```
 
 Description:
 
 Computes the difference between two lists. In the first
-form, the result contains all unique elements that appear
-in list-1 but not in list-2. The input lists may contain
+syntax, the result contains all unique elements that appear
+in `list-1` but not in `list-2`. The input lists may contain
 duplicates, but the result of this set operation is
 unique.
 
-In the second form, difference operates in list mode when
-bool is true. All elements appearing in list-2 are removed
-from list-1, while duplicates of remaining elements are
+In the second syntax, difference operates in list mode when
+`bool` is `true`. All elements appearing in `list-2` are removed
+from `list-1`, while duplicates of remaining elements are
 preserved.
 
 Examples:
 
 ```
-(difference '(2 5 6 0 3 5 0 2)
-            '(1 2 3 3 2 1))
+(diff '(2 5 6 0 3 5 0 2)
+      '(1 2 3 3 2 1))
 ;-> (5 6 0)
 
-(difference '(2 5 6 0 3 5 0 2)
-            '(1 2 3 3 2 1)
+(diff '(2 5 6 0 3 5 0 2)
+      '(1 2 3 3 2 1)
             true)
 ;-> (5 6 0 5 0)
 ```
@@ -4389,7 +4393,7 @@ Notes:
 
 - Set mode returns a unique list.
 - List mode preserves duplicates except for those removed
-  due to matches with list-2.
+  due to matches with `list-2`.
 
 See: [intersect](#f-intersect), [unique](#f-unique),
 [union](#f-union)
@@ -4397,77 +4401,77 @@ See: [intersect](#f-intersect), [unique](#f-unique),
 ---
 
 
-<a name="f-directory"></a>
-## directory
+<a name="f-dir"></a>
+## dir
 
 ```
-syntax: (directory)
-syntax: (directory str-path)
-syntax: (directory str-path str-pattern [regex-option])
+syntax: (dir)
+syntax: (dir str-path)
+syntax: (dir str-path str-pattern [regex-option])
 ```
 
 Description:
 
 Returns a list of directory entry names for the path in
-str-path. When str-path is omitted, entries from the
-current working directory are returned. On failure, nil is
+`str-path`. When `str-path` is omitted, entries from the
+current working directory are returned. On failure, `nil` is
 returned.
 
 In the pattern form, only filenames matching the regular
-expression in str-pattern are included. When present,
-regex-option controls the matching mode. Matching follows
-the same rules as in regex.
+expression in `str-pattern` are included. When present,
+`regex-option` controls the matching mode. Matching follows
+the same rules as in `rx` function.
 
 Examples:
 
 ```
-(directory "/bin")
+(dir "/bin")
 
-(directory "." "\\.c")
+(dir "." "\\.c")
 ;-> ("file1.c" "file2.c")
 
-(directory "." {\\.c})
+(dir "." {\\.c})
 ;-> ("file1.c" "file2.c")
 
 ; show hidden entries
-(directory "." "^[.]")
+(dir "." "^[.]")
 ;-> ("." ".." ".conf" ".cache")
 ```
 
 Notes:
 
-- str-pattern uses standard regex syntax.
-- regex-option enables specific regex evaluation modes.
-- A nil return indicates that the directory could not be
+- `str-pattern` uses standard regex syntax.
+- `regex-option` enables specific `rx` evaluation modes.
+- A `nil` return indicates that the directory could not be
   read.
 
-See: [regex](#f-regex), [find](#f-find),
-[find-all](#f-findall), [parse](#f-parse),
+See: [rx](#f-rx), [pos](#f-pos),
+[find](#f-find), [parse](#f-parse),
 [replace](#f-replace), [search](#f-search)
 
 ---
 
 
-<a name="f-directoryp"></a>
-## directory?
+<a name="f-dirp"></a>
+## dir?
 
 ```
-syntax: (directory? str-path)
+syntax: (dir? str-path)
 ```
 
 Description:
 
-Checks whether str-path refers to an existing directory.
-Returns true when the path is a directory, or nil when it
+Checks whether `str-path` refers to an existing directory.
+Returns `true` when the path is a directory, or `nil` when it
 is not.
 
 Examples:
 
 ```
-(directory? "/etc")
+(dir? "/etc")
 ;-> true
 
-(directory? "/usr/local/bin/nvi2/")
+(dir? "/usr/local/bin/nvi2/")
 ;-> nil
 ```
 
@@ -4475,7 +4479,7 @@ Notes:
 
 - The check follows the filesystem exactly; trailing
   slashes are allowed.
-- Returns nil when the path does not exist or is not a
+- Returns `nil` when the path does not exist or is not a
   directory.
 
 See: [file?](#f-filep)
@@ -7959,12 +7963,12 @@ syntax: (shared? sym)
 
 Description:
 
-Checks whether the symbol in `sym` is shared.
-A symbol is considered shared if it is visible without
-a context prefix from other contexts. This includes
-built-in symbols and symbols explicitly marked shared
-using the `shared` function.
-Returns true or nil.
+Checks whether the symbol in `sym` is shared.  A symbol
+is considered shared if it is visible without a context
+prefix from other contexts.  This includes built-in
+functions and symbols and symbols explicitly marked
+shared using the `shared` function.  Returns true or
+nil.
 
 Examples:
 
@@ -7991,7 +7995,7 @@ Examples:
 
 Notes:
 
-- Returns `true` for all built-in functions.
+- Returns `true` for all built-in functions and symbols.
 - Returns `true` for symbols shared via `shared`.
 - Returns nil for non-shared MAIN symbols.
 
