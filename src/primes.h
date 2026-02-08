@@ -178,7 +178,8 @@ PRIMITIVE primitive[] =
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
-    {"len",              p_length,           0},     /* [any] */
+    {"length",           p_length,           0},     /* [any] */
+    {"len",              p_length,           0},     /* [any] :alt */
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
@@ -211,7 +212,8 @@ PRIMITIVE primitive[] =
     {"unique",           p_unique,           0},     /* [] */
 
     #ifdef SUPPORT_UTF8
-    {"len8",             p_utf8len,          0},     /* [s] */
+    {"length8",          p_utf8len,          0},     /* [s] */
+    {"len8",             p_utf8len,          0},     /* [s] :alt */
     #endif
 
     /* core - math - integers */
@@ -368,7 +370,7 @@ PRIMITIVE primitive[] =
     /* core - OS/CILK processes */
 
     {"!",                p_system,           0},
-    {"kill",             p_destroyProcess,   0}, /* :replaces destroy-process */
+    {"kill",             p_destroyProcess,   0}, /* :replaces destroy */
     {"exec",             p_exec,             0},
     {"process",          p_process,          0},
     {"pipe",             p_pipe,             0},
@@ -424,7 +426,7 @@ PRIMITIVE primitive[] =
     {"source",           p_symbolSource,     0},
     {"sym",              p_symbol,           0}, 
     {"symbols",          p_symbols,          0},
-    {"syserr",           p_systemError,      0},
+    {"syslasterr",       p_systemError,      0},
     {"sysinfo",          p_systemInfo,       0},
     {"term",             p_term,             0},
     {"throwerror",       p_throwError,       0},
@@ -470,7 +472,6 @@ PRIMITIVE primitive[] =
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
     {"fn?",              p_isFn,             0},
-    {"shared?",          p_isShared,         0}, /* :replaces global? */
     {"inf?",             p_isinf,            0},
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
     {"legal?",           p_isLegal,          0},
@@ -483,6 +484,7 @@ PRIMITIVE primitive[] =
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
+    {"shared?",          p_isShared,         0}, /* :replaces global? */
     {"starts?",          p_startsWith,       0}, /* :replaces starts-with */
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},
