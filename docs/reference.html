@@ -39,7 +39,7 @@ You may use, copy, modify and distribute it freely,
 provided that this notice is preserved.</p>
 <hr/>
 <p><a name="f-bang"></a></p>
-<h2 id="run">! &#47; run</h2>
+<h2 id="section">!</h2>
 <pre><code>syntax: (! str-shell-command)
 </code></pre>
 <p>Description:</p>
@@ -71,7 +71,7 @@ interpreter.</li>
 <p>See: <a href="#f-exec">exec</a>, <a href="#f-process">process</a></p>
 <hr/>
 <p><a name="f-dollar"></a></p>
-<h2 id="section">$</h2>
+<h2 id="section-1">$</h2>
 <pre><code>syntax: ($ int-idx)
 </code></pre>
 <p>Description:</p>
@@ -109,7 +109,7 @@ the variables <code>$0</code>–<code>$15</code> directly.</li>
 <a href="#f-rx">rx</a>, <a href="#f-replace">replace</a>, <a href="#f-parse">parse</a></p>
 <hr/>
 <p><a name="f-plus"></a></p>
-<h2 id="section-1">+</h2>
+<h2 id="section-2">+</h2>
 <pre><code>syntax: (+ int-1 [int-2 ...])
 </code></pre>
 <p>Description:</p>
@@ -159,7 +159,7 @@ evaluating to NaN are treated as zero.</p>
 <a href="#f-percent">&#37;</a></p>
 <hr/>
 <p><a name="f-star"></a></p>
-<h2 id="section-2">*</h2>
+<h2 id="section-3">*</h2>
 <pre><code>syntax: (* int-1 [int-2 ...])
 </code></pre>
 <p>Description:</p>
@@ -182,7 +182,7 @@ treated as zero before multiplication.</p>
 <a href="#f-percent">&#37;</a></p>
 <hr/>
 <p><a name="f-slash"></a></p>
-<h2 id="section-3">&#47;</h2>
+<h2 id="section-4">&#47;</h2>
 <pre><code>syntax: (&#47; int-1 [int-2 ...])
 </code></pre>
 <p>Description:</p>
@@ -207,7 +207,7 @@ error.</p>
 <a href="#f-percent">&#37;</a></p>
 <hr/>
 <p><a name="f-percent"></a></p>
-<h2 id="section-4">%</h2>
+<h2 id="section-5">%</h2>
 <pre><code>syntax: (% int-1 [int-2 ...])
 </code></pre>
 <p>Description:</p>
@@ -236,7 +236,7 @@ function instead, which preserves fractional behavior.</p>
 <a href="#f-slash">&#47;</a>, <a href="#f-mod">mod</a></p>
 <hr/>
 <p><a name="f-plusplus"></a></p>
-<h2 id="section-5">++</h2>
+<h2 id="section-6">++</h2>
 <pre><code>syntax: (++ place [num ...])
 </code></pre>
 <p>Description:</p>
@@ -278,7 +278,7 @@ lst                    ; → (1 4 3)
 <p>See: <a href="#f-minusminus">&#8211;</a>, <a href="#f-inc">inc</a></p>
 <hr/>
 <p><a name="f-minusminus"></a></p>
-<h2 id="section-6">&#8211;</h2>
+<h2 id="section-7">&#8211;</h2>
 <pre><code>syntax: (-- place [num ...])
 </code></pre>
 <p>Description:</p>
@@ -565,7 +565,7 @@ comparisons follow the general type precedence rules.</p>
 <a href="#f-le">&#60;=</a>, <a href="#f-ge">&#62;=</a></p>
 <hr/>
 <p><a name="f-shiftl"></a></p>
-<h2 id="section-7">&#60;&#60;</h2>
+<h2 id="section-8">&#60;&#60;</h2>
 <pre><code>syntax: (&#60;&#60; int-1 int-2 [int-3 ...])
 syntax: (&#60;&#60; int-1)
 </code></pre>
@@ -592,7 +592,7 @@ with wrap-around on overflow.</p>
 <p>See: <a href="#f-shiftr">&#62;&#62;</a></p>
 <hr/>
 <p><a name="f-shiftr"></a></p>
-<h2 id="section-8">&#62;&#62;</h2>
+<h2 id="section-9">&#62;&#62;</h2>
 <pre><code>syntax: (&#62;&#62; int-1 int-2 [int-3 ...])
 syntax: (&#62;&#62; int-1)
 </code></pre>
@@ -625,7 +625,7 @@ given.</li>
 <p>See: <a href="#f-shiftl">&#60;&#60;</a></p>
 <hr/>
 <p><a name="f-andbit"></a></p>
-<h2 id="section-9">&#38;</h2>
+<h2 id="section-10">&#38;</h2>
 <pre><code>syntax: (&#38; int-1 int-2 [int-3 ...])
 </code></pre>
 <p>Description:</p>
@@ -650,7 +650,7 @@ extension rules used in shifts.</li>
 <p>See: <a href="#f-orbit">|</a>, [^](#f-xorbit), <a href="#f-notbit">~</a></p>
 <hr/>
 <p><a name="f-orbit"></a></p>
-<h2 id="section-10">|</h2>
+<h2 id="section-11">|</h2>
 <pre><code>syntax: (| int-1 int-2 [int-3 ...])
 </code></pre>
 <p>Description:</p>
@@ -676,7 +676,7 @@ arguments.</li>
 <p>See: <a href="#f-andbit">&#38;</a>, [^](#f-xorbit), <a href="#f-notbit">~</a></p>
 <hr/>
 <p><a name="f-xorbit"></a></p>
-<h2 id="section-11">^</h2>
+<h2 id="section-12">^</h2>
 <pre><code>syntax: (^ int-1 int-2 [int-3 ...])
 </code></pre>
 <p>Description:</p>
@@ -701,7 +701,7 @@ is set in an odd number of the processed arguments.</p>
 <p>See: <a href="#f-andbit">&#38;</a>, <a href="#f-orbit">|</a>, <a href="#f-notbit">~</a></p>
 <hr/>
 <p><a name="f-notbit"></a></p>
-<h2 id="section-12">~</h2>
+<h2 id="section-13">~</h2>
 <pre><code>syntax: (~ int)
 </code></pre>
 <p>Description:</p>
@@ -2427,7 +2427,7 @@ elements, <code>first</code> and <code>last</code> form the corresponding pair.<
 <p>See: <a href="#f-first">first</a>, <a href="#f-rest">rest</a>, <a href="#f-last">last</a></p>
 <hr/>
 <p><a name="f-const"></a></p>
-<h2 id="const-alias">const [!] &#47; alias</h2>
+<h2 id="const-alias-">const &#47; alias [!]</h2>
 <pre><code>syntax: (const sym-1 exp-1 [sym-2 exp-2] ...)
 </code></pre>
 <p>Description:</p>
@@ -2474,7 +2474,7 @@ is the internal pointer to the function.</li>
 <p><a name="f-context"></a></p>
 <h2 id="context">context</h2>
 <pre><code>syntax: (context [sym-context])
-syntax: (context sym-context str | sym [exp-value])
+syntax: (context sym-context str|sym [exp-value])
 </code></pre>
 <p>Description:</p>
 <p>Switches the current namespace to <code>sym-context</code>. Any
@@ -2683,9 +2683,9 @@ inf.</p>
 <p>Description:</p>
 <p>Computes a 32-bit CRC (Cyclic Redundancy Check) value for
 the bytes contained in <code>str-data</code>. The calculation starts
-with an initial CRC of 0xffffffff and processes each byte
-using the standard polynomial method published by w3.org.
-The result is an unsigned 32-bit integer suitable for
+with an initial CRC of <code>0xffffffff</code> and processes each byte
+using the standard polynomial method published by <code>w3.org</code>.
+The result is an unsigned <code>32-bit</code> integer suitable for
 basic integrity checks.</p>
 <p>CRC values are typically used to detect corruption in
 data streams, files, or network transfers where the data
@@ -2882,7 +2882,7 @@ timestamps when format and locale are consistent.</p>
 <ul>
 <li>The function always interprets the input as UTC and
 does not apply local time zone offsets.</li>
-<li>Invalid or incomplete date strings return nil.</li>
+<li>Invalid or incomplete date strings return <code>nil</code>.</li>
 <li>The supported timestamp range is limited to values
 representable before the year 2038.</li>
 </ul>
@@ -2976,10 +2976,10 @@ l
 </ul>
 <p>See: <a href="#f-minusminus">&#8211;</a>, <a href="#f-inc">inc</a></p>
 <hr/>
-<p><a name="f-define-macro"></a></p>
-<h2 id="define-macro">define-macro</h2>
-<pre><code>syntax: (define-macro (sym-name [sym-param-1 ...]) body)
-syntax: (define-macro (sym-name [(sym-param-1 exp-default) ...]) body)
+<p><a name="f-mac></a></p>
+<h2 id="mac">mac</h2>
+<pre><code>syntax: (mac (sym-name [sym-param-1 ...]) body)
+syntax: (mac (sym-name [(sym-param-1 exp-default) ...]) body)
 </code></pre>
 <p>Description:</p>
 <p>Creates a named runtime macro. When the macro is called,
@@ -2993,7 +2993,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 <p>Examples:</p>
 <pre><code>; 1) simple macro: (inc2 x) → (+ x 2)
 
-(define-macro (inc2 x)
+(mac (inc2 x)
   (+ (eval x) 2))
 
 (inc2 10)
@@ -3003,7 +3003,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 ; 2) custom conditional form
 ;    (if-zero x a b) → (if (= x 0) a b)
 
-(define-macro (if-zero x a b)
+(mac (if-zero x a b)
   (if (= (eval x) 0)
       (eval a)
       (eval b)))
@@ -3016,10 +3016,10 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 
 
 ; 3) macro that defines a new function
-;    (make-fn name (p1) body) → (define (name p1) body)
+;    (make-fn name (p1) body) → (func (name p1) body)
 
-(define-macro (make-fn name params body)
-  (define (name params) (eval body)))
+(mac (make-fn name params body)
+  (func (name params) (eval body)))
 
 (make-fn triple (x) (* x 3))
 (triple 10)
@@ -3029,7 +3029,7 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 ; 4) macro with a default argument
 ;    (add2 x) → (+ x 2)
 
-(define-macro (add2 (x 0))
+(mac (add2 (x 0))
   (+ (eval x) 2))
 
 (add2 10)
@@ -3041,14 +3041,14 @@ If <em>eval</em> is not used, the macro returns unevaluated syntax.</p>
 <p>Notes:</p>
 <ul>
 <li>Macro arguments are not evaluated automatically.</li>
-<li>The macro controls evaluation explicitly using <em>eval</em>.</li>
+<li>The macro controls evaluation explicitly using <code>eval</code>.</li>
 <li>A macro may return evaluated results or unevaluated syntax.</li>
 <li>Runtime macros allow creation of custom control forms.</li>
 <li>A macro with default parameters may receive fewer arguments
 than declared; unspecified parameters take their default
 values.</li>
 </ul>
-<p>See: <a href="#f-fn-macro">fn-macro</a>, <a href="#f-macro">macro</a>, <a href="#f-fn">fn</a></p>
+<p>See: <a href="#f-fn-macro">fn-macro</a>, <a href="#f-macex">macex</a>, <a href="#f-fn">fn</a></p>
 <hr/>
 <p><a name="f-delete"></a></p>
 <h2 id="delete-">delete [!]</h2>
@@ -3058,21 +3058,21 @@ syntax: (delete sym-context [bool])
 <p>Description:</p>
 <p>Removes a symbol from the symbol table or deletes all
 symbols belonging to a context. After deletion, any
-external references to the removed symbol become nil.
+external references to the removed symbol become <code>nil</code>.
 When deleting a context, all symbols inside the context
 are removed and the context name is converted into a
 normal symbol containing nil. A second delete can remove
 the context symbol itself.</p>
-<p>If bool evaluates to true, deletion is allowed only when
-the symbol has no external references. If bool evaluates
-to nil, deletion is unconditional and reference checks are
+<p>If <code>bool</code> evaluates to <code>true</code>, deletion is allowed only when
+the <code>symbol</code> has no external references. If <code>bool</code> evaluates
+to <code>nil</code>, deletion is unconditional and reference checks are
 skipped. This unconditional mode must be used with care:
 if a deleted symbol is still referenced somewhere, the
-missing update to nil can lead to crashes or inconsistent
+missing update to <code>nil</code> can lead to crashes or inconsistent
 program state.</p>
-<p>Protected symbols, built-in functions, nil, and true
-cannot be deleted. delete returns true on successful
-deletion, or nil if deletion was refused.</p>
+<p>Protected symbols, built-in functions, <code>nil</code>, and <code>true</code>
+cannot be deleted. <code>delete</code> returns <code>true</code> on successful
+deletion, or <code>nil</code> if deletion was refused.</p>
 <p>Examples:</p>
 <pre><code>(set lst &#39;(a b xvar c d))
 ;-&#62; (a b xvar c d)
@@ -3114,97 +3114,97 @@ when no external references exist.</li>
 <li>After deleting a context, the context name survives as a
 normal symbol holding nil.</li>
 </ul>
-<p>See: <a href="#f-constant">constant</a>, <a href="#f-context">context</a>,
+<p>See: <a href="#f-const">const</a>, <a href="#f-context">context</a>,
 <a href="#f-symbolp">symbol?</a></p>
 <hr/>
-<p><a name="f-delete-file"></a></p>
-<h2 id="delete-file">delete-file</h2>
-<pre><code>syntax: (delete-file str-file-name)
+<p><a name="f-fdel"></a></p>
+<h2 id="fdel">fdel</h2>
+<pre><code>syntax: (fdel str-file-name)
 </code></pre>
 <p>Description:</p>
-<p>Removes the file specified by str-file-name. Returns true
-when the file is successfully deleted, or nil if the
+<p>Removes the file specified by <code>str-file-name</code>. Returns <code>true</code>
+when the file is successfully deleted, or <code>nil</code> if the
 operation fails. When deleting a local file, error details
-can be retrieved using sys-error. When deleting a URL
-resource, net-error provides additional information.</p>
+can be retrieved using <code>syslasterr</code>. When deleting a URL
+resource, <code>netlasterr</code> provides additional information.</p>
 <p>The file name may refer to a local path or to a URL using
 the file:&#47;&#47; or http:&#47;&#47; schemes. When a URL is used,
-additional parameters may be supported; see delete-url for
+additional parameters may be supported; see <code>urldel</code> for
 details.</p>
 <p>Examples:</p>
-<pre><code>(delete-file "temp.txt")
+<pre><code>(fdel "temp.txt")
 ;-&#62; true or nil
 
-(delete-file "http:&#47;&#47;example.com&#47;sample.txt")
+(fdel "http:&#47;&#47;example.com&#47;sample.txt")
 ;-&#62; true or nil
 
-(delete-file "file:&#47;&#47;notes.txt")
+(fdel "file:&#47;&#47;notes.txt")
 ;-&#62; true or nil
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>For URL deletions, behavior depends on the underlying
 protocol handler.</li>
-<li>Use sys-error or net-error for diagnostics.</li>
+<li>Use syslasterr or netlasterr for diagnostics.</li>
 </ul>
-<p>See: <a href="#f-delete-url">delete-url</a>, <a href="#f-sys-error">sys-error</a>,
-<a href="#f-net-error">net-error</a></p>
+<p>See: <a href="#f-urldel">urldel</a>, <a href="#f-syslasterr">syslasterr</a>,
+<a href="#f-netlasterr">netlasterr</a></p>
 <hr/>
-<p><a name="f-delete-url"></a></p>
-<h2 id="delete-url">delete-url</h2>
-<pre><code>syntax: (delete-url str-url)
+<p><a name="f-urldel"></a></p>
+<h2 id="urldel">urldel</h2>
+<pre><code>syntax: (urldel str-url)
 </code></pre>
 <p>Description:</p>
 <p>Sends an HTTP DELETE request to the resource specified by
-str-url. The remote server must support the DELETE method
+<code>str-url</code>. The remote server must support the DELETE method
 and allow deletion of the target resource; otherwise the
-call returns nil or an error string. Optional parameters
+call returns <code>nil</code> or an error string. Optional parameters
 such as timeouts or custom headers may be supplied in the
-same way as with get-url.</p>
-<p>If str-url begins with file:&#47;&#47;, a file on the local
+same way as with <code>urlget</code>.</p>
+<p>If <code>str-url</code> begins with file:&#47;&#47;, a file on the local
 filesystem is removed instead. This behavior matches
-delete-file when a URL is given.</p>
+<code>fdel</code> when a URL is given.</p>
 <p>Examples:</p>
-<pre><code>(delete-url "http:&#47;&#47;example.com&#47;data.txt")
+<pre><code>(urldel "http:&#47;&#47;example.com&#47;data.txt")
 ;-&#62; true or nil
 
-(delete-url "http:&#47;&#47;example.org:8080&#47;page.html" 5000)
+(urldel "http:&#47;&#47;example.org:8080&#47;page.html" 5000)
 ;-&#62; true or nil
 
-(delete-url "file:&#47;&#47;&#47;home&#47;user&#47;remove.txt")
+(urldel "file:&#47;&#47;&#47;home&#47;user&#47;remove.txt")
 ;-&#62; true or nil
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>Remote deletion depends on server configuration and
 permissions.</li>
-<li>Additional options follow the same rules as get-url.</li>
+<li>Additional options follow the same rules as <code>urlget</code>.</li>
 <li>Rebel-style server nodes accept DELETE requests
 unless started with -http-safe.</li>
 </ul>
-<p>See: <a href="#f-delete-file">delete-file</a>, <a href="#f-get-url">get-url</a>,
-<a href="#f-net-error">net-error</a></p>
+<p>See: <a href="#f-fdel">fdel</a>, <a href="#f-urlget">urlget</a>,
+<a href="#f-netlasterr">netlasterr</a></p>
 <hr/>
-<p><a name="f-destroy"></a></p>
-<h2 id="destroy-">destroy [!]</h2>
-<pre><code>syntax: (destroy int-pid)
-syntax: (destroy int-pid int-signal)
+<p><a name="f-kill"></a></p>
+<h2 id="kill-">kill [!]</h2>
+<pre><code>syntax: (kill int-pid)
+syntax: (kill int-pid int-signal)
 </code></pre>
 <p>Description:</p>
 <p>Sends a termination signal to the process identified by
-int-pid. When only int-pid is given, destroy sends a
-default fatal signal equivalent to SIGKILL. When
-int-signal is supplied, the specified Unix signal is sent
-instead. The function returns true on success or nil on
+<code>int-pid</code>. When only <code>int-pid</code> is given, <code>kill</code> sends a
+default fatal signal equivalent to <code>SIGKILL</code>. When
+<code>int-signal</code> is supplied, the specified Unix signal is sent
+instead. The function returns <code>true</code> on success or <code>nil</code> on
 failure.</p>
-<p>Process IDs are typically obtained from fork or process.
-destroy operates exactly like the Unix kill utility and
+<p>Process IDs are typically obtained from <code>fork</code> or <code>process</code>.
+<code>kill</code> operates exactly like the Unix kill utility and
 obeys all standard semantics of process groups and user
 permissions.</p>
 <p><strong>CAUTION:</strong><br/>
-- If int-pid is 0, the signal is sent to all processes in
+- If <code>int-pid</code> is <code>0</code>, the signal is sent to all processes in
   the caller’s process group.<br/>
-- If int-pid is -1, the signal is sent to all processes
+- If <code>int-pid</code> is -1, the signal is sent to all processes
   owned by the current user.<br/>
 - Using these special values can terminate large numbers
   of processes and should be used with extreme care.</p>
@@ -3213,7 +3213,7 @@ permissions.</p>
 (set pid (process "&#47;usr&#47;bin&#47;bc" in out))
 ;-&#62; &#60;pid&#62;
 
-(destroy pid)
+(kill pid)
 ;-&#62; true
 
 ; kill a forked background worker
@@ -3223,30 +3223,30 @@ permissions.</p>
 ;-&#62; &#60;pid&#62;
 
 (sleep 100)
-(destroy pid)
+(kill pid)
 ;-&#62; true
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>Signals follow standard Unix behavior.</li>
-<li>destroy can terminate process groups when specific PID
-values (0 or -1) are used.</li>
+<li><code>kill</code> can terminate process groups when specific PID
+values <code>(0 or -1)</code> are used.</li>
 </ul>
-<p>See: <a href="#f-process">process</a>, <a href="#f-fork">fork</a>, <a href="#f-wait-pid">wait-pid</a></p>
+<p>See: <a href="#f-process">process</a>, <a href="#f-fork">fork</a>, <a href="#f-waitpid">waitpid</a></p>
 <hr/>
 <p><a name="f-det"></a></p>
 <h2 id="det">det</h2>
-<pre><code>syntax: (det matrix [float-pivot])
+<pre><code>syntax: (mat-det matrix [float-pivot])
 </code></pre>
 <p>Description:</p>
-<p>Computes the determinant of a square matrix. The matrix
+<p>Computes the determinant of a square <code>matrix</code>. The matrix
 may be given as a nested list or as an array. If the
 matrix is singular and no pivot override is supplied, det
 returns nil.</p>
-<p>The optional float-pivot argument specifies a substitute
+<p>The optional <code>float-pivot</code> argument specifies a substitute
 value for zero pivots during LU decomposition. This is
 useful when working with singular or near-singular
-matrices. A value of 0.0 forces all zero pivots to be
+matrices. A value of <code>0.0</code> forces all zero pivots to be
 treated as exact zeros; very small values allow controlled
 fallback behavior and prevent premature singularity
 detection.</p>
@@ -3256,31 +3256,33 @@ detection.</p>
           (1 -2 0)))
 ;-&#62; ((-1 1 1) (1 4 -5) (1 -2 0))
 
-(det A)
+(mat-det A)
 ;-&#62; -1
 
 ; singular matrices
-(det &#39;((2 -1)
+(mat-det &#39;((2 -1)
        (4 -2)))
 ;-&#62; nil
 
-(det &#39;((2 -1)
+(mat-det &#39;((2 -1)
        (4 -2)) 0)
 ;-&#62; -0
 
-(det &#39;((2 -1)
+(mat-det &#39;((2 -1)
        (4 -2)) 1e-20)
 ;-&#62; -4e-20
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>float-pivot influences LU decomposition when zero
+<li><code>float-pivot</code> influences LU decomposition when zero
 pivots occur.</li>
-<li>When omitted, singular matrices produce nil.</li>
+<li>When omitted, singular matrices produce <code>nil</code>.</li>
 <li>Arrays may be used instead of nested lists.</li>
 </ul>
-<p>See: <a href="#f-invert">invert</a>, <a href="#f-mat">mat</a>, <a href="#f-multiply">multiply</a>,
-<a href="#f-transpose">transpose</a></p>
+<p>See: <a href="#f-mat-invert">mat-invert</a>,
+<a href="#f-matapply">mat-apply</a>,
+<a href="#f-mat-multiply">mat-multiply</a>,
+<a href="#f-mat-transpose">mat-transpose</a></p>
 <hr/>
 <p><a name="f-device"></a></p>
 <h2 id="device">device</h2>
@@ -3289,18 +3291,17 @@ pivots occur.</li>
 <p>Description:</p>
 <p>Sets or retrieves the current I&#47;O device. When called
 without arguments, the function returns the handle of the
-currently active device. When int-io-handle is supplied,
+currently active device. When <code>int-io-handle</code> is supplied,
 it becomes the new target for input and output.</p>
-<p>The value 0 selects the default standard streams:</p>
-<ul>
-<li>0 — stdin<br/></li>
-<li>1 — stdout<br/></li>
-<li>2 — stderr<br/></li>
-</ul>
+<p>The value <code>0</code> selects the default standard streams:</p>
+<pre><code>- 0 — stdin  
+- 1 — stdout  
+- 2 — stderr  
+</code></pre>
 <p>A device handle may also be a file descriptor previously
 returned by open. When a file descriptor is active, all
 high-level I&#47;O functions (print, println, write,
-write-line, read-char, read-line) operate on that file
+writeln, readc, readln) operate on that file
 instead of the console.</p>
 <p>Any valid open handle can be used as the active I&#47;O
 channel.</p>
@@ -3317,35 +3318,35 @@ channel.</p>
 <p>Notes:</p>
 <ul>
 <li>Closing the current device automatically resets the
-device to 0.</li>
+device to <code>0</code>.</li>
 <li>All standard I&#47;O functions respect the currently active
 device handle.</li>
 </ul>
 <p>See: <a href="#f-open">open</a>, <a href="#f-close">close</a>,
-<a href="#f-print">print</a>, <a href="#f-read-line">read-line</a></p>
+<a href="#f-print">print</a>, <a href="#f-readln">readln</a></p>
 <hr/>
-<p><a name="f-difference"></a></p>
-<h2 id="difference">difference</h2>
-<pre><code>syntax: (difference list-1 list-2)
-syntax: (difference list-1 list-2 bool)
+<p><a name="f-diff></a></p>
+<h2 id="diff">diff</h2>
+<pre><code>syntax: (diff list-1 list-2)
+syntax: (diff list-1 list-2 bool)
 </code></pre>
 <p>Description:</p>
 <p>Computes the difference between two lists. In the first
-form, the result contains all unique elements that appear
-in list-1 but not in list-2. The input lists may contain
+syntax, the result contains all unique elements that appear
+in <code>list-1</code> but not in <code>list-2</code>. The input lists may contain
 duplicates, but the result of this set operation is
 unique.</p>
-<p>In the second form, difference operates in list mode when
-bool is true. All elements appearing in list-2 are removed
-from list-1, while duplicates of remaining elements are
+<p>In the second syntax, difference operates in list mode when
+<code>bool</code> is <code>true</code>. All elements appearing in <code>list-2</code> are removed
+from <code>list-1</code>, while duplicates of remaining elements are
 preserved.</p>
 <p>Examples:</p>
-<pre><code>(difference &#39;(2 5 6 0 3 5 0 2)
-            &#39;(1 2 3 3 2 1))
+<pre><code>(diff &#39;(2 5 6 0 3 5 0 2)
+      &#39;(1 2 3 3 2 1))
 ;-&#62; (5 6 0)
 
-(difference &#39;(2 5 6 0 3 5 0 2)
-            &#39;(1 2 3 3 2 1)
+(diff &#39;(2 5 6 0 3 5 0 2)
+      &#39;(1 2 3 3 2 1)
             true)
 ;-&#62; (5 6 0 5 0)
 </code></pre>
@@ -3353,70 +3354,70 @@ preserved.</p>
 <ul>
 <li>Set mode returns a unique list.</li>
 <li>List mode preserves duplicates except for those removed
-due to matches with list-2.</li>
+due to matches with <code>list-2</code>.</li>
 </ul>
 <p>See: <a href="#f-intersect">intersect</a>, <a href="#f-unique">unique</a>,
 <a href="#f-union">union</a></p>
 <hr/>
-<p><a name="f-directory"></a></p>
-<h2 id="directory">directory</h2>
-<pre><code>syntax: (directory)
-syntax: (directory str-path)
-syntax: (directory str-path str-pattern [regex-option])
+<p><a name="f-dir"></a></p>
+<h2 id="dir">dir</h2>
+<pre><code>syntax: (dir)
+syntax: (dir str-path)
+syntax: (dir str-path str-pattern [regex-option])
 </code></pre>
 <p>Description:</p>
 <p>Returns a list of directory entry names for the path in
-str-path. When str-path is omitted, entries from the
-current working directory are returned. On failure, nil is
+<code>str-path</code>. When <code>str-path</code> is omitted, entries from the
+current working directory are returned. On failure, <code>nil</code> is
 returned.</p>
 <p>In the pattern form, only filenames matching the regular
-expression in str-pattern are included. When present,
-regex-option controls the matching mode. Matching follows
-the same rules as in regex.</p>
+expression in <code>str-pattern</code> are included. When present,
+<code>regex-option</code> controls the matching mode. Matching follows
+the same rules as in <code>rx</code> function.</p>
 <p>Examples:</p>
-<pre><code>(directory "&#47;bin")
+<pre><code>(dir "&#47;bin")
 
-(directory "." "\\.c")
+(dir "." "\\.c")
 ;-&#62; ("file1.c" "file2.c")
 
-(directory "." {\\.c})
+(dir "." {\\.c})
 ;-&#62; ("file1.c" "file2.c")
 
 ; show hidden entries
-(directory "." "^[.]")
+(dir "." "^[.]")
 ;-&#62; ("." ".." ".conf" ".cache")
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>str-pattern uses standard regex syntax.</li>
-<li>regex-option enables specific regex evaluation modes.</li>
-<li>A nil return indicates that the directory could not be
+<li><code>str-pattern</code> uses standard regex syntax.</li>
+<li><code>regex-option</code> enables specific <code>rx</code> evaluation modes.</li>
+<li>A <code>nil</code> return indicates that the directory could not be
 read.</li>
 </ul>
-<p>See: <a href="#f-regex">regex</a>, <a href="#f-find">find</a>,
-<a href="#f-findall">find-all</a>, <a href="#f-parse">parse</a>,
+<p>See: <a href="#f-rx">rx</a>, <a href="#f-pos">pos</a>,
+<a href="#f-find">find</a>, <a href="#f-parse">parse</a>,
 <a href="#f-replace">replace</a>, <a href="#f-search">search</a></p>
 <hr/>
-<p><a name="f-directoryp"></a></p>
-<h2 id="directory-1">directory?</h2>
-<pre><code>syntax: (directory? str-path)
+<p><a name="f-dirp"></a></p>
+<h2 id="dir-1">dir?</h2>
+<pre><code>syntax: (dir? str-path)
 </code></pre>
 <p>Description:</p>
-<p>Checks whether str-path refers to an existing directory.
-Returns true when the path is a directory, or nil when it
+<p>Checks whether <code>str-path</code> refers to an existing directory.
+Returns <code>true</code> when the path is a directory, or <code>nil</code> when it
 is not.</p>
 <p>Examples:</p>
-<pre><code>(directory? "&#47;etc")
+<pre><code>(dir? "&#47;etc")
 ;-&#62; true
 
-(directory? "&#47;usr&#47;local&#47;bin&#47;nvi2&#47;")
+(dir? "&#47;usr&#47;local&#47;bin&#47;nvi2&#47;")
 ;-&#62; nil
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>The check follows the filesystem exactly; trailing
 slashes are allowed.</li>
-<li>Returns nil when the path does not exist or is not a
+<li>Returns <code>nil</code> when the path does not exist or is not a
 directory.</li>
 </ul>
 <p>See: <a href="#f-filep">file?</a></p>
@@ -6161,12 +6162,12 @@ sharing functions or constants from the <code>MAIN</code> context.</p>
 <pre><code>syntax: (shared? sym)
 </code></pre>
 <p>Description:</p>
-<p>Checks whether the symbol in <code>sym</code> is shared.
-A symbol is considered shared if it is visible without
-a context prefix from other contexts. This includes
-built-in symbols and symbols explicitly marked shared
-using the <code>shared</code> function.
-Returns true or nil.</p>
+<p>Checks whether the symbol in <code>sym</code> is shared.  A symbol
+is considered shared if it is visible without a context
+prefix from other contexts.  This includes built-in
+functions and symbols and symbols explicitly marked
+shared using the <code>shared</code> function.  Returns true or
+nil.</p>
 <p>Examples:</p>
 <pre><code>; built-in functions are always shared
 ;-----------------------------------------------------------
@@ -6189,7 +6190,7 @@ Returns true or nil.</p>
 </code></pre>
 <p>Notes:</p>
 <ul>
-<li>Returns <code>true</code> for all built-in functions.</li>
+<li>Returns <code>true</code> for all built-in functions and symbols.</li>
 <li>Returns <code>true</code> for symbols shared via <code>shared</code>.</li>
 <li>Returns nil for non-shared MAIN symbols.</li>
 </ul>
