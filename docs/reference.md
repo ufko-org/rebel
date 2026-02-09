@@ -4355,7 +4355,7 @@ See: [open](#f-open), [close](#f-close),
 ---
 
 
-<a name="f-diff></a>
+<a name="f-diff"></a>
 ## diff
 
 ```
