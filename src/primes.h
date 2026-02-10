@@ -279,6 +279,7 @@ PRIMITIVE primitive[] =
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
+    {"ifnot",            p_ifNot,            2},
     {"throw",            p_throw,            0}, 
     {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
@@ -427,7 +428,7 @@ PRIMITIVE primitive[] =
     {"source",           p_symbolSource,     0},
     {"sym",              p_symbol,           0}, 
     {"symbols",          p_symbols,          0},
-    {"syslasterr",       p_systemError,      0},
+    {"syserr",           p_systemError,      0},
     {"sysinfo",          p_systemInfo,       0},
     {"term",             p_term,             0},
     {"throwerror",       p_throwError,       0},
@@ -531,7 +532,7 @@ PRIMITIVE primitive[] =
     {"netsessions",        p_netSessions,      0},
     {"neteval",            p_netEval,          0},
     {"netinterface",       p_netInterface,     0},
-    {"netlasterr",         p_netLastError,     0},
+    {"neterr",             p_netLastError,     0},
 
     /* core - http */
 
