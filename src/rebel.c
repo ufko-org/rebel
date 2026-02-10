@@ -70,8 +70,9 @@ char banner2[]= ". Options: rebel -h";
 
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
+/* ufko: userland bootstrap */
 char preLoad[] = 
-    "(func (printf) (print (format (args 0) (expand (rest (args)))))) (shared 'printf)"
+    "(func (printf) (print (format (args 0) (expand (rest (args)))))) (const (shared 'printf))"
     "(set $preload '(printf)) (const (shared '$preload))";
 void printHelpText(void);
 #ifdef READLINE

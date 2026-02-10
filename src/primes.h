@@ -279,7 +279,7 @@ PRIMITIVE primitive[] =
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
-    {"ifnot",            p_ifNot,            2},
+    {"ifnot",            p_ifNot,            2}, /* :rebel full, multi-branch if counterpart */
     {"throw",            p_throw,            0}, 
     {"unless",           p_unless,           2}, 
     {"until",            p_until,            2},
