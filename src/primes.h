@@ -152,6 +152,8 @@ PRIMITIVE primitive[] =
 
     /* core - data - workers */
 
+    {"all",              p_forAll,           0}, 
+    {"any",              p_any,              0}, 
     {"append",           p_append,           0},     /* [l,s,a] */
     {"apply",            p_apply,            0},     /* [l] */
     {"assoc",            p_assoc,            0},     /* [l] */
@@ -167,6 +169,7 @@ PRIMITIVE primitive[] =
     {"cut",              p_member,           0},     /* [l,s,a] */
     {"diff",             p_difference,       0},     /* [l] :replaces difference */
     {"dup",              p_dup,              0},     /* [any] */
+    {"ends",             p_endsWith,         0},     /* [] :replaces ends-with */
     {"expand",           p_expand,           0},     /* [l] */
     {"extend",           p_extend,           0x400}, /* [l,s] */
     {"filter",           p_filter,           0},     /* [l] */
@@ -204,6 +207,7 @@ PRIMITIVE primitive[] =
     {"select",           p_select,           0},     /* [] */
     {"slice",            p_slice,            0},     /* [] */
     {"sort",             p_sort,             0x400}, /* [] */
+    {"starts",           p_startsWith,       0},     /* [] :replaces starts-with */
     {"swap",             p_swap,             0},     /* [] */
     {"tcase",            p_title,            0},     /* [] :replaces title-case */
     {"trim",             p_trim,             0},     /* [] */
@@ -460,38 +464,34 @@ PRIMITIVE primitive[] =
 
     /* core - predicates */
 
-    {"nan?",             p_isnan,            0},
-    {"all?",             p_forAll,           0},
-    {"any?",             p_any,              0}, /* :rebel */
+    {"nan?",             p_isnan,            0}, 
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
-    {"empty?",           p_isEmpty,          0},
-    {"ends?",            p_endsWith,         0}, /* :replaces ends-with */
-    {"even?",            p_isEven,           0},
+    {"empty?",           p_isEmpty,          0}, /* np -> remove */
+    {"even?",            p_isEven,           0}, 
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
     {"fn?",              p_isFn,             0},
     {"inf?",             p_isinf,            0},
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
-    {"legal?",           p_isLegal,          0},
+    {"legal?",           p_isLegal,          0}, 
     {"list?",            p_isList,           0},
     {"macro?",           p_isMacro,          0},
     {"nil?",             p_isNil,            0},
-    {"null?",            p_isNull,           0},
-    {"number?",          p_isNumber,         0},
-    {"odd?",             p_isOdd,            0},
+    {"null?",            p_isNull,           0},  
+    {"number?",          p_isNumber,         0}, 
+    {"odd?",             p_isOdd,            0}, 
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
     {"shared?",          p_isShared,         0}, /* :replaces global? */
-    {"starts?",          p_startsWith,       0}, /* :replaces starts-with */
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},
     {"true?",            p_isTrue,           0},
-    {"zero?",            p_isZero,           0},
+    {"zero?",            p_isZero,           0}, 
 
     /* core - flow - boosters */
 
