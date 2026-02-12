@@ -119,7 +119,7 @@ PRIMITIVE primitive[] =
     {"dolist",           p_dolist,           2}, /* [l,a] */
     {"forl",             p_dolist,           2}, /* [l,a] :alt for list elements */
     {"dostring",         p_dostring,         2}, /* [s] */
-    {"fors",             p_dostring,         2}, /* [s] :alt for string chars */
+    {"fors",             p_dostring,         2}, /* [s] :alt for string code points */
     {"doargs",           p_doargs,           2}, /* [l] */
     {"forf",             p_doargs,           2}, /* [l] :alt for function args */
     {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
@@ -169,7 +169,7 @@ PRIMITIVE primitive[] =
     {"cut",              p_member,           0},     /* [l,s,a] */
     {"diff",             p_difference,       0},     /* [l] :replaces difference */
     {"dup",              p_dup,              0},     /* [any] */
-    {"ends",             p_endsWith,         0},     /* [] :replaces ends-with */
+    {"ends",             p_endsWith,         0},     /* [l,s] :replaces ends-with */
     {"expand",           p_expand,           0},     /* [l] */
     {"extend",           p_extend,           0x400}, /* [l,s] */
     {"filter",           p_filter,           0},     /* [l] */
@@ -207,7 +207,7 @@ PRIMITIVE primitive[] =
     {"select",           p_select,           0},     /* [] */
     {"slice",            p_slice,            0},     /* [] */
     {"sort",             p_sort,             0x400}, /* [] */
-    {"starts",           p_startsWith,       0},     /* [] :replaces starts-with */
+    {"starts",           p_startsWith,       0},     /* [l,s] :replaces starts-with */
     {"swap",             p_swap,             0},     /* [] */
     {"tcase",            p_title,            0},     /* [] :replaces title-case */
     {"trim",             p_trim,             0},     /* [] */
