@@ -3,13 +3,13 @@
 (load "testing.rbl")
 
 (test "1: ends? string"
-  (ends? "hello" "o")
+  (ends "hello" "o")
   true)
 
 (test "2: ends? string"
-  (ends? "hello" "lo")
+  (ends "hello" "lo")
   true)
 
 (test "2: ends? string"
-  (ends? "hello" "xx")
+  (ends "hello" "xx")
   nil)
