@@ -26,7 +26,6 @@
 
 #ifdef READLINE
     #include <readline/readline.h>
-    /* take following line out on Slackware Linux */
     #include <readline/history.h>
 #endif /* end READLINE */
 
@@ -3125,19 +3124,15 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
-    /*
+    
     SYMBOL *sym;
     if(params->type == CELL_SYMBOL)
     {
         sym = (SYMBOL *)params->contents;
-        if(isShared(sym->flags))
-        {
-        }
-        else
-        {
-        }
-   }
-   */
+        printf("%c\n", sym->name[0]);
+        printf("%s\n", sym->name);
+    }
+   
    return(nilCell);
 }
 
