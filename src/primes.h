@@ -109,7 +109,7 @@ PRIMITIVE primitive[] =
     {"local",            p_local,            2},
     {"func",             p_define,           0x402}, /* :rebel :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel reimplemented :replaces setq/setf */ 
-    {"tie",              p_tie,              0x400}, /* :rebel :replaces set ' */ 
+    {"setn",             p_tie,              0x400}, /* :rebel :replaces set ' */ 
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
@@ -178,7 +178,6 @@ PRIMITIVE primitive[] =
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
     {"count",            p_count,            0},     /* [l] */
-    {"index",            p_index,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
@@ -192,7 +191,8 @@ PRIMITIVE primitive[] =
     {"parse",            p_parse,            0},     /* [] */
     {"pop",              p_pop,              0x400}, /* [] */
     {"popassoc",         p_popAssoc,         0x400}, /* [] */
-    {"pos",              p_find,             0},     /* [l,s] :replaces find */
+    {"pos",              p_find,             0},     /* [l,s] :replaces find - pos by value */
+    {"posp",             p_index,            0},     /* [l] :replaces index - positions by predicate */
     {"push",             p_push,             0x400}, /* [] */
     {"ref",              p_ref,              0},     /* [] */
     {"refall",           p_refAll,           0},     /* [] */
