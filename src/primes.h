@@ -108,8 +108,8 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"func",             p_define,           0x402}, /* :rebel :replaces define */
-    {"set",              p_setdef,           0x400}, /* :rebel reimplemented :replaces setq/setf */ 
-    {"setn",             p_tie,              0x400}, /* :rebel :replaces set ' */ 
+    {"set",              p_setdef,           0x400}, /* :rebel - set value to variable  */ 
+    {"setq",             p_tie,              0x400}, /* :rebel - bind value to 'symbol - name tells the truth finally */ 
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
