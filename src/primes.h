@@ -116,14 +116,10 @@ PRIMITIVE primitive[] =
     /* core - data - iterators */
 
     {"loop",             p_loop,             2}, /* [l,s,a,c] :rebel */
-    {"dolist",           p_dolist,           2}, /* [l,a] */
-    {"forl",             p_dolist,           2}, /* [l,a] :alt for list elements */
-    {"dostring",         p_dostring,         2}, /* [s] */
-    {"fors",             p_dostring,         2}, /* [s] :alt for string code points */
-    {"doargs",           p_doargs,           2}, /* [l] */
-    {"forf",             p_doargs,           2}, /* [l] :alt for function args */
-    {"ls",               p_dotree,           2}, /* :replaces dotree, "loop symbols" in context */
-    {"forc",             p_dotree,           2}, /* :alt for context */
+    {"forl",             p_dolist,           2}, /* [l,a] for list/array elements */
+    {"fors",             p_dostring,         2}, /* [s] for string code points */
+    {"forf",             p_doargs,           2}, /* [l] for function args */
+    {"forc",             p_dotree,           2}, /* [c] for context symbols */
 
     /* core - data - sequencers */
 
