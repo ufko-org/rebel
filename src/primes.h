@@ -273,7 +273,6 @@ PRIMITIVE primitive[] =
     {"do",               p_evalBlock,        1}, /* :replaces begin */
     {"case",             p_case,             2},
     {"catch",            p_catch,            0},
-    {"cond",             p_condition,        1},
     {"repeat",           p_dotimes,          2}, /* :replaces dotimes */
     {"dountil",          p_doUntil,          2},
     {"dowhile",          p_doWhile,          2},
