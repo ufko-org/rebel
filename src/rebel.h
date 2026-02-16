@@ -254,6 +254,7 @@ This is for 64bit large file support (LFS),
 #define CELL_FN_MACRO (13 | ENVELOPE_TYPE_MASK | LIST_TYPE_MASK | EVAL_SELF_TYPE_MASK)
 #define CELL_ARRAY (14 | ENVELOPE_TYPE_MASK | EVAL_SELF_TYPE_MASK)
 #define CELL_DYN_SYMBOL (15 | SYMBOL_TYPE_MASK)
+#define CELL_DEREF (16 | ENVELOPE_TYPE_MASK)
 #define CELL_FREE 0xFF
 
 /* cell type classes */
