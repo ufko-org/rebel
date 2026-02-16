@@ -72,8 +72,9 @@ char linkOffset[] = "&&&&@@@@";
 /* ufko: userland bootstrap */
 char preLoad[] = 
     "(func (printf) (print (format (args 0) (expand (rest (args)))))) (const (shared 'printf))"
-    "(mac (setf) (if (quote? (args 0)) (do (puts {Warn: quoted symbol used in function setf}) nil) (do (puts {Info: in Rebel use 'set' for variable assignment}) (set (eval (args 0)) (args 1))))) (const (shared 'setf))"
-    "(set $preload '(printf setf)) (const (shared '$preload))";
+    "(mac (setf) (if (quote? (args 0)) (do (puts {Warn: quoted symbol used in function setf: } (args 0)) nil) (do (puts {Info: in Rebel use 'set' for variable assignment.}) (set (eval (args 0)) (args 1))))) (const (shared 'setf))"
+    "(mac (cond) (puts {Info: in Rebel use multi-branch 'if/ifnot' instead of 'cond'.}) nil) (const (shared 'cond))"
+    "(set $preload '(cond printf setf)) (const (shared '$preload))";
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
