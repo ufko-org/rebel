@@ -5443,9 +5443,7 @@ SETDEF_BEGIN:
             deleteList((CELL *)cell->contents);
         }
     }
-    else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
-            || cell->type == CELL_BIGINT
-           )
+    else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL || cell->type == CELL_BIGINT)
     {
         freeMemory( (void *)cell->contents);
     }
