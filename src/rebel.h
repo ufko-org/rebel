@@ -201,6 +201,8 @@ This is for 64bit large file support (LFS),
 #define TKN_LEFT_PAR '('
 #define TKN_RIGHT_PAR ')'
 #define TKN_QUOTE '\''
+/* ufko: deref */
+#define TKN_DEREF '*'
 
 /* symbol flags types and masks */
 #define PRINT_TYPE_MASK 0x0F

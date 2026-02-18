@@ -1452,6 +1452,19 @@ CELL *evaluateExpression(CELL *cell)
         case CELL_QUOTE:
             return((CELL *)cell->contents);
 
+        /* ufko: deref */
+        case CELL_DEREF:
+            /* first level: unquote */
+            result = evaluateExpression((CELL *)cell->contents);
+            if(result->type != CELL_SYMBOL)  
+            {
+                return(errorProcExt(ERR_SYMBOL_EXPECTED, result));
+            }
+            /* second level: get place */
+            result = evaluateExpression(result);
+            /* return place */
+            return(result);
+
         case CELL_EXPRESSION:
             args = (CELL *)cell->contents;
             if(++recursionCount > (int)MAX_CPU_STACK)
@@ -2668,6 +2681,13 @@ void printCell(CELL *cell, UINT printFlag, UINT device)
             printCell((CELL *)cell->contents, printFlag, device);
             break;
 
+        /* ufko: deref */
+        case CELL_DEREF:
+            varPrintf(device, "*");
+            prettyPrintFlags |= PRETTYPRINT_DOUBLE;
+            printCell((CELL *)cell->contents, printFlag, device);
+            break;
+
         case CELL_EXPRESSION:
         case CELL_FN:
         case CELL_FN_MACRO:
@@ -3757,6 +3777,12 @@ GETNEXT:
             compileExpression(stream, newCell);
             break;
 
+        /* ufko: deref */
+        case TKN_DEREF:
+            newCell = getCell(CELL_DEREF);
+            compileExpression(stream, newCell);
+            break;
+
         case TKN_LEFT_PAR:
             ++parStackCounter;
             newCell = getCell(CELL_EXPRESSION);
@@ -3791,7 +3817,7 @@ GETNEXT:
 
     linkCell(cell, newCell, listFlag);
 
-    if(cell->type == CELL_QUOTE && listFlag == TRUE)
+    if((cell->type == CELL_QUOTE || cell->type == CELL_DEREF) && listFlag == TRUE)
     {
         return(TRUE);
     }
@@ -4118,6 +4144,8 @@ STRIP:
                 break;
 
             case '\'':
+            /* ufko: deref */
+            case '*':
             case '(':
             case ')':
                 *tkn = 0;
@@ -4182,6 +4210,7 @@ STRIP:
                 while(  tknLen < MAX_SYMBOL
                         && (unsigned char)*stream->ptr > ' '
                         && *stream->ptr != '"' && *stream->ptr != '\''
+                        && *stream->ptr != '*' /* ufko: deref */
                         && *stream->ptr != '(' && *stream->ptr != ')'
                         && *stream->ptr != ':' && *stream->ptr != ','
                         && *stream->ptr != 0)
@@ -5352,7 +5381,6 @@ CELL *p_macro(CELL *params)
 CELL *p_setdef(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
-    /* SYMBOL *testSym; */ 
     CELL *cell;
     CELL *head;
     CELL *new;
