@@ -5506,6 +5506,7 @@ SETDEF_BEGIN:
     return(cell);
 }
 
+/* ufko: */
 CELL *p_setmut(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
@@ -5514,8 +5515,13 @@ CELL *p_setmut(CELL *params)
     CELL *new;
     CELL *stringRef;
     char *indexRefPtr;
+    UINT *idx = envStackIdx;
+    int isLocal = 0;
 
 SETMUT_BEGIN:
+
+    idx = envStackIdx;
+    isLocal = 0;
 
     if(params->next == nilCell)
     {
@@ -5551,6 +5557,34 @@ SETMUT_BEGIN:
     symbolRef = symbolCheck;
     stringRef = stringCell;
     indexRefPtr = stringIndexPtr;
+
+    /* Reject: unbound and non-stack symbols */
+    if(symbolRef != NULL)
+    {
+        /* Reject: unbound symbol */
+        if(symbolRef->mutable == 0)
+        {
+            return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolRef));
+        }
+
+        /* Reject: symbol not local to current call-chain */
+        idx = envStackIdx;
+        isLocal = 0;
+
+        while(idx > envStack)
+        {
+            if(symbolRef == (SYMBOL *)*(--idx))
+            {
+                isLocal = 1;
+                break;
+            }
+        }
+
+        if(isLocal == 0)
+        {
+            return errorProcExt(ERR_SYMBOL_NONLOCAL_MUT, stuffSymbol(symbolRef));
+        }
+    }
 
     if(symbolRef && isProtected(symbolRef->flags) && symbolRef->contents == (UINT)cell)
     {
