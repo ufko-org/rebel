@@ -173,12 +173,11 @@ PRIMITIVE primitive[] =
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
-    {"count",            p_count,            0},     /* [l] */
+    {"freq",             p_count,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
-    {"length",           p_length,           0},     /* [any] */
-    {"len",              p_length,           0},     /* [any] :alt */
+    {"len",              p_length,           0},     /* [any] */
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
@@ -213,8 +212,7 @@ PRIMITIVE primitive[] =
     {"unique",           p_unique,           0},     /* [] */
 
     #ifdef SUPPORT_UTF8
-    {"length8",          p_utf8len,          0},     /* [s] */
-    {"len8",             p_utf8len,          0},     /* [s] :alt */
+    {"len8",             p_utf8len,          0},     /* [s] */
     #endif
 
     /* core - math - integers */
@@ -412,6 +410,7 @@ PRIMITIVE primitive[] =
     {"history",          p_history,          0},
     {"lasterr",          p_lastError,        0},
     {"load",             p_load,             0},
+    {"local?",           p_isLocal,          0}, /* :rebel */
     {"locale",           p_setLocale,        0},
     {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
     {"pprint",           p_prettyPrint,      0},
@@ -463,6 +462,7 @@ PRIMITIVE primitive[] =
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},
+    {"bound?",           p_isBound,          0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
     {"empty?",           p_isEmpty,          0}, /* np -> remove */
