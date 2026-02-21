@@ -5539,17 +5539,6 @@ SETMUT_BEGIN:
         }
     }
 
-    /* Reject: unbound symbol */
-    if(params->type == CELL_SYMBOL)
-    {
-        symbolMut = (SYMBOL *)params->contents;
-        if(symbolMut->mutable == 0)
-        {
-            /* return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolMut)); */
-            return(nilCell);
-        }
-    }
-
     cell = evaluateExpression(params);
 
     if(cell == nilCell || cell == trueCell)
