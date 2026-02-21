@@ -3274,8 +3274,9 @@ char *errorMessage[] =
     "cannot convert NULL to string",/* 76 */
     "quoted symbol used",                  /* 77 ufko: */
     "unbound symbol used",                 /* 78 ufko: */
-    "named function definition expected",  /* 79 ufko: */
-    "quoted symbol expected",              /* 80 ufko: */
+    "non-local symbol used",               /* 79 ufko: */
+    "named function definition expected",  /* 80 ufko: */
+    "quoted symbol expected",              /* 81 ufko: */
     NULL
 };
 
