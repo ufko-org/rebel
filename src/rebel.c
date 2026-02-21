@@ -5768,6 +5768,23 @@ CELL *p_set(CELL *params)
     }
 }
 
+/* ufko: */
+CELL *p_isLocal(CELL *params)
+{
+    SYMBOL *symbol;
+    UINT *idx = envStackIdx;
+
+    params = getSymbol(params, &symbol);
+    /* make sure symbol is local in call hierachy */
+    while(idx > envStack)
+    {
+        if(symbol == (SYMBOL *)*(--idx))
+        {
+            return(trueCell);
+        }
+    }
+    return(nilCell);
+}
 
 CELL *p_constant(CELL *params)
 {
@@ -7725,6 +7742,22 @@ CELL *p_defineNew(CELL *params)
 
 CELL *isType(CELL *, int);
 
+/* ufko: */
+CELL *p_isBound(CELL *params)
+{
+    SYMBOL *sym;
+    params = evaluateExpression(params); /* requires quoted sym name */
+    if(params->type == CELL_SYMBOL)
+    {
+
+        sym = (SYMBOL *)params->contents;
+        if(sym->mutable == 1)
+        {
+            return(trueCell);
+        }
+    }
+    return(nilCell);
+}
 
 CELL *p_isNil(CELL *params)
 {
