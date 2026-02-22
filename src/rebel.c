@@ -188,7 +188,7 @@ UINT *fnStackIdx;
 SYMBOL objSymbol = {
   SYMBOL_SHARED | SYMBOL_BUILTIN, /* flags */
   0,                              /* color */ 
-  0,                              /* mutable */ 
+  0,                              /* explicit */ 
   "container of (self)",          /* name */ 
   0,                              /* contents */ 
   NULL,                           /* context */ 
