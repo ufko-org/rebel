@@ -5450,7 +5450,9 @@ SETDEF_BEGIN:
     }
 
     /* delete contents of original cell */
-    if(isEnvelope(cell->type))
+    /* ufko: prevent segfault when a function rebinds itself during execution
+       (func (a) (set a 1)) */
+    if(isEnvelope(cell->type) && cell->type != CELL_FN)
     {
         if(cell->type == CELL_ARRAY)
         {
@@ -5868,7 +5870,13 @@ CELL *setDefine(SYMBOL *symbol, CELL *params, int type)
 
     cell = copyCell(evaluateExpression(params));
 
-    deleteList((CELL *)symbol->contents);
+    /* ufko: prevent segfault when a function rebinds itself during execution
+       (func (a) (setq 'a 1)) */
+    if(((CELL *)symbol->contents)->type != CELL_FN)
+    {
+        deleteList((CELL *)symbol->contents);
+    }
+    symbol->explicit = 1;
     symbol->contents = (UINT)(cell);
 
     symbolCheck = symbol;
