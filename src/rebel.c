@@ -5474,7 +5474,7 @@ SETDEF_BEGIN:
     cell->aux = new->aux;
     cell->contents = new->contents;
     if(symbolRef) {
-      symbolRef->mutable = 1;
+      symbolRef->explicit = 1;
     }
 
     /* free cell */
