@@ -628,7 +628,7 @@ SYMBOL sentinel =
 {
     0,          /* flags */
     BLACK,      /* color */
-    0,          /* mutable */
+    0,          /* explicit */
     "NIL",      /* name */
     0,          /* contents */
     NULL,       /* context */
