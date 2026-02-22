@@ -5868,8 +5868,8 @@ CELL *setDefine(SYMBOL *symbol, CELL *params, int type)
     {
         deleteList((CELL *)symbol->contents);
     }
-    symbol->explicit = 1;
     symbol->contents = (UINT)(cell);
+    symbol->explicit = 1;
 
     symbolCheck = symbol;
     pushResultFlag = FALSE;
