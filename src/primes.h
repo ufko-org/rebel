@@ -462,7 +462,7 @@ PRIMITIVE primitive[] =
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},
-    {"bound?",           p_isBound,          0},
+    {"set?",             p_isSet,            0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
     {"empty?",           p_isEmpty,          0}, /* np -> remove */

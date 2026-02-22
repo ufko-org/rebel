@@ -7753,7 +7753,7 @@ CELL *p_defineNew(CELL *params)
 CELL *isType(CELL *, int);
 
 /* ufko: */
-CELL *p_isBound(CELL *params)
+CELL *p_isSet(CELL *params)
 {
     SYMBOL *sym;
     params = evaluateExpression(params); /* requires quoted sym name */
@@ -7761,7 +7761,7 @@ CELL *p_isBound(CELL *params)
     {
 
         sym = (SYMBOL *)params->contents;
-        if(sym->mutable == 1)
+        if(sym->explicit == 1)
         {
             return(trueCell);
         }
