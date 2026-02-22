@@ -5547,16 +5547,9 @@ SETMUT_BEGIN:
     stringRef = stringCell;
     indexRefPtr = stringIndexPtr;
 
-    /* Reject: unbound and non-stack symbols */
+    /* Reject: symbol not local to current call-chain */
     if(symbolRef != NULL)
     {
-        /* Reject: unbound symbol */
-        if(symbolRef->mutable == 0)
-        {
-            return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolRef));
-        }
-
-        /* Reject: symbol not local to current call-chain */
         idx = envStackIdx;
         isLocal = 0;
 
