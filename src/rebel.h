@@ -461,7 +461,7 @@ typedef struct tagSYMBOL
 {
     int flags;
     int color;
-    int mutable;
+    int explicit;
     char *name;
     UINT contents;
     struct tagSYMBOL *context;
