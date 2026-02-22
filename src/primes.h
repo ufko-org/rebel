@@ -410,7 +410,6 @@ PRIMITIVE primitive[] =
     {"history",          p_history,          0},
     {"lasterr",          p_lastError,        0},
     {"load",             p_load,             0},
-    {"local?",           p_isLocal,          0}, /* :rebel */
     {"locale",           p_setLocale,        0},
     {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
     {"pprint",           p_prettyPrint,      0},
@@ -474,6 +473,7 @@ PRIMITIVE primitive[] =
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
     {"legal?",           p_isLegal,          0}, 
     {"list?",            p_isList,           0},
+    {"local?",           p_isLocal,          0}, /* :rebel */
     {"macro?",           p_isMacro,          0},
     {"nil?",             p_isNil,            0},
     {"null?",            p_isNull,           0},  

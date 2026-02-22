@@ -227,7 +227,7 @@ char startupDir[PATH_MAX]; /* start up directory, if defined via -w */
 char *tempDir;  /* /tmp on unix or geten("TMP") on Windows */
 char logFile[PATH_MAX]; /* logFile, is define with -l, -L */
 
-/* nl-filesys.c */
+/* rebel-filesys.c */
 int pagesize;
 
 /* ============================== MAIN ================================ */
@@ -255,7 +255,6 @@ void setupSignalHandler(int sig, void (* handler)(int))
 void setupAllSignals(void)
 {
     setupSignalHandler(SIGINT, signal_handler);
-
 
     setupSignalHandler(SIGALRM, signal_handler);
     setupSignalHandler(SIGVTALRM, signal_handler);
@@ -1220,7 +1219,7 @@ printf("\n");
 }
 */
 
-/* used for loadFile() and and executeCommandLine() */
+/* used for loadFile() and executeCommandLine() */
 CELL *evaluateStream(STREAM *stream, UINT outDevice, int flag)
 {
     CELL *program;
