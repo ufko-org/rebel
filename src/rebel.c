@@ -5415,17 +5415,6 @@ SETDEF_BEGIN:
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
     }
-    /* reject: rebind
-    if(params->type == CELL_SYMBOL)
-    {
-        testSym = (SYMBOL *)params->contents;
-        if (testSym->mutable == 1)
-        {
-            printf("Can't rebind bro, use mut :P :D\n");
-            return(nilCell);
-        }
-    }
-    */
 
     cell = evaluateExpression(params);
 
