@@ -5500,7 +5500,6 @@ SETDEF_BEGIN:
 CELL *p_setmut(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
-    SYMBOL *symbolMut = NULL;
     CELL *cell;
     CELL *new;
     CELL *stringRef;
