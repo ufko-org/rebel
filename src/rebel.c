@@ -5961,7 +5961,6 @@ CELL *let(CELL *params, int type)
             pushEnvironment(symbol->contents);
             pushEnvironment(symbol);
             symbol->contents = (UINT)copyCell(nilCell);
-            symbol->mutable = 1;
             localCount++;
             inits = inits->next;
         }
@@ -6012,7 +6011,6 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)args;
-            symbol->mutable = 1;
         }
 
         localCount++;
@@ -6045,7 +6043,6 @@ CELL *let(CELL *params, int type)
             pushEnvironment((CELL *)symbol->contents);
             pushEnvironment((UINT)symbol);
             symbol->contents = (UINT)list;
-            symbol->mutable = 1;
 
             args = list;
             list = list->next;
