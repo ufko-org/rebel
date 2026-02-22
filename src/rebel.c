@@ -1862,7 +1862,6 @@ CELL *evaluateFn(CELL *localLst, CELL *arg, SYMBOL *newContext)
             result = copyCell(nilCell);
         }
         symbol->contents = (UINT)result;
-        symbol->mutable = 1; /* ufko: make func argument mutable */
 
         cell = result;
         result = result->next;
