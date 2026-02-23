@@ -1453,15 +1453,8 @@ CELL *evaluateExpression(CELL *cell)
 
         /* ufko: deref */
         case CELL_DEREF:
-            /* first level: unquote */
             result = evaluateExpression((CELL *)cell->contents);
-            if(result->type != CELL_SYMBOL)  
-            {
-                return(errorProcExt(ERR_SYMBOL_EXPECTED, result));
-            }
-            /* second level: get place */
             result = evaluateExpression(result);
-            /* return place */
             return(result);
 
         case CELL_EXPRESSION:
