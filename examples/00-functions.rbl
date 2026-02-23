@@ -39,8 +39,8 @@
 
 (set z 10)
 
-(mac (f z)
-  (set (eval z) 5))
+(mac (f _z)
+  (set (eval _z) 5))
 
 (f z)
 (println z)     ;-> 5
