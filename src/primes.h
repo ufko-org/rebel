@@ -158,23 +158,23 @@ PRIMITIVE primitive[] =
     {"check",            p_exists,           0},     /* [l] :replaces exists */
     {"chop",             p_chop,             0},     /* [l,s] */
     {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
-    {"clean",            p_clean,            0},     /* [l] */
     {"collect",          p_collect,          0},     /* [] */
     {"cons",             p_cons,             0},     /* [l] */
     {"curry",            p_curry,            0},     /* [] */
     {"cut",              p_member,           0},     /* [l,s,a] */
     {"diff",             p_difference,       0},     /* [l] :replaces difference */
+    {"drop",             p_clean,            0},     /* [l] :replaces clean */
     {"dup",              p_dup,              0},     /* [any] */
     {"ends",             p_endsWith,         0},     /* [l,s] :replaces ends-with */
     {"expand",           p_expand,           0},     /* [l] */
     {"extend",           p_extend,           0x400}, /* [l,s] */
-    {"filter",           p_filter,           0},     /* [l] */
     {"find",             p_findAll,          0},     /* [l,s] :replaces findall */
     {"first",            p_first,            0},     /* [l,s,a] */
     {"flat",             p_flat,             0},     /* [l] */
     {"format",           p_format,           0},     /* [s] */
     {"freq",             p_count,            0},     /* [l] */
     {"join",             p_join,             0},     /* [l] */
+    {"keep",             p_filter,           0},     /* [l] :replaces filter */
     {"last",             p_last,             0},     /* [l,s,a] */
     {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
     {"len",              p_length,           0},     /* [any] */
@@ -461,7 +461,6 @@ PRIMITIVE primitive[] =
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},
-    {"set?",             p_isSet,            0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
     {"empty?",           p_isEmpty,          0}, /* np -> remove */
@@ -482,6 +481,7 @@ PRIMITIVE primitive[] =
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
+    {"set?",             p_isSet,            0},
     {"shared?",          p_isShared,         0}, /* :replaces global? */
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},

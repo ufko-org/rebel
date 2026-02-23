@@ -1,0 +1,846 @@
+Curl_base64_decode	rebel-web.c	/^size_t Curl_base64_decode(const char *src, char *d/
+Curl_base64_encode	rebel-web.c	/^size_t Curl_base64_encode(const char *inp, size_t /
+FFITYPE	rebel-import.c	/^} FFITYPE;$/
+GETCHARINC	rebel-utf8.c	/^#define GETCHARINC(c, eptr) \\$/
+LIBCALLBACK	rebel-import.c	/^} LIBCALLBACK;$/
+Mrebel	rebel.c	/^int main(int argc, char *argv[])$/
+NETEVAL	rebel-sock.c	/^} NETEVAL;$/
+REFSTACK	rebel-list.c	/^} REFSTACK;$/
+REGEX	rebel-string.c	/^} REGEX;$/
+SOCKLIST	rebel-sock.c	/^} SOCKLIST;$/
+SPAWN_LIST	rebel-filesys.c	/^} SPAWN_LIST;$/
+SUN_LEN	rebel-sock.c	/^#define SUN_LEN(su) \\$/
+SWAP	rebel-math.c	/^#define SWAP(a,b) tempr=(a);(a)=(b);(b)=tempr$/
+TAG_STACK	rebel-xml-json.c	/^} TAG_STACK;$/
+TERMSET	rebel-math.c	/^} TERMSET;$/
+T_MEDIA_TYPE	rebel-web.c	/^} T_MEDIA_TYPE;$/
+UINT	rebel-import.c	/^                         UINT, UINT, UINT, UINT, U/
+UUID	rebel-filesys.c	/^} UUID;$/
+addBigint	rebel-math.c	/^int *addBigint(int *x, int nx, int *y, int ny, int/
+addList	rebel.c	/^void addList(CELL *list, CELL *new)$/
+addResult	rebel-sock.c	/^CELL *addResult(CELL * * result, CELL *cell, CELL /
+addSpawnedChild	rebel-filesys.c	/^void addSpawnedChild(void *addr, SYMBOL *sPtr, int/
+adjustCount	rebel-liststr.c	/^size_t adjustCount(ssize_t count, ssize_t length)$/
+adjustNegativeIndex	rebel-liststr.c	/^size_t adjustNegativeIndex(ssize_t index, size_t l/
+allocBlock	rebel.c	/^void allocBlock(void)$/
+allocMemory	rebel.c	/^void *allocMemory(size_t nbytes)$/
+allocateMatrix	rebel-matrix.c	/^double * *allocateMatrix(int rows, int cols)$/
+appendArray	rebel-list.c	/^CELL *appendArray(CELL *array, CELL *params)$/
+appendCellString	rebel-filesys.c	/^size_t appendCellString(CELL *cell, char *buffer, /
+appendNode	rebel-xml-json.c	/^CELL *appendNode(CELL *node, CELL *newNode)$/
+appendString	rebel-liststr.c	/^CELL *appendString(CELL *cell, CELL *list, char *j/
+appendWriteFile	rebel-filesys.c	/^CELL *appendWriteFile(CELL *params, char *type)$/
+arithmetikOp	rebel-math.c	/^CELL *arithmetikOp(CELL *params, int op)$/
+arrayList	rebel-list.c	/^CELL *arrayList(CELL *array, int flag)$/
+arrayTranspose	rebel-list.c	/^CELL *arrayTranspose(CELL *array)$/
+assignSymbol	rebel-symbol.c	/^CELL *assignSymbol(SYMBOL *sPtr, CELL *content)$/
+associationsFromTree	rebel-symbol.c	/^CELL *associationsFromTree(SYMBOL *context)$/
+base64	rebel-web.c	/^CELL *base64(CELL *params, int type)$/
+betacf	rebel-math.c	/^double betacf(double a, double b, double x)$/
+betai	rebel-math.c	/^double betai(double a, double b, double x)$/
+bigintCellToFloat	rebel-math.c	/^double bigintCellToFloat(CELL *cell)$/
+bigintToAbsFloat	rebel-math.c	/^double bigintToAbsFloat(int *numPtr, int n)$/
+bigintToDigits	rebel-math.c	/^char *bigintToDigits(int *num, int n, int offset, /
+bigintToInt64	rebel-math.c	/^INT64 bigintToInt64(CELL *cell)$/
+bindList	rebel-list.c	/^CELL *bindList(CELL *params, int evalFlag)$/
+binsort	rebel-list.c	/^void binsort(CELL * * x, ssize_t n, CELL *pCell)$/
+blockExpand	rebel.c	/^CELL *blockExpand(CELL *block, SYMBOL *symbol)$/
+blockSocket	rebel-sock.c	/^int blockSocket(int sock)$/
+calcDateValue	rebel-filesys.c	/^time_t calcDateValue(int year, int month, int day,/
+callback0	rebel-import.c	/^INT callback0(INT p1, INT p2, INT p3, INT p4, INT /
+callback1	rebel-import.c	/^INT callback1(INT p1, INT p2, INT p3, INT p4, INT /
+callback10	rebel-import.c	/^INT callback10(INT p1, INT p2, INT p3, INT p4, INT/
+callback11	rebel-import.c	/^INT callback11(INT p1, INT p2, INT p3, INT p4, INT/
+callback12	rebel-import.c	/^INT callback12(INT p1, INT p2, INT p3, INT p4, INT/
+callback13	rebel-import.c	/^INT callback13(INT p1, INT p2, INT p3, INT p4, INT/
+callback14	rebel-import.c	/^INT callback14(INT p1, INT p2, INT p3, INT p4, INT/
+callback15	rebel-import.c	/^INT callback15(INT p1, INT p2, INT p3, INT p4, INT/
+callback2	rebel-import.c	/^INT callback2(INT p1, INT p2, INT p3, INT p4, INT /
+callback3	rebel-import.c	/^INT callback3(INT p1, INT p2, INT p3, INT p4, INT /
+callback4	rebel-import.c	/^INT callback4(INT p1, INT p2, INT p3, INT p4, INT /
+callback5	rebel-import.c	/^INT callback5(INT p1, INT p2, INT p3, INT p4, INT /
+callback6	rebel-import.c	/^INT callback6(INT p1, INT p2, INT p3, INT p4, INT /
+callback7	rebel-import.c	/^INT callback7(INT p1, INT p2, INT p3, INT p4, INT /
+callback8	rebel-import.c	/^INT callback8(INT p1, INT p2, INT p3, INT p4, INT /
+callback9	rebel-import.c	/^INT callback9(INT p1, INT p2, INT p3, INT p4, INT /
+callocMemory	rebel.c	/^void *callocMemory(size_t nbytes)$/
+cdeclFunction	rebel-import.c	/^UINT cdeclFunction(UINT fAddress, UINT *args, int /
+cellToString	rebel-string.c	/^char *cellToString(CELL *cell, size_t *size, int q/
+cellTokenString	rebel-string.c	/^CELL *cellTokenString(char * * source, size_t *src/
+cfPv	rebel-math.c	/^double cfPv(int N, int times[], double amounts[], /
+changeContextCells	rebel-symbol.c	/^void changeContextCells(SYMBOL *contextPtr)$/
+checkDeleteShareFile	rebel-filesys.c	/^void checkDeleteShareFile(UINT *address)$/
+cleanupResults	rebel.c	/^void cleanupResults(UINT *from)$/
+closeStrStream	rebel-string.c	/^void closeStrStream(STREAM *stream)$/
+closeTrace	rebel-debug.c	/^void closeTrace(void)$/
+cmpAbsBigint	rebel-math.c	/^int cmpAbsBigint(int *x, int nx, int *y, int ny)$/
+cmpBigint	rebel-math.c	/^int cmpBigint(int *x, int nx, int *y, int ny)$/
+collectSymbolAssocs	rebel-symbol.c	/^void collectSymbolAssocs(SYMBOL *sPtr, CELL *assoc/
+collectSymbols	rebel-symbol.c	/^void collectSymbols(SYMBOL *sPtr, CELL *symbolList/
+command_generator	rebel.c	/^char *command_generator(char *text, int state)$/
+compEQ	rebel-symbol.c	/^#define compEQ(a,b) (a == b)$/
+compLT	rebel-symbol.c	/^#define compLT(a,b) (a < b)$/
+compareArrays	rebel-list.c	/^int compareArrays(CELL *left, CELL *right)$/
+compareCells	rebel-math.c	/^int compareCells(CELL *left, CELL *right)$/
+compareFloats	rebel-math.c	/^int compareFloats(CELL *left, CELL *right)$/
+compareFunc	rebel-list.c	/^int compareFunc(CELL *left, CELL *right, CELL *fun/
+compareInts	rebel-math.c	/^int compareInts(CELL *left, CELL *right)$/
+compareLists	rebel-math.c	/^int compareLists(CELL *left, CELL *right)$/
+compareOp	rebel-math.c	/^CELL *compareOp(CELL *params, int op)$/
+compareSymbols	rebel-math.c	/^int compareSymbols(CELL *left, CELL *right)$/
+compileExpression	rebel.c	/^int compileExpression(STREAM *stream, CELL *cell)$/
+convertNegativeOffset	rebel.c	/^ssize_t convertNegativeOffset(ssize_t offset, CELL/
+copyArray	rebel-list.c	/^UINT *copyArray(CELL *array)$/
+copyCell	rebel.c	/^CELL *copyCell(CELL *cell)$/
+copyContextArray	rebel.c	/^UINT *copyContextArray(CELL *array)$/
+copyContextCell	rebel.c	/^CELL *copyContextCell(CELL *cell)$/
+copyContextList	rebel.c	/^CELL *copyContextList(CELL *cell)$/
+copyList	rebel.c	/^CELL *copyList(CELL *cell)$/
+crc16	rebel-math.c	/^unsigned short crc16(unsigned char *buff, int len)/
+createIOsession	rebel-sock.c	/^IO_SESSION *createIOsession(int handle, int family/
+createRootContext	rebel-symbol.c	/^SYMBOL *createRootContext(char *token)$/
+criticalX	rebel-math.c	/^CELL *criticalX(CELL *params, int type)$/
+critical_value	rebel-math.c	/^double critical_value(double p, UINT df1, UINT df2/
+currentDateValue	rebel-filesys.c	/^ssize_t currentDateValue(void)$/
+data2matrix	rebel-matrix.c	/^double * *data2matrix(CELL *list, int n, int m)$/
+debug	rebel-math.c	/^void debug(int *x, int n, char *txt)$/
+debugPrintFunction	rebel-debug.c	/^int debugPrintFunction(CELL *cell)$/
+decodeQuantum	rebel-web.c	/^static void decodeQuantum(unsigned char *dest, con/
+defineOrMacro	rebel.c	/^CELL *defineOrMacro(CELL *params, UINT cellType, i/
+deleteAndFreeSymbol	rebel-symbol.c	/^void deleteAndFreeSymbol(SYMBOL *sPtr, int checkRe/
+deleteArray	rebel-list.c	/^void deleteArray(CELL *array)$/
+deleteContextSymbols	rebel-symbol.c	/^void deleteContextSymbols(CELL *cell, int checkRef/
+deleteFixup	rebel-symbol.c	/^void deleteFixup(SYMBOL *x)$/
+deleteIOsession	rebel-sock.c	/^int deleteIOsession(int handle)$/
+deleteList	rebel.c	/^void deleteList(CELL *cell)$/
+deleteSymbol	rebel-symbol.c	/^int deleteSymbol(char *key)$/
+deleteTagStack	rebel-xml-json.c	/^void deleteTagStack(void)$/
+divModBigint	rebel-math.c	/^int *divModBigint(int *x, int nx, int *y, int ny, /
+dolist	rebel.c	/^CELL *dolist(CELL *params, int doType)$/
+encryptPad	rebel-math.c	/^void encryptPad(char *encrypted, char *data, char /
+endsWith	rebel-web.c	/^int endsWith(char *str, char *ext)$/
+environment	rebel-filesys.c	/^CELL *environment(void)$/
+errorMissingPar	rebel.c	/^void errorMissingPar(STREAM *stream)$/
+errorProc	rebel.c	/^CELL *errorProc(int errorNumber)$/
+errorProcAll	rebel.c	/^CELL *errorProcAll(int errorNumber, CELL *expr, in/
+errorProcArgs	rebel.c	/^CELL *errorProcArgs(int errorNumber, CELL *expr)$/
+errorProcExt	rebel.c	/^CELL *errorProcExt(int errorNumber, CELL *expr)$/
+errorProcExt2	rebel.c	/^CELL *errorProcExt2(int errorNumber, CELL *expr)$/
+evalString	rebel.c	/^CELL *evalString(CELL *params, int mode)$/
+evaluateBlock	rebel.c	/^CELL *evaluateBlock(CELL *cell)$/
+evaluateExpression	rebel.c	/^CELL *evaluateExpression(CELL *cell)$/
+evaluateExpressionSafe	rebel.c	/^CELL   *evaluateExpressionSafe(CELL *cell, int *er/
+evaluateFn	rebel.c	/^CELL *evaluateFn(CELL *localLst, CELL *arg, SYMBOL/
+evaluateFnMacro	rebel.c	/^CELL *evaluateFnMacro(CELL *localLst, CELL *arg, S/
+evaluateNamespaceHash	rebel.c	/^CELL *evaluateNamespaceHash(CELL *args, SYMBOL *ne/
+evaluateStream	rebel.c	/^CELL *evaluateStream(STREAM *stream, UINT outDevic/
+executeCommandLine	rebel.c	/^void executeCommandLine(char *command, UINT outDev/
+executeHTTPrequest	rebel-web.c	/^int executeHTTPrequest(char *request, int type)$/
+executeLibFFI	rebel-import.c	/^CELL *executeLibFFI(CELL *pCell, CELL *params)$/
+executeLibfunction	rebel-import.c	/^CELL *executeLibfunction(CELL *pCell, CELL *params/
+executeSymbol	rebel.c	/^int executeSymbol(SYMBOL *symbol, CELL *params, CE/
+expand	rebel.c	/^CELL *expand(CELL *expr, SYMBOL *symbol)$/
+expandExprSymbol	rebel.c	/^void expandExprSymbol(CELL *cell, SYMBOL *sPtr)$/
+explodeList	rebel-list.c	/^CELL *explodeList(CELL *list, CELL *params)$/
+externalContextReferences	rebel-symbol.c	/^int externalContextReferences(SYMBOL *contextPtr, /
+fastFourierTransform	rebel-math.c	/^void fastFourierTransform(double data[], unsigned /
+fatalError	rebel.c	/^void fatalError(int errorNumber, CELL *expr, int d/
+ffiPreparation	rebel-import.c	/^CELL *ffiPreparation(CELL *pCell, CELL *params, in/
+ffiTypeToCell	rebel-import.c	/^CELL *ffiTypeToCell(ffi_type *type, void *result)$/
+ffi_trampoline	rebel-import.c	/^void ffi_trampoline(ffi_cif *cif, void *ret, void /
+fft	rebel-math.c	/^CELL *fft(CELL *params, int isign)$/
+fileSize	rebel-filesys.c	/^INT64 fileSize(char *pathName)$/
+filterIndex	rebel-list.c	/^CELL *filterIndex(CELL *params, int mode)$/
+find	rebel-xml-json.c	/^int find(char *key, char *source)$/
+findAllList	rebel-liststr.c	/^CELL *findAllList(CELL *pattern, CELL *list, CELL /
+findAllString	rebel-liststr.c	/^CELL *findAllString(char *pattern, char *str, size/
+findInsertSymbol	rebel-symbol.c	/^SYMBOL *findInsertSymbol(char *key, int forceCreat/
+finishUnify	rebel-math.c	/^CELL *finishUnify(CELL *result)$/
+flat	rebel-list.c	/^void flat(CELL *list, CELL *result, CELL * * next,/
+floatOp	rebel-math.c	/^CELL *floatOp(CELL *params, int op)$/
+floatToBigint	rebel-math.c	/^int *floatToBigint(double fnum, int *len)$/
+freeCellBlocks	rebel.c	/^void freeCellBlocks(void)$/
+freeMatrix	rebel-matrix.c	/^void freeMatrix(double * * m, int rows)$/
+freeRegex	rebel-string.c	/^void freeRegex(REGEX *regex)$/
+freeSessions	rebel-sock.c	/^void freeSessions(NETEVAL *base)$/
+freeTermSet	rebel-math.c	/^void freeTermSet(TERMSET * * tset)$/
+functionFloat	rebel-math.c	/^CELL *functionFloat(CELL *params, int op)$/
+gammaln	rebel-math.c	/^double gammaln(double xx)$/
+gammap	rebel-math.c	/^double gammap(double a, double x)$/
+gcdBig	rebel-math.c	/^CELL *gcdBig(CELL *a, CELL *b)$/
+gcf	rebel-math.c	/^double gcf(double a, double x, double gln)$/
+getAddress	rebel-string.c	/^UINT getAddress(CELL *params)$/
+getArg	rebel.c	/^char *getArg(char * * arg, int argc, int *index)$/
+getBigintSizeDirect	rebel-math.c	/^int *getBigintSizeDirect(CELL *cell, int * * numPt/
+getCell	rebel.c	/^CELL *getCell(int type)$/
+getCommandLine	rebel.c	/^char *getCommandLine(int batchMode, int *length)$/
+getContext	rebel.c	/^CELL *getContext(CELL *params, SYMBOL * * context)/
+getCreateContext	rebel.c	/^SYMBOL *getCreateContext(CELL *cell, int evaluate)/
+getCreateSymbol	rebel.c	/^CELL *getCreateSymbol(CELL *params, SYMBOL * * sym/
+getDebuggerInput	rebel-debug.c	/^void getDebuggerInput(char *msg)$/
+getDimensions	rebel-matrix.c	/^int getDimensions(CELL *mat, int *n, int *m)$/
+getDirectFloat	rebel-math.c	/^double getDirectFloat(CELL *param)$/
+getDynamicSymbol	rebel.c	/^SYMBOL *getDynamicSymbol(CELL *cell)$/
+getEvalDefault	rebel.c	/^CELL *getEvalDefault(CELL *params, CELL * * result/
+getFFIType	rebel-import.c	/^ffi_type *getFFIType(char *type)$/
+getFlag	rebel.c	/^int getFlag(CELL *params)$/
+getFloat	rebel.c	/^CELL *getFloat(CELL *params, double *floatNumber)$/
+getFormatType	rebel-string.c	/^char *getFormatType(char *fmt, int *type)$/
+getHostAddr	rebel-sock.c	/^int getHostAddr(struct sockaddr *address, int styp/
+getIOstream	rebel-sock.c	/^FILE *getIOstream(int handle)$/
+getInteger	rebel.c	/^CELL *getInteger(CELL *params, UINT *number)$/
+getInteger64Ext	rebel.c	/^CELL *getInteger64Ext(CELL *params, INT64 *number,/
+getIntegerExt	rebel.c	/^CELL *getIntegerExt(CELL *params, UINT *number, in/
+getIpPortFromSocket	rebel-sock.c	/^int getIpPortFromSocket(int sock, int peerLocalFla/
+getJSONobject	rebel-xml-json.c	/^CELL *getJSONobject(char *jsonStr, char * * restSt/
+getJSONstring	rebel-xml-json.c	/^CELL *getJSONstring(char *jsonStr, char * * restSt/
+getJSONvalue	rebel-xml-json.c	/^CELL *getJSONvalue(char *jsonStr, char * * restStr/
+getListHead	rebel.c	/^CELL *getListHead(CELL *params, CELL * * head)$/
+getLocalPath	rebel-filesys.c	/^char *getLocalPath(char *fileName)$/
+getMainArgs	rebel.c	/^CELL *getMainArgs(char *mainArgs[])$/
+getMatrix	rebel-matrix.c	/^double * *getMatrix(CELL *params, int *type, int */
+getMediaType	rebel-web.c	/^char *getMediaType(char *request)$/
+getPushSymbolParam	rebel.c	/^CELL *getPushSymbolParam(CELL *params, SYMBOL * * /
+getPutPostDeleteUrl	rebel-web.c	/^CELL *getPutPostDeleteUrl(char *url, CELL *params,/
+getRandom	rebel-math.c	/^double getRandom(double offset, double scale, int /
+getRefCheckProtected	rebel-liststr.c	/^CELL *getRefCheckProtected(CELL *params)$/
+getSelectReadyList	rebel-filesys.c	/^CELL *getSelectReadyList(int mode)$/
+getSocketFamily	rebel-sock.c	/^int getSocketFamily(int sock)$/
+getSpawnedChild	rebel-filesys.c	/^SPAWN_LIST *getSpawnedChild(int pid)$/
+getString	rebel.c	/^CELL *getString(CELL *params, char * * stringPtr)$/
+getStringSize	rebel.c	/^CELL *getStringSize(CELL *params, char * * stringP/
+getSymbol	rebel.c	/^CELL *getSymbol(CELL *params, SYMBOL * * symbol)$/
+getSymbolCheckProtected	rebel-filesys.c	/^SYMBOL *getSymbolCheckProtected(CELL *params)$/
+getToken	rebel.c	/^int getToken(STREAM *stream, char *token, int *ptr/
+getUUID	rebel-filesys.c	/^char *getUUID(char *str, char *node)$/
+getVector	rebel-math.c	/^double *getVector(CELL *data, UINT *N, double *Sum/
+gser	rebel-math.c	/^static double gser(double a, double x, double gln)/
+handleHTTPcgi	rebel-web.c	/^void handleHTTPcgi(char *request, char *query, ssi/
+implicitIndexArray	rebel-list.c	/^CELL *implicitIndexArray(CELL *cell, CELL *params)/
+implicitIndexList	rebel-list.c	/^CELL *implicitIndexList (CELL *list, CELL *params)/
+implicitIndexString	rebel-string.c	/^CELL *implicitIndexString(CELL *cell, CELL *params/
+implicitNrestSlice	rebel.c	/^CELL *implicitNrestSlice(CELL *num, CELL *params)$/
+in_cksum	rebel-sock.c	/^unsigned short in_cksum(unsigned short *addr, int /
+incDecF	rebel-math.c	/^CELL *incDecF(CELL *params, int type)$/
+incDecI	rebel-math.c	/^CELL *incDecI(CELL *params, int type)$/
+initArray	rebel-list.c	/^CELL *initArray(CELL *array, CELL *list, CELL * * /
+initDefaultInAddr	rebel-sock.c	/^void initDefaultInAddr()$/
+initFFI	rebel-import.c	/^void initFFI(void)$/
+initIteratorIndex	rebel.c	/^CELL *initIteratorIndex(void)$/
+initLocale	rebel.c	/^void initLocale(void)$/
+initRebelDir	rebel.c	/^void initRebelDir(void)$/
+initStacks	rebel.c	/^void initStacks(void)$/
+initTempDir	rebel.c	/^void initTempDir(void)$/
+init_argv	rebel-filesys.c	/^int init_argv(char *ptr, char *argv[])$/
+initialize	rebel.c	/^void initialize(void)$/
+insertFixup	rebel-symbol.c	/^static void insertFixup(SYMBOL *x)$/
+intToBigint	rebel-math.c	/^int *intToBigint(INT64 num, int *len)$/
+invert	rebel-matrix.c	/^double * *invert(double * * A, int n, int *err, do/
+ipstrFromSockAddr	rebel-sock.c	/^int ipstrFromSockAddr(struct sockaddr *addr, char /
+irr	rebel-math.c	/^double irr(int N, int times[], double amounts[], d/
+isDir	rebel-filesys.c	/^int isDir(char *fileName)$/
+isEmptyFunc	rebel.c	/^CELL *isEmptyFunc(CELL *cell)$/
+isFile	rebel-filesys.c	/^int isFile(char *fileName, int flag)$/
+isLegalSymbol	rebel.c	/^int isLegalSymbol(char *source)$/
+isOddEven	rebel-math.c	/^CELL *isOddEven(CELL *params, int type)$/
+isSessionSocket	rebel-sock.c	/^int isSessionSocket(int sock)$/
+isType	rebel.c	/^CELL *isType(CELL *params, int operand)$/
+isWhiteSpaceStringN	rebel-xml-json.c	/^int isWhiteSpaceStringN(char *source, int tagPos)$/
+isZero	rebel.c	/^CELL *isZero(CELL *cell)$/
+isnum	rebel-sock.c	/^#define isnum(A) ((A)>= '0' && (A) <= '9')$/
+iterateCopyCreateSymbols	rebel.c	/^void iterateCopyCreateSymbols(SYMBOL *sPtr)$/
+lengthBigint	rebel-math.c	/^int lengthBigint(int *num, int len)$/
+let	rebel.c	/^CELL *let(CELL *params, int type)$/
+lib_callback_t	rebel-import.c	/^typedef INT (*lib_callback_t)(INT p1, INT p2, INT /
+linkCell	rebel.c	/^void linkCell(CELL *left, CELL *right, int linkFla/
+linkMatches	rebel-list.c	/^CELL *linkMatches(CELL * * matchList, CELL *matchP/
+linkSource	rebel.c	/^void linkSource(char *pathname, char *source, char/
+listToSortedVector	rebel-list.c	/^CELL * *listToSortedVector(CELL *list, ssize_t *le/
+listlen	rebel.c	/^size_t listlen(CELL *listHead)$/
+loadFile	rebel.c	/^CELL *loadFile(char *fileName, UINT offset, int li/
+loadStartup	rebel.c	/^void loadStartup(char *name)$/
+lookupSymbol	rebel-symbol.c	/^SYMBOL *lookupSymbol(char *token, SYMBOL *context)/
+loop	rebel.c	/^CELL *loop(CELL *params, int forFlag)$/
+lubksb	rebel-matrix.c	/^void lubksb(double * * a, int n, int *indx, double/
+ludcmp	rebel-matrix.c	/^int ludcmp(double * * a, int n, int *indx, double /
+makeArray	rebel-list.c	/^CELL *makeArray(ssize_t *index, int p)$/
+makeCell	rebel.c	/^CELL *makeCell(int type, UINT contents)$/
+makeContextFromSymbol	rebel-symbol.c	/^void makeContextFromSymbol(SYMBOL *symbol, SYMBOL /
+makeElementNode	rebel-xml-json.c	/^CELL *makeElementNode(CELL *tagNode, CELL *attribu/
+makeIndexVector	rebel-list.c	/^CELL *makeIndexVector(REFSTACK *refStack)$/
+makeListFromFloats	rebel-math.c	/^CELL *makeListFromFloats(double num1, double num2)/
+makeMatrix	rebel-matrix.c	/^double * *makeMatrix(CELL *number, int n, int m)$/
+makePair	rebel-sock.c	/^CELL *makePair(CELL *left, CELL *right)$/
+makeSafeSymbol	rebel-symbol.c	/^SYMBOL *makeSafeSymbol(CELL *cell, SYMBOL *context/
+makeStreamFromFile	rebel-string.c	/^int makeStreamFromFile(STREAM *stream, char *fileN/
+makeStreamFromString	rebel-string.c	/^int makeStreamFromString(STREAM *stream, char *str/
+makeStringCell	rebel.c	/^CELL *makeStringCell(char *contents, size_t size)$/
+makeTagSymbolCell	rebel-xml-json.c	/^CELL *makeTagSymbolCell(char *tagStart, int tagLen/
+makeTextNode	rebel-xml-json.c	/^CELL *makeTextNode(int type, CELL *contents)$/
+matrix2data	rebel-matrix.c	/^CELL *matrix2data(double **matrix, int type, int n/
+microSecTime	rebel-filesys.c	/^INT64 microSecTime(void)$/
+milliSecTime	rebel-filesys.c	/^int milliSecTime(void)$/
+modRef	rebel-list.c	/^CELL *modRef(CELL *key, CELL *list, CELL *func, CE/
+mulBigint	rebel-math.c	/^int *mulBigint(int *x, int nx, int *y,  int ny, in/
+multiply	rebel-matrix.c	/^double * *multiply(double **A, double **B, int n, /
+myNanoSleep	rebel-filesys.c	/^void myNanoSleep(int nanosec)$/
+mySleep	rebel-filesys.c	/^void mySleep(int ms)$/
+my_random	rebel-math.c	/^uint32_t my_random()$/
+my_setenv	rebel-filesys.c	/^int my_setenv(const char *varName, const char *var/
+my_srandom	rebel-math.c	/^void my_srandom(uint32_t seed)$/
+my_strnicmp	rebel-string.c	/^int my_strnicmp(char *s1, char *s2, ssize_t size)$/
+my_vasprintf	rebel-filesys.c	/^int my_vasprintf(char * * buffer, const char *form/
+netAccept	rebel-sock.c	/^int netAccept(int listenSock)$/
+netConnect	rebel-sock.c	/^int netConnect(char *remoteHostName, int portNo, i/
+netConnectLocal	rebel-sock.c	/^int netConnectLocal(char *path)$/
+netError	rebel-sock.c	/^CELL *netError(int errorNo)$/
+netEvalError	rebel-sock.c	/^CELL *netEvalError(int errorNo)$/
+netListenLocal	rebel-sock.c	/^int netListenLocal(char *name)$/
+netListenOrDatagram	rebel-sock.c	/^int netListenOrDatagram(int portNo, int stype, cha/
+netPeerLocal	rebel-sock.c	/^CELL *netPeerLocal(CELL *params, int peerLocalFlag/
+netReceive	rebel-sock.c	/^CELL *netReceive(int sock, SYMBOL *readSymbol, siz/
+netReceiveFrom	rebel-sock.c	/^CELL *netReceiveFrom(int sock, size_t readSize, in/
+netSendTo	rebel-sock.c	/^CELL *netSendTo(CELL *params, int type)$/
+occurCheck	rebel-math.c	/^int occurCheck(CELL *symCell, CELL *expr)$/
+openFile	rebel-filesys.c	/^int openFile(char *fileName, char *accessMode, cha/
+openStrStream	rebel-string.c	/^void openStrStream(STREAM *stream, size_t buffSize/
+openTrace	rebel-debug.c	/^void openTrace(void)$/
+p_JSONerror	rebel-xml-json.c	/^CELL *p_JSONerror(CELL *params)$/
+p_JSONparse	rebel-xml-json.c	/^CELL *p_JSONparse(CELL *params)$/
+p_XMLerror	rebel-xml-json.c	/^CELL *p_XMLerror(CELL *params)$/
+p_XMLparse	rebel-xml-json.c	/^CELL *p_XMLparse(CELL *params)$/
+p_XMLtypeTags	rebel-xml-json.c	/^CELL *p_XMLtypeTags(CELL *params)$/
+p_abort	rebel-filesys.c	/^CELL *p_abort(CELL *params)$/
+p_abs	rebel-math.c	/^CELL *p_abs(CELL *params)$/
+p_acos	rebel-math.c	/^CELL *p_acos(CELL *params)$/
+p_acosh	rebel-math.c	/^CELL *p_acosh(CELL *params)$/
+p_add	rebel-math.c	/^CELL *p_add(CELL *params)$/
+p_addFloat	rebel-math.c	/^CELL *p_addFloat(CELL *params)$/
+p_address	rebel-string.c	/^CELL *p_address(CELL *params)$/
+p_adhoc	rebel.c	/^CELL *p_adhoc(CELL *params)$/
+p_amb	rebel-math.c	/^CELL *p_amb(CELL *params)$/
+p_and	rebel.c	/^CELL *p_and(CELL *params)$/
+p_any	rebel-list.c	/^CELL *p_any(CELL *params)$/
+p_append	rebel-liststr.c	/^CELL *p_append(CELL *params)$/
+p_appendFile	rebel-filesys.c	/^CELL *p_appendFile(CELL *params)$/
+p_apply	rebel.c	/^CELL *p_apply(CELL *params)$/
+p_args	rebel.c	/^CELL *p_args(CELL *params)$/
+p_array	rebel-list.c	/^CELL *p_array(CELL *params)$/
+p_arrayList	rebel-list.c	/^CELL *p_arrayList(CELL *params)$/
+p_asin	rebel-math.c	/^CELL *p_asin(CELL *params)$/
+p_asinh	rebel-math.c	/^CELL *p_asinh(CELL *params)$/
+p_assoc	rebel-list.c	/^CELL *p_assoc(CELL *params)$/
+p_atan	rebel-math.c	/^CELL *p_atan(CELL *params)$/
+p_atan2	rebel-math.c	/^CELL *p_atan2(CELL *params)$/
+p_atanh	rebel-math.c	/^CELL *p_atanh(CELL *params)$/
+p_base64Dec	rebel-web.c	/^CELL *p_base64Dec(CELL *params)$/
+p_base64Enc	rebel-web.c	/^CELL *p_base64Enc(CELL *params)$/
+p_bayesQuery	rebel-math.c	/^CELL *p_bayesQuery(CELL *params)$/
+p_bayesTrain	rebel-math.c	/^CELL *p_bayesTrain(CELL *params)$/
+p_beta	rebel-math.c	/^CELL *p_beta(CELL *params)$/
+p_betai	rebel-math.c	/^CELL *p_betai(CELL *params)$/
+p_bigInt	rebel-math.c	/^CELL *p_bigInt(CELL *params)$/
+p_bind	rebel-list.c	/^CELL *p_bind(CELL *params)$/
+p_binomial	rebel-math.c	/^CELL *p_binomial(CELL *params)$/
+p_bitAnd	rebel-math.c	/^CELL *p_bitAnd(CELL *params)$/
+p_bitNot	rebel-math.c	/^CELL *p_bitNot(CELL *params)$/
+p_bitOr	rebel-math.c	/^CELL *p_bitOr(CELL *params)$/
+p_bitXor	rebel-math.c	/^CELL *p_bitXor(CELL *params)$/
+p_bits	rebel-math.c	/^CELL *p_bits(CELL *params)$/
+p_callback	rebel-import.c	/^CELL *p_callback(CELL *params)$/
+p_case	rebel.c	/^CELL *p_case(CELL *params)$/
+p_catch	rebel.c	/^CELL *p_catch(CELL *params)$/
+p_ceil	rebel-math.c	/^CELL *p_ceil(CELL *params)$/
+p_changeDir	rebel-filesys.c	/^CELL *p_changeDir(CELL *params)$/
+p_char	rebel-string.c	/^CELL *p_char(CELL *params)$/
+p_chop	rebel-liststr.c	/^CELL *p_chop(CELL *params)$/
+p_clean	rebel-list.c	/^CELL *p_clean(CELL *params)$/
+p_close	rebel-filesys.c	/^CELL *p_close(CELL *params)$/
+p_collect	rebel-list.c	/^CELL *p_collect(CELL *params)$/
+p_colon_orig	rebel.c	/^CELL *p_colon_orig(CELL *params)$/
+p_commandEvent	rebel.c	/^CELL *p_commandEvent(CELL *params)$/
+p_condition	rebel.c	/^CELL *p_condition(CELL *params)$/
+p_cons	rebel.c	/^CELL *p_cons(CELL *params)$/
+p_constant	rebel.c	/^CELL *p_constant(CELL *params)$/
+p_context	rebel.c	/^CELL *p_context(CELL *params)$/
+p_copy	rebel.c	/^CELL *p_copy(CELL *params)$/
+p_copyFile	rebel-filesys.c	/^CELL *p_copyFile(CELL *params)$/
+p_copyMemory	rebel-string.c	/^CELL *p_copyMemory(CELL *params)$/
+p_corr	rebel-math.c	/^CELL *p_corr(CELL *params)$/
+p_cos	rebel-math.c	/^CELL *p_cos(CELL *params)$/
+p_cosh	rebel-math.c	/^CELL *p_cosh(CELL *params)$/
+p_count	rebel-list.c	/^CELL *p_count(CELL *params)$/
+p_crc32	rebel-math.c	/^CELL *p_crc32(CELL *params)$/
+p_criticalChi2	rebel-math.c	/^CELL *p_criticalChi2(CELL   *params)$/
+p_criticalF	rebel-math.c	/^CELL *p_criticalF(CELL   *params)$/
+p_criticalT	rebel-math.c	/^CELL *p_criticalT(CELL *params)$/
+p_criticalZ	rebel-math.c	/^CELL *p_criticalZ(CELL *params)$/
+p_currentLine	rebel-filesys.c	/^CELL *p_currentLine(CELL *params)$/
+p_curry	rebel.c	/^CELL *p_curry(CELL *params)$/
+p_date	rebel-filesys.c	/^CELL *p_date(CELL *params)$/
+p_dateISO	rebel-filesys.c	/^CELL *p_dateISO(CELL *params)$/
+p_dateList	rebel-filesys.c	/^CELL *p_dateList(CELL *params)$/
+p_dateParse	rebel-filesys.c	/^CELL *p_dateParse(CELL *params)$/
+p_dateValue	rebel-filesys.c	/^CELL *p_dateValue(CELL *params)$/
+p_debug	rebel-debug.c	/^CELL *p_debug(CELL *params)$/
+p_decrementF	rebel-math.c	/^CELL *p_decrementF(CELL *params)$/
+p_decrementI	rebel-math.c	/^CELL *p_decrementI(CELL *params)$/
+p_default	rebel.c	/^CELL *p_default(CELL *params)$/
+p_define	rebel.c	/^CELL *p_define(CELL *params)$/
+p_defineMacro	rebel.c	/^CELL *p_defineMacro(CELL *params)$/
+p_defineNew	rebel.c	/^CELL *p_defineNew(CELL *params)$/
+p_deleteFile	rebel-filesys.c	/^CELL *p_deleteFile(CELL *params)$/
+p_deleteSymbol	rebel-symbol.c	/^CELL *p_deleteSymbol(CELL *params)$/
+p_deleteUrl	rebel-web.c	/^CELL *p_deleteUrl(CELL *params)$/
+p_destroyProcess	rebel-filesys.c	/^CELL *p_destroyProcess(CELL *params)$/
+p_determinant	rebel-matrix.c	/^CELL *p_determinant(CELL *params)$/
+p_device	rebel.c	/^CELL *p_device(CELL *params)$/
+p_difference	rebel-list.c	/^CELL *p_difference(CELL *params)$/
+p_directory	rebel-filesys.c	/^CELL *p_directory(CELL *params)$/
+p_divFloat	rebel-math.c	/^CELL *p_divFloat(CELL *params)$/
+p_divide	rebel-math.c	/^CELL *p_divide(CELL *params)$/
+p_doUntil	rebel.c	/^CELL *p_doUntil(CELL *params)$/
+p_doWhile	rebel.c	/^CELL *p_doWhile(CELL *params)$/
+p_doargs	rebel.c	/^CELL *p_doargs(CELL *params)$/
+p_dolist	rebel.c	/^CELL *p_dolist(CELL *params)$/
+p_dostring	rebel.c	/^CELL *p_dostring(CELL *params)$/
+p_dotimes	rebel.c	/^CELL *p_dotimes(CELL *params)$/
+p_dotree	rebel.c	/^CELL *p_dotree(CELL *params)$/
+p_dump	rebel.c	/^CELL *p_dump(CELL *params)$/
+p_dumpSymbol	rebel-symbol.c	/^CELL *p_dumpSymbol(CELL *params)$/
+p_dup	rebel-liststr.c	/^CELL *p_dup(CELL *params)$/
+p_encrypt	rebel-math.c	/^CELL *p_encrypt(CELL *params)$/
+p_endsWith	rebel-liststr.c	/^CELL *p_endsWith(CELL *params)$/
+p_env	rebel-filesys.c	/^CELL *p_env(CELL *params)$/
+p_equal	rebel-math.c	/^CELL *p_equal(CELL *params)$/
+p_erf	rebel-math.c	/^CELL *p_erf(CELL *params)$/
+p_errorEvent	rebel.c	/^CELL *p_errorEvent(CELL *params)$/
+p_eval	rebel.c	/^CELL *p_eval(CELL *params)$/
+p_evalBlock	rebel.c	/^CELL *p_evalBlock(CELL *params)$/
+p_evalString	rebel.c	/^CELL *p_evalString(CELL *params)$/
+p_exec	rebel-filesys.c	/^CELL *p_exec(CELL *params)$/
+p_exists	rebel-list.c	/^CELL *p_exists(CELL *params)$/
+p_exit	rebel.c	/^CELL *p_exit(CELL *params)$/
+p_exp	rebel-math.c	/^CELL *p_exp(CELL *params)$/
+p_expand	rebel.c	/^CELL *p_expand(CELL *params)$/
+p_explode	rebel-string.c	/^CELL *p_explode(CELL *params)$/
+p_extend	rebel-liststr.c	/^CELL *p_extend(CELL *params)$/
+p_factor	rebel-math.c	/^CELL *p_factor (CELL *params)$/
+p_fft	rebel-math.c	/^CELL *p_fft(CELL *params)$/
+p_fileInfo	rebel-filesys.c	/^CELL *p_fileInfo(CELL *params)$/
+p_filter	rebel-list.c	/^CELL *p_filter(CELL *params)$/
+p_find	rebel-liststr.c	/^CELL *p_find(CELL *params)$/
+p_findAll	rebel-liststr.c	/^CELL *p_findAll(CELL *params)$/
+p_first	rebel.c	/^CELL *p_first(CELL *params)$/
+p_flat	rebel-list.c	/^CELL *p_flat(CELL *params)$/
+p_float	rebel-string.c	/^CELL *p_float(CELL *params)$/
+p_floor	rebel-math.c	/^CELL *p_floor(CELL *params)$/
+p_flt	rebel-math.c	/^CELL *p_flt(CELL *params)$/
+p_for	rebel.c	/^CELL *p_for(CELL *params)$/
+p_forAll	rebel-list.c	/^CELL *p_forAll(CELL *params)$/
+p_fork	rebel-filesys.c	/^CELL *p_fork(CELL *params)$/
+p_format	rebel-string.c	/^CELL *p_format(CELL *params)$/
+p_fv	rebel-math.c	/^CELL *p_fv(CELL *params)$/
+p_gammai	rebel-math.c	/^CELL *p_gammai(CELL *params)$/
+p_gammaln	rebel-math.c	/^CELL *p_gammaln(CELL *params)$/
+p_gcd	rebel-math.c	/^CELL *p_gcd(CELL *params)$/
+p_getChar	rebel-string.c	/^CELL *p_getChar(CELL *params)$/
+p_getFloat	rebel-string.c	/^CELL *p_getFloat(CELL *params)$/
+p_getInteger	rebel-string.c	/^CELL *p_getInteger(CELL *params)$/
+p_getLong	rebel-string.c	/^CELL *p_getLong(CELL *params)$/
+p_getString	rebel-string.c	/^CELL *p_getString(CELL *params)$/
+p_getUrl	rebel-web.c	/^CELL *p_getUrl(CELL *params)$/
+p_greater	rebel-math.c	/^CELL *p_greater(CELL *params)$/
+p_greaterEqual	rebel-math.c	/^CELL *p_greaterEqual(CELL *params)$/
+p_history	rebel.c	/^CELL *p_history(CELL *params)$/
+p_if	rebel.c	/^CELL *p_if(CELL *params)$/
+p_ifNot	rebel.c	/^CELL *p_ifNot(CELL *params)$/
+p_ifft	rebel-math.c	/^CELL *p_ifft(CELL *params)$/
+p_importLib	rebel-import.c	/^CELL *p_importLib(CELL *params)$/
+p_incrementF	rebel-math.c	/^CELL *p_incrementF(CELL *params)$/
+p_incrementI	rebel-math.c	/^CELL *p_incrementI(CELL *params)$/
+p_index	rebel-list.c	/^CELL *p_index(CELL *params)$/
+p_integer	rebel-string.c	/^CELL *p_integer(CELL *params)$/
+p_intersect	rebel-list.c	/^CELL *p_intersect(CELL *params)$/
+p_irr	rebel-math.c	/^CELL *p_irr(CELL *params)$/
+p_isArray	rebel.c	/^CELL *p_isArray(CELL *params)$/
+p_isAtom	rebel.c	/^CELL *p_isAtom(CELL *params)$/
+p_isBigInteger	rebel.c	/^CELL *p_isBigInteger(CELL *params)$/
+p_isContext	rebel.c	/^CELL *p_isContext(CELL *params)$/
+p_isDirectory	rebel-filesys.c	/^CELL *p_isDirectory(CELL *params)$/
+p_isEmpty	rebel.c	/^CELL *p_isEmpty(CELL *params)$/
+p_isEven	rebel-math.c	/^CELL *p_isEven(CELL *params)$/
+p_isFile	rebel-filesys.c	/^CELL *p_isFile(CELL *params)   \/* includes dev,so/
+p_isFloat	rebel.c	/^CELL *p_isFloat(CELL *params)$/
+p_isFn	rebel.c	/^CELL *p_isFn(CELL *params)$/
+p_isInteger	rebel.c	/^CELL *p_isInteger(CELL *params)$/
+p_isLegal	rebel.c	/^CELL *p_isLegal(CELL *params)$/
+p_isList	rebel.c	/^CELL *p_isList(CELL *params)$/
+p_isLocal	rebel.c	/^CELL *p_isLocal(CELL *params)$/
+p_isMacro	rebel.c	/^CELL *p_isMacro(CELL *params)$/
+p_isNil	rebel.c	/^CELL *p_isNil(CELL *params)$/
+p_isNull	rebel.c	/^CELL *p_isNull(CELL *params)$/
+p_isNumber	rebel.c	/^CELL *p_isNumber(CELL *params)$/
+p_isOdd	rebel-math.c	/^CELL *p_isOdd(CELL *params)$/
+p_isPrimitive	rebel.c	/^CELL *p_isPrimitive(CELL *params)$/
+p_isProtected	rebel.c	/^CELL *p_isProtected(CELL *params)$/
+p_isQuote	rebel.c	/^CELL *p_isQuote(CELL *params)$/
+p_isSet	rebel.c	/^CELL *p_isSet(CELL *params)$/
+p_isShared	rebel.c	/^CELL *p_isShared(CELL *params)$/
+p_isString	rebel.c	/^CELL *p_isString(CELL *params)$/
+p_isSymbol	rebel.c	/^CELL *p_isSymbol(CELL *params)$/
+p_isTrue	rebel.c	/^CELL *p_isTrue(CELL *params)$/
+p_isZero	rebel.c	/^CELL *p_isZero(CELL *params)$/
+p_isinf	rebel-math.c	/^CELL *p_isinf(CELL *params)$/
+p_isnan	rebel-math.c	/^CELL *p_isnan(CELL *params)$/
+p_join	rebel-liststr.c	/^CELL *p_join(CELL *params)$/
+p_kmeansQuery	rebel-matrix.c	/^CELL *p_kmeansQuery(CELL *params)$/
+p_kmeansTrain	rebel-matrix.c	/^CELL *p_kmeansTrain(CELL *params)$/
+p_last	rebel.c	/^CELL *p_last(CELL *params)$/
+p_lastError	rebel.c	/^CELL *p_lastError(CELL *params)$/
+p_length	rebel-liststr.c	/^CELL *p_length(CELL *params)$/
+p_less	rebel-math.c	/^CELL *p_less(CELL *params)$/
+p_lessEqual	rebel-math.c	/^CELL *p_lessEqual(CELL *params)$/
+p_let	rebel.c	/^CELL *p_let(CELL *params)$/
+p_letExpand	rebel.c	/^CELL *p_letExpand(CELL *params)$/
+p_letn	rebel.c	/^CELL *p_letn(CELL *params)$/
+p_list	rebel.c	/^CELL *p_list(CELL *params)$/
+p_load	rebel.c	/^CELL *p_load(CELL *params)$/
+p_load_orig	rebel.c	/^CELL *p_load_orig(CELL *params)$/
+p_local	rebel.c	/^CELL *p_local(CELL *params)$/
+p_log	rebel-math.c	/^CELL *p_log(CELL *params)$/
+p_lookup	rebel-list.c	/^CELL *p_lookup(CELL *params)$/
+p_loop	rebel.c	/^CELL *p_loop(CELL *params)$/
+p_lower	rebel-string.c	/^CELL *p_lower(CELL *params)$/
+p_macro	rebel.c	/^CELL *p_macro(CELL *params)$/
+p_mainArgs	rebel.c	/^CELL *p_mainArgs(CELL *params)$/
+p_makeDir	rebel-filesys.c	/^CELL *p_makeDir(CELL *params)$/
+p_map	rebel-list.c	/^CELL *p_map(CELL *params)$/
+p_matInvert	rebel-matrix.c	/^CELL *p_matInvert(CELL *params)$/
+p_matMultiply	rebel-matrix.c	/^CELL *p_matMultiply(CELL *params)$/
+p_matScalar	rebel-matrix.c	/^CELL *p_matScalar(CELL *params)$/
+p_matTranspose	rebel-matrix.c	/^CELL *p_matTranspose(CELL *params)$/
+p_match	rebel-list.c	/^CELL *p_match(CELL *params)$/
+p_maxFloat	rebel-math.c	/^CELL *p_maxFloat(CELL *params)$/
+p_member	rebel-liststr.c	/^CELL *p_member(CELL *params)$/
+p_minFloat	rebel-math.c	/^CELL *p_minFloat(CELL *params)$/
+p_modFloat	rebel-math.c	/^CELL *p_modFloat(CELL *params)$/
+p_modulo	rebel-math.c	/^CELL *p_modulo(CELL *params)$/
+p_mulFloat	rebel-math.c	/^CELL *p_mulFloat(CELL *params)$/
+p_multiply	rebel-math.c	/^CELL *p_multiply(CELL *params)$/
+p_netAccept	rebel-sock.c	/^CELL *p_netAccept(CELL *params)$/
+p_netClose	rebel-sock.c	/^CELL *p_netClose(CELL *params)$/
+p_netConnect	rebel-sock.c	/^CELL *p_netConnect(CELL *params)$/
+p_netEval	rebel-sock.c	/^CELL *p_netEval(CELL *params)$/
+p_netInterface	rebel-sock.c	/^CELL *p_netInterface(CELL *params)$/
+p_netIpv	rebel-sock.c	/^CELL *p_netIpv(CELL *params)$/
+p_netLastError	rebel-sock.c	/^CELL *p_netLastError(CELL *params)$/
+p_netListen	rebel-sock.c	/^CELL *p_netListen(CELL *params)$/
+p_netLocal	rebel-sock.c	/^CELL *p_netLocal(CELL *params)$/
+p_netLookup	rebel-sock.c	/^CELL *p_netLookup(CELL *params)$/
+p_netPacket	rebel-sock.c	/^CELL *p_netPacket(CELL *params)$/
+p_netPeek	rebel-sock.c	/^CELL *p_netPeek(CELL *params)$/
+p_netPeer	rebel-sock.c	/^CELL *p_netPeer(CELL *params)$/
+p_netPing	rebel-sock.c	/^CELL *p_netPing(CELL *params)$/
+p_netReceive	rebel-sock.c	/^CELL *p_netReceive(CELL *params)$/
+p_netReceiveFrom	rebel-sock.c	/^CELL *p_netReceiveFrom(CELL *params)$/
+p_netReceiveUDP	rebel-sock.c	/^CELL *p_netReceiveUDP(CELL *params)$/
+p_netSelect	rebel-sock.c	/^CELL *p_netSelect(CELL *params)$/
+p_netSend	rebel-sock.c	/^CELL *p_netSend(CELL *params)$/
+p_netSendTo	rebel-sock.c	/^CELL *p_netSendTo(CELL *params)$/
+p_netSendUDP	rebel-sock.c	/^CELL *p_netSendUDP(CELL *params)$/
+p_netService	rebel-sock.c	/^CELL *p_netService(CELL *params)$/
+p_netSessions	rebel-sock.c	/^CELL *p_netSessions(CELL *params)$/
+p_new	rebel.c	/^CELL *p_new(CELL *params)$/
+p_normal	rebel-math.c	/^CELL *p_normal(CELL *params)$/
+p_not	rebel.c	/^CELL *p_not(CELL *params)$/
+p_notEqual	rebel-math.c	/^CELL *p_notEqual(CELL *params)$/
+p_now	rebel-filesys.c	/^CELL *p_now(CELL *params)$/
+p_nper	rebel-math.c	/^CELL *p_nper(CELL *params)$/
+p_npv	rebel-math.c	/^CELL *p_npv(CELL *params)$/
+p_nth	rebel-liststr.c	/^CELL *p_nth(CELL *params)$/
+p_open	rebel-filesys.c	/^CELL *p_open(CELL *params)$/
+p_or	rebel.c	/^CELL *p_or(CELL *params)$/
+p_pack	rebel-string.c	/^CELL *p_pack(CELL *params)$/
+p_parse	rebel-string.c	/^CELL *p_parse(CELL *params)$/
+p_peek	rebel-filesys.c	/^CELL *p_peek(CELL *params)$/
+p_pipe	rebel-filesys.c	/^CELL *p_pipe(CELL *params)$/
+p_pmt	rebel-math.c	/^CELL *p_pmt(CELL *params)$/
+p_pop	rebel-liststr.c	/^CELL *p_pop(CELL *params)$/
+p_popAssoc	rebel-list.c	/^CELL *p_popAssoc(CELL *params)$/
+p_postUrl	rebel-web.c	/^CELL *p_postUrl(CELL *params)$/
+p_powFloat	rebel-math.c	/^CELL *p_powFloat(CELL *params)$/
+p_prefix	rebel-symbol.c	/^CELL *p_prefix(CELL *params)$/
+p_prettyPrint	rebel.c	/^CELL *p_prettyPrint(CELL *params)$/
+p_print	rebel.c	/^CELL *p_print(CELL *params)$/
+p_println	rebel.c	/^CELL *p_println(CELL *params)$/
+p_probabilityChi2	rebel-math.c	/^CELL *p_probabilityChi2(CELL *params)$/
+p_probabilityF	rebel-math.c	/^CELL *p_probabilityF(CELL *params)$/
+p_probabilityT	rebel-math.c	/^CELL *p_probabilityT(CELL *params)$/
+p_probabilityZ	rebel-math.c	/^CELL *p_probabilityZ(CELL *params)$/
+p_process	rebel-filesys.c	/^CELL *p_process(CELL *params)$/
+p_promptEvent	rebel.c	/^CELL *p_promptEvent(CELL *params)$/
+p_push	rebel-liststr.c	/^CELL *p_push(CELL *params)$/
+p_putUrl	rebel-web.c	/^CELL *p_putUrl(CELL *params)$/
+p_pv	rebel-math.c	/^CELL *p_pv(CELL *params)$/
+p_quote	rebel.c	/^CELL *p_quote(CELL *params)$/
+p_rand	rebel-math.c	/^CELL *p_rand(CELL *params)$/
+p_random	rebel-math.c	/^CELL *p_random(CELL *params)$/
+p_randomize	rebel-math.c	/^CELL *p_randomize(CELL *params)$/
+p_readBuffer	rebel-filesys.c	/^CELL *p_readBuffer(CELL *params)$/
+p_readChar	rebel-filesys.c	/^CELL *p_readChar(CELL *params)$/
+p_readExpr	rebel.c	/^CELL *p_readExpr(CELL *params)$/
+p_readFile	rebel-filesys.c	/^CELL *p_readFile(CELL *params)$/
+p_readKey	rebel-filesys.c	/^CELL *p_readKey(CELL *params)$/
+p_readLine	rebel-filesys.c	/^CELL *p_readLine(CELL *params)$/
+p_readUTF8	rebel-utf8.c	/^CELL *p_readUTF8(CELL *params)$/
+p_readerEvent	rebel.c	/^CELL *p_readerEvent(CELL *params)$/
+p_realpath	rebel-filesys.c	/^CELL *p_realpath(CELL *params)$/
+p_receive	rebel-filesys.c	/^CELL *p_receive(CELL *params)$/
+p_ref	rebel-list.c	/^CELL *p_ref(CELL *params)$/
+p_refAll	rebel-list.c	/^CELL *p_refAll(CELL *params)$/
+p_regex	rebel-string.c	/^CELL *p_regex(CELL *params)$/
+p_regexComp	rebel-string.c	/^CELL *p_regexComp(CELL *params)$/
+p_removeDir	rebel-filesys.c	/^CELL *p_removeDir(CELL *params)$/
+p_renameFile	rebel-filesys.c	/^CELL *p_renameFile(CELL *params)$/
+p_replace	rebel-liststr.c	/^CELL *p_replace(CELL *params)$/
+p_reset	rebel.c	/^CELL *p_reset(CELL *params)$/
+p_rest	rebel.c	/^CELL *p_rest(CELL *params)$/
+p_reverse	rebel-liststr.c	/^CELL *p_reverse(CELL *params)$/
+p_rotate	rebel-liststr.c	/^CELL *p_rotate(CELL *params)$/
+p_round	rebel-math.c	/^CELL *p_round(CELL *params)$/
+p_save	rebel.c	/^CELL *p_save(CELL *params)$/
+p_search	rebel-string.c	/^CELL *p_search(CELL *params)$/
+p_seed	rebel-math.c	/^CELL   *p_seed(CELL *params)$/
+p_seek	rebel-filesys.c	/^CELL *p_seek(CELL *params)$/
+p_select	rebel-liststr.c	/^CELL *p_select(CELL *params)$/
+p_self_orig	rebel.c	/^CELL *p_self_orig(CELL *params)$/
+p_semaphore	rebel-filesys.c	/^CELL *p_semaphore(CELL *params)$/
+p_send	rebel-filesys.c	/^CELL *p_send(CELL *params)$/
+p_sequence	rebel-list.c	/^CELL *p_sequence(CELL *params)$/
+p_series	rebel-math.c	/^CELL *p_series(CELL *params)$/
+p_set	rebel.c	/^CELL *p_set(CELL *params)$/
+p_setLocale	rebel.c	/^CELL *p_setLocale(CELL *params)$/
+p_setRef	rebel-list.c	/^CELL *p_setRef(CELL *params)$/
+p_setRefAll	rebel-list.c	/^CELL *p_setRefAll(CELL *params)$/
+p_setdef	rebel.c	/^CELL *p_setdef(CELL *params)$/
+p_setf	rebel.c	/^CELL *p_setf(CELL *params)$/
+p_setmut	rebel.c	/^CELL *p_setmut(CELL *params)$/
+p_sgn	rebel-math.c	/^CELL *p_sgn(CELL *params)$/
+p_share	rebel-filesys.c	/^CELL *p_share(CELL *params)$/
+p_shared	rebel.c	/^CELL *p_shared(CELL *params)$/
+p_shiftLeft	rebel-math.c	/^CELL *p_shiftLeft(CELL *params)$/
+p_shiftRight	rebel-math.c	/^CELL *p_shiftRight(CELL *params)$/
+p_signal	rebel.c	/^CELL *p_signal(CELL *params)$/
+p_silent	rebel.c	/^CELL *p_silent(CELL *params)$/
+p_sin	rebel-math.c	/^CELL *p_sin(CELL *params)$/
+p_sinh	rebel-math.c	/^CELL *p_sinh(CELL *params)$/
+p_sleep	rebel-filesys.c	/^CELL *p_sleep(CELL *params)$/
+p_slice	rebel-liststr.c	/^CELL *p_slice(CELL *params)$/
+p_sort	rebel-list.c	/^CELL *p_sort(CELL *params)$/
+p_spawn	rebel-filesys.c	/^CELL *p_spawn(CELL *params)$/
+p_sqrt	rebel-math.c	/^CELL *p_sqrt(CELL *params)$/
+p_ssq	rebel-math.c	/^CELL *p_ssq(CELL *params)$/
+p_startsWith	rebel-liststr.c	/^CELL *p_startsWith(CELL *params)$/
+p_stats	rebel-math.c	/^CELL *p_stats(CELL *params)$/
+p_string	rebel-string.c	/^CELL *p_string(CELL *params)$/
+p_struct	rebel-import.c	/^CELL *p_struct(CELL *params)$/
+p_subFloat	rebel-math.c	/^CELL *p_subFloat(CELL *params)$/
+p_subtract	rebel-math.c	/^CELL *p_subtract(CELL *params)$/
+p_swap	rebel-liststr.c	/^CELL *p_swap(CELL *params)$/
+p_symbol	rebel-string.c	/^CELL *p_symbol(CELL *params)$/
+p_symbolSource	rebel-string.c	/^CELL *p_symbolSource(CELL *params)$/
+p_symbols	rebel-symbol.c	/^CELL *p_symbols(CELL *params)$/
+p_sync	rebel-filesys.c	/^CELL *p_sync(CELL *params)$/
+p_system	rebel-filesys.c	/^CELL *p_system(CELL *params)$/
+p_systemError	rebel-filesys.c	/^CELL *p_systemError(CELL *params)$/
+p_systemInfo	rebel-filesys.c	/^CELL *p_systemInfo(CELL *params)$/
+p_systemSymbol	rebel.c	/^CELL *p_systemSymbol(CELL *params)$/
+p_tan	rebel-math.c	/^CELL *p_tan(CELL *params)$/
+p_tanh	rebel-math.c	/^CELL *p_tanh(CELL *params)$/
+p_term	rebel-symbol.c	/^CELL *p_term(CELL *params)$/
+p_throw	rebel.c	/^CELL *p_throw(CELL *params)$/
+p_throwError	rebel.c	/^CELL *p_throwError(CELL *params)$/
+p_tie	rebel.c	/^CELL *p_tie(CELL *params)$/
+p_time	rebel-filesys.c	/^CELL *p_time(CELL *params)$/
+p_timeOfDay	rebel-filesys.c	/^CELL *p_timeOfDay(CELL *params)$/
+p_timerEvent	rebel.c	/^CELL *p_timerEvent(CELL *params)$/
+p_title	rebel-string.c	/^CELL *p_title(CELL *params)$/
+p_trace	rebel-debug.c	/^CELL *p_trace(CELL *params)$/
+p_traceHighlight	rebel-debug.c	/^CELL *p_traceHighlight(CELL *params)$/
+p_transferEvent	rebel.c	/^CELL *p_transferEvent(CELL *params)$/
+p_trim	rebel-string.c	/^CELL *p_trim(CELL *params)$/
+p_ttest	rebel-math.c	/^CELL *p_ttest(CELL *params)$/
+p_unicode	rebel-utf8.c	/^CELL *p_unicode(CELL *params)$/
+p_unify	rebel-math.c	/^CELL *p_unify(CELL *params)$/
+p_union	rebel-list.c	/^CELL *p_union(CELL *params)$/
+p_unique	rebel-list.c	/^CELL *p_unique(CELL *params)$/
+p_unless	rebel.c	/^CELL *p_unless(CELL *params)$/
+p_unpack	rebel-string.c	/^CELL *p_unpack(CELL *params)$/
+p_until	rebel.c	/^CELL *p_until(CELL *params)$/
+p_upper	rebel-string.c	/^CELL *p_upper(CELL *params)$/
+p_utf8	rebel-utf8.c	/^CELL *p_utf8(CELL *params)$/
+p_utf8len	rebel-utf8.c	/^CELL *p_utf8len(CELL *params)$/
+p_uuid	rebel-filesys.c	/^CELL *p_uuid(CELL *params)$/
+p_waitpid	rebel-filesys.c	/^CELL *p_waitpid(CELL *params)$/
+p_when	rebel.c	/^CELL *p_when(CELL *params)$/
+p_while	rebel.c	/^CELL *p_while(CELL *params)$/
+p_writeBuffer	rebel-filesys.c	/^CELL *p_writeBuffer(CELL *params)$/
+p_writeChar	rebel-filesys.c	/^CELL *p_writeChar(CELL *params)$/
+p_writeFile	rebel-filesys.c	/^CELL *p_writeFile(CELL *params)$/
+p_writeLine	rebel-filesys.c	/^CELL *p_writeLine(CELL *params)$/
+packFFIstruct	rebel-import.c	/^CELL *packFFIstruct(CELL *cell, CELL *params)$/
+parseAttributes	rebel-xml-json.c	/^CELL *parseAttributes(char *endSrc)$/
+parseClosing	rebel-xml-json.c	/^void parseClosing(void)$/
+parseDTD	rebel-xml-json.c	/^void parseDTD(void)$/
+parseDoc	rebel-xml-json.c	/^CELL *parseDoc(void)$/
+parseNormalTag	rebel-xml-json.c	/^CELL *parseNormalTag(char *endSrc, char *newSrc)$/
+parsePackFormat	rebel-string.c	/^char *parsePackFormat(char *format, int *length, i/
+parsePath	rebel-web.c	/^void parsePath(char *url, char *path, size_t buffl/
+parseProcessingInstruction	rebel-xml-json.c	/^void parseProcessingInstruction(void)$/
+parseRegexOptions	rebel-string.c	/^CELL *parseRegexOptions(CELL *params, UINT *option/
+parseTag	rebel-xml-json.c	/^CELL *parseTag(char *closeTagStr)$/
+parseUrl	rebel-web.c	/^int parseUrl(char *url, char *protocol, char *host/
+parseValue	rebel-web.c	/^size_t parseValue(char *str)$/
+patternMatchL	rebel-list.c	/^CELL *patternMatchL(CELL *pattern, CELL *list, int/
+pcreCachedCompile	rebel-string.c	/^pcre *pcreCachedCompile(char *pattern, int options/
+performXmlCallback	rebel-xml-json.c	/^void performXmlCallback(CELL *result, char *tagSta/
+ping	rebel-sock.c	/^CELL *ping(CELL *address, int maxwait, int listmod/
+popDebugStack	rebel-debug.c	/^#define popDebugStack() (*(debugStack + --debugSta/
+popRef	rebel-list.c	/^#define popRef() (--refStack->idx)$/
+popSet	rebel-math.c	/^void  popSet(TERMSET * * root, CELL * * left, CELL/
+popString	rebel-liststr.c	/^CELL *popString(CELL *str, CELL *params)$/
+portFromSockAddr	rebel-sock.c	/^in_port_t portFromSockAddr(struct sockaddr *addr)$/
+prettyPrint	rebel.c	/^void prettyPrint(UINT device)$/
+printArray	rebel-list.c	/^void printArray(CELL *array, UINT device)$/
+printArrayDimensions	rebel-list.c	/^void printArrayDimensions(CELL *array, UINT device/
+printCell	rebel.c	/^void printCell(CELL *cell, UINT printFlag, UINT de/
+printErrorMessage	rebel.c	/^void printErrorMessage(UINT errorNumber, CELL *exp/
+printExpression	rebel.c	/^void printExpression(CELL *cell, UINT device)$/
+printFn	rebel.c	/^void printFn(SYMBOL *sPtr, UINT device)$/
+printHelpText	rebel.c	/^void printHelpText(void)$/
+printStack	rebel-math.c	/^void printStack(TERMSET *tset)$/
+printString	rebel.c	/^void printString(char *str, UINT  device, int size/
+printSymbol	rebel.c	/^void printSymbol(SYMBOL *sPtr, UINT device)$/
+printSymbolName	rebel.c	/^void printSymbolName(UINT device, SYMBOL *sPtr)$/
+printSymbolNameExt	rebel.c	/^void printSymbolNameExt(UINT device, SYMBOL *sPtr)/
+println	rebel.c	/^CELL *println(CELL *params, int lineFeed)$/
+probChi2	rebel-math.c	/^double probChi2(double chi2, UINT df)$/
+probF	rebel-math.c	/^double probF(double f, UINT df1, UINT df2)$/
+probT	rebel-math.c	/^double probT(double t, UINT df)$/
+probability_x	rebel-math.c	/^CELL *probability_x(CELL *params, int type)$/
+processCommandEvent	rebel.c	/^char *processCommandEvent(char *command)$/
+processSpawnList	rebel-filesys.c	/^void processSpawnList(int pid, int mode, int resul/
+prompt	rebel.c	/^char *prompt(void)$/
+pseudo_chks	rebel-sock.c	/^unsigned short pseudo_chks($/
+pseudohdr	rebel-sock.c	/^struct pseudohdr$/
+purgeSpawnList	rebel-filesys.c	/^void purgeSpawnList(int sockFlag)$/
+pushDebugStack	rebel-debug.c	/^#define pushDebugStack(A) (*(debugStack + debugSta/
+pushFn	rebel.c	/^#define pushFn(A) (*(fnStackIdx++) = (UINT)(A))$/
+pushOnString	rebel-liststr.c	/^CELL *pushOnString(CELL *newStr, CELL *str, CELL */
+pushRef	rebel-list.c	/^#define pushRef(A) (refStack->base[refStack->idx++/
+pushSet	rebel-math.c	/^void pushSet(TERMSET * * root, CELL *left, CELL *r/
+randomDist	rebel-math.c	/^CELL *randomDist(CELL *params, int type)$/
+readFile	rebel-filesys.c	/^ssize_t readFile(char *fileName, char * * buffer)$/
+readHeader	rebel-web.c	/^size_t readHeader(char *buff, int *pragmaFlag)$/
+readPayLoad	rebel-web.c	/^ssize_t readPayLoad(ssize_t size, char *buff, int /
+readStreamLine	rebel-filesys.c	/^char *readStreamLine(STREAM *stream, FILE *inStrea/
+readStreamText	rebel-string.c	/^char *readStreamText(STREAM *stream, int *size)$/
+readWriteShared	rebel-filesys.c	/^CELL *readWriteShared(UINT *address, CELL *params,/
+readWriteSharedExpression	rebel-filesys.c	/^CELL *readWriteSharedExpression(UINT *address, CEL/
+readWriteSocket	rebel-filesys.c	/^CELL *readWriteSocket(int socket, CELL *params)$/
+reallocMemory	rebel.c	/^void *reallocMemory(void *prevPtr, UINT size)$/
+rebel_completion	rebel.c	/^char **rebel_completion (char *text, int start, in/
+recoverEnvironment	rebel.c	/^void recoverEnvironment(UINT *index)$/
+recoverIteratorIndex	rebel.c	/^void recoverIteratorIndex(CELL *cellIdx)$/
+recvc_tm	rebel-web.c	/^int recvc_tm(int sock)$/
+recvs_tm	rebel-web.c	/^char *recvs_tm(char *buffer, size_t size, int sock/
+recvsize_tm	rebel-web.c	/^size_t recvsize_tm(char *buffer, size_t size, int /
+ref	rebel-list.c	/^void ref(CELL *keyCell, CELL *list, CELL *funcCell/
+reference	rebel-list.c	/^CELL *reference(CELL *params, int mode)$/
+references	rebel-symbol.c	/^int references(SYMBOL *sPtr, int replaceFlag)$/
+regexError	rebel-string.c	/^void regexError(char *msg_1, int number, const cha/
+repeat	rebel.c	/^CELL *repeat(CELL *params, int type)$/
+replaceString	rebel-string.c	/^(char *keyStr, size_t keyLen, char *buff, size_t b/
+reset	rebel.c	/^void reset(void)$/
+resortVectorToList	rebel-list.c	/^CELL *resortVectorToList(CELL * * vector, ssize_t /
+rotateLeft	rebel-symbol.c	/^void rotateLeft(SYMBOL *x)$/
+rotateRight	rebel-symbol.c	/^void rotateRight(SYMBOL *x)$/
+saveContext	rebel.c	/^void saveContext(SYMBOL *sPtr, UINT device)$/
+saveSymbols	rebel.c	/^void saveSymbols(SYMBOL *sPtr, UINT device)$/
+searchBuffer	rebel-string.c	/^ssize_t searchBuffer(char *buffer,  size_t length,/
+searchBufferRegex	rebel-string.c	/^ssize_t searchBufferRegex(char *string,  size_t of/
+semaphore	rebel-filesys.c	/^int semaphore(UINT sem_id, int value, int type)$/
+semun	rebel-filesys.c	/^union semun$/
+sendHTTPmessage	rebel-web.c	/^int sendHTTPmessage(int status, char *desc, char */
+sendHTTPpage	rebel-web.c	/^void sendHTTPpage(char *content, size_t size, char/
+sendall	rebel-sock.c	/^int sendall(int sock, char *buffer, int len)$/
+sendf	rebel-web.c	/^ssize_t sendf(int sock, int debug, char *format, ./
+serializeSymbols	rebel.c	/^void serializeSymbols(CELL *params, UINT device)$/
+serverFD	rebel-sock.c	/^FILE *serverFD(int port, char *domain, int reconne/
+setDefine	rebel.c	/^CELL *setDefine(SYMBOL *symbol, CELL *params, int /
+setEvent	rebel.c	/^CELL *setEvent(CELL *params, SYMBOL * * eventSymPt/
+setInterDiff	rebel-list.c	/^CELL *setInterDiff(CELL *params, int mode)$/
+setJSONerror	rebel-xml-json.c	/^CELL *setJSONerror(char *errorText, char *jsonStr)/
+setNthStr	rebel-string.c	/^CELL *setNthStr(CELL *cellStr, CELL *new, char *in/
+setRef	rebel-list.c	/^CELL *setRef(CELL *params, int mode)$/
+setSockaddrPort	rebel-sock.c	/^void setSockaddrPort(struct sockaddr *addr, in_por/
+setupAllSignals	rebel.c	/^void setupAllSignals(void)$/
+setupServer	rebel.c	/^void setupServer(int reconnect)$/
+setupSignalHandler	rebel.c	/^void setupSignalHandler(int sig, void (* handler)(/
+setupTypeTagCells	rebel-xml-json.c	/^CELL *setupTypeTagCells(void)$/
+signal_handler	rebel.c	/^void signal_handler(int sig)$/
+startsEndsWith	rebel-liststr.c	/^CELL *startsEndsWith(CELL *params, int type)$/
+str2cmp	rebel-symbol.c	/^#define str2cmp(s1,s2) \\$/
+strToBigint	rebel-math.c	/^int *strToBigint(char *str, int len, int *intlen)$/
+strUpperLower	rebel-string.c	/^CELL *strUpperLower(CELL *params, int type)$/
+stuffBigint	rebel.c	/^CELL *stuffBigint(char *token)$/
+stuffFloat	rebel.c	/^CELL *stuffFloat(double floatVal)$/
+stuffInteger	rebel.c	/^CELL *stuffInteger(UINT contents)$/
+stuffIntegerList	rebel.c	/^CELL *stuffIntegerList(int argc, ...)$/
+stuffString	rebel.c	/^CELL *stuffString(char *string)$/
+stuffStringN	rebel.c	/^CELL *stuffStringN(char *string, int len)$/
+stuffSymbol	rebel.c	/^CELL *stuffSymbol(SYMBOL *sPtr)$/
+subBigint	rebel-math.c	/^int *subBigint(int *x, int nx, int *y, int ny, int/
+subarray	rebel-list.c	/^CELL *subarray(CELL *array, ssize_t offset, ssize_/
+sublist	rebel-liststr.c	/^CELL *sublist(CELL *list, ssize_t offset, ssize_t /
+substitute	rebel-math.c	/^void substitute(CELL *expr, CELL *sym, TERMSET *ts/
+substring	rebel-string.c	/^CELL *substring(char *string, ssize_t slen, ssize_/
+subsym	rebel-math.c	/^CELL *subsym(CELL *expr, CELL *sym, CELL *cell)$/
+swap	rebel-liststr.c	/^void swap(UINT *left, UINT *right)$/
+swapEndian	rebel-string.c	/^void swapEndian(char *data, int n)$/
+sysEvalString	rebel.c	/^CELL *sysEvalString(char *evalString, SYMBOL *cont/
+template	rebel-import.c	/^INT template(INT n, INT p1, INT p2, INT p3, INT p4/
+timediff64_us	rebel-filesys.c	/^UINT64 timediff64_us(struct timeval out, struct ti/
+timediff_ms	rebel-filesys.c	/^int timediff_ms(struct timeval out, struct timeval/
+traceEntry	rebel-debug.c	/^void traceEntry(CELL *cell, CELL *pCell, CELL *arg/
+traceExit	rebel-debug.c	/^void traceExit(CELL *result, CELL *cell, CELL *pCe/
+tracePrint	rebel-debug.c	/^void tracePrint(char *label, CELL *expr)$/
+transfer	rebel-web.c	/^int transfer(int sock, char *buff, int len)$/
+translateCreateSymbol	rebel-symbol.c	/^(char *token, int type, SYMBOL *context, int force/
+trim	rebel-web.c	/^char *trim(char *buff)$/
+unblockSocket	rebel-sock.c	/^int unblockSocket(int sock)$/
+unify	rebel-math.c	/^CELL *unify(CELL *left, CELL *right)$/
+unifyGetType	rebel-math.c	/^int unifyGetType(CELL *cell)$/
+unpackFFI	rebel-import.c	/^CELL *unpackFFI(ffi_type *ffiPtr, char *data)$/
+unpackFFIstruct	rebel-import.c	/^CELL *unpackFFIstruct(CELL *cell, char *data)$/
+updateCell	rebel-list.c	/^void updateCell(CELL *cell, CELL *val)$/
+update_crc	rebel-math.c	/^unsigned int update_crc(unsigned int crc, unsigned/
+url_decode	rebel-web.c	/^void url_decode(char *dest, char *src)$/
+utf8_1st_len	rebel-utf8.c	/^int utf8_1st_len(char *utf8str)$/
+utf8_index	rebel-utf8.c	/^char *utf8_index(char *utf8str, int idx)$/
+utf8_wchar	rebel-utf8.c	/^char *utf8_wchar(char *utf8str, int *chr)$/
+utf8_wlen	rebel-utf8.c	/^size_t utf8_wlen(char *utf8str, char *limit)$/
+utf8_wstr	rebel-utf8.c	/^int utf8_wstr(int *unicode, char *utf8str, int max/
+varPrintf	rebel.c	/^void varPrintf(UINT device, char *format, ...)$/
+wait_ready	rebel-sock.c	/^int wait_ready(int sock, INT64 wait_us, int mode)$/
+wait_until_read_ready	rebel-web.c	/^void wait_until_read_ready(int sock)$/
+wchar_utf8	rebel-utf8.c	/^int wchar_utf8(int cvalue, char *buffer)$/
+webError	rebel-web.c	/^CELL *webError(int errorNo, int sockno)$/
+which	rebel.c	/^char *which(char *name, char *buff)$/
+writeBuffer	rebel-filesys.c	/^CELL *writeBuffer(CELL *params, int lineFeed)$/
+writeFile	rebel-filesys.c	/^int writeFile(char *fileName, char *buffer, size_t/
+writeLog	rebel-sock.c	/^void writeLog(char *text, int newLine)$/
+writeStreamChar	rebel-string.c	/^void writeStreamChar(STREAM *stream, char chr)$/
+writeStreamStr	rebel-string.c	/^void writeStreamStr(STREAM *stream, char *buff, si/
+wstr_utf8	rebel-utf8.c	/^int wstr_utf8(char *utf8str, int *unicode, int max/
