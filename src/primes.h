@@ -356,7 +356,7 @@ PRIMITIVE primitive[] =
     {"fcopy",            p_copyFile,         0},
     {"fmove",            p_renameFile,       0},
     {"fdel",             p_deleteFile,       0},
-    {"fgrep",            p_search,           0},
+    {"fsearch",          p_search,           0},
     
     /* core - io - directories */
 
