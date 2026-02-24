@@ -3871,6 +3871,7 @@ int getToken(STREAM *stream, char *token, int *ptr_len)
 {
     char *tkn;
     char chr;
+    char chr_next;
     int tknLen;
     #ifdef SUPPORT_UTF8
     int len;
@@ -4157,9 +4158,24 @@ STRIP:
                 }
                 break;
 
-            case '\'':
-            /* ufko: deref */
+            /* ufko: deref / eval operator */
             case '*':
+            {
+                chr_next = *stream->ptr;
+
+                if(chr_next == 0 || (unsigned char)chr_next <= ' ' || chr_next == ')')
+                {
+                    /* treat as normal symbol "*" */
+                    *tkn = 0;
+                    *ptr_len = tknLen;
+                    return(TKN_SYMBOL);
+                }
+
+                /* treat as deref / eval operator */
+                *tkn = 0;
+                return('*');   /* TKN_DEREF */
+            }
+            case '\'':
             case '(':
             case ')':
                 *tkn = 0;
