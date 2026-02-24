@@ -27,7 +27,7 @@
 #ifdef READLINE
     #include <readline/readline.h>
     #include <readline/history.h>
-#endif /* end READLINE */
+#endif 
 
 #ifdef SUPPORT_UTF8
     #include <wctype.h>
@@ -36,8 +36,6 @@
 #define freeMemory free
 
 #define INIT_FILE "init.rbl"
-
-
 
 #ifdef _LINUX
     int opsys = 1;
@@ -78,6 +76,7 @@ char preLoad[] =
 void printHelpText(void);
 #ifdef READLINE
     char **rebel_completion (char *text, int start, int end);
+    static char rebel_history_file[PATH_MAX];
 #endif
 /* --------------------- globals -------------------------------------- */
 
@@ -537,6 +536,11 @@ int main(int argc, char *argv[])
     char *cmd;
     int idx;
 
+    /* ufko: */
+    #ifdef READLINE
+    const char *history_home;
+    FILE *history_fd;
+    #endif
 
     #ifdef SUPPORT_UTF8
     opsys += 128;
@@ -778,14 +782,28 @@ AFTER_ERROR_ENTRY:
     }
 
 
+    /* ufko: improved to use rebel specific history file */
     #ifdef READLINE
     rl_readline_name = "rebel";
     rl_attempted_completion_function = (char **(*) (const char *, int, int))rebel_completion;
-    #if defined(_LINUX) || defined(_BSD)
-    /* in Bash .inputrc put 'set blink-matching-paren on' */
-    rl_set_paren_blink_timeout(300000); /* 300 ms */
-    #endif
-    #endif
+    history_home = getenv("HOME");
+    if(history_home != NULL)
+    {
+        snprintf(rebel_history_file,
+                 sizeof(rebel_history_file),
+                 "%s/.rebel_history",
+                 history_home);
+
+        using_history();
+        read_history_range(rebel_history_file, -1000, -1);
+        /* stifle_history(1000); */
+        history_fd = fopen(rebel_history_file, "a");
+        if(history_fd != NULL)
+        {
+            fclose(history_fd);
+        }
+    }
+    #endif /* READLINE */
 
     while(TRUE)
     {
@@ -866,7 +884,6 @@ char **rebel_completion (char *text, int start, int end)
 {
     return(completion_matches(text,  (char * (*) (const char *, int) )command_generator));
 }
-
 #endif /* READLINE */
 
 
@@ -902,8 +919,12 @@ char *getCommandLine(int batchMode, int *length)
     if(len > 0)
     {
         add_history(cmd);
+        if(rebel_history_file[0] != '\0')
+        {
+            append_history(1, rebel_history_file);
+        }
     }
-    #endif
+    #endif /* READLINE */
 
     if(length != NULL)
     {
