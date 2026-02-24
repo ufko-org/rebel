@@ -4445,9 +4445,7 @@ Notes:
 - A `nil` return indicates that the directory could not be
   read.
 
-See: [rx](#f-rx), [pos](#f-pos),
-[find](#f-find), [parse](#f-parse),
-[replace](#f-replace), [search](#f-search)
+See: [dir?](#f-dirp), [rx](#f-rx)
 
 ---
 
