@@ -28,9 +28,9 @@
     Creating aliases for built-in functions is normal daily practice.
     It is an idiom and has no speed penalty.
 
-    Aliases also provide long-term stability. If a function name 
-    changes in the future, only the alias definition needs to be 
-    updated and existing code keeps working. The best place for 
+    Aliases also provide long-term stability. If a function name
+    changes in the future, only the alias definition needs to be
+    updated and existing code keeps working. The best place for
     user created aliases is ~/.init.rbl file.
 
     (alias 'bt sta-bayes-train) for current context
@@ -60,7 +60,7 @@
 
     Function name patterns, if possible:
 
-       noun          - string/str            (conversion operation) 
+       noun          - string/str            (conversion operation)
        action        - rotate/rot            (generic operation)
        nounaction    - stringrotate/strrot   (specific operation)
        actionnoun    - rotatestring/rotstr   (worst case)
@@ -76,11 +76,11 @@
 
     Allowed characters in core names: [a-z0-9?]
 
-    Any brand new function, if added, is marked with a :rebel comment 
+    Any brand new function, if added, is marked with a :rebel comment
     next to it, indicating a new C implementation with new semantics.
 
-    Some functions may have alternative names marked :alt that provide 
-    clearer meaning in a given context or improve code reading and writing 
+    Some functions may have alternative names marked :alt that provide
+    clearer meaning in a given context or improve code reading and writing
     flow. Alternatives can replace original functions in future.
 
     constant -> const, alias
@@ -100,7 +100,7 @@ PRIMITIVE primitive[] =
 
     /* core - data - creators */
 
-    {"const",            p_constant,         0x400}, 
+    {"const",            p_constant,         0x400},
     {"alias",            p_constant,         0x400}, /* :alt */
     {"shared",           p_shared,           0},     /* :replaces global */
     {"let",              p_let,              0x402},
@@ -108,8 +108,8 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"func",             p_define,           0x402}, /* :rebel :replaces define */
-    {"set",              p_setdef,           0x400}, /* :rebel - set value to variable  */ 
-    {"setq",             p_tie,              0x400}, /* :rebel - bind value to 'symbol - name tells the truth finally */ 
+    {"set",              p_setdef,           0x400}, /* :rebel - set value to variable  */
+    {"setq",             p_tie,              0x400}, /* :rebel - bind value to 'symbol - name tells the truth finally */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
@@ -125,7 +125,7 @@ PRIMITIVE primitive[] =
 
     {"array",            p_array,            0},
     {"list",             p_list,             0},
-    {"range",            p_sequence,         0}, 
+    {"range",            p_sequence,         0},
     {"series",           p_series,           0},
 
     /* core - data - convertors/extractors */
@@ -148,12 +148,12 @@ PRIMITIVE primitive[] =
 
     /* core - data - workers */
 
-    {"all",              p_forAll,           0}, 
-    {"any",              p_any,              0}, 
+    {"all",              p_forAll,           0},
+    {"any",              p_any,              0},
     {"append",           p_append,           0},     /* [l,s,a] */
     {"apply",            p_apply,            0},     /* [l] */
     {"assoc",            p_assoc,            0},     /* [l] */
-    {"bind",             p_bind,             0x400}, /* [l] */ 
+    {"bind",             p_bind,             0x400}, /* [l] */
     {"intersect",        p_intersect,        0},     /* [l] */
     {"check",            p_exists,           0},     /* [l] :replaces exists */
     {"chop",             p_chop,             0},     /* [l,s] */
@@ -231,7 +231,7 @@ PRIMITIVE primitive[] =
     {"sub",              p_subFloat,         0},
     {"mul",              p_mulFloat,         0},
     {"div",              p_divFloat,         0},
-    {"mod",              p_modFloat,         0}, 
+    {"mod",              p_modFloat,         0},
     {"inc",              p_incrementF,       0x400},
     {"dec",              p_decrementF,       0x400},
 
@@ -277,10 +277,10 @@ PRIMITIVE primitive[] =
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"ifnot",            p_ifNot,            2}, /* :rebel full, multi-branch if counterpart */
-    {"throw",            p_throw,            0}, 
-    {"unless",           p_unless,           2}, 
+    {"throw",            p_throw,            0},
+    {"unless",           p_unless,           2},
     {"until",            p_until,            2},
-    {"when",             p_when,             2}, 
+    {"when",             p_when,             2},
     {"while",            p_while,            2},
 
     /* core - logical */
@@ -324,13 +324,13 @@ PRIMITIVE primitive[] =
 
     /* core - io - via std */
 
-    {"print",            p_print,            0}, 
-    {"println",          p_println,          0}, 
+    {"print",            p_print,            0},
+    {"println",          p_println,          0},
     {"puts",             p_println,          0}, /* :alt */
-    {"readkey",          p_readKey,          0}, 
+    {"readkey",          p_readKey,          0},
 
     /* core - io - via device number */
-    
+
     {"device",           p_device,           0},
     {"open",             p_open,             0},
     {"close",            p_close,            0},
@@ -338,8 +338,8 @@ PRIMITIVE primitive[] =
     #ifdef SUPPORT_UTF8
     {"readc8",           p_readUTF8,         0},
     #endif
-    {"read",             p_readBuffer,       0x400}, 
-    {"write",            p_writeBuffer,      0}, 
+    {"read",             p_readBuffer,       0x400},
+    {"write",            p_writeBuffer,      0},
     {"readc",            p_readChar,         0},
     {"writec",           p_writeChar,        0},
     {"readln",           p_readLine,         0},
@@ -349,7 +349,7 @@ PRIMITIVE primitive[] =
     /* core - io - via path */
 
     {"fpath",            p_realpath,         0},
-    {"finfo",            p_fileInfo,         0}, 
+    {"finfo",            p_fileInfo,         0},
     {"fappend",          p_appendFile,       0},
     {"fread",            p_readFile,         0},
     {"fwrite",           p_writeFile,        0},
@@ -357,7 +357,7 @@ PRIMITIVE primitive[] =
     {"fmove",            p_renameFile,       0},
     {"fdel",             p_deleteFile,       0},
     {"fsearch",          p_search,           0},
-    
+
     /* core - io - directories */
 
     {"dir",              p_directory,        0},
@@ -423,7 +423,7 @@ PRIMITIVE primitive[] =
     {"silent",           p_silent,           0},
     {"sleep",            p_sleep,            0},
     {"source",           p_symbolSource,     0},
-    {"sym",              p_symbol,           0}, 
+    {"sym",              p_symbol,           0},
     {"symbols",          p_symbols,          0},
     {"syserr",           p_systemError,      0},
     {"sysinfo",          p_systemInfo,       0},
@@ -438,15 +438,15 @@ PRIMITIVE primitive[] =
     #endif
 
     /* core - C */
-    
+
     {"address",          p_address,          0},
     {"callback",         p_callback,         0},
     {"flt",              p_flt,              0},
-    {"charc",            p_getChar,          0}, 
-    {"floatc",           p_getFloat,         0}, 
-    {"intc",             p_getInteger,       0}, 
-    {"longc",            p_getLong,          0}, 
-    {"stringc",          p_getString,        0}, 
+    {"charc",            p_getChar,          0},
+    {"floatc",           p_getFloat,         0},
+    {"intc",             p_getInteger,       0},
+    {"longc",            p_getLong,          0},
+    {"stringc",          p_getString,        0},
     {"import",           p_importLib,        0},
     {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem */
     {"pack",             p_pack,             0},
@@ -457,27 +457,27 @@ PRIMITIVE primitive[] =
 
     /* core - predicates */
 
-    {"nan?",             p_isnan,            0}, 
+    {"nan?",             p_isnan,            0},
     {"array?",           p_isArray,          0},
     {"atom?",            p_isAtom,           0},
     {"bigint?",          p_isBigInteger,     0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
-    {"empty?",           p_isEmpty,          0}, 
-    {"even?",            p_isEven,           0}, 
+    {"empty?",           p_isEmpty,          0},
+    {"even?",            p_isEven,           0},
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
     {"fn?",              p_isFn,             0},
     {"inf?",             p_isinf,            0},
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
-    {"legal?",           p_isLegal,          0}, 
+    {"legal?",           p_isLegal,          0},
     {"list?",            p_isList,           0},
     {"local?",           p_isLocal,          0}, /* :rebel */
     {"macro?",           p_isMacro,          0},
     {"nil?",             p_isNil,            0},
-    {"null?",            p_isNull,           0},  
-    {"number?",          p_isNumber,         0}, 
-    {"odd?",             p_isOdd,            0}, 
+    {"null?",            p_isNull,           0},
+    {"number?",          p_isNumber,         0},
+    {"odd?",             p_isOdd,            0},
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
@@ -486,7 +486,7 @@ PRIMITIVE primitive[] =
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},
     {"true?",            p_isTrue,           0},
-    {"zero?",            p_isZero,           0}, 
+    {"zero?",            p_isZero,           0},
 
     /* core - flow - boosters */
 
@@ -505,7 +505,7 @@ PRIMITIVE primitive[] =
 
     /* core - network */
 
-    {"netclose",           p_netClose,         0}, 
+    {"netclose",           p_netClose,         0},
     {"netservice",         p_netService,       0},
     {"netconnect",         p_netConnect,       0},
     {"netaccept",          p_netAccept,        0},
@@ -536,7 +536,7 @@ PRIMITIVE primitive[] =
     {"urlpost",            p_postUrl,          0}, /* :replaces post-url */
     {"urldel",             p_deleteUrl,        0}, /* :replaces delete-url */
 
-  
+
     /* NON-CORE - science domain specific -------------------------- */
 
     #ifdef NON_CORE
@@ -582,7 +582,7 @@ PRIMITIVE primitive[] =
     {"fin-npv",              p_npv,              0},
     {"fin-pmt",              p_pmt,              0},
     {"fin-pv",               p_pv,               0},
-      
+
     /* non-core - encoding */
 
     #ifdef XML_SUPPORT

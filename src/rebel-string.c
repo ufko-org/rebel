@@ -1225,7 +1225,9 @@ CELL *p_integer(CELL *params)
             num = bigintToInt64(cell);
         }
         else
+        {
             getInteger64Ext(cell, &num, FALSE);
+        }
         return(stuffInteger(num));
     }
     else
@@ -1306,7 +1308,9 @@ CELL *p_float(CELL *params)
             value = bigintCellToFloat(cell);
         }
         else
+        {
             getFloat(cell, &value);
+        }
         return(stuffFloat(value));
     }
     else

@@ -682,22 +682,22 @@ size_t appendCellString(CELL *cell, char *buffer, size_t size);
 UINT *copyArray(CELL *params);
 UINT64 timediff64_us(struct timeval end, struct timeval start);
 
-    int *getBigintSizeDirect(CELL *params, int * * numPtr, int *len);
-    int *mulBigint(int *x, int nx, int *y, int ny, int *p, int *n);
-    int *divModBigint(int *x, int nx, int *y, int ny, int rmndr, int *n);
-    int *addBigint(int *x, int nx, int *y, int ny, int *sm, int *nsm);
-    int *subBigint(int *x, int nx, int *y, int ny, int *sm, int *nsm);
-    int cmpBigint(int *x, int nx, int *y, int ny);
-    int cmpAbsBigint(int *x, int nx, int *y, int ny);
-    int *strToBigint(char *str, int len, int *intlen);
-    char *bigintToDigits(int *num, int n, int offset, int *slen);
-    INT64 bigintToInt64(CELL *cell);
-    double bigintCellToFloat(CELL *cell);
-    double bigintToAbsFloat(int *num, int n);
-    CELL *p_bigInt(CELL *params);
-    int *intToBigint(INT64 num, int *len);
-    int *floatToBigint(double fnum, int *len);
-    int lengthBigint(int *num, int len);
+int *getBigintSizeDirect(CELL *params, int * * numPtr, int *len);
+int *mulBigint(int *x, int nx, int *y, int ny, int *p, int *n);
+int *divModBigint(int *x, int nx, int *y, int ny, int rmndr, int *n);
+int *addBigint(int *x, int nx, int *y, int ny, int *sm, int *nsm);
+int *subBigint(int *x, int nx, int *y, int ny, int *sm, int *nsm);
+int cmpBigint(int *x, int nx, int *y, int ny);
+int cmpAbsBigint(int *x, int nx, int *y, int ny);
+int *strToBigint(char *str, int len, int *intlen);
+char *bigintToDigits(int *num, int n, int offset, int *slen);
+INT64 bigintToInt64(CELL *cell);
+double bigintCellToFloat(CELL *cell);
+double bigintToAbsFloat(int *num, int n);
+CELL *p_bigInt(CELL *params);
+int *intToBigint(INT64 num, int *len);
+int *floatToBigint(double fnum, int *len);
+int lengthBigint(int *num, int len);
 
 #ifdef SUPPORT_UTF8
     int utf8_1st_len(char *utf8str);

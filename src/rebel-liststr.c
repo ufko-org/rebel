@@ -207,8 +207,10 @@ CELL *p_length(CELL *params)
 
     cond = (getFlag(flagp->next) == 1) ? trueCell : nilCell;
     if(cond == nilCell)
-      return(stuffInteger(length));
-   return(stuffInteger(length - 1));
+    {
+        return(stuffInteger(length));
+    }
+    return(stuffInteger(length - 1));
 
 }
 

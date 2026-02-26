@@ -1678,18 +1678,16 @@ int endsWith(char *str, char *ext)
 /* ^ ufko prevent potential UB edge case, when ext is longer than str */
 int endsWith(char *str, char *ext)
 {
-	size_t size = strlen(str);
-	size_t len  = strlen(ext);
+    size_t size = strlen(str);
+    size_t len  = strlen(ext);
 
-	if(len > size)
-	{
-		return(FALSE);
-	}
+    if(len > size)
+    {
+        return(FALSE);
+    }
 
-	return(strncmp(str + size - len, ext, len) == 0);
+    return(strncmp(str + size - len, ext, len) == 0);
 }
-
-
 
 
 typedef struct

@@ -27,7 +27,7 @@
 #ifdef READLINE
     #include <readline/readline.h>
     #include <readline/history.h>
-#endif 
+#endif
 
 #ifdef SUPPORT_UTF8
     #include <wctype.h>
@@ -68,7 +68,7 @@ char banner2[]= ". Options: rebel -h";
 void linkSource(char *, char *, char *);
 char linkOffset[] = "&&&&@@@@";
 /* ufko: userland bootstrap */
-char preLoad[] = 
+char preLoad[] =
     "(func (printf) (print (format (args 0) (expand (rest (args)))))) (const (shared 'printf))"
     "(mac (setf) (if (quote? (args 0)) (do (puts {Warn: quoted symbol used in function setf: } (args 0)) nil) (do (puts {Info: in Rebel use 'set' for variable assignment.}) (set (eval (args 0)) (args 1))))) (const (shared 'setf))"
     "(mac (cond) (puts {Info: in Rebel use multi-branch 'if/ifnot' instead of 'cond'.}) nil) (const (shared 'cond))"
@@ -184,16 +184,17 @@ UINT *fnStack = NULL;
 UINT *fnStackIdx;
 
 /* internal dummy to carry FOOP object */
-SYMBOL objSymbol = {
-  SYMBOL_SHARED | SYMBOL_BUILTIN, /* flags */
-  0,                              /* color */ 
-  0,                              /* explicit */ 
-  "container of (self)",          /* name */ 
-  0,                              /* contents */ 
-  NULL,                           /* context */ 
-  NULL,                           /* parent */ 
-  NULL,                           /* left */ 
-  NULL                            /* right */
+SYMBOL objSymbol =
+{
+    SYMBOL_SHARED | SYMBOL_BUILTIN, /* flags */
+    0,                              /* color */
+    0,                              /* explicit */
+    "container of (self)",          /* name */
+    0,                              /* contents */
+    NULL,                           /* context */
+    NULL,                           /* parent */
+    NULL,                           /* left */
+    NULL                            /* right */
 };
 CELL *objCell;
 
@@ -402,7 +403,7 @@ void loadStartup(char *name)
 
     /* ufko: ensure initFile is a valid empty string if no env var is set */
     initFile[0] = 0;
-    
+
     /* normal Rebel start up */
     if(strncmp(linkOffset + 4, "@@@@", 4) == 0)
     {
@@ -3159,7 +3160,7 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
-    
+
     SYMBOL *sym;
     if(params->type == CELL_SYMBOL)
     {
@@ -3167,8 +3168,8 @@ CELL *p_adhoc(CELL *params)
         printf("%c\n", sym->name[0]);
         printf("%s\n", sym->name);
     }
-   
-   return(nilCell);
+
+    return(nilCell);
 }
 
 CELL *p_prettyPrint(CELL *params)
@@ -4160,21 +4161,21 @@ STRIP:
 
             /* ufko: deref / eval operator */
             case '*':
-            {
-                chr_next = *stream->ptr;
-
-                if(chr_next == 0 || (unsigned char)chr_next <= ' ' || chr_next == ')')
                 {
-                    /* treat as normal symbol "*" */
-                    *tkn = 0;
-                    *ptr_len = tknLen;
-                    return(TKN_SYMBOL);
-                }
+                    chr_next = *stream->ptr;
 
-                /* treat as deref / eval operator */
-                *tkn = 0;
-                return('*');   /* TKN_DEREF */
-            }
+                    if(chr_next == 0 || (unsigned char)chr_next <= ' ' || chr_next == ')')
+                    {
+                        /* treat as normal symbol "*" */
+                        *tkn = 0;
+                        *ptr_len = tknLen;
+                        return(TKN_SYMBOL);
+                    }
+
+                    /* treat as deref / eval operator */
+                    *tkn = 0;
+                    return('*');   /* TKN_DEREF */
+                }
             case '\'':
             case '(':
             case ')':
@@ -5345,8 +5346,8 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
     {
         if(body->next != nilCell)
         {
-            /* ufko: 
-            body has multiple expressions (expand '(do ...)) 
+            /* ufko:
+            body has multiple expressions (expand '(do ...))
             > (macro (m a b) (a) (b))
             (fn-macro (a b) (expand '(do
                (a)
@@ -5377,12 +5378,12 @@ CELL *p_define(CELL *params)
 {
     if((params->type != CELL_SYMBOL) && (params->type != CELL_DYN_SYMBOL))
     {
-       return(defineOrMacro(params, CELL_FN, FALSE));
+        return(defineOrMacro(params, CELL_FN, FALSE));
     }
     return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED_FUNC);
 }
 
-/* ufko: 
+/* ufko:
 CELL *p_define(CELL *params)
 {
     if(params->type != CELL_SYMBOL)
@@ -5419,7 +5420,7 @@ CELL *p_setdef(CELL *params)
 
 SETDEF_BEGIN:
 
-    /* reject implicit nil value for symbol - turned off for now 
+    /* reject implicit nil value for symbol - turned off for now
     if(params->next == nilCell)
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
@@ -5438,8 +5439,8 @@ SETDEF_BEGIN:
         head = (CELL *)params->contents;
 
         if(head &&
-           head->type == CELL_SYMBOL &&
-           strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
+                head->type == CELL_SYMBOL &&
+                strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
         {
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
@@ -5502,8 +5503,9 @@ SETDEF_BEGIN:
     cell->type = new->type;
     cell->aux = new->aux;
     cell->contents = new->contents;
-    if(symbolRef) {
-      symbolRef->explicit = 1;
+    if(symbolRef)
+    {
+        symbolRef->explicit = 1;
     }
 
     /* free cell */
@@ -5545,7 +5547,7 @@ SETMUT_BEGIN:
     {
         return(errorProc(ERR_MISSING_ARGUMENT));
     }
-      
+
     /* Reject: 'sym  */
     if(params->type == CELL_QUOTE)
     {
@@ -5558,8 +5560,8 @@ SETMUT_BEGIN:
         CELL *head = (CELL *)params->contents;
 
         if(head &&
-           head->type == CELL_SYMBOL &&
-           strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
+                head->type == CELL_SYMBOL &&
+                strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
         {
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
@@ -6910,22 +6912,32 @@ CELL *p_loop(CELL *params)
     pair = (CELL *)params->contents;        /* (x xs) */
     value = evaluateExpression(pair->next); /* xs' value */
 
-    /* micro-opt: assumed usage frequency order; 
+    /* micro-opt: assumed usage frequency order;
        array tested separately, not with list */
     if (isList(value->type))
+    {
         return(dolist(params, DOLIST));
+    }
 
     else if (value->type == CELL_STRING)
+    {
         return(dolist(params, DOSTRING));
+    }
 
     else if (value->type == CELL_ARRAY)
+    {
         return(dolist(params, DOLIST));
+    }
 
     else if (value->type == CELL_CONTEXT)
+    {
         return(dolist(params, DOTREE));
+    }
 
     else
+    {
         return(dolist(params, DOARGS));
+    }
 }
 
 CELL *p_dolist(CELL *params)

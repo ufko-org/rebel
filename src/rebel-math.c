@@ -61,8 +61,8 @@
 #define OP_ISNAN 35
 #define OP_ISINF 36
 
-    #define BIGINT_BASE 1000000000 /* 9 zeros */
-    #define BIGINT_BASE2 1000000000000000000LL /* 18 zeros */
+#define BIGINT_BASE 1000000000 /* 9 zeros */
+#define BIGINT_BASE2 1000000000000000000LL /* 18 zeros */
 
 extern uint32_t my_random();
 void my_srandom(uint32_t seed);
@@ -100,16 +100,15 @@ CELL *p_abs(CELL *params)
         }
         return(cell);
     }
-    else
-        if(cell->type == CELL_FLOAT)
+    else if(cell->type == CELL_FLOAT)
+    {
+        floatValue = getDirectFloat(cell);
+        if(floatValue < 0.0)
         {
-            floatValue = getDirectFloat(cell);
-            if(floatValue < 0.0)
-            {
-                floatValue = floatValue * -1.0;
-            }
-            return(stuffFloat(floatValue));
+            floatValue = floatValue * -1.0;
         }
+        return(stuffFloat(floatValue));
+    }
 
     getInteger64Ext(cell, &intValue, FALSE);
     if(intValue < 0)
@@ -4122,7 +4121,9 @@ CELL *isOddEven(CELL *params, int type)
         num = *((int *)params->contents + params->aux - 1);
     }
     else
+    {
         getInteger64Ext(params, &num, FALSE);
+    }
 
     if(type == BOOL_EVEN)
     {

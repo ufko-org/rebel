@@ -949,25 +949,25 @@ CELL *p_directory(CELL *params)
 /* ufko: new realpath */
 CELL *p_realpath(CELL *params)
 {
-	char  resolved[PATH_MAX];
-	char *name;
+    char  resolved[PATH_MAX];
+    char *name;
 
-	/* no args -> current directory */
-	if(params == nilCell)
-	{
-		name = ".";
-	}
-	else
-	{
-		params = getString(params, &name);
-	}
+    /* no args -> current directory */
+    if(params == nilCell)
+    {
+        name = ".";
+    }
+    else
+    {
+        params = getString(params, &name);
+    }
 
-	if(realpath(name, resolved) == NULL)
-	{
-		return(nilCell);
-	}
+    if(realpath(name, resolved) == NULL)
+    {
+        return(nilCell);
+    }
 
-	return(stuffString(resolved));
+    return(stuffString(resolved));
 }
 
 /* ufko: old and unreal :)
@@ -999,7 +999,7 @@ CELL *p_realpath(CELL *params)
         return(nilCell);
     }
 
-    #ifdef _BSD 
+    #ifdef _BSD
     if(isFile(path, 0))
     {
         return(nilCell);
@@ -2671,9 +2671,9 @@ CELL *p_dateISO(CELL *params)
     if(ttm == NULL)
     {
         return(errorProcExt2(
-            ERR_INVALID_PARAMETER,
-            stuffInteger((UINT)timeValue)
-        ));
+                   ERR_INVALID_PARAMETER,
+                   stuffInteger((UINT)timeValue)
+               ));
     }
 
     year  = ttm->tm_year + 1900;
