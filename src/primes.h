@@ -463,7 +463,7 @@ PRIMITIVE primitive[] =
     {"bigint?",          p_isBigInteger,     0},
     {"context?",         p_isContext,        0},
     {"dir?",             p_isDirectory,      0},
-    {"empty?",           p_isEmpty,          0}, /* np -> remove */
+    {"empty?",           p_isEmpty,          0}, 
     {"even?",            p_isEven,           0}, 
     {"file?",            p_isFile,           0},
     {"float?",           p_isFloat,          0},
@@ -481,7 +481,7 @@ PRIMITIVE primitive[] =
     {"primitive?",       p_isPrimitive,      0},
     {"protected?",       p_isProtected,      0},
     {"quote?",           p_isQuote,          0},
-    {"set?",             p_isSet,            0},
+    {"set?",             p_isSet,            0}, /* :rebel */
     {"shared?",          p_isShared,         0}, /* :replaces global? */
     {"string?",          p_isString,         0},
     {"symbol?",          p_isSymbol,         0},
