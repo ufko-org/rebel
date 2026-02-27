@@ -33,8 +33,8 @@
     updated and existing code keeps working. The best place for
     user created aliases is ~/.init.rbl file.
 
-    (alias 'bt sta-bayes-train) for current context
-    (alias (shared 'bt) sta-bayes-train) for all contexts
+    (alias 'bt sta.bayes-train) for current context
+    (alias (shared 'bt) sta.bayes-train) for all contexts
 
     Also there is no module system at the API level; modularity
     is a userland concept implemented explicitly via contexts.
@@ -537,61 +537,61 @@ PRIMITIVE primitive[] =
     {"urldel",             p_deleteUrl,        0}, /* :replaces delete-url */
 
 
-    /* NON-CORE - science domain specific -------------------------- */
+    /* NON-CORE - science/domain specific -------------------------- */
 
     #ifdef NON_CORE
 
     /* non-core - matrix */
 
-    {"mat-apply",            p_matScalar,        0}, /* :replaces mat */
-    {"mat-det",              p_determinant,      0},
-    {"mat-invert",           p_matInvert,        0},
-    {"mat-multiply",         p_matMultiply,      0},
-    {"mat-transpose",        p_matTranspose,     0},
+    {"mat.apply",            p_matScalar,        0}, /* :replaces mat */
+    {"mat.det",              p_determinant,      0},
+    {"mat.invert",           p_matInvert,        0},
+    {"mat.multiply",         p_matMultiply,      0},
+    {"mat.transpose",        p_matTranspose,     0},
 
     /* non-core - statistics */
 
-    {"sta-bayes-query",      p_bayesQuery,       0},
-    {"sta-bayes-train",      p_bayesTrain,       0},
-    {"sta-beta",             p_beta,             0},
-    {"sta-betai",            p_betai,            0},
-    {"sta-binomial",         p_binomial,         0},
-    {"sta-corr",             p_corr,             0},
-    {"sta-crit-chi2",        p_criticalChi2,     0},
-    {"sta-crit-f",           p_criticalF,        0},
-    {"sta-crit-t",           p_criticalT,        0},
-    {"sta-crit-z",           p_criticalZ,        0},
-    {"sta-fft",              p_fft,              0},
-    {"sta-gammai",           p_gammai,           0},
-    {"sta-gammaln",          p_gammaln,          0},
-    {"sta-ifft",             p_ifft,             0},
-    {"sta-kmeans-query",     p_kmeansQuery,      0},
-    {"sta-kmeans-train",     p_kmeansTrain,      0},
-    {"sta-prob-chi2",        p_probabilityChi2,  0},
-    {"sta-prob-f",           p_probabilityF,     0},
-    {"sta-prob-t",           p_probabilityT,     0},
-    {"sta-prob-z",           p_probabilityZ,     0},
-    {"sta-stats",            p_stats,            0},
-    {"sta-t-test",           p_ttest,            0},
+    {"sta.bayes-query",      p_bayesQuery,       0},
+    {"sta.bayes-train",      p_bayesTrain,       0},
+    {"sta.beta",             p_beta,             0},
+    {"sta.betai",            p_betai,            0},
+    {"sta.binomial",         p_binomial,         0},
+    {"sta.corr",             p_corr,             0},
+    {"sta.crit-chi2",        p_criticalChi2,     0},
+    {"sta.crit-f",           p_criticalF,        0},
+    {"sta.crit-t",           p_criticalT,        0},
+    {"sta.crit-z",           p_criticalZ,        0},
+    {"sta.fft",              p_fft,              0},
+    {"sta.gammai",           p_gammai,           0},
+    {"sta.gammaln",          p_gammaln,          0},
+    {"sta.ifft",             p_ifft,             0},
+    {"sta.kmeans-query",     p_kmeansQuery,      0},
+    {"sta.kmeans-train",     p_kmeansTrain,      0},
+    {"sta.prob-chi2",        p_probabilityChi2,  0},
+    {"sta.prob-f",           p_probabilityF,     0},
+    {"sta.prob-t",           p_probabilityT,     0},
+    {"sta.prob-z",           p_probabilityZ,     0},
+    {"sta.stats",            p_stats,            0},
+    {"sta.t-test",           p_ttest,            0},
 
     /* non-core - finantial math */
 
-    {"fin-fv",               p_fv,               0},
-    {"fin-irr",              p_irr,              0},
-    {"fin-nper",             p_nper,             0},
-    {"fin-npv",              p_npv,              0},
-    {"fin-pmt",              p_pmt,              0},
-    {"fin-pv",               p_pv,               0},
+    {"fin.fv",               p_fv,               0},
+    {"fin.irr",              p_irr,              0},
+    {"fin.nper",             p_nper,             0},
+    {"fin.npv",              p_npv,              0},
+    {"fin.pmt",              p_pmt,              0},
+    {"fin.pv",               p_pv,               0},
 
     /* non-core - encoding */
 
     #ifdef XML_SUPPORT
-    {"enc-xml-error",        p_XMLerror,         0},
-    {"enc-xml-parse",        p_XMLparse,         0},
-    {"enc-xml-type-tags",    p_XMLtypeTags,      0},
+    {"enc.xml-error",        p_XMLerror,         0},
+    {"enc.xml-parse",        p_XMLparse,         0},
+    {"enc.xml-type-tags",    p_XMLtypeTags,      0},
     #endif
-    {"enc-json-error",       p_JSONerror,        0},
-    {"enc-json-parse",       p_JSONparse,        0},
+    {"enc.json-error",       p_JSONerror,        0},
+    {"enc.json-parse",       p_JSONparse,        0},
     #endif /* NON_CORE */
 
     {NULL,NULL,0},
