@@ -791,11 +791,7 @@ AFTER_ERROR_ENTRY:
                  history_home);
 
         using_history();
-        #ifdef _MACOS
-        read_history(rebel_history_file);
-        #else
         read_history_range(rebel_history_file, -1000, -1);
-        #endif
         /* stifle_history(1000); */
         history_fd = fopen(rebel_history_file, "a");
         if(history_fd != NULL)
@@ -921,11 +917,7 @@ char *getCommandLine(int batchMode, int *length)
         add_history(cmd);
         if(rebel_history_file[0] != '\0')
         {
-            #ifdef _MACOS
-            write_history(rebel_history_file);
-            #else
             append_history(1, rebel_history_file);
-            #endif
         }
     }
     #endif /* READLINE */

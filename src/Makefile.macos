@@ -21,9 +21,11 @@ CC = cc
 
 CFLAGS = -fPIC -Wall -Oz -c \
 	-I/usr/local/include -I/usr/local/opt/libffi/include \
+  -I$(shell brew --prefix readline)/include \
 	-D_MACOS -DSUPPORT_UTF8 -DREADLINE -DFFI -DNON_CORE
 
-LDFLAGS = -L/usr/local/lib -L/usr/local/opt/libffi/lib
+LDFLAGS = -L/usr/local/lib -L/usr/local/opt/libffi/lib \
+          -L$(shell brew --prefix readline)/lib
 
 default: rebel
 
