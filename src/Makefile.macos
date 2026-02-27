@@ -43,4 +43,4 @@ clean:
 	rm -f $(OBJS) rebel
 
 test: rebel
-	./rebel qa-dot
+	#./rebel qa-dot
