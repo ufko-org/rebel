@@ -13,6 +13,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install libffi 
+          brew install readline
           # readline is installed by default
 
       - name: Build rebel using Makefile.macos
