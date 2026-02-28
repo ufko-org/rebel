@@ -17,7 +17,7 @@
 ; bits length and string conversion
 ; ------------------------------------------------------------
 (test "3: length of bits 0x8000000000000000"
-  (= 64 (length (bits 0x8000000000000000)))
+  (= 64 (len (bits 0x8000000000000000)))
   true
 )
 

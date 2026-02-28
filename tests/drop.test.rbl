@@ -1,17 +1,17 @@
-; Test for function "clean"
+; Test for function "drop"
 ; ------------------------------------------------------------
 (load "testing.rbl")
 
-; Clean numbers
+; Drop numbers
 ; ------------------------------------------------------------
 (test "1: remove integers from mixed list"
-  (= (clean int? '(1 1.1 2 2.2 3 3.3)) '(1.1 2.2 3.3))
+  (= (drop int? '(1 1.1 2 2.2 3 3.3)) '(1.1 2.2 3.3))
   true
 )
 
-; Clean true values
+; Drop true values
 ; ------------------------------------------------------------
 (test "2: remove true? values from list"
-  (= (clean true? '(a nil b nil c nil)) '(nil nil nil))
+  (= (drop true? '(a nil b nil c nil)) '(nil nil nil))
   true
 )

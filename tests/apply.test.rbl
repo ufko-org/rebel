@@ -32,9 +32,9 @@
 
 ; Variables
 ; ------------------------------------------------------------
-(test "5: apply tie and increment"
+(test "5: apply setq and increment"
   (let ((x 0))
-    (= (inc (apply tie '(x 123))) 124 x))
+    (= (inc (apply setq '(x 123))) 124 x))
   true
 )
 

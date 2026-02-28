@@ -12,18 +12,18 @@
   15
 )
 
-; Curry inside filter
+; Curry inside keep
 ; ------------------------------------------------------------
-(test "2: curry with match inside filter"
-  (filter (curry match '(a *))
+(test "2: curry with match inside keep"
+  (keep (curry match '(a *))
           '((a 10) (b 5) (a 3) (c 8) (a 9)))
   '((a 10) (a 3) (a 9))
 )
 
-; Curry inside clean
+; Curry inside drop
 ; ------------------------------------------------------------
-(test "3: curry with match inside clean"
-  (clean (curry match '(a *))
+(test "3: curry with match inside drop"
+  (drop (curry match '(a *))
          '((a 10) (b 5) (a 3) (c 8) (a 9)))
   '((b 5) (c 8))
 )
