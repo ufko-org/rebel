@@ -3155,15 +3155,6 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
-
-    SYMBOL *sym;
-    if(params->type == CELL_SYMBOL)
-    {
-        sym = (SYMBOL *)params->contents;
-        printf("%c\n", sym->name[0]);
-        printf("%s\n", sym->name);
-    }
-
     return(nilCell);
 }
 
@@ -5425,10 +5416,12 @@ SETDEF_BEGIN:
     /* reject: 'sym */
     if(params->type == CELL_QUOTE)
     {
+        return(p_set(params));
         return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
     }
 
     /* reject: (quote sym) */
+    #if 0
     if(params->type == CELL_EXPRESSION)
     {
         head = (CELL *)params->contents;
@@ -5440,6 +5433,7 @@ SETDEF_BEGIN:
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
     }
+    #endif
 
     cell = evaluateExpression(params);
 
@@ -5523,7 +5517,7 @@ SETDEF_BEGIN:
 }
 
 /* ufko: */
-CELL *p_setmut(CELL *params)
+CELL *p_mut(CELL *params)
 {
     SYMBOL *symbolRef = NULL;
     CELL *cell;
@@ -5573,6 +5567,157 @@ SETMUT_BEGIN:
     stringRef = stringCell;
     indexRefPtr = stringIndexPtr;
 
+    if(symbolRef && isProtected(symbolRef->flags) && symbolRef->contents == (UINT)cell)
+    {
+        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbolRef)));
+    }
+
+    
+    /* Reject: 
+      1. symbol not local to current call-chain -or-
+      2. symbol not created explicitly 
+      - local symbol has priority to respect shadowing */ 
+    if(symbolRef != NULL)
+    {
+        idx = envStackIdx;
+        isLocal = 0;
+
+        while(idx > envStack)
+        {
+            if(symbolRef == (SYMBOL *)*(--idx))
+            {
+                isLocal = 1;
+                break;
+            }
+        }
+
+        if(isLocal == 0)
+        {
+            if(symbolRef->explicit == 0)
+            {
+                return errorProcExt(ERR_SYMBOL_UNBOUND_MUT, stuffSymbol(symbolRef));
+            }
+        }
+    }
+
+    itSymbol->contents = (UINT)cell;
+    new = copyCell(evaluateExpression(params->next));
+    itSymbol->contents = (UINT)nilCell;
+
+    params = params->next;
+    params = params->next;
+
+
+    if(stringRef && indexRefPtr)
+    {
+        cell = setNthStr((CELL *)stringRef, new, indexRefPtr);
+        if(params != nilCell)
+        {
+            goto SETMUT_BEGIN;
+        }
+        return(cell);
+    }
+
+    /* delete contents of original cell */
+    if(isEnvelope(cell->type))
+    {
+        if(cell->type == CELL_ARRAY)
+        {
+            deleteArray(cell);
+        }
+        else
+        {
+            deleteList((CELL *)cell->contents);
+        }
+    }
+    else if(cell->type == CELL_STRING || cell->type == CELL_DYN_SYMBOL
+            || cell->type == CELL_BIGINT
+           )
+    {
+        freeMemory( (void *)cell->contents);
+    }
+
+
+    /* get new contents */
+    cell->type = new->type;
+    cell->aux = new->aux;
+    cell->contents = new->contents;
+
+    /* free cell */
+    new->type = CELL_FREE;
+    new->aux = 0;
+    new->contents = 0;
+    new->next = firstFreeCell;
+    firstFreeCell = new;
+    --cellCount;
+
+    if(params != nilCell)
+    {
+        goto SETMUT_BEGIN;
+    }
+
+    /* return modified cell */
+    symbolCheck = symbolRef;
+    pushResultFlag = FALSE;
+    return(cell);
+}
+
+/* ufko: */
+CELL *p_mutLocal(CELL *params)
+{
+    SYMBOL *symbolRef = NULL;
+    CELL *cell;
+    CELL *new;
+    CELL *stringRef;
+    char *indexRefPtr;
+    UINT *idx = envStackIdx;
+    int isLocal = 0;
+
+SETMUT_BEGIN:
+
+    idx = envStackIdx;
+    isLocal = 0;
+
+    if(params->next == nilCell)
+    {
+        return(errorProc(ERR_MISSING_ARGUMENT));
+    }
+
+    /* Reject: 'sym  */
+    if(params->type == CELL_QUOTE)
+    {
+        return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
+    }
+
+    /* Reject: (quote sym) */
+    if(params->type == CELL_EXPRESSION)
+    {
+        CELL *head = (CELL *)params->contents;
+
+        if(head &&
+                head->type == CELL_SYMBOL &&
+                strcmp(((SYMBOL *)head->contents)->name, "quote") == 0)
+        {
+            return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
+        }
+    }
+
+    cell = evaluateExpression(params);
+
+    if(cell == nilCell || cell == trueCell)
+    {
+        errorProcExt(ERR_IS_NOT_REFERENCED, cell);
+    }
+
+    symbolRef = symbolCheck;
+    stringRef = stringCell;
+    indexRefPtr = stringIndexPtr;
+
+    if(symbolRef && isProtected(symbolRef->flags) && symbolRef->contents == (UINT)cell)
+    {
+        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbolRef)));
+    }
+
     /* Reject: symbol not local to current call-chain */
     if(symbolRef != NULL)
     {
@@ -5593,12 +5738,7 @@ SETMUT_BEGIN:
             return errorProcExt(ERR_SYMBOL_NONLOCAL_MUT, stuffSymbol(symbolRef));
         }
     }
-
-    if(symbolRef && isProtected(symbolRef->flags) && symbolRef->contents == (UINT)cell)
-    {
-        return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbolRef)));
-    }
-
+    
     itSymbol->contents = (UINT)cell;
     new = copyCell(evaluateExpression(params->next));
     itSymbol->contents = (UINT)nilCell;
@@ -7787,6 +7927,37 @@ CELL *p_defineNew(CELL *params)
 /* ------------------------------ system ------------------------------ */
 
 CELL *isType(CELL *, int);
+
+/* ufko: */
+CELL *p_isInternal(CELL *params)
+{
+    SYMBOL *sym;
+    int i;
+
+    if(params->type != CELL_SYMBOL)
+    {
+        return(nilCell);
+    }
+
+    sym = (SYMBOL *)params->contents;
+
+    /* _ prefix */
+    if(sym->name[0] == '_')
+    {
+        return(trueCell);
+    }
+
+    /* dot at index 1–3 */
+    for(i = 1; sym->name[i] != '\0' && i < 4; i++)
+    {
+        if(sym->name[i] == '.')
+        {
+            return(trueCell);
+        }
+    }
+
+    return(nilCell);
+}
 
 /* ufko: */
 CELL *p_isSet(CELL *params)

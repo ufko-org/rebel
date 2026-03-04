@@ -471,6 +471,7 @@ PRIMITIVE primitive[] =
     {"fn?",              p_isFn,             0},
     {"inf?",             p_isinf,            0},
     {"int?",             p_isInteger,        0}, /* :replaces integer? */
+    {"internal?",        p_isInternal,       0}, /* :rebel */
     {"legal?",           p_isLegal,          0},
     {"list?",            p_isList,           0},
     {"local?",           p_isLocal,          0}, /* :rebel */
