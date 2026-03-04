@@ -98,7 +98,7 @@ PRIMITIVE primitive[] =
 {
     /* CORE ------------------------------------------------------------- */
 
-    /* core - data - creators */
+    /* core - data - symbol workers */
 
     {"const",            p_constant,         0x400},
     {"alias",            p_constant,         0x400}, /* :alt */
