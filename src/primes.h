@@ -183,7 +183,6 @@ PRIMITIVE primitive[] =
     {"lookup",           p_lookup,           0},     /* [l] */
     {"map",              p_map,              0},     /* [l] */
     {"match",            p_match,            0},     /* [l] */
-    {"mut",              p_setmut,           0},     /* [] :rebel, conscious mutate tool */
     {"nth",              p_nth,              0},     /* [] */
     {"parse",            p_parse,            0},     /* [] */
     {"pop",              p_pop,              0x400}, /* [] */
