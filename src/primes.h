@@ -110,6 +110,8 @@ PRIMITIVE primitive[] =
     {"func",             p_define,           0x402}, /* :rebel :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel - set value to variable  */
     {"setq",             p_tie,              0x400}, /* :rebel - bind value to 'symbol - name tells the truth finally */
+    {"mut",              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
+    {"mutl",             p_mutLocal,         0},     /* [] :rebel, opt-in stack mutate tool */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
     {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
 
