@@ -7947,7 +7947,7 @@ CELL *p_isInternal(CELL *params)
         return(trueCell);
     }
 
-    /* dot at index 1–3 */
+    /* dot at index 1-3 */
     for(i = 1; sym->name[i] != '\0' && i < 4; i++)
     {
         if(sym->name[i] == '.')
