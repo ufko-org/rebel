@@ -1344,6 +1344,8 @@ void initialize(void)
     /* build symbols for primitives */
     for(i = 0; primitive[i].name != NULL; i++)
     {
+if(primitive[i].function == NULL)
+    continue;
         pCell = getCell(CELL_PRIMITIVE);
         symbol = translateCreateSymbol(
                      primitive[i].name, CELL_PRIMITIVE, mainContext, TRUE);
@@ -5360,8 +5362,17 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
 }
 
 /* ufko: only function definition is allowed, removes set redundancy */
-CELL *p_define(CELL *params)
+CELL *p_func(CELL *params)
 {
+    /* get func name 
+    CELL *head;
+    if(params->type == CELL_EXPRESSION)
+    {
+        head = (CELL *)params->contents;
+        printf("%s", ((SYMBOL *)head->contents)->name);
+    }
+    */
+
     if((params->type != CELL_SYMBOL) && (params->type != CELL_DYN_SYMBOL))
     {
         return(defineOrMacro(params, CELL_FN, FALSE));
@@ -5369,7 +5380,6 @@ CELL *p_define(CELL *params)
     return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED_FUNC);
 }
 
-/* ufko:
 CELL *p_define(CELL *params)
 {
     if(params->type != CELL_SYMBOL)
@@ -5383,7 +5393,7 @@ CELL *p_define(CELL *params)
 
     return(setDefine((SYMBOL *)params->contents, params->next, SET_SET));
 }
-*/
+
 
 CELL *p_defineMacro(CELL *params)
 {
@@ -5416,12 +5426,10 @@ SETDEF_BEGIN:
     /* reject: 'sym */
     if(params->type == CELL_QUOTE)
     {
-        return(p_set(params));
         return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
     }
 
     /* reject: (quote sym) */
-    #if 0
     if(params->type == CELL_EXPRESSION)
     {
         head = (CELL *)params->contents;
@@ -5433,7 +5441,6 @@ SETDEF_BEGIN:
             return errorProc(ERR_QUOTED_SYMBOL_IN_FUNCTION_SETDEF);
         }
     }
-    #endif
 
     cell = evaluateExpression(params);
 
@@ -5894,7 +5901,7 @@ SETF_BEGIN:
     return(cell);
 }
 
-CELL *p_tie(CELL *params)
+CELL *p_setn(CELL *params)
 {
     SYMBOL *symbol;
     CELL *next;

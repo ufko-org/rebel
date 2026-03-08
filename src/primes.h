@@ -107,9 +107,9 @@ PRIMITIVE primitive[] =
     {"letex",            p_letExpand,        0x403},
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
-    {"func",             p_define,           0x402}, /* :rebel :replaces define */
-    {"set",              p_setdef,           0x400}, /* :rebel - set value to variable  */
-    {"setq",             p_tie,              0x400}, /* :rebel - bind value to 'symbol - name tells the truth finally */
+    {"func",             p_func,             0x402}, /* :rebel :replaces define */
+    {"set",              p_setdef,           0x400}, /* :rebel - set place to value */
+    {"setn",             p_setn,             0x400}, /* :rebel - set symbol name to value */
     {"mut",              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
     {"mutl",             p_mutLocal,         0},     /* [] :rebel, opt-in stack mutate tool */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
@@ -495,6 +495,7 @@ PRIMITIVE primitive[] =
     {"is",               p_equal,            0}, /* :alt for = */
     {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
     {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases. covers nil?,null?,empty?,zero?,nan? */
+    /* {"hash",             NULL,               0}, */
 
     /* core - date and time */
 
