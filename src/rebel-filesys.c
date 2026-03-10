@@ -2592,6 +2592,20 @@ CELL *p_timeOfDay(CELL *params)
     return(stuffFloat(microSecs));
 }
 
+/* ufko: */
+CELL *p_timeId(CELL *params)
+{
+  struct timeval tv;
+  INT64 usec;
+
+  gettimeofday(&tv, NULL);
+
+  /* epoch microseconds */
+  usec = (INT64)tv.tv_sec * (INT64)1000000 + (INT64)tv.tv_usec;
+
+  /* return milliseconds with 3 decimals */
+  return stuffFloat((double)usec / 1000.0);
+}
 
 CELL *p_now(CELL *params)
 {

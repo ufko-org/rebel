@@ -1264,8 +1264,12 @@ CELL *evaluateStream(STREAM *stream, UINT outDevice, int flag)
             eval = evaluateExpression((CELL *)program->contents);
             if(outDevice != 0 && !evalSilent)
             {
+                /* ufko: repl result marker "-> " */
+                /* varPrintf(outDevice, "-> "); */
                 printCell(eval, TRUE, outDevice);
                 varPrintf(outDevice, "\n");
+                /* ufko: repl result marker " <" */
+                /* varPrintf(outDevice, " <\n");*/
                 if(logTraffic == LOG_MORE)
                 {
                     writeLog("-> ", 0);

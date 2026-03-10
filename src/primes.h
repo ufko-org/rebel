@@ -109,7 +109,7 @@ PRIMITIVE primitive[] =
     {"local",            p_local,            2},
     {"func",             p_func,             0x402}, /* :rebel :replaces define */
     {"set",              p_setdef,           0x400}, /* :rebel - set place to value */
-    {"setn",             p_setn,             0x400}, /* :rebel - set symbol name to value */
+    {"setn",             p_setn,             0x400}, /* :rebel - set 'name to value */
     {"mut",              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
     {"mutl",             p_mutLocal,         0},     /* [] :rebel, opt-in stack mutate tool */
     {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
@@ -412,7 +412,8 @@ PRIMITIVE primitive[] =
     {"lasterr",          p_lastError,        0},
     {"load",             p_load,             0},
     {"locale",           p_setLocale,        0},
-    {"mstime",           p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
+    {"mstimeday",        p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
+    {"mstime",           p_timeId,           0}, /* :rebel */
     {"pprint",           p_prettyPrint,      0},
     {"prefix",           p_prefix,           0},
     {"promptevent",      p_promptEvent,      0},
