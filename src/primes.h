@@ -108,7 +108,7 @@ PRIMITIVE primitive[] =
     {"letn",             p_letn,             0x002},
     {"local",            p_local,            2},
     {"func",             p_func,             0x402}, /* :rebel :replaces define */
-    {"def",              p_func,             0x402}, /* :rebel :replaces define */
+    {"def",              p_func,             0x402}, /* :rebel :alt func */
     {"set",              p_setdef,           0x400}, /* :rebel - set place to value */
     {"setn",             p_setn,             0x400}, /* :rebel - set 'name to value */
     {"mut",              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
