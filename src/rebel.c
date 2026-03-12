@@ -5366,17 +5366,8 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
 }
 
 /* ufko: only function definition is allowed, removes set redundancy */
-CELL *p_func(CELL *params)
+CELL *p_func_orig(CELL *params)
 {
-    /* get func name 
-    CELL *head;
-    if(params->type == CELL_EXPRESSION)
-    {
-        head = (CELL *)params->contents;
-        printf("%s", ((SYMBOL *)head->contents)->name);
-    }
-    */
-
     if((params->type != CELL_SYMBOL) && (params->type != CELL_DYN_SYMBOL))
     {
         return(defineOrMacro(params, CELL_FN, FALSE));
