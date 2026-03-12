@@ -5384,6 +5384,40 @@ CELL *p_func(CELL *params)
     return errorProc(ERR_NAMED_FUNCTION_DEFINITION_EXPECTED_FUNC);
 }
 
+static CELL *normalizeSignature(CELL *params)
+{
+  CELL *sig;
+  CELL *name;
+  CELL *args;
+
+  if(params->type == CELL_SYMBOL || params->type == CELL_DYN_SYMBOL)
+  {
+    name = stuffSymbol((SYMBOL *)params->contents);
+
+    args = params->next;
+    if(args == nilCell || args->type != CELL_EXPRESSION)
+      return errorProcExt(ERR_LIST_EXPECTED, args);
+
+    name->next = (CELL *)args->contents;
+    sig = makeCell(CELL_EXPRESSION, (UINT)name);
+
+    sig->next = args->next;
+    return sig;
+  }
+
+  return params;
+}
+
+CELL *p_func(CELL *params)
+{
+
+  params = normalizeSignature(params);
+  if(params->type != CELL_EXPRESSION)
+    return errorProcExt(ERR_LIST_OR_SYMBOL_EXPECTED, params);
+
+  return defineOrMacro(params, CELL_FN, FALSE);
+}
+
 CELL *p_define(CELL *params)
 {
     if(params->type != CELL_SYMBOL)
@@ -5399,13 +5433,25 @@ CELL *p_define(CELL *params)
 }
 
 
+CELL *p_defineMacro_orig(CELL *params)
+{
+    return(defineOrMacro(params, CELL_FN_MACRO, FALSE));
+}
+
+CELL *p_macro_orig(CELL *params)
+{
+    return(defineOrMacro(params, CELL_FN_MACRO, TRUE));
+}
+
 CELL *p_defineMacro(CELL *params)
 {
+    params = normalizeSignature(params);
     return(defineOrMacro(params, CELL_FN_MACRO, FALSE));
 }
 
 CELL *p_macro(CELL *params)
 {
+    params = normalizeSignature(params);
     return(defineOrMacro(params, CELL_FN_MACRO, TRUE));
 }
 
