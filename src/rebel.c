@@ -5340,10 +5340,10 @@ CELL *defineOrMacro(CELL *params, UINT cellType, int flag)
         {
             /* ufko:
             body has multiple expressions (expand '(do ...))
-            > (macro (m A B) (A) (B))
-            (fn-macro (a b) (expand '(do
-               (A)
-               (B))))
+            > (macex (m A B) A B)
+            (fn-macro (A B) (expand '(do
+               A
+               B)))
             */
             cell = stuffSymbol(doSymbol);
             cell->next = body;
