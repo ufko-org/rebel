@@ -432,6 +432,7 @@ PRIMITIVE primitive[] =
     {"sysinfo",          p_systemInfo,       0},
     {"term",             p_term,             0},
     {"throwerror",       p_throwError,       0},
+    {"error",            p_throwError,       0}, /* :alt */
     {"trace",            p_trace,            0},
     {"xferevent",        p_transferEvent,    0},
 
