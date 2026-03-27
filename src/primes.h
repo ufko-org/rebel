@@ -270,15 +270,16 @@ PRIMITIVE primitive[] =
 
     /* core - flow */
 
-    {"do",               p_evalBlock,        1}, /* :replaces begin */
     {"case",             p_case,             2},
     {"catch",            p_catch,            0},
-    {"repeat",           p_dotimes,          2}, /* :replaces dotimes */
+    {"cond",             p_condition,        2}, 
+    {"do",               p_evalBlock,        1}, /* :replaces begin */
     {"dountil",          p_doUntil,          2},
     {"dowhile",          p_doWhile,          2},
     {"for",              p_for,              2},
     {"if",               p_if,               2},
     {"ifnot",            p_ifNot,            2}, /* :rebel full, multi-branch if counterpart */
+    {"repeat",           p_dotimes,          2}, /* :replaces dotimes */
     {"throw",            p_throw,            0},
     {"unless",           p_unless,           2},
     {"until",            p_until,            2},
