@@ -1,4 +1,4 @@
-name: macOS Rebel build & QA test
+name: macOS Rebel build
 
 on: [push, pull_request]
 
