@@ -1348,8 +1348,6 @@ void initialize(void)
     /* build symbols for primitives */
     for(i = 0; primitive[i].name != NULL; i++)
     {
-if(primitive[i].function == NULL)
-    continue;
         pCell = getCell(CELL_PRIMITIVE);
         symbol = translateCreateSymbol(
                      primitive[i].name, CELL_PRIMITIVE, mainContext, TRUE);
