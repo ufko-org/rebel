@@ -94,454 +94,461 @@
 #ifndef PRIMES_H
 #define PRIMES_H
 
+#ifdef DOT_NAMES
+  #define P(name) name "."
+#else
+  #define P(name) name
+#endif
+
 PRIMITIVE primitive[] =
 {
     /* CORE ------------------------------------------------------------- */
 
     /* core - data - symbol workers */
 
-    {"const",            p_constant,         0x400},
-    {"alias",            p_constant,         0x400}, /* :alt */
-    {"shared",           p_shared,           0},     /* :replaces global */
-    {"let",              p_let,              0x402},
-    {"letex",            p_letExpand,        0x403},
-    {"letn",             p_letn,             0x002},
-    {"local",            p_local,            2},
-    {"func",             p_func,             0x402}, /* :rebel :replaces define */
-    {"def",              p_func,             0x402}, /* :rebel :alt func */
-    {"set",              p_setdef,           0x400}, /* :rebel - set place to value */
-    {"setn",             p_setn,             0x400}, /* :rebel - set 'name to value */
-    {"mut",              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
-    {"mutl",             p_mutLocal,         0},     /* [] :rebel, opt-in stack mutate tool */
-    {"mac",              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
-    {"macex",            p_macro,            2},     /* expand macro, :replaces macro. */
+    {P("const"),            p_constant,         0x400},
+    {P("alias"),            p_constant,         0x400}, /* :alt */
+    {P("shared"),           p_shared,           0},     /* :replaces global */
+    {P("let"),              p_let,              0x402},
+    {P("letex"),            p_letExpand,        0x403},
+    {P("letn"),             p_letn,             0x002},
+    {P("local"),            p_local,            2},
+    {P("func"),             p_func,             0x402}, /* :rebel :replaces define */
+    {P("def"),              p_func,             0x402}, /* :rebel :alt func */
+    {P("set"),              p_setdef,           0x400}, /* :rebel - set place to value */
+    {P("setn"),             p_setn,             0x400}, /* :rebel - set 'name to value */
+    {P("mut"),              p_mut,              0},     /* [] :rebel, opt-in mutate tool */
+    {P("mutl"),             p_mutLocal,         0},     /* [] :rebel, opt-in stack mutate tool */
+    {P("mac"),              p_defineMacro,      0x402}, /* runtime macro, :replaces define-macro */
+    {P("macex"),            p_macro,            2},     /* expand macro, :replaces macro. */
 
     /* core - data - iterators */
 
-    {"loop",             p_loop,             2}, /* [l,s,a,c] :rebel */
-    {"forl",             p_dolist,           2}, /* [l,a] for list/array elements */
-    {"fors",             p_dostring,         2}, /* [s] for string code points */
-    {"forf",             p_doargs,           2}, /* [l] for function args */
-    {"forc",             p_dotree,           2}, /* [c] for context symbols */
+    {P("loop"),             p_loop,             2}, /* [l,s,a,c] :rebel */
+    {P("forl"),             p_dolist,           2}, /* [l,a] for list/array elements */
+    {P("fors"),             p_dostring,         2}, /* [s] for string code points */
+    {P("forf"),             p_doargs,           2}, /* [l] for function args */
+    {P("forc"),             p_dotree,           2}, /* [c] for context symbols */
 
     /* core - data - sequencers */
 
-    {"array",            p_array,            0},
-    {"list",             p_list,             0},
-    {"range",            p_sequence,         0},
-    {"series",           p_series,           0},
+    {P("array"),            p_array,            0},
+    {P("list"),             p_list,             0},
+    {P("range"),            p_sequence,         0},
+    {P("series"),           p_series,           0},
 
     /* core - data - convertors/extractors */
 
-    {"arraylist",        p_arrayList,        0},
-    {"bigint",           p_bigInt,           0},
-    {"bits",             p_bits,             0},
-    {"char",             p_char,             0},
-    {"float",            p_float,            0},
-    {"int",              p_integer,          0},
-    {"string",           p_string,           0},
+    {P("arraylist"),        p_arrayList,        0},
+    {P("bigint"),           p_bigInt,           0},
+    {P("bits"),             p_bits,             0},
+    {P("char"),             p_char,             0},
+    {P("float"),            p_float,            0},
+    {P("int"),              p_integer,          0},
+    {P("string"),           p_string,           0},
 
     /* core - data - transformers */
 
-    {"b64dec",           p_base64Dec,        0}, /* :replaces base64-dec */
-    {"b64enc",           p_base64Enc,        0}, /* :replaces base64-enc */
-    {"crc32",            p_crc32,            0},
-    {"crypt",          p_encrypt,            0}, /* :replaces encrypt - bidir OTP cryptor */
-    {"uuid",             p_uuid,             0},
+    {P("b64dec"),           p_base64Dec,        0}, /* :replaces base64-dec */
+    {P("b64enc"),           p_base64Enc,        0}, /* :replaces base64-enc */
+    {P("crc32"),            p_crc32,            0},
+    {P("crypt"),          p_encrypt,            0}, /* :replaces encrypt - bidir OTP cryptor */
+    {P("uuid"),             p_uuid,             0},
 
     /* core - data - workers */
 
-    {"all",              p_forAll,           0},
-    {"any",              p_any,              0},
-    {"append",           p_append,           0},     /* [l,s,a] */
-    {"apply",            p_apply,            0},     /* [l] */
-    {"assoc",            p_assoc,            0},     /* [l] */
-    {"bind",             p_bind,             0x400}, /* [l] */
-    {"intersect",        p_intersect,        0},     /* [l] */
-    {"check",            p_exists,           0},     /* [l] :replaces exists */
-    {"chop",             p_chop,             0},     /* [l,s] */
-    {"chunk",            p_explode,          0},     /* [l,s] :replaces explode*/
-    {"collect",          p_collect,          0},     /* [] */
-    {"cons",             p_cons,             0},     /* [l] */
-    {"curry",            p_curry,            0},     /* [] */
-    {"cut",              p_member,           0},     /* [l,s,a] */
-    {"diff",             p_difference,       0},     /* [l] :replaces difference */
-    {"drop",             p_clean,            0},     /* [l] :replaces clean */
-    {"dup",              p_dup,              0},     /* [any] */
-    {"ends",             p_endsWith,         0},     /* [l,s] :replaces ends-with */
-    {"expand",           p_expand,           0},     /* [l] */
-    {"extend",           p_extend,           0x400}, /* [l,s] */
-    {"find",             p_findAll,          0},     /* [l,s] :replaces findall */
-    {"first",            p_first,            0},     /* [l,s,a] */
-    {"flat",             p_flat,             0},     /* [l] */
-    {"format",           p_format,           0},     /* [s] */
-    {"freq",             p_count,            0},     /* [l] */
-    {"join",             p_join,             0},     /* [l] */
-    {"keep",             p_filter,           0},     /* [l] :replaces filter */
-    {"last",             p_last,             0},     /* [l,s,a] */
-    {"lcase",            p_lower,            0},     /* [s] :replaces lower-case */
-    {"len",              p_length,           0},     /* [any] */
-    {"lookup",           p_lookup,           0},     /* [l] */
-    {"map",              p_map,              0},     /* [l] */
-    {"match",            p_match,            0},     /* [l] */
-    {"nth",              p_nth,              0},     /* [] */
-    {"parse",            p_parse,            0},     /* [] */
-    {"pop",              p_pop,              0x400}, /* [] */
-    {"popassoc",         p_popAssoc,         0x400}, /* [] */
-    {"pos",              p_find,             0},     /* [l,s] :replaces find - pos by value */
-    {"posp",             p_index,            0},     /* [l] :replaces index - positions by predicate */
-    {"push",             p_push,             0x400}, /* [] */
-    {"ref",              p_ref,              0},     /* [] */
-    {"refall",           p_refAll,           0},     /* [] */
-    {"refset",           p_setRef,           0x400}, /* [] :replaces set-ref */
-    {"refsetall",        p_setRefAll,        0x400}, /* [] :replaces set-ref-all */
-    {"replace",          p_replace,          0x400}, /* [] */
-    {"rest",             p_rest,             0},     /* [] */
-    {"reverse",          p_reverse,          0x400}, /* [] */
-    {"rotate",           p_rotate,           0x400}, /* [] */
-    {"rx",               p_regex,            0},     /* [] :replaces regex */
-    {"rxcomp",           p_regexComp,        0},     /* [] :replaces regex-comp */
-    {"select",           p_select,           0},     /* [] */
-    {"slice",            p_slice,            0},     /* [] */
-    {"sort",             p_sort,             0x400}, /* [] */
-    {"starts",           p_startsWith,       0},     /* [l,s] :replaces starts-with */
-    {"swap",             p_swap,             0},     /* [] */
-    {"tcase",            p_title,            0},     /* [] :replaces title-case */
-    {"trim",             p_trim,             0},     /* [] */
-    {"ucase",            p_upper,            0},     /* [] :replaces upper-case */
-    {"unify",            p_unify,            0},     /* [] */
-    {"union",            p_union,            0},     /* [] */
-    {"unique",           p_unique,           0},     /* [] */
+    {P("all"),              p_forAll,           0},
+    {P("any"),              p_any,              0},
+    {P("append"),           p_append,           0},     /* [l,s,a] */
+    {P("apply"),            p_apply,            0},     /* [l] */
+    {P("assoc"),            p_assoc,            0},     /* [l] */
+    {P("bind"),             p_bind,             0x400}, /* [l] */
+    {P("intersect"),        p_intersect,        0},     /* [l] */
+    {P("check"),            p_exists,           0},     /* [l] :replaces exists */
+    {P("chop"),             p_chop,             0},     /* [l,s] */
+    {P("chunk"),            p_explode,          0},     /* [l,s] :replaces explode*/
+    {P("collect"),          p_collect,          0},     /* [] */
+    {P("cons"),             p_cons,             0},     /* [l] */
+    {P("curry"),            p_curry,            0},     /* [] */
+    {P("cut"),              p_member,           0},     /* [l,s,a] */
+    {P("diff"),             p_difference,       0},     /* [l] :replaces difference */
+    {P("drop"),             p_clean,            0},     /* [l] :replaces clean */
+    {P("dup"),              p_dup,              0},     /* [any] */
+    {P("ends"),             p_endsWith,         0},     /* [l,s] :replaces ends-with */
+    {P("expand"),           p_expand,           0},     /* [l] */
+    {P("extend"),           p_extend,           0x400}, /* [l,s] */
+    {P("find"),             p_findAll,          0},     /* [l,s] :replaces findall */
+    {P("first"),            p_first,            0},     /* [l,s,a] */
+    {P("flat"),             p_flat,             0},     /* [l] */
+    {P("format"),           p_format,           0},     /* [s] */
+    {P("freq"),             p_count,            0},     /* [l] */
+    {P("join"),             p_join,             0},     /* [l] */
+    {P("keep"),             p_filter,           0},     /* [l] :replaces filter */
+    {P("last"),             p_last,             0},     /* [l,s,a] */
+    {P("lcase"),            p_lower,            0},     /* [s] :replaces lower-case */
+    {P("len"),              p_length,           0},     /* [any] */
+    {P("lookup"),           p_lookup,           0},     /* [l] */
+    {P("map"),              p_map,              0},     /* [l] */
+    {P("match"),            p_match,            0},     /* [l] */
+    {P("nth"),              p_nth,              0},     /* [] */
+    {P("parse"),            p_parse,            0},     /* [] */
+    {P("pop"),              p_pop,              0x400}, /* [] */
+    {P("popassoc"),         p_popAssoc,         0x400}, /* [] */
+    {P("pos"),              p_find,             0},     /* [l,s] :replaces find - pos by value */
+    {P("posp"),             p_index,            0},     /* [l] :replaces index - positions by predicate */
+    {P("push"),             p_push,             0x400}, /* [] */
+    {P("ref"),              p_ref,              0},     /* [] */
+    {P("refall"),           p_refAll,           0},     /* [] */
+    {P("refset"),           p_setRef,           0x400}, /* [] :replaces set-ref */
+    {P("refsetall"),        p_setRefAll,        0x400}, /* [] :replaces set-ref-all */
+    {P("replace"),          p_replace,          0x400}, /* [] */
+    {P("rest"),             p_rest,             0},     /* [] */
+    {P("reverse"),          p_reverse,          0x400}, /* [] */
+    {P("rotate"),           p_rotate,           0x400}, /* [] */
+    {P("rx"),               p_regex,            0},     /* [] :replaces regex */
+    {P("rxcomp"),           p_regexComp,        0},     /* [] :replaces regex-comp */
+    {P("select"),           p_select,           0},     /* [] */
+    {P("slice"),            p_slice,            0},     /* [] */
+    {P("sort"),             p_sort,             0x400}, /* [] */
+    {P("starts"),           p_startsWith,       0},     /* [l,s] :replaces starts-with */
+    {P("swap"),             p_swap,             0},     /* [] */
+    {P("tcase"),            p_title,            0},     /* [] :replaces title-case */
+    {P("trim"),             p_trim,             0},     /* [] */
+    {P("ucase"),            p_upper,            0},     /* [] :replaces upper-case */
+    {P("unify"),            p_unify,            0},     /* [] */
+    {P("union"),            p_union,            0},     /* [] */
+    {P("unique"),           p_unique,           0},     /* [] */
 
     #ifdef SUPPORT_UTF8
-    {"len8",             p_utf8len,          0},     /* [s] */
+    {P("len8"),             p_utf8len,          0},     /* [s] */
     #endif
 
     /* core - math - integers */
 
-    {"+",                p_add,              0},
-    {"-",                p_subtract,         0},
-    {"*",                p_multiply,         0},
-    {"/",                p_divide,           0},
-    {"%",                p_modulo,           0},
-    {"++",               p_incrementI,       0x400},
-    {"--",               p_decrementI,       0x400},
+    {P("+"),                p_add,              0},
+    {P("-"),                p_subtract,         0},
+    {P("*"),                p_multiply,         0},
+    {P("/"),                p_divide,           0},
+    {P("%"),                p_modulo,           0},
+    {P("++"),               p_incrementI,       0x400},
+    {P("--"),               p_decrementI,       0x400},
 
     /* core - math - floats */
 
-    {"add",              p_addFloat,         0},
-    {"sub",              p_subFloat,         0},
-    {"mul",              p_mulFloat,         0},
-    {"div",              p_divFloat,         0},
-    {"mod",              p_modFloat,         0},
-    {"inc",              p_incrementF,       0x400},
-    {"dec",              p_decrementF,       0x400},
+    {P("add"),              p_addFloat,         0},
+    {P("sub"),              p_subFloat,         0},
+    {P("mul"),              p_mulFloat,         0},
+    {P("div"),              p_divFloat,         0},
+    {P("mod"),              p_modFloat,         0},
+    {P("inc"),              p_incrementF,       0x400},
+    {P("dec"),              p_decrementF,       0x400},
 
     /* core - math - floats extended */
 
-    {"abs",              p_abs,              0},
-    {"acos",             p_acos,             0},
-    {"acosh",            p_acosh,            0},
-    {"asin",             p_asin,             0},
-    {"asinh",            p_asinh,            0},
-    {"atan",             p_atan,             0},
-    {"atan2",            p_atan2,            0},
-    {"atanh",            p_atanh,            0},
-    {"ceil",             p_ceil,             0},
-    {"cos",              p_cos,              0},
-    {"cosh",             p_cosh,             0},
-    {"erf",              p_erf,              0},
-    {"exp",              p_exp,              0},
-    {"factor",           p_factor,           0},
-    {"floor",            p_floor,            0},
-    {"gcd",              p_gcd,              0},
-    {"log",              p_log,              0},
-    {"max",              p_maxFloat,         0},
-    {"min",              p_minFloat,         0},
-    {"pow",              p_powFloat,         0},
-    {"round",            p_round,            0},
-    {"sgn",              p_sgn,              0},
-    {"sin",              p_sin,              0},
-    {"sinh",             p_sinh,             0},
-    {"sqrt",             p_sqrt,             0},
-    {"ssq",              p_ssq,              0},
-    {"tan",              p_tan,              0},
-    {"tanh",             p_tanh,             0},
+    {P("abs"),              p_abs,              0},
+    {P("acos"),             p_acos,             0},
+    {P("acosh"),            p_acosh,            0},
+    {P("asin"),             p_asin,             0},
+    {P("asinh"),            p_asinh,            0},
+    {P("atan"),             p_atan,             0},
+    {P("atan2"),            p_atan2,            0},
+    {P("atanh"),            p_atanh,            0},
+    {P("ceil"),             p_ceil,             0},
+    {P("cos"),              p_cos,              0},
+    {P("cosh"),             p_cosh,             0},
+    {P("erf"),              p_erf,              0},
+    {P("exp"),              p_exp,              0},
+    {P("factor"),           p_factor,           0},
+    {P("floor"),            p_floor,            0},
+    {P("gcd"),              p_gcd,              0},
+    {P("log"),              p_log,              0},
+    {P("max"),              p_maxFloat,         0},
+    {P("min"),              p_minFloat,         0},
+    {P("pow"),              p_powFloat,         0},
+    {P("round"),            p_round,            0},
+    {P("sgn"),              p_sgn,              0},
+    {P("sin"),              p_sin,              0},
+    {P("sinh"),             p_sinh,             0},
+    {P("sqrt"),             p_sqrt,             0},
+    {P("ssq"),              p_ssq,              0},
+    {P("tan"),              p_tan,              0},
+    {P("tanh"),             p_tanh,             0},
 
     /* core - flow */
 
-    {"case",             p_case,             2},
-    {"catch",            p_catch,            0},
-    {"cond",             p_condition,        2}, 
-    {"do",               p_evalBlock,        1}, /* :replaces begin */
-    {"dountil",          p_doUntil,          2},
-    {"dowhile",          p_doWhile,          2},
-    {"for",              p_for,              2},
-    {"if",               p_if,               2},
-    {"ifnot",            p_ifNot,            2}, /* :rebel full, multi-branch if counterpart */
-    {"repeat",           p_dotimes,          2}, /* :replaces dotimes */
-    {"throw",            p_throw,            0},
-    {"unless",           p_unless,           2},
-    {"until",            p_until,            2},
-    {"when",             p_when,             2},
-    {"while",            p_while,            2},
+    {P("case"),             p_case,             2},
+    {P("catch"),            p_catch,            0},
+    {P("cond"),             p_condition,        2}, 
+    {P("do"),               p_evalBlock,        1}, /* :replaces begin */
+    {P("dountil"),          p_doUntil,          2},
+    {P("dowhile"),          p_doWhile,          2},
+    {P("for"),              p_for,              2},
+    {P("if"),               p_if,               2},
+    {P("ifnot"),            p_ifNot,            2}, /* :rebel full, multi-branch if counterpart */
+    {P("repeat"),           p_dotimes,          2}, /* :replaces dotimes */
+    {P("throw"),            p_throw,            0},
+    {P("unless"),           p_unless,           2},
+    {P("until"),            p_until,            2},
+    {P("when"),             p_when,             2},
+    {P("while"),            p_while,            2},
 
     /* core - logical */
 
-    {"and",              p_and,              0},
-    {"or",               p_or,               0},
-    {"not",              p_not,              0},
+    {P("and"),              p_and,              0},
+    {P("or"),               p_or,               0},
+    {P("not"),              p_not,              0},
 
     /* core - comparison ops */
 
-    {"<",                p_less,             0},
-    {"lt",               p_less,             0}, /* :alt */
-    {">",                p_greater,          0},
-    {"gt",               p_greater,          0}, /* :alt */
-    {"<=",               p_lessEqual,        0},
-    {"le",               p_lessEqual,        0}, /* :alt */
-    {">=",               p_greaterEqual,     0},
-    {"ge",               p_greaterEqual,     0}, /* :alt */
-    {"=",                p_equal,            0},
-    {"eq",               p_equal,            0}, /* :alt */
-    {"!=",               p_notEqual,         0},
-    {"ne",               p_notEqual,         0}, /* :alt */
+    {P("<"),                p_less,             0},
+    {P("lt"),               p_less,             0}, /* :alt */
+    {P(">"),                p_greater,          0},
+    {P("gt"),               p_greater,          0}, /* :alt */
+    {P("<="),               p_lessEqual,        0},
+    {P("le"),               p_lessEqual,        0}, /* :alt */
+    {P(">="),               p_greaterEqual,     0},
+    {P("ge"),               p_greaterEqual,     0}, /* :alt */
+    {P("="),                p_equal,            0},
+    {P("eq"),               p_equal,            0}, /* :alt */
+    {P("!="),               p_notEqual,         0},
+    {P("ne"),               p_notEqual,         0}, /* :alt */
 
     /* core - bit ops */
 
-    {"<<",               p_shiftLeft,        0},
-    {">>",               p_shiftRight,       0},
-    {"&",                p_bitAnd,           0},
-    {"|",                p_bitOr,            0},
-    {"^",                p_bitXor,           0},
-    {"~",                p_bitNot,           0},
+    {P("<<"),               p_shiftLeft,        0},
+    {P(">>"),               p_shiftRight,       0},
+    {P("&"),                p_bitAnd,           0},
+    {P("|"),                p_bitOr,            0},
+    {P("^"),                p_bitXor,           0},
+    {P("~"),                p_bitNot,           0},
 
     /* core - random */
 
-    {"pick",             p_amb,              0}, /* :replaces amb */
-    {"normal",           p_normal,           0},
-    {"rand",             p_rand,             0},
-    {"random",           p_random,           0},
-    {"randomize",        p_randomize,        0},
-    {"seed",             p_seed,             0},
+    {P("pick"),             p_amb,              0}, /* :replaces amb */
+    {P("normal"),           p_normal,           0},
+    {P("rand"),             p_rand,             0},
+    {P("random"),           p_random,           0},
+    {P("randomize"),        p_randomize,        0},
+    {P("seed"),             p_seed,             0},
 
     /* core - io - via std */
 
-    {"print",            p_print,            0},
-    {"println",          p_println,          0},
-    {"puts",             p_println,          0}, /* :alt */
-    {"readkey",          p_readKey,          0},
+    {P("print"),            p_print,            0},
+    {P("println"),          p_println,          0},
+    {P("puts"),             p_println,          0}, /* :alt */
+    {P("readkey"),          p_readKey,          0},
 
     /* core - io - via device number */
 
-    {"device",           p_device,           0},
-    {"open",             p_open,             0},
-    {"close",            p_close,            0},
-    {"seek",             p_seek,             0},
+    {P("device"),           p_device,           0},
+    {P("open"),             p_open,             0},
+    {P("close"),            p_close,            0},
+    {P("seek"),             p_seek,             0},
     #ifdef SUPPORT_UTF8
-    {"readc8",           p_readUTF8,         0},
+    {P("readc8"),           p_readUTF8,         0},
     #endif
-    {"read",             p_readBuffer,       0x400},
-    {"write",            p_writeBuffer,      0},
-    {"readc",            p_readChar,         0},
-    {"writec",           p_writeChar,        0},
-    {"readln",           p_readLine,         0},
-    {"writeln",          p_writeLine,        0},
-    {"cline",            p_currentLine,      0},
+    {P("read"),             p_readBuffer,       0x400},
+    {P("write"),            p_writeBuffer,      0},
+    {P("readc"),            p_readChar,         0},
+    {P("writec"),           p_writeChar,        0},
+    {P("readln"),           p_readLine,         0},
+    {P("writeln"),          p_writeLine,        0},
+    {P("cline"),            p_currentLine,      0},
 
     /* core - io - via path */
 
-    {"fpath",            p_realpath,         0},
-    {"finfo",            p_fileInfo,         0},
-    {"fappend",          p_appendFile,       0},
-    {"fread",            p_readFile,         0},
-    {"fwrite",           p_writeFile,        0},
-    {"fcopy",            p_copyFile,         0},
-    {"fmove",            p_renameFile,       0},
-    {"fdel",             p_deleteFile,       0},
-    {"fsearch",          p_search,           0},
+    {P("fpath"),            p_realpath,         0},
+    {P("finfo"),            p_fileInfo,         0},
+    {P("fappend"),          p_appendFile,       0},
+    {P("fread"),            p_readFile,         0},
+    {P("fwrite"),           p_writeFile,        0},
+    {P("fcopy"),            p_copyFile,         0},
+    {P("fmove"),            p_renameFile,       0},
+    {P("fdel"),             p_deleteFile,       0},
+    {P("fsearch"),          p_search,           0},
 
     /* core - io - directories */
 
-    {"dir",              p_directory,        0},
-    {"dirpath",          p_realpath,         0},
-    {"dirmk",            p_makeDir,          0},
-    {"dirrm",            p_removeDir,        0},
-    {"dircd",            p_changeDir,        0},
+    {P("dir"),              p_directory,        0},
+    {P("dirpath"),          p_realpath,         0},
+    {P("dirmk"),            p_makeDir,          0},
+    {P("dirrm"),            p_removeDir,        0},
+    {P("dircd"),            p_changeDir,        0},
 
     /* core - OS/CILK processes */
 
-    {"!",                p_system,           0},
-    {"kill",             p_destroyProcess,   0}, /* :replaces destroy */
-    {"exec",             p_exec,             0},
-    {"process",          p_process,          0},
-    {"pipe",             p_pipe,             0},
-    {"fork",             p_fork,             0},
-    {"waitpid",          p_waitpid,          0},
-    {"spawn",            p_spawn,            0},
-    {"sync",             p_sync,             0},
-    {"abort",            p_abort,            0},
-    {"send",             p_send,             0},
-    {"recv",             p_receive,          0},
-    {"signal",           p_signal,           0},
-    {"shmem",            p_share,            0}, /* :replaces share */
-    {"semaphore",        p_semaphore,        0},
-    {"peek",             p_peek,             0},
+    {P("!"),                p_system,           0},
+    {P("kill"),             p_destroyProcess,   0}, /* :replaces destroy */
+    {P("exec"),             p_exec,             0},
+    {P("process"),          p_process,          0},
+    {P("pipe"),             p_pipe,             0},
+    {P("fork"),             p_fork,             0},
+    {P("waitpid"),          p_waitpid,          0},
+    {P("spawn"),            p_spawn,            0},
+    {P("sync"),             p_sync,             0},
+    {P("abort"),            p_abort,            0},
+    {P("send"),             p_send,             0},
+    {P("recv"),             p_receive,          0},
+    {P("signal"),           p_signal,           0},
+    {P("shmem"),            p_share,            0}, /* :replaces share */
+    {P("semaphore"),        p_semaphore,        0},
+    {P("peek"),             p_peek,             0},
 
     /* core - internals */
 
-    {"$",                p_systemSymbol,     0},
-    {"adhoc",            p_adhoc,            0}, /* :experimental */
-    {"alarm",            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
-    {"args",             p_args,             0},
-    {"argv",             p_mainArgs,         0},
-    {"clone",            p_new,              0}, /* :replaces new, this is obviously cloning op */
-    {"clonesym",         p_defineNew,        0}, /* :replaces def-new -||- */
-    {"commandevent",     p_commandEvent,     0},
-    {"context",          p_context,          0},
-    {"copy",             p_copy,             0},
-    {"delete",           p_deleteSymbol,     0},
-    {"dump",             p_dump,             0},
-    {"dumpsym",          p_dumpSymbol,       0}, /* :debug not documented in original */
-    {"env",              p_env,              0},
-    {"errorevent",       p_errorEvent,       0},
-    {"etime",            p_time,             0}, /* :replaces time, measures elapsed eval time */
-    {"eval",             p_eval,             0},
-    {"evalstr",          p_evalString,       0},
-    {"exit",             p_exit,             0},
-    {"functor",          p_default,          0}, /* :replaces default, returns value of default functor */
-    {"history",          p_history,          0},
-    {"lasterr",          p_lastError,        0},
-    {"load",             p_load,             0},
-    {"locale",           p_setLocale,        0},
-    {"mstimeday",        p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
-    {"mstime",           p_timeId,           0}, /* :rebel */
-    {"pprint",           p_prettyPrint,      0},
-    {"prefix",           p_prefix,           0},
-    {"promptevent",      p_promptEvent,      0},
-    {"quote",            p_quote,            0},
-    {"readerevent",      p_readerEvent,      0},
-    {"readexpr",         p_readExpr,         0},
-    {"reset",            p_reset,            0},
-    {"save",             p_save,             0},
-    {"silent",           p_silent,           0},
-    {"sleep",            p_sleep,            0},
-    {"source",           p_symbolSource,     0},
-    {"sym",              p_symbol,           0},
-    {"symbols",          p_symbols,          0},
-    {"syserr",           p_systemError,      0},
-    {"sysinfo",          p_systemInfo,       0},
-    {"term",             p_term,             0},
-    {"throwerror",       p_throwError,       0},
-    {"error",            p_throwError,       0}, /* :alt */
-    {"trace",            p_trace,            0},
-    {"xferevent",        p_transferEvent,    0},
+    {P("$"),                p_systemSymbol,     0},
+    {P("adhoc"),            p_adhoc,            0}, /* :experimental */
+    {P("alarm"),            p_timerEvent,       0}, /* :replaces timer; one-shot sig fire */
+    {P("args"),             p_args,             0},
+    {P("argv"),             p_mainArgs,         0},
+    {P("clone"),            p_new,              0}, /* :replaces new, this is obviously cloning op */
+    {P("clonesym"),         p_defineNew,        0}, /* :replaces def-new -||- */
+    {P("commandevent"),     p_commandEvent,     0},
+    {P("context"),          p_context,          0},
+    {P("copy"),             p_copy,             0},
+    {P("delete"),           p_deleteSymbol,     0},
+    {P("dump"),             p_dump,             0},
+    {P("dumpsym"),          p_dumpSymbol,       0}, /* :debug not documented in original */
+    {P("env"),              p_env,              0},
+    {P("errorevent"),       p_errorEvent,       0},
+    {P("etime"),            p_time,             0}, /* :replaces time, measures elapsed eval time */
+    {P("eval"),             p_eval,             0},
+    {P("evalstr"),          p_evalString,       0},
+    {P("exit"),             p_exit,             0},
+    {P("functor"),          p_default,          0}, /* :replaces default, returns value of default functor */
+    {P("history"),          p_history,          0},
+    {P("lasterr"),          p_lastError,        0},
+    {P("load"),             p_load,             0},
+    {P("locale"),           p_setLocale,        0},
+    {P("mstimeday"),        p_timeOfDay,        0}, /* :replaces time-of-day, high-res time in ms */
+    {P("mstime"),           p_timeId,           0}, /* :rebel */
+    {P("pprint"),           p_prettyPrint,      0},
+    {P("prefix"),           p_prefix,           0},
+    {P("promptevent"),      p_promptEvent,      0},
+    {P("quote"),            p_quote,            0},
+    {P("readerevent"),      p_readerEvent,      0},
+    {P("readexpr"),         p_readExpr,         0},
+    {P("reset"),            p_reset,            0},
+    {P("save"),             p_save,             0},
+    {P("silent"),           p_silent,           0},
+    {P("sleep"),            p_sleep,            0},
+    {P("source"),           p_symbolSource,     0},
+    {P("sym"),              p_symbol,           0},
+    {P("symbols"),          p_symbols,          0},
+    {P("syserr"),           p_systemError,      0},
+    {P("sysinfo"),          p_systemInfo,       0},
+    {P("term"),             p_term,             0},
+    {P("throwerror"),       p_throwError,       0},
+    {P("error"),            p_throwError,       0}, /* :alt */
+    {P("trace"),            p_trace,            0},
+    {P("xferevent"),        p_transferEvent,    0},
 
     #ifdef DEBUGGER
-    {"debug",            p_debug,            0},
-    {"tracemarks",       p_traceHighlight,   0}, /* :replaces trace-highlight */
+    {P("debug"),            p_debug,            0},
+    {P("tracemarks"),       p_traceHighlight,   0}, /* :replaces trace-highlight */
     #endif
 
     /* core - C */
 
-    {"address",          p_address,          0},
-    {"callback",         p_callback,         0},
-    {"flt",              p_flt,              0},
-    {"charc",            p_getChar,          0},
-    {"floatc",           p_getFloat,         0},
-    {"intc",             p_getInteger,       0},
-    {"longc",            p_getLong,          0},
-    {"stringc",          p_getString,        0},
-    {"import",           p_importLib,        0},
-    {"memcpy",           p_copyMemory,       0}, /* :replaces cpymem */
-    {"pack",             p_pack,             0},
+    {P("address"),          p_address,          0},
+    {P("callback"),         p_callback,         0},
+    {P("flt"),              p_flt,              0},
+    {P("charc"),            p_getChar,          0},
+    {P("floatc"),           p_getFloat,         0},
+    {P("intc"),             p_getInteger,       0},
+    {P("longc"),            p_getLong,          0},
+    {P("stringc"),          p_getString,        0},
+    {P("import"),           p_importLib,        0},
+    {P("memcpy"),           p_copyMemory,       0}, /* :replaces cpymem */
+    {P("pack"),             p_pack,             0},
     #ifdef FFI
-    {"struct",           p_struct,           0},
+    {P("struct"),           p_struct,           0},
     #endif
-    {"unpack",           p_unpack,           0},
+    {P("unpack"),           p_unpack,           0},
 
     /* core - predicates */
 
-    {"nan?",             p_isnan,            0},
-    {"array?",           p_isArray,          0},
-    {"atom?",            p_isAtom,           0},
-    {"bigint?",          p_isBigInteger,     0},
-    {"context?",         p_isContext,        0},
-    {"dir?",             p_isDirectory,      0},
-    {"empty?",           p_isEmpty,          0},
-    {"even?",            p_isEven,           0},
-    {"file?",            p_isFile,           0},
-    {"float?",           p_isFloat,          0},
-    {"fn?",              p_isFn,             0},
-    {"inf?",             p_isinf,            0},
-    {"int?",             p_isInteger,        0}, /* :replaces integer? */
-    {"internal?",        p_isInternal,       0}, /* :rebel */
-    {"legal?",           p_isLegal,          0},
-    {"list?",            p_isList,           0},
-    {"local?",           p_isLocal,          0}, /* :rebel */
-    {"macro?",           p_isMacro,          0},
-    {"nil?",             p_isNil,            0},
-    {"null?",            p_isNull,           0},
-    {"number?",          p_isNumber,         0},
-    {"odd?",             p_isOdd,            0},
-    {"primitive?",       p_isPrimitive,      0},
-    {"protected?",       p_isProtected,      0},
-    {"quote?",           p_isQuote,          0},
-    {"set?",             p_isSet,            0}, /* :rebel */
-    {"shared?",          p_isShared,         0}, /* :replaces global? */
-    {"string?",          p_isString,         0},
-    {"symbol?",          p_isSymbol,         0},
-    {"true?",            p_isTrue,           0},
-    {"zero?",            p_isZero,           0},
+    {P("nan?"),             p_isnan,            0},
+    {P("array?"),           p_isArray,          0},
+    {P("atom?"),            p_isAtom,           0},
+    {P("bigint?"),          p_isBigInteger,     0},
+    {P("context?"),         p_isContext,        0},
+    {P("dir?"),             p_isDirectory,      0},
+    {P("empty?"),           p_isEmpty,          0},
+    {P("even?"),            p_isEven,           0},
+    {P("file?"),            p_isFile,           0},
+    {P("float?"),           p_isFloat,          0},
+    {P("fn?"),              p_isFn,             0},
+    {P("inf?"),             p_isinf,            0},
+    {P("int?"),             p_isInteger,        0}, /* :replaces integer? */
+    {P("internal?"),        p_isInternal,       0}, /* :rebel */
+    {P("legal?"),           p_isLegal,          0},
+    {P("list?"),            p_isList,           0},
+    {P("local?"),           p_isLocal,          0}, /* :rebel */
+    {P("macro?"),           p_isMacro,          0},
+    {P("nil?"),             p_isNil,            0},
+    {P("null?"),            p_isNull,           0},
+    {P("number?"),          p_isNumber,         0},
+    {P("odd?"),             p_isOdd,            0},
+    {P("primitive?"),       p_isPrimitive,      0},
+    {P("protected?"),       p_isProtected,      0},
+    {P("quote?"),           p_isQuote,          0},
+    {P("set?"),             p_isSet,            0}, /* :rebel */
+    {P("shared?"),          p_isShared,         0}, /* :replaces global? */
+    {P("string?"),          p_isString,         0},
+    {P("symbol?"),          p_isSymbol,         0},
+    {P("true?"),            p_isTrue,           0},
+    {P("zero?"),            p_isZero,           0},
 
-    /* core - flow - boosters */
+    /* core - flow - code reading boosters */
 
-    {"is",               p_equal,            0}, /* :alt for = */
-    {"ok",               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
-    {"no",               p_isNull,           0}, /* :alt, sentinel of usability in some cases. covers nil?,null?,empty?,zero?,nan? */
-    /* {"hash",             NULL,               0}, */
+    {P("is"),               p_equal,            0}, /* :alt for = */
+    {P("ok"),               p_isTrue,           0}, /* :alt, explicit boolean in some cases */
+    {P("no"),               p_isNull,           0}, /* :alt, sentinel of usability in some cases. covers nil?,null?,empty?,zero?,nan? */
+    {P("ret"),              p_ret,              2}, /* :rebel */
+    /* {P("hash"),             NULL,               0}, */
 
     /* core - date and time */
 
-    {"date",             p_date,             0}, /* date as human-readable string */
-    {"dateiso",          p_dateISO,          0}, /* :rebel date as ISO 8601 string */
-    {"datelist",         p_dateList,         0}, /* date and time as list */
-    {"datestamp",        p_dateParse,        0}, /* :replaces date-parse, seconds since epoch to date */
-    {"time",             p_dateValue,        0}, /* :replaces date-value, seconds since epoch (UTC); adjustable */
-    {"timelist",         p_now,              0}, /* :replaces now, current date and time +/- sec offset as list */
+    {P("date"),             p_date,             0}, /* date as human-readable string */
+    {P("dateiso"),          p_dateISO,          0}, /* :rebel date as ISO 8601 string */
+    {P("datelist"),         p_dateList,         0}, /* date and time as list */
+    {P("datestamp"),        p_dateParse,        0}, /* :replaces date-parse, seconds since epoch to date */
+    {P("time"),             p_dateValue,        0}, /* :replaces date-value, seconds since epoch (UTC); adjustable */
+    {P("timelist"),         p_now,              0}, /* :replaces now, current date and time +/- sec offset as list */
 
     /* core - network */
 
-    {"netclose",           p_netClose,         0},
-    {"netservice",         p_netService,       0},
-    {"netconnect",         p_netConnect,       0},
-    {"netaccept",          p_netAccept,        0},
-    {"netlocal",           p_netLocal,         0},
-    {"netpeer",            p_netPeer,          0},
-    {"netipv",             p_netIpv,           0},
-    {"netlookup",          p_netLookup,        0},
-    {"netrecv",            p_netReceive,       0x400},
-    {"netrecvfrom",        p_netReceiveFrom,   0},
-    {"netrecvudp",         p_netReceiveUDP,    0},
-    {"netsend",            p_netSend,          0},
-    {"netsendto",          p_netSendTo,        0},
-    {"netsendudp",         p_netSendUDP,       0},
-    {"netlisten",          p_netListen,        0},
-    {"netpacket",          p_netPacket,        0},
-    {"netping",            p_netPing,          0},
-    {"netpeek",            p_netPeek,          0},
-    {"netselect",          p_netSelect,        0},
-    {"netsessions",        p_netSessions,      0},
-    {"neteval",            p_netEval,          0},
-    {"netinterface",       p_netInterface,     0},
-    {"neterr",             p_netLastError,     0},
+    {P("netclose"),           p_netClose,         0},
+    {P("netservice"),         p_netService,       0},
+    {P("netconnect"),         p_netConnect,       0},
+    {P("netaccept"),          p_netAccept,        0},
+    {P("netlocal"),           p_netLocal,         0},
+    {P("netpeer"),            p_netPeer,          0},
+    {P("netipv"),             p_netIpv,           0},
+    {P("netlookup"),          p_netLookup,        0},
+    {P("netrecv"),            p_netReceive,       0x400},
+    {P("netrecvfrom"),        p_netReceiveFrom,   0},
+    {P("netrecvudp"),         p_netReceiveUDP,    0},
+    {P("netsend"),            p_netSend,          0},
+    {P("netsendto"),          p_netSendTo,        0},
+    {P("netsendudp"),         p_netSendUDP,       0},
+    {P("netlisten"),          p_netListen,        0},
+    {P("netpacket"),          p_netPacket,        0},
+    {P("netping"),            p_netPing,          0},
+    {P("netpeek"),            p_netPeek,          0},
+    {P("netselect"),          p_netSelect,        0},
+    {P("netsessions"),        p_netSessions,      0},
+    {P("neteval"),            p_netEval,          0},
+    {P("netinterface"),       p_netInterface,     0},
+    {P("neterr"),             p_netLastError,     0},
 
     /* core - http */
 
-    {"urlget",             p_getUrl,           0}, /* :replaces get-url */
-    {"urlput",             p_putUrl,           0}, /* :replaces put-url */
-    {"urlpost",            p_postUrl,          0}, /* :replaces post-url */
-    {"urldel",             p_deleteUrl,        0}, /* :replaces delete-url */
+    {P("urlget"),             p_getUrl,           0}, /* :replaces get-url */
+    {P("urlput"),             p_putUrl,           0}, /* :replaces put-url */
+    {P("urlpost"),            p_postUrl,          0}, /* :replaces post-url */
+    {P("urldel"),             p_deleteUrl,        0}, /* :replaces delete-url */
 
 
     /* NON-CORE - science/domain specific -------------------------- */
@@ -550,55 +557,55 @@ PRIMITIVE primitive[] =
 
     /* non-core - matrix */
 
-    {"mat.apply",            p_matScalar,        0}, /* :replaces mat */
-    {"mat.det",              p_determinant,      0},
-    {"mat.invert",           p_matInvert,        0},
-    {"mat.multiply",         p_matMultiply,      0},
-    {"mat.transpose",        p_matTranspose,     0},
+    {P("mat.apply"),            p_matScalar,        0}, /* :replaces mat */
+    {P("mat.det"),              p_determinant,      0},
+    {P("mat.invert"),           p_matInvert,        0},
+    {P("mat.multiply"),         p_matMultiply,      0},
+    {P("mat.transpose"),        p_matTranspose,     0},
 
     /* non-core - statistics */
 
-    {"sta.bayes-query",      p_bayesQuery,       0},
-    {"sta.bayes-train",      p_bayesTrain,       0},
-    {"sta.beta",             p_beta,             0},
-    {"sta.betai",            p_betai,            0},
-    {"sta.binomial",         p_binomial,         0},
-    {"sta.corr",             p_corr,             0},
-    {"sta.crit-chi2",        p_criticalChi2,     0},
-    {"sta.crit-f",           p_criticalF,        0},
-    {"sta.crit-t",           p_criticalT,        0},
-    {"sta.crit-z",           p_criticalZ,        0},
-    {"sta.fft",              p_fft,              0},
-    {"sta.gammai",           p_gammai,           0},
-    {"sta.gammaln",          p_gammaln,          0},
-    {"sta.ifft",             p_ifft,             0},
-    {"sta.kmeans-query",     p_kmeansQuery,      0},
-    {"sta.kmeans-train",     p_kmeansTrain,      0},
-    {"sta.prob-chi2",        p_probabilityChi2,  0},
-    {"sta.prob-f",           p_probabilityF,     0},
-    {"sta.prob-t",           p_probabilityT,     0},
-    {"sta.prob-z",           p_probabilityZ,     0},
-    {"sta.stats",            p_stats,            0},
-    {"sta.t-test",           p_ttest,            0},
+    {P("sta.bayes-query"),      p_bayesQuery,       0},
+    {P("sta.bayes-train"),      p_bayesTrain,       0},
+    {P("sta.beta"),             p_beta,             0},
+    {P("sta.betai"),            p_betai,            0},
+    {P("sta.binomial"),         p_binomial,         0},
+    {P("sta.corr"),             p_corr,             0},
+    {P("sta.crit-chi2"),        p_criticalChi2,     0},
+    {P("sta.crit-f"),           p_criticalF,        0},
+    {P("sta.crit-t"),           p_criticalT,        0},
+    {P("sta.crit-z"),           p_criticalZ,        0},
+    {P("sta.fft"),              p_fft,              0},
+    {P("sta.gammai"),           p_gammai,           0},
+    {P("sta.gammaln"),          p_gammaln,          0},
+    {P("sta.ifft"),             p_ifft,             0},
+    {P("sta.kmeans-query"),     p_kmeansQuery,      0},
+    {P("sta.kmeans-train"),     p_kmeansTrain,      0},
+    {P("sta.prob-chi2"),        p_probabilityChi2,  0},
+    {P("sta.prob-f"),           p_probabilityF,     0},
+    {P("sta.prob-t"),           p_probabilityT,     0},
+    {P("sta.prob-z"),           p_probabilityZ,     0},
+    {P("sta.stats"),            p_stats,            0},
+    {P("sta.t-test"),           p_ttest,            0},
 
     /* non-core - finantial math */
 
-    {"fin.fv",               p_fv,               0},
-    {"fin.irr",              p_irr,              0},
-    {"fin.nper",             p_nper,             0},
-    {"fin.npv",              p_npv,              0},
-    {"fin.pmt",              p_pmt,              0},
-    {"fin.pv",               p_pv,               0},
+    {P("fin.fv"),               p_fv,               0},
+    {P("fin.irr"),              p_irr,              0},
+    {P("fin.nper"),             p_nper,             0},
+    {P("fin.npv"),              p_npv,              0},
+    {P("fin.pmt"),              p_pmt,              0},
+    {P("fin.pv"),               p_pv,               0},
 
     /* non-core - encoding */
 
     #ifdef XML_SUPPORT
-    {"enc.xml-error",        p_XMLerror,         0},
-    {"enc.xml-parse",        p_XMLparse,         0},
-    {"enc.xml-type-tags",    p_XMLtypeTags,      0},
+    {P("enc.xml-error"),        p_XMLerror,         0},
+    {P("enc.xml-parse"),        p_XMLparse,         0},
+    {P("enc.xml-type-tags"),    p_XMLtypeTags,      0},
     #endif
-    {"enc.json-error",       p_JSONerror,        0},
-    {"enc.json-parse",       p_JSONparse,        0},
+    {P("enc.json-error"),       p_JSONerror,        0},
+    {P("enc.json-parse"),       p_JSONparse,        0},
     #endif /* NON_CORE */
 
     {NULL,NULL,0},

@@ -416,6 +416,7 @@ CELL *p_replace(CELL *params);
 CELL *p_replaceAssoc(CELL *params);
 CELL *p_reset(CELL *params);
 CELL *p_rest(CELL *params);
+CELL *p_ret(CELL *params);
 CELL *p_reverse(CELL *params);
 CELL *p_rotate(CELL *params);
 CELL *p_round(CELL *params);

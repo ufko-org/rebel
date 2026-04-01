@@ -3159,6 +3159,10 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
+    if(params->type == CELL_QUOTE)
+    {
+        return(trueCell);
+    }
     return(nilCell);
 }
 
@@ -5375,36 +5379,40 @@ CELL *p_func_orig(CELL *params)
 
 static CELL *normalizeSignature(CELL *params)
 {
-  CELL *sig;
-  CELL *name;
-  CELL *args;
+    CELL *sig;
+    CELL *name;
+    CELL *args;
 
-  if(params->type == CELL_SYMBOL || params->type == CELL_DYN_SYMBOL)
-  {
-    name = stuffSymbol((SYMBOL *)params->contents);
+    if(params->type == CELL_SYMBOL || params->type == CELL_DYN_SYMBOL)
+    {
+        name = stuffSymbol((SYMBOL *)params->contents);
 
-    args = params->next;
-    if(args == nilCell || args->type != CELL_EXPRESSION)
-      return errorProcExt(ERR_LIST_EXPECTED, args);
+        args = params->next;
+        if(args == nilCell || args->type != CELL_EXPRESSION)
+        {
+            return errorProcExt(ERR_LIST_EXPECTED, args);
+        }
 
-    name->next = (CELL *)args->contents;
-    sig = makeCell(CELL_EXPRESSION, (UINT)name);
+        name->next = (CELL *)args->contents;
+        sig = makeCell(CELL_EXPRESSION, (UINT)name);
 
-    sig->next = args->next;
-    return sig;
-  }
+        sig->next = args->next;
+        return sig;
+    }
 
-  return params;
+    return params;
 }
 
 CELL *p_func(CELL *params)
 {
 
-  params = normalizeSignature(params);
-  if(params->type != CELL_EXPRESSION)
-    return errorProcExt(ERR_LIST_OR_SYMBOL_EXPECTED, params);
+    params = normalizeSignature(params);
+    if(params->type != CELL_EXPRESSION)
+    {
+        return errorProcExt(ERR_LIST_OR_SYMBOL_EXPECTED, params);
+    }
 
-  return defineOrMacro(params, CELL_FN, FALSE);
+    return defineOrMacro(params, CELL_FN, FALSE);
 }
 
 CELL *p_define(CELL *params)
@@ -5618,11 +5626,11 @@ SETMUT_BEGIN:
         return(errorProcExt2(ERR_SYMBOL_PROTECTED, stuffSymbol(symbolRef)));
     }
 
-    
-    /* Reject: 
+
+    /* Reject:
       1. symbol not local to current call-chain -or-
-      2. symbol not created explicitly 
-      - local symbol has priority to respect shadowing */ 
+      2. symbol not created explicitly
+      - local symbol has priority to respect shadowing */
     if(symbolRef != NULL)
     {
         idx = envStackIdx;
@@ -5784,7 +5792,7 @@ SETMUT_BEGIN:
             return errorProcExt(ERR_SYMBOL_NONLOCAL_MUT, stuffSymbol(symbolRef));
         }
     }
-    
+
     itSymbol->contents = (UINT)cell;
     new = copyCell(evaluateExpression(params->next));
     itSymbol->contents = (UINT)nilCell;
@@ -6653,6 +6661,61 @@ CELL *p_if(CELL *params)
     }
 
 IF_RETURN:
+    itSymbol->contents = (UINT)nilCell;
+    pushResultFlag = FALSE;
+    return(cell);
+}
+
+/* ufko: */
+CELL *p_ret(CELL *params)
+{
+    CELL *cell;
+
+    /* single argument → works as identity function */
+    if(params != nilCell && params->next == nilCell)
+    {
+        cell = evaluateExpression(params);
+        goto RET_RETURN;
+    }
+
+    /* pair arguments - evaluate test (second element in pair) */
+    if(params == nilCell || params->next == nilCell)
+    {
+        goto RET_DEFAULT;
+    }
+
+    cell = evaluateExpression(params->next);
+    itSymbol->contents = (UINT)cell;
+
+    while(isNil(cell) || isEmpty(cell))
+    {
+        /* skip (value test) pair */
+        params = params->next;
+        params = params->next;
+
+        if(params == nilCell)
+        {
+            goto RET_DEFAULT;
+        }
+
+        /* if no test follows, this is default value */
+        if(params->next == nilCell)
+        {
+            cell = evaluateExpression(params);
+            goto RET_RETURN;
+        }
+
+        cell = evaluateExpression(params->next);
+    }
+
+    /* test true → return value (first element) */
+    cell = evaluateExpression(params);
+    goto RET_RETURN;
+
+RET_DEFAULT:
+    cell = nilCell;
+
+RET_RETURN:
     itSymbol->contents = (UINT)nilCell;
     pushResultFlag = FALSE;
     return(cell);
@@ -7978,6 +8041,8 @@ CELL *isType(CELL *, int);
 CELL *p_isInternal(CELL *params)
 {
     SYMBOL *sym;
+    char *s;
+    int len;
     int i;
 
     if(params->type != CELL_SYMBOL)
@@ -7986,20 +8051,29 @@ CELL *p_isInternal(CELL *params)
     }
 
     sym = (SYMBOL *)params->contents;
+    s = sym->name;
 
-    /* _ prefix */
-    if(sym->name[0] == '_')
+    /* 1) _ prefix */
+    if(s[0] == '_')
     {
         return(trueCell);
     }
 
-    /* dot at index 1-3 */
-    for(i = 1; sym->name[i] != '\0' && i < 4; i++)
+    /* 2) dot up to index 3 */
+    for(i = 0; s[i] != '\0' && i < 4; i++)
     {
-        if(sym->name[i] == '.')
+        if(s[i] == '.')
         {
             return(trueCell);
         }
+    }
+
+    /* 3) dot at end */
+    for(len = 0; s[len] != '\0'; len++);
+
+    if(len > 0 && s[len - 1] == '.')
+    {
+        return(trueCell);
     }
 
     return(nilCell);
