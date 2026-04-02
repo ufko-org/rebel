@@ -38,13 +38,43 @@
 You may use, copy, modify and distribute it freely,
 provided that this notice is preserved.</p>
 <hr/>
+<h2 id="parameter-markers-in-function-signature">Parameter markers in function signature</h2>
+<p>These are markers describing the expected role or form of parameters,
+not a strict type system.</p>
+<p>Markers may be combined (e.g. var-str, patt-str) to express role and domain,
+numbered (e.g. str-1, var-2, int-N) to express position or repetition,
+and can be further clarified with free-form suffixes when needed
+(e.g. num-radians, str-path).</p>
+<pre><code>
+sym       - symbol name (quoted)
+var       - symbol name (not quoted)
+
+arr       - array
+body      - block of expressions to evaluate
+bool      - truthy&#47;nil
+cmd       - shell command string
+ctx       - context
+exp       - any expression 
+flt       - float
+fn        - function (built-in, user defined or fn-expression)
+idx       - index
+int       - integer
+lst       - list
+num       - float or integer
+place     - assignable expression
+rxo       - regular expression option
+rxp       - regular expression pattern string
+str       - string
+
+</code></pre>
+<hr/>
 <p><a name="f-bang"></a></p>
 <h2 id="section">!</h2>
-<pre><code>syntax: (! str-shell-command)
+<pre><code>syntax: (! str-cmd)
 </code></pre>
 <p>Description:</p>
 <p>Executes the external command contained in
-<code>str-shell-command</code>. The call blocks until the invoked
+<code>str-cmd</code>. The call blocks until the invoked
 program terminates. The return value is the exit status
 reported by the operating system.</p>
 <p>Use <code>exec</code> when capturing standard output or providing
@@ -55,7 +85,7 @@ shell is a special operator, not a function call. In
 that form, parentheses are omitted and the remainder of
 the line is forwarded directly to the system shell.</p>
 <p>Examples:</p>
-<pre><code>(! "nvi2")
+<pre><code>(! "date")
 (! "ls -ltr")
 
 ; interactive shell operator form
@@ -848,12 +878,12 @@ result.</li>
 <p><a name="f-address"></a></p>
 <h2 id="address">address</h2>
 <pre><code>syntax: (address int)
-syntax: (address float)
+syntax: (address flt)
 syntax: (address str)
 </code></pre>
 <p>Description:</p>
 <p>Returns the memory address of the value referenced by
-<code>int</code>, <code>float</code>, or <code>str</code>. The returned value is an integer
+<code>int</code>, <code>flt</code>, or <code>str</code>. The returned value is an integer
 representing the address of the underlying storage used
 by the object.</p>
 <p>This function is primarily used when passing pointers to
@@ -888,8 +918,8 @@ access functions.</li>
 <hr/>
 <p><a name="f-alarm"></a></p>
 <h2 id="alarm">alarm</h2>
-<pre><code>syntax: (alarm sym-event-handler | func-event-handler num-seconds [int-option])
-syntax: (alarm sym-event-handler | func-event-handler)
+<pre><code>syntax: (alarm sym-event-handler | fn-event-handler num-seconds [int-option])
+syntax: (alarm sym-event-handler | fn-event-handler)
 syntax: (alarm)
 </code></pre>
 <p>Description:</p>
@@ -939,9 +969,9 @@ periodic behavior.</li>
 <li>An <code>alarm</code> cannot interrupt a running built-in
 function; it runs between expression evaluations.</li>
 <li>For interrupting blocking I&#47;O, polling patterns
-using <code>nselect</code> are required.</li>
+using <code>netselect</code> are required.</li>
 </ul>
-<p>See: <a href="#f-nselect">nselect</a></p>
+<p>See: <a href="#f-netselect">netselect</a></p>
 <hr/>
 <p><a name="f-and"></a></p>
 <h2 id="and">and</h2>
@@ -955,7 +985,7 @@ immediately and that value is returned. When called with
 no arguments, the result is <code>true</code>.</p>
 <p>This operator provides short-circuit behavior: evaluation
 continues only as long as all intermediate results are
-non-nil and not ().</p>
+non-nil and not <code>()</code>.</p>
 <p>Examples:</p>
 <pre><code>(set x 10)                         ; → 10
 (and (&#60; x 100) (&#62; x 2))            ; → true
@@ -975,8 +1005,8 @@ expressions succeed.</li>
 <hr/>
 <p><a name="f-append"></a></p>
 <h2 id="append">append</h2>
-<pre><code>syntax: (append list-1 [list-2 ...])
-syntax: (append array-1 [array-2 ...])
+<pre><code>syntax: (append lst-1 [lst-2 ...])
+syntax: (append arr-1 [arr-2 ...])
 syntax: (append str-1 [str-2 ...])
 </code></pre>
 <p>Description:</p>
@@ -1031,20 +1061,20 @@ bytes.</li>
 <hr/>
 <p><a name="f-apply"></a></p>
 <h2 id="apply">apply</h2>
-<pre><code>syntax: (apply function list [int-reduce])
-syntax: (apply function)
+<pre><code>syntax: (apply fn lst [int-reduce])
+syntax: (apply fn)
 </code></pre>
 <p>Description:</p>
-<p>Invokes <code>function</code> using the elements of <code>list</code> as its
-arguments.  The function in <code>func</code> may be a primitive,
+<p>Invokes <code>fn</code> using the elements of <code>lst</code> as its
+arguments.  The function in <code>fn</code> may be a primitive,
 a user-defined function, or a <code>fn</code> expression.  Only
 functions that evaluate all of their arguments may be
 used; special forms that evaluate selectively (such as
-<code>dolist</code> or <code>case</code>) will fail when used with <code>apply</code>.</p>
+<code>forl</code> or <code>case</code>) will fail when used with <code>apply</code>.</p>
 <p>In the second syntax form, apply simply calls
-<code>function</code> without any arguments.</p>
+<code>fn</code> without any arguments.</p>
 <p>When <code>int-reduce</code> is supplied, it specifies how many
-arguments <code>function</code> consumes.  The function is then
+arguments <code>fn</code> consumes.  The function is then
 applied repeatedly in left-associative order: the
 result of each application becomes the first argument
 of the next application, and the remaining arguments
@@ -1080,8 +1110,8 @@ variadic one.</p>
 <p>Notes:</p>
 <ul>
 <li>Only works with functions that evaluate all arguments.</li>
-<li>Special forms (<code>dolist</code>, <code>case</code>, etc.) cannot be used.</li>
-<li><code>int-reduce</code> applies <code>function</code> repeatedly in
+<li>Special forms (<code>forl</code>, <code>case</code>, etc.) cannot be used.</li>
+<li><code>int-reduce</code> applies <code>fn</code> repeatedly in
 left-associative order.</li>
 </ul>
 <p>See: <a href="#f-map">map</a>, <a href="#f-fn">fn</a></p>
@@ -1106,7 +1136,7 @@ list.  Indices may be nested-access indices, allowing
 traversal inside structured data such as lists.</p>
 <p>Examples:</p>
 <pre><code>(mac (print-line)
-  (dolist (x (args))
+  (forl (x (args))
     (print x "\n")))
 (print-line "hello" "World")
 ; prints each argument on its own line
@@ -1135,7 +1165,7 @@ traversal inside structured data such as lists.</p>
 <ul>
 <li>Returns only arguments not already bound to local
 variables of the active function or macro.</li>
-<li>Calling <code>(args)</code> inside a macro and passing it as an
+<li>Calling <code>args</code> inside a macro and passing it as an
 argument to <em>another</em> macro is invalid, because args
 would not be evaluated in the target macro’s
 environment.</li>
@@ -1145,14 +1175,14 @@ environment.</li>
 <hr/>
 <p><a name="f-array"></a></p>
 <h2 id="array">array</h2>
-<pre><code>syntax: (array int-n1 [int-n2 ...] [list-init])
+<pre><code>syntax: (array int-1 [int-2 ...] [lst-init])
 </code></pre>
 <p>Description:</p>
-<p>Creates an array with <code>int-n1</code> elements.  Additional
+<p>Creates an array with <code>int-N</code> elements.  Additional
 integer dimensions define a multidimensional array,
-supporting up to sixteen dimensions.  When <code>list-init</code>
+supporting up to sixteen dimensions.  When <code>lst-init</code>
 is supplied, its elements initialize the array.  If
-<code>list-init</code> has fewer elements than required, its
+<code>lst-init</code> has fewer elements than required, its
 contents repeat until all array positions are filled.
 Elements may be of any type.</p>
 <p>Multidimensional arrays are stored as arrays of arrays.
@@ -1229,7 +1259,7 @@ a
 <p>Notes:</p>
 <ul>
 <li>Up to sixteen dimensions are supported.</li>
-<li><code>list-init</code> repeats until the array is fully initialized.</li>
+<li><code>lst-init</code> repeats until the array is fully initialized.</li>
 <li>Converting list rows requires care: use arrays, not
 lists, when replacing rows.</li>
 <li><code>arraylist</code> converts arrays to lists; <code>flat</code> assists in
@@ -1240,10 +1270,10 @@ reconstructing arrays from list data.</li>
 <hr/>
 <p><a name="f-arraylist"></a></p>
 <h2 id="arraylist">arraylist</h2>
-<pre><code>syntax: (arraylist array)
+<pre><code>syntax: (arraylist arr)
 </code></pre>
 <p>Description:</p>
-<p>Converts an <code>array</code> into a list structure. The conversion
+<p>Converts an <code>arr</code> into a list structure. The conversion
 is recursive: every row of a multidimensional array is
 turned into a list, and nested arrays become nested
 lists. The original array is left unchanged.</p>
@@ -1336,21 +1366,21 @@ domain restrictions.</p>
 <hr/>
 <p><a name="f-assoc"></a></p>
 <h2 id="assoc">assoc</h2>
-<pre><code>syntax: (assoc exp-key list-alist)
-syntax: (assoc list-exp-key list-alist)
+<pre><code>syntax: (assoc exp-key lst-alist)
+syntax: (assoc lst-exp-key lst-alist)
 </code></pre>
 <p>Description:</p>
 <p>Searches an association list for an entry whose first
 element matches the given key.  In the first form,
 <code>exp-key</code> is a single key expression.  The function
-scans each member-list of <code>list-alist</code>; when the first
+scans each member-list of <code>lst-alist</code>; when the first
 element equals <code>exp-key</code>, that member-list is returned.
 If no match is found, the result is <code>nil</code>.</p>
-<p>In the second form, <code>list-exp-key</code> is a list of keys
+<p>In the second form, <code>lst-exp-key</code> is a list of keys
 used to traverse nested association lists.  Each key
 selects a sublist, allowing lookup inside multilevel
 structures.</p>
-<p>When <code>list-alist</code> is a context symbol, assoc operates
+<p>When <code>lst-alist</code> is a context symbol, assoc operates
 on its default functor, enabling large association
 lists to be referenced without copying.</p>
 <p>assoc may be combined with set to modify association
@@ -1402,7 +1432,7 @@ db
 <p>Notes:</p>
 <ul>
 <li><code>assoc</code> returns the full matching pair or sublist.</li>
-<li><code>list-exp-key</code> allows multilevel lookup.</li>
+<li><code>lst-exp-key</code> allows multilevel lookup.</li>
 <li>When used with a context, <code>assoc</code> operates on the
 context&#8217;s default functor.</li>
 <li>For modifications, combine <code>assoc</code> with <code>set</code>.</li>
@@ -1578,11 +1608,11 @@ such as XML-RPC.</li>
 <hr/>
 <p><a name="f-bigint"></a></p>
 <h2 id="bigint">bigint</h2>
-<pre><code>syntax: (bigint number)
-syntax: (bigint string)
+<pre><code>syntax: (bigint num)
+syntax: (bigint str)
 </code></pre>
 <p>Description:</p>
-<p>Converts a <code>number</code> or a numeric <code>string</code> into a big integer.
+<p>Converts a <code>num</code> or a numeric <code>str</code> into a big integer.
 Floating point inputs are converted by truncating toward
 zero after binary-to-decimal transformation, which may
 introduce rounding artifacts. Integer inputs convert
@@ -1626,7 +1656,7 @@ character.</li>
 <hr/>
 <p><a name="f-bind"></a></p>
 <h2 id="bind">bind</h2>
-<pre><code>syntax: (bind list-variable-associations [bool-eval])
+<pre><code>syntax: (bind lst-variable-associations [bool-eval])
 </code></pre>
 <p>Description:</p>
 <p>Takes an association list of symbol–value pairs and
@@ -1716,29 +1746,29 @@ ordering allows direct indexing and use in flow control.</p>
 <hr/>
 <p><a name="f-callback"></a></p>
 <h2 id="callback">callback</h2>
-<pre><code>syntax: (callback int-index sym-function)
-syntax: (callback sym-function str-return-type [str-param-type ...])
-syntax: (callback sym-function)
+<pre><code>syntax: (callback int-idx sym-fn)
+syntax: (callback sym-fn str-return-type [str-param-type ...])
+syntax: (callback sym-fn)
 </code></pre>
 <p>Description:</p>
 <p>Creates a C-callable function pointer which invokes the
-Rebel function stored in <code>sym-function</code>. The mechanism
+Rebel function stored in <code>sym-fn</code>. The mechanism
 supports two independent modes. In the simple form the
 first parameter selects one of sixteen static callback
 slots numbered 0 to 15. Each slot contains a built-in
 C function which transfers control into the runtime.</p>
-<p>Assigning <code>sym-function</code> to a slot causes external C code
+<p>Assigning <code>sym-fn</code> to a slot causes external C code
 calling the slot pointer to enter the Rebel evaluator
 and run the assigned function. This simple form accepts
 up to eight parameters as raw integer or pointer
 values. The slot pointer remains valid until reassigned
-with a new <code>sym-function</code>.</p>
+with a new <code>sym-fn</code>.</p>
 <p>The extended syntax uses libffi closures. A closure is
 allocated dynamically and configured with a call
 interface describing the return type and parameter
 types. When external C code calls the closure address,
 libffi performs type conversions, constructs a Rebel
-argument list and invokes <code>sym-function</code>. After the
+argument list and invokes <code>sym-fn</code>. After the
 function finishes, libffi converts the returned value
 back to the declared C type. This form has no slot
 limits and can represent any combination of integer,
@@ -1747,7 +1777,7 @@ arriving from C are represented as numbers and may be
 inspected using <code>intc</code>, <code>longc</code> or <code>stringc</code> as
 needed for buffer access.</p>
 <p>The third syntax retrieves the previously created
-callback pointer for <code>sym-function</code>. This avoids building
+callback pointer for <code>sym-fn</code>. This avoids building
 additional closures when the same pointer must be
 passed to multiple C functions.</p>
 <p>Both simple and extended forms coexist. The first form
@@ -1788,37 +1818,37 @@ pointer for reuse.</li>
 <p>See: <a href="#f-import">import</a>, <a href="#f-intc">intc</a>, <a href="#f-longc">longc</a>,
 <a href="#f-pack">pack</a>, <a href="#f-unpack">unpack</a></p>
 <hr/>
-<p><a name="f-cap"></a></p>
-<h2 id="cap">cap</h2>
-<pre><code>syntax: (cap list-A list-B)
-syntax: (cap list-A list-B bool)
+<p><a name="f-intersect"></a></p>
+<h2 id="intersect">intersect</h2>
+<pre><code>syntax: (intersect lst-A lst-B)
+syntax: (intersect lst-A lst-B bool)
 </code></pre>
 <p>Description:</p>
-<p>Computes the intersection of list-A and list-B. In the
+<p>Computes the intersection of <code>lst-A</code> and <code>lst-B</code>. In the
 first form, the result contains one copy of each value
 that appears in both lists, preserving the order in
-which those values first occur in <code>list-A</code>. Duplicates in
+which those values first occur in <code>lst-A</code>. Duplicates in
 either input list are ignored in this mode.</p>
 <p>In the second form, when <code>bool</code> evaluates to true (any
-non-nil value), duplicates from <code>list-A</code> are preserved.
-Every element of <code>list-A</code> that is also present in <code>list-B</code>
+non-nil value), duplicates from <code>lst-A</code> are preserved.
+Every element of <code>lst-A</code> that is also present in <code>lst-B</code>
 is included in the result in its original order, and no
 deduplication occurs.</p>
 <p>Membership tests follow standard list element equality.</p>
 <p>Examples:</p>
-<pre><code>(cap &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5))
+<pre><code>(intersect &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5))
 ;-&#62; (2 4 1)
 
-(cap &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5) true)
+(intersect &#39;(3 0 1 3 2 3 4 2 1) &#39;(1 4 2 5) true)
 ;-&#62; (1 2 4 2 1)
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li>First form removes duplicates.</li>
-<li>Second form preserves duplicates from <code>list-A</code>.</li>
-<li>Order of results always follows <code>list-A</code>.</li>
+<li>Second form preserves duplicates from <code>lst-A</code>.</li>
+<li>Order of results always follows <code>lst-A</code>.</li>
 </ul>
-<p>See: <a href="#f-diff">diff</a>, <a href="#f-uniq">uniq</a>, <a href="#f-union">union</a></p>
+<p>See: <a href="#f-diff">diff</a>, <a href="#f-unique">uniq</a>, <a href="#f-union">union</a></p>
 <hr/>
 <p><a name="f-case"></a></p>
 <h2 id="case">case</h2>
@@ -1849,19 +1879,19 @@ executed and serves as a default branch.</p>
 <hr/>
 <p><a name="f-catch"></a></p>
 <h2 id="catch">catch</h2>
-<pre><code>syntax: (catch exp symbol)
+<pre><code>syntax: (catch exp sym)
 syntax: (catch exp)
 </code></pre>
 <p>Description:</p>
 <p>Evaluates <code>exp</code> under a handler capable of intercepting
 throws and runtime errors. In the first syntax <code>catch</code>
 returns a status flag and stores the outcome of <code>exp</code> in
-<code>symbol</code>. When evaluation finishes normally, <code>catch</code>
-returns <code>true</code> and <code>symbol</code> receives the value of <code>exp</code>. When
-a runtime error occurs, <code>catch</code> returns <code>nil</code> and <code>symbol</code> is
+<code>sym</code>. When evaluation finishes normally, <code>catch</code>
+returns <code>true</code> and <code>sym</code> receives the value of <code>exp</code>. When
+a runtime error occurs, <code>catch</code> returns <code>nil</code> and <code>sym</code> is
 set to the formatted error message. When a throw is
 triggered during evaluation, <code>catch</code> returns <code>true</code> and
-<code>symbol</code> receives the argument supplied to <code>throw</code>. This
+<code>sym</code> receives the argument supplied to <code>throw</code>. This
 form is used when errors or explicit throws are part of
 normal program flow and must be handled without aborting
 the surrounding computation.</p>
@@ -1879,9 +1909,8 @@ the dynamic extent of exp.</p>
   (if (= x 500) (throw x))))  → 500
 
 (func (f x)
-   …
-  (if condition (throw 123))
-    …
+  (if condition 
+    (throw 123))
   456)
 
 (catch (f p))  → 123       ;; condition true

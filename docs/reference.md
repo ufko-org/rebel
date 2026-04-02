@@ -13,17 +13,53 @@ provided that this notice is preserved.
 
 ---
 
+## Parameter markers in function signature
+
+These are markers describing the expected role or form of parameters,
+not a strict type system.
+
+Markers may be combined (e.g. var-str, patt-str) to express role and domain,
+numbered (e.g. str-1, var-2, int-N) to express position or repetition,
+and can be further clarified with free-form suffixes when needed
+(e.g. num-radians, str-path).
+
+```
+
+sym       - symbol name (quoted)
+var       - symbol name (not quoted)
+
+arr       - array
+body      - block of expressions to evaluate
+bool      - truthy/nil
+cmd       - shell command string
+ctx       - context
+exp       - any expression 
+flt       - float
+fn        - function (built-in, user defined or fn-expression)
+idx       - index
+int       - integer
+lst       - list
+num       - float or integer
+place     - assignable expression
+rxo       - regular expression option
+rxp       - regular expression pattern string
+str       - string
+
+```
+
+---
+
 <a name="f-bang"></a>
 ## ! 
 
 ```
-syntax: (! str-shell-command)
+syntax: (! str-cmd)
 ```
 
 Description:
 
 Executes the external command contained in
-`str-shell-command`. The call blocks until the invoked
+`str-cmd`. The call blocks until the invoked
 program terminates. The return value is the exit status
 reported by the operating system.
 
@@ -39,7 +75,7 @@ the line is forwarded directly to the system shell.
 Examples:
 
 ```
-(! "nvi2")
+(! "date")
 (! "ls -ltr")
 
 ; interactive shell operator form
@@ -1137,14 +1173,14 @@ See: [sub](#f-sub), [mul](#f-mul), [div](#f-div)
 
 ```
 syntax: (address int)
-syntax: (address float)
+syntax: (address flt)
 syntax: (address str)
 ```
 
 Description:
 
 Returns the memory address of the value referenced by
-`int`, `float`, or `str`. The returned value is an integer
+`int`, `flt`, or `str`. The returned value is an integer
 representing the address of the underlying storage used
 by the object.
 
@@ -1191,8 +1227,8 @@ See: [charc](#f-charc), [intc](#f-intc),
 ## alarm
 
 ```
-syntax: (alarm sym-event-handler | func-event-handler num-seconds [int-option])
-syntax: (alarm sym-event-handler | func-event-handler)
+syntax: (alarm sym-event-handler | fn-event-handler num-seconds [int-option])
+syntax: (alarm sym-event-handler | fn-event-handler)
 syntax: (alarm)
 ```
 
@@ -1256,9 +1292,9 @@ Notes:
 - An `alarm` cannot interrupt a running built-in
   function; it runs between expression evaluations.
 - For interrupting blocking I/O, polling patterns
-  using `nselect` are required.
+  using `netselect` are required.
 
-See: [nselect](#f-nselect)
+See: [netselect](#f-netselect)
 
 
 ---
@@ -1279,7 +1315,7 @@ no arguments, the result is `true`.
 
 This operator provides short-circuit behavior: evaluation
 continues only as long as all intermediate results are
-non-nil and not ().
+non-nil and not `()`.
 
 Examples:
 
@@ -1308,8 +1344,8 @@ See: [or](#f-or), [not](#f-not)
 ## append
 
 ```
-syntax: (append list-1 [list-2 ...])
-syntax: (append array-1 [array-2 ...])
+syntax: (append lst-1 [lst-2 ...])
+syntax: (append arr-1 [arr-2 ...])
 syntax: (append str-1 [str-2 ...])
 ```
 
@@ -1372,30 +1408,28 @@ See: [join](#f-join), [extend](#f-extend), [push](#f-push)
 
 ---
 
-
-
 <a name="f-apply"></a>
 ## apply
 
 ```
-syntax: (apply function list [int-reduce])
-syntax: (apply function)
+syntax: (apply fn lst [int-reduce])
+syntax: (apply fn)
 ```
 
 Description:
 
-Invokes `function` using the elements of `list` as its
-arguments.  The function in `func` may be a primitive,
+Invokes `fn` using the elements of `lst` as its
+arguments.  The function in `fn` may be a primitive,
 a user-defined function, or a `fn` expression.  Only
 functions that evaluate all of their arguments may be
 used; special forms that evaluate selectively (such as
-`dolist` or `case`) will fail when used with `apply`.
+`forl` or `case`) will fail when used with `apply`.
 
 In the second syntax form, apply simply calls
-`function` without any arguments.
+`fn` without any arguments.
 
 When `int-reduce` is supplied, it specifies how many
-arguments `function` consumes.  The function is then
+arguments `fn` consumes.  The function is then
 applied repeatedly in left-associative order: the
 result of each application becomes the first argument
 of the next application, and the remaining arguments
@@ -1435,8 +1469,8 @@ Examples:
 Notes:
 
 - Only works with functions that evaluate all arguments.
-- Special forms (`dolist`, `case`, etc.) cannot be used.
-- `int-reduce` applies `function` repeatedly in
+- Special forms (`forl`, `case`, etc.) cannot be used.
+- `int-reduce` applies `fn` repeatedly in
   left-associative order.
 
 See: [map](#f-map), [fn](#f-fn)
@@ -1472,7 +1506,7 @@ Examples:
 
 ```
 (mac (print-line)
-  (dolist (x (args))
+  (forl (x (args))
     (print x "\n")))
 (print-line "hello" "World")
 ; prints each argument on its own line
@@ -1502,7 +1536,7 @@ Notes:
 
 - Returns only arguments not already bound to local
   variables of the active function or macro.
-- Calling `(args)` inside a macro and passing it as an
+- Calling `args` inside a macro and passing it as an
   argument to *another* macro is invalid, because args
   would not be evaluated in the target macro’s
   environment.
@@ -1517,16 +1551,16 @@ See: [func](#f-func), [mac](#f-mac)
 ## array
 
 ```
-syntax: (array int-n1 [int-n2 ...] [list-init])
+syntax: (array int-1 [int-2 ...] [lst-init])
 ```
 
 Description:
 
-Creates an array with `int-n1` elements.  Additional
+Creates an array with `int-N` elements.  Additional
 integer dimensions define a multidimensional array,
-supporting up to sixteen dimensions.  When `list-init`
+supporting up to sixteen dimensions.  When `lst-init`
 is supplied, its elements initialize the array.  If
-`list-init` has fewer elements than required, its
+`lst-init` has fewer elements than required, its
 contents repeat until all array positions are filled.
 Elements may be of any type.
 
@@ -1610,7 +1644,7 @@ a
 Notes:
 
 - Up to sixteen dimensions are supported.
-- `list-init` repeats until the array is fully initialized.
+- `lst-init` repeats until the array is fully initialized.
 - Converting list rows requires care: use arrays, not
   lists, when replacing rows.
 - `arraylist` converts arrays to lists; `flat` assists in
@@ -1626,12 +1660,12 @@ See: [arraylist](#f-arraylist), [array?](#f-arrayp),
 ## arraylist
 
 ```
-syntax: (arraylist array)
+syntax: (arraylist arr)
 ```
 
 Description:
 
-Converts an `array` into a list structure. The conversion
+Converts an `arr` into a list structure. The conversion
 is recursive: every row of a multidimensional array is
 turned into a list, and nested arrays become nested
 lists. The original array is left unchanged.
@@ -1766,8 +1800,8 @@ See: [sinh](#f-sinh), [acosh](#f-acosh), [atanh](#f-atanh)
 ## assoc
 
 ```
-syntax: (assoc exp-key list-alist)
-syntax: (assoc list-exp-key list-alist)
+syntax: (assoc exp-key lst-alist)
+syntax: (assoc lst-exp-key lst-alist)
 ```
 
 Description:
@@ -1775,16 +1809,16 @@ Description:
 Searches an association list for an entry whose first
 element matches the given key.  In the first form,
 `exp-key` is a single key expression.  The function
-scans each member-list of `list-alist`; when the first
+scans each member-list of `lst-alist`; when the first
 element equals `exp-key`, that member-list is returned.
 If no match is found, the result is `nil`.
 
-In the second form, `list-exp-key` is a list of keys
+In the second form, `lst-exp-key` is a list of keys
 used to traverse nested association lists.  Each key
 selects a sublist, allowing lookup inside multilevel
 structures.
 
-When `list-alist` is a context symbol, assoc operates
+When `lst-alist` is a context symbol, assoc operates
 on its default functor, enabling large association
 lists to be referenced without copying.
 
@@ -1841,7 +1875,7 @@ db
 Notes:
 
 - `assoc` returns the full matching pair or sublist.
-- `list-exp-key` allows multilevel lookup.
+- `lst-exp-key` allows multilevel lookup.
 - When used with a context, `assoc` operates on the
   context's default functor.
 - For modifications, combine `assoc` with `set`.
@@ -2090,13 +2124,13 @@ See: [b64dec](#f-b64dec)
 ## bigint
 
 ```
-syntax: (bigint number)
-syntax: (bigint string)
+syntax: (bigint num)
+syntax: (bigint str)
 ```
 
 Description:
 
-Converts a `number` or a numeric `string` into a big integer.
+Converts a `num` or a numeric `str` into a big integer.
 Floating point inputs are converted by truncating toward
 zero after binary-to-decimal transformation, which may
 introduce rounding artifacts. Integer inputs convert
@@ -2151,7 +2185,7 @@ See: [int](#f-int), [float](#f-float)
 ## bind
 
 ```
-syntax: (bind list-variable-associations [bool-eval])
+syntax: (bind lst-variable-associations [bool-eval])
 ```
 
 Description:
@@ -2267,33 +2301,33 @@ See: [int](#f-int), [&](#f-andbit), [|](#f-orbit)
 ## callback
 
 ```
-syntax: (callback int-index sym-function)
-syntax: (callback sym-function str-return-type [str-param-type ...])
-syntax: (callback sym-function)
+syntax: (callback int-idx sym-fn)
+syntax: (callback sym-fn str-return-type [str-param-type ...])
+syntax: (callback sym-fn)
 ```
 
 Description:
 
 Creates a C-callable function pointer which invokes the
-Rebel function stored in `sym-function`. The mechanism
+Rebel function stored in `sym-fn`. The mechanism
 supports two independent modes. In the simple form the
 first parameter selects one of sixteen static callback
 slots numbered 0 to 15. Each slot contains a built-in
 C function which transfers control into the runtime.
 
-Assigning `sym-function` to a slot causes external C code
+Assigning `sym-fn` to a slot causes external C code
 calling the slot pointer to enter the Rebel evaluator
 and run the assigned function. This simple form accepts
 up to eight parameters as raw integer or pointer
 values. The slot pointer remains valid until reassigned
-with a new `sym-function`.
+with a new `sym-fn`.
 
 The extended syntax uses libffi closures. A closure is
 allocated dynamically and configured with a call
 interface describing the return type and parameter
 types. When external C code calls the closure address,
 libffi performs type conversions, constructs a Rebel
-argument list and invokes `sym-function`. After the
+argument list and invokes `sym-fn`. After the
 function finishes, libffi converts the returned value
 back to the declared C type. This form has no slot
 limits and can represent any combination of integer,
@@ -2303,7 +2337,7 @@ inspected using `intc`, `longc` or `stringc` as
 needed for buffer access.
 
 The third syntax retrieves the previously created
-callback pointer for `sym-function`. This avoids building
+callback pointer for `sym-fn`. This avoids building
 additional closures when the same pointer must be
 passed to multiple C functions.
 
@@ -2352,25 +2386,25 @@ See: [import](#f-import), [intc](#f-intc), [longc](#f-longc),
 ---
 
 
-<a name="f-cap"></a>
-## cap
+<a name="f-intersect"></a>
+## intersect
 
 ```
-syntax: (cap list-A list-B)
-syntax: (cap list-A list-B bool)
+syntax: (intersect lst-A lst-B)
+syntax: (intersect lst-A lst-B bool)
 ```
 
 Description:
 
-Computes the intersection of list-A and list-B. In the
+Computes the intersection of `lst-A` and `lst-B`. In the
 first form, the result contains one copy of each value
 that appears in both lists, preserving the order in
-which those values first occur in `list-A`. Duplicates in
+which those values first occur in `lst-A`. Duplicates in
 either input list are ignored in this mode.
 
 In the second form, when `bool` evaluates to true (any
-non-nil value), duplicates from `list-A` are preserved.
-Every element of `list-A` that is also present in `list-B`
+non-nil value), duplicates from `lst-A` are preserved.
+Every element of `lst-A` that is also present in `lst-B`
 is included in the result in its original order, and no
 deduplication occurs.
 
@@ -2379,20 +2413,20 @@ Membership tests follow standard list element equality.
 Examples:
 
 ```
-(cap '(3 0 1 3 2 3 4 2 1) '(1 4 2 5))
+(intersect '(3 0 1 3 2 3 4 2 1) '(1 4 2 5))
 ;-> (2 4 1)
 
-(cap '(3 0 1 3 2 3 4 2 1) '(1 4 2 5) true)
+(intersect '(3 0 1 3 2 3 4 2 1) '(1 4 2 5) true)
 ;-> (1 2 4 2 1)
 ```
 
 Notes:
 
 - First form removes duplicates.
-- Second form preserves duplicates from `list-A`.
-- Order of results always follows `list-A`.
+- Second form preserves duplicates from `lst-A`.
+- Order of results always follows `lst-A`.
 
-See: [diff](#f-diff), [uniq](#f-uniq), [union](#f-union)
+See: [diff](#f-diff), [uniq](#f-unique), [union](#f-union)
 
 ---
 
@@ -2439,7 +2473,7 @@ See: [if](#f-if), [cond](#f-cond), [when](#f-when)
 ## catch
 
 ```
-syntax: (catch exp symbol)
+syntax: (catch exp sym)
 syntax: (catch exp)
 ```
 
@@ -2448,12 +2482,12 @@ Description:
 Evaluates `exp` under a handler capable of intercepting
 throws and runtime errors. In the first syntax `catch`
 returns a status flag and stores the outcome of `exp` in
-`symbol`. When evaluation finishes normally, `catch`
-returns `true` and `symbol` receives the value of `exp`. When
-a runtime error occurs, `catch` returns `nil` and `symbol` is
+`sym`. When evaluation finishes normally, `catch`
+returns `true` and `sym` receives the value of `exp`. When
+a runtime error occurs, `catch` returns `nil` and `sym` is
 set to the formatted error message. When a throw is
 triggered during evaluation, `catch` returns `true` and
-`symbol` receives the argument supplied to `throw`. This
+`sym` receives the argument supplied to `throw`. This
 form is used when errors or explicit throws are part of
 normal program flow and must be handled without aborting
 the surrounding computation.
@@ -2476,9 +2510,8 @@ Examples:
   (if (= x 500) (throw x))))  → 500
 
 (func (f x)
-   …
-  (if condition (throw 123))
-    …
+  (if condition 
+    (throw 123))
   456)
 
 (catch (f p))  → 123       ;; condition true
