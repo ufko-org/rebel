@@ -3165,11 +3165,10 @@ void printSymbolNameExt(UINT device, SYMBOL *sPtr)
 /* ufko: for adhoc testing only */
 CELL *p_adhoc(CELL *params)
 {
-    if(params->type == CELL_QUOTE)
-    {
-        return(trueCell);
-    }
-    return(nilCell);
+    CELL *result;
+    result = evaluateExpression(params);
+    pushResultFlag = FALSE;
+    return(result);
 }
 
 CELL *p_prettyPrint(CELL *params)
