@@ -1760,7 +1760,12 @@ SYMBOL *getDynamicSymbol(CELL *cell)
     contextCell = (CELL *)((SYMBOL *)cell->aux)->contents;
     if(contextCell->type != CELL_CONTEXT)
     {
+        /* ufko: better error message, maybe still not the best 
+                 implicit context symbol creation (on-the-fly) requires
+                 using previously unused symbol for context name
         fatalError(ERR_CONTEXT_EXPECTED, stuffSymbol((SYMBOL *)cell->aux), TRUE);
+        */
+        fatalError(ERR_UNUSED_SYMBOL_EXPECTED, stuffSymbol((SYMBOL *)cell->aux), TRUE);
     }
 
     return(translateCreateSymbol(
