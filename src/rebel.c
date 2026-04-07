@@ -1476,6 +1476,7 @@ CELL *evaluateExpression(CELL *cell)
         case CELL_DEREF:
             result = evaluateExpression((CELL *)cell->contents);
             result = evaluateExpression(result);
+            pushResultFlag = FALSE;
             return(result);
 
         case CELL_EXPRESSION:
