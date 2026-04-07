@@ -3284,11 +3284,12 @@ char *errorMessage[] =
     "bigint type not applicable",   /* 74 */
     "not a number or infinite",     /* 75 */
     "cannot convert NULL to string",/* 76 */
-    "quoted symbol used",                  /* 77 ufko: */
-    "unbound symbol used",                 /* 78 ufko: */
-    "non-local symbol used",               /* 79 ufko: */
-    "named function definition expected",  /* 80 ufko: */
-    "quoted symbol expected",              /* 81 ufko: */
+    "quoted symbol used",           /* 77 ufko: */
+    "unbound symbol used",          /* 78 ufko: */
+    "non-local symbol used",        /* 79 ufko: */
+    "named function expected",      /* 80 ufko: */
+    "quoted symbol expected",       /* 81 ufko: */
+    "unused symbol expected",       /* 82 ufko: */
     NULL
 };
 

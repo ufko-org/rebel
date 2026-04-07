@@ -385,7 +385,8 @@ This is for 64bit large file support (LFS),
 #define ERR_SYMBOL_NONLOCAL_MUT 79
 #define ERR_NAMED_FUNCTION_DEFINITION_EXPECTED_FUNC 80
 #define ERR_QUOTED_SYMBOL_EXPECTED 81
-#define MAX_ERROR_NUMBER 81
+#define ERR_UNUSED_SYMBOL_EXPECTED 82
+#define MAX_ERROR_NUMBER 82
 #define UNKNOWN_ERROR "Unknown error"
 
 /* network error handling */
